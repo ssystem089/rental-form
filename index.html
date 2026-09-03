@@ -1,54 +1,644 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FIX iT RiGHT｜器材租借預約</title>
-<style>
-:root{--bg:#0b0b0d;--card:#17171a;--card2:#202024;--line:#2d2d32;--text:#f4f4f5;--muted:#a1a1aa;--sub:#71717a}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",Arial,sans-serif;-webkit-font-smoothing:antialiased}.wrap{width:min(100%,500px);margin:auto;padding:18px 14px 34px}.header{padding:7px 4px 18px;border-bottom:1px solid var(--line);margin-bottom:18px}.brand{font-size:22px;font-weight:800}.subtitle{color:var(--muted);font-size:13px;margin-top:4px}.store{color:var(--sub);font-size:12px;line-height:1.55;margin-top:9px}.label-title{color:var(--muted);font-size:12px;font-weight:700;margin:20px 4px 8px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}.price{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06)}.price:last-child{border:0}.name{font-size:14px;font-weight:700}.desc{font-size:11px;color:var(--sub);line-height:1.45;margin-top:3px}.amount{text-align:right;font-size:13px;font-weight:700;min-width:140px;line-height:1.5}.amount small{font-size:10px;color:var(--muted);font-weight:500}.field{margin-bottom:14px}.field:last-child{margin-bottom:0}label{display:block;color:var(--muted);font-size:12px;font-weight:650;margin-bottom:6px}input,select{width:100%;min-height:45px;padding:10px 11px;border:1px solid var(--line);border-radius:8px;background:var(--card2);color:var(--text);font:inherit;font-size:14px;outline:0}input:focus,select:focus{border-color:#606068}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.hint{margin-top:12px;padding:10px;border-radius:8px;background:rgba(255,255,255,.035);color:var(--sub);font-size:11px;line-height:1.6}.actions{display:grid;gap:9px;margin-top:14px}button{width:100%;min-height:46px;border-radius:8px;padding:11px;font:inherit;font-size:14px;font-weight:750;cursor:pointer}button:active{opacity:.85}.primary{background:#fff;color:#111;border:1px solid #fff}.secondary{background:transparent;color:var(--text);border:1px solid #55555d}.terms{color:var(--sub);font-size:11px;line-height:1.7;margin:16px 4px 0}.sheet{display:none;position:fixed;z-index:20;left:0;right:0;bottom:0;background:#19191d;border-top:1px solid #45454d;border-radius:16px 16px 0 0;padding:18px 14px max(18px,env(safe-area-inset-bottom));box-shadow:0 -12px 36px #0008}.sheet.show{display:block}.sheet h2{font-size:17px;margin:0 0 6px}.sheet p{font-size:13px;color:var(--muted);line-height:1.55;margin:0 0 12px}textarea{width:100%;height:180px;resize:none;padding:10px;border:1px solid #45454d;border-radius:8px;background:#09090b;color:var(--text);font:12px/1.55 inherit}.sheet-buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}@media(max-width:360px){.grid{grid-template-columns:1fr}.amount{min-width:120px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0b0d">
+  <title>FIX iT RiGHT｜器材租借預約</title>
+  <style>
+    :root {
+      --bg: #0b0b0d;
+      --card: #17171a;
+      --card-2: #202024;
+      --line: #2d2d32;
+      --text: #f4f4f5;
+      --muted: #a1a1aa;
+      --subtle: #71717a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", "Noto Sans TC", "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap {
+      width: min(100%, 500px);
+      margin: 0 auto;
+      padding: 18px 14px 34px;
+    }
+
+    .header {
+      padding: 7px 4px 18px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: .3px;
+    }
+
+    .subtitle {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .store {
+      margin-top: 9px;
+      color: var(--subtle);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .section-title {
+      margin: 20px 4px 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .5px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, .06);
+    }
+
+    .price-row:last-child { border-bottom: 0; }
+
+    .product-name {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .product-desc {
+      margin-top: 3px;
+      color: var(--subtle);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .price {
+      min-width: 140px;
+      text-align: right;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .price small {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .field { margin-bottom: 14px; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 45px;
+      padding: 10px 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--card-2);
+      color: var(--text);
+      font: inherit;
+      font-size: 14px;
+      outline: 0;
+    }
+
+    input:focus,
+    select:focus { border-color: #606068; }
+
+    input::placeholder { color: #6d6d76; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .notice {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .035);
+      color: var(--subtle);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .actions {
+      display: grid;
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    button {
+      width: 100%;
+      min-height: 46px;
+      padding: 11px;
+      border-radius: 8px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    button:active { opacity: .85; }
+
+    .primary {
+      background: #fff;
+      color: #111;
+      border: 1px solid #fff;
+    }
+
+    .secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid #55555d;
+    }
+
+    .terms {
+      margin: 16px 4px 0;
+      color: var(--subtle);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .sheet {
+      display: none;
+      position: fixed;
+      z-index: 20;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 18px 14px max(18px, env(safe-area-inset-bottom));
+      background: #19191d;
+      border-top: 1px solid #45454d;
+      border-radius: 16px 16px 0 0;
+      box-shadow: 0 -12px 36px rgba(0, 0, 0, .55);
+    }
+
+    .sheet.show { display: block; }
+
+    .sheet h2 {
+      margin: 0 0 6px;
+      font-size: 17px;
+    }
+
+    .sheet p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    textarea {
+      width: 100%;
+      height: 180px;
+      padding: 10px;
+      resize: none;
+      border: 1px solid #45454d;
+      border-radius: 8px;
+      background: #09090b;
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .sheet-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 360px) {
+      .grid { grid-template-columns: 1fr; }
+      .price { min-width: 120px; }
+    }
+  </style>
 </head>
 <body>
-<main class="wrap">
-<header class="header"><div class="brand">FIX iT RiGHT</div><div class="subtitle">器材租借預約</div><div class="store">台北大巨蛋門市｜台北市大安區光復南路88號1樓<br>營業時間 12:00–20:00｜演唱會日依現場狀況彈性延長</div></header>
-<div class="label-title">租借費率｜24H 彈性制</div>
-<section class="card">
-<div class="price"><div><div class="name">vivo x300 Ultra</div><div class="desc">支援 200mm／400mm 增距鏡</div></div><div class="amount">$1,200 <small>/ 1–2日</small><br><small>$1,000（3–5日）｜$900（6日以上）</small></div></div>
-<div class="price"><div><div class="name">vivo x200 Ultra</div><div class="desc">支援 200mm 增距鏡</div></div><div class="amount">$1,000 <small>/ 1–2日</small><br><small>$900（3–5日）｜$800（6日以上）</small></div></div>
-<div class="price"><div><div class="name">vivo x300 Pro</div><div class="desc">支援 200mm 增距鏡</div></div><div class="amount">$900 <small>/ 1–2日</small><br><small>$800（3–5日）｜$700（6日以上）</small></div></div>
-<div class="price"><div><div class="name">OPPO Find X9 Ultra</div><div class="desc">支援 400mm 增距鏡</div></div><div class="amount">$1,000 <small>/ 1–2日</small><br><small>$900（3–5日）｜$800（6日以上）</small></div></div>
-<div class="price"><div><div class="name">iPhone 17 Pro／Pro Max</div><div class="desc">旗艦錄影與演唱會拍攝</div></div><div class="amount">$850 <small>/ 1–2日</small><br><small>$750（3–5日）｜$600（6日以上）</small></div></div>
-<div class="price"><div><div class="name">DJI Pocket 4 Pro</div><div class="desc">全能套裝｜三軸雙鏡頭手持相機</div></div><div class="amount">$700 <small>/ 日</small></div></div>
-<div class="price"><div><div class="name">增距鏡特仕組</div><div class="desc">200mm：$300／日｜400mm：$600／日</div></div><div class="amount">$300–$600 <small>/ 日</small></div></div>
-<div class="price"><div><div class="name">雲端上傳服務</div><div class="desc">原畫質上傳，保留 2 週</div></div><div class="amount">$200 <small>/ 次</small></div></div>
-</section>
-<div class="label-title">先查檔期或正式預約</div>
-<section class="card">
-<div class="field"><label for="model">租借主機型號</label><select id="model" onchange="updateLensOptions()"><option value="vivo x300 Ultra">vivo x300 Ultra</option><option value="vivo x200 Ultra">vivo x200 Ultra</option><option value="vivo x300 Pro">vivo x300 Pro</option><option value="OPPO Find X9 Ultra">OPPO Find X9 Ultra</option><option value="iPhone 17 Pro Max">iPhone 17 Pro Max</option><option value="iPhone 17 Pro">iPhone 17 Pro</option><option value="DJI Pocket 4 Pro 全能套裝">DJI Pocket 4 Pro 全能套裝</option><option value="僅租借 G2 增距鏡頭特仕組">僅租借 G2 增距鏡頭特仕組</option></select></div>
-<div class="field"><label for="lens">增距鏡配件選配</label><select id="lens"><option value="無加選配件 (單機身)">無加選配件 (單機身)</option><option value="加租 200mm 增距鏡 (+$300/D)">加租 200mm 增距鏡 (+$300/D)</option><option value="加租 400mm 增距鏡 (+$600/D)">加租 400mm 增距鏡 (+$600/D)</option></select></div>
-<div class="grid"><div class="field"><label for="pickupTime">預計取機時間</label><input type="datetime-local" id="pickupTime"></div><div class="field"><label for="returnDate">預計歸還日期</label><input type="date" id="returnDate"></div></div>
-<button type="button" class="secondary" onclick="inquireAvailability()">先詢問設備檔期</button><div class="hint">熱門檔期先選設備與日期即可查詢，不必先填姓名、電話或證件。</div>
-<div class="label-title" style="margin:20px 0 10px">確認可租後，填寫正式預約資料</div>
-<div class="field"><label for="cloudService">雲端上傳服務</label><select id="cloudService"><option value="No">不需要（現場自行傳檔取機）</option><option value="Yes">需要（+$200／次，原畫質雲端下載）</option></select></div>
-<div class="grid"><div class="field"><label for="name">承租人姓名</label><input id="name" autocomplete="name" placeholder="身分證姓名"></div><div class="field"><label for="phone">聯絡手機</label><input id="phone" autocomplete="tel" inputmode="tel" placeholder="同 LINE 門號"></div></div>
-<div class="field"><label for="idType">門市押附證件正本</label><select id="idType"><option value="身分證正本">身分證正本</option><option value="健保卡正本">健保卡正本</option><option value="駕照正本">駕照正本</option></select></div>
-<div class="field"><label for="isStore">交還方式</label><select id="isStore"><option value="Yes（大巨蛋門市親取親還）">Yes（大巨蛋門市親取親還）</option><option value="No（需寄送，依免證件押金 NT$30,000 計）">No（需寄送，依免證件押金 NT$30,000 計）</option></select></div>
-<div class="actions"><button type="button" class="primary" onclick="createFormalBooking()">複製正式預約資料</button></div>
-</section>
-<div class="terms">• 基礎訂金 700 元起，可全額折抵租金，實際以報價與確認結果為準。<br>• 門市交機：本人有效證件＋現金押金 NT$3,000；免證件寄送押金 NT$30,000。<br>• 增距鏡如因場館規定無法使用，租金不退款，可轉為 12 個月有效折抵金。<br>• 本頁只整理詢問／預約資料；回到 LINE 聊天室後請貼上並自行確認傳送。</div>
-</main>
-<section id="sheet" class="sheet"><h2 id="sheetTitle">內容已複製</h2><p id="sheetGuide">請回到 LINE 聊天室，在輸入框長按後選擇「貼上」，確認後自行傳送。</p><textarea id="resultText" readonly></textarea><div class="sheet-buttons"><button class="secondary" type="button" onclick="closeSheet()">返回表單</button><button class="primary" type="button" onclick="copyAgain()">再次複製</button></div></section>
-<script>
-let currentMessage = "";
-function updateLensOptions(){const m=document.getElementById("model").value,l=document.getElementById("lens");if(m==="vivo x300 Ultra")l.innerHTML='<option value="無加選配件 (單機身)">無加選配件 (單機身)</option><option value="加租 200mm 增距鏡 (+$300/D)">加租 200mm 增距鏡 (+$300/D)</option><option value="加租 400mm 增距鏡 (+$600/D)">加租 400mm 增距鏡 (+$600/D)</option>';else if(m==="vivo x200 Ultra"||m==="vivo x300 Pro")l.innerHTML='<option value="無加選配件 (單機身)">無加選配件 (單機身)</option><option value="加租 200mm 增距鏡 (+$300/D)">加租 200mm 增距鏡 (+$300/D)</option>';else if(m==="OPPO Find X9 Ultra")l.innerHTML='<option value="無加選配件 (單機身)">無加選配件 (單機身)</option><option value="加租 400mm 增距鏡 (+$600/D)">加租 400mm 增距鏡 (+$600/D)</option>';else if(m==="僅租借 G2 增距鏡頭特仕組")l.innerHTML='<option value="單租 200mm 增距鏡 ($300/D)">單租 200mm 增距鏡 ($300/D)</option><option value="單租 400mm 增距鏡 ($600/D)">單租 400mm 增距鏡 ($600/D)</option>';else l.innerHTML='<option value="無適配增距鏡">無適配增距鏡 (單機身)</option>'}
-function equipment(){const m=document.getElementById("model").value,l=document.getElementById("lens").value;return l==="無加選配件 (單機身)"||l==="無適配增距鏡"?m:m+" + "+l}
-function days(){const p=document.getElementById("pickupTime").value,r=document.getElementById("returnDate").value;if(!p||!r)return null;const a=new Date(p),b=new Date(r+"T00:00:00");if(isNaN(a)||isNaN(b)||b<a)return null;return Math.max(1,Math.ceil((b-a)/86400000))}
-function inquireAvailability(){const p=document.getElementById("pickupTime").value,r=document.getElementById("returnDate").value;if(!p||!r)return alert("請先選擇預計取機時間與歸還日期。");const d=days();if(!d)return alert("歸還日期需晚於或等於取機日期。");currentMessage=`您好，想先詢問設備是否還有檔期：\n\n租借器材：${equipment()}\n預計取機：${p.replace("T"," ")}\n預計歸還：${r}\n預計租借：約 ${d} 天\n\n請協助確認是否可租，謝謝。`;openSheet("詢問內容已複製","請回到 LINE 聊天室，長按輸入框後選擇「貼上」，確認後自行傳送。")}
-function createFormalBooking(){const p=document.getElementById("pickupTime").value,r=document.getElementById("returnDate").value,n=document.getElementById("name").value.trim(),ph=document.getElementById("phone").value.trim();if(!p||!r||!n||!ph)return alert("正式預約請填寫取還日期、姓名與聯絡電話。");const d=days();if(!d)return alert("歸還日期需晚於或等於取機日期。");const cloud=document.getElementById("cloudService").value==="Yes"?"需要（+$200／次）":"不需要";currentMessage=`※正式預約申請\n※租借器材：${equipment()}\n※雲端上傳：${cloud}\n※預約日期：${p.replace("T"," ")} 取 / ${r} 還\n※租借天數：約 ${d} 天\n※姓名：${n}\n※電話：${ph}\n押附證件：${document.getElementById("idType").value}\n台北大巨蛋門市交還機：${document.getElementById("isStore").value}\n\n基礎訂金：700 元起（可抵扣租金，以最終報價為準）\n押金支付方式：現金（交還設備確認無誤後退還）`;openSheet("正式預約內容已複製","請回到 LINE 聊天室，長按輸入框後選擇「貼上」，確認後自行傳送。")}
-async function copyText(t){try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(t);return true}}catch(e){}try{const x=document.createElement("textarea");x.value=t;x.style.position="fixed";x.style.left="-9999px";document.body.appendChild(x);x.select();const ok=document.execCommand("copy");x.remove();return ok}catch(e){return false}}
-async function openSheet(title,guide){document.getElementById("sheetTitle").textContent=title;document.getElementById("sheetGuide").textContent=guide;const t=document.getElementById("resultText");t.value=currentMessage;document.getElementById("sheet").classList.add("show");t.focus();t.select();const ok=await copyText(currentMessage);if(!ok){document.getElementById("sheetTitle").textContent="請手動複製以下內容";document.getElementById("sheetGuide").textContent="長按文字後選擇複製，再回到 LINE 聊天室貼上並自行傳送。"}}
-async function copyAgain(){alert(await copyText(currentMessage)?"已複製。請回到 LINE 聊天室貼上並傳送。":"請長按上方文字後手動複製。")}function closeSheet(){document.getElementById("sheet").classList.remove("show")}
-</script>
+  <main class="wrap">
+    <header class="header">
+      <div class="brand">FIX iT RiGHT</div>
+      <div class="subtitle">器材租借預約</div>
+      <div class="store">
+        台北大巨蛋門市｜台北市大安區光復南路88號1樓<br>
+        營業時間 12:00–20:00｜演唱會日依現場狀況彈性延長
+      </div>
+    </header>
+
+    <div class="section-title">租借費率｜24H 彈性制</div>
+    <section class="card" aria-label="器材租借費率">
+      <div class="price-row">
+        <div>
+          <div class="product-name">vivo x300 Ultra</div>
+          <div class="product-desc">支援 200mm／400mm 增距鏡</div>
+        </div>
+        <div class="price">$1,200 <small>/ 1–2日</small><br><small>$1,000（3–5日）｜$900（6日以上）</small></div>
+      </div>
+      <div class="price-row">
+        <div>
+          <div class="product-name">vivo x200 Ultra</div>
+          <div class="product-desc">支援 200mm 增距鏡</div>
+        </div>
+        <div class="price">$1,000 <small>/ 1–2日</small><br><small>$900（3–5日）｜$800（6日以上）</small></div>
+      </div>
+      <div class="price-row">
+        <div>
+          <div class="product-name">vivo x300 Pro</div>
+          <div class="product-desc">支援 200mm 增距鏡</div>
+        </div>
+        <div class="price">$900 <small>/ 1–2日</small><br><small>$800（3–5日）｜$700（6日以上）</small></div>
+      </div>
+      <div class="price-row">
+        <div>
+          <div class="product-name">OPPO Find X9 Ultra</div>
+          <div class="product-desc">支援 400mm 增距鏡</div>
+        </div>
+        <div class="price">$1,000 <small>/ 1–2日</small><br><small>$900（3–5日）｜$800（6日以上）</small></div>
+      </div>
+      <div class="price-row">
+        <div>
+          <div class="product-name">iPhone 17 Pro／Pro Max</div>
+          <div class="product-desc">旗艦錄影與演唱會拍攝</div>
+        </div>
+        <div class="price">$850 <small>/ 1–2日</small><br><small>$750（3–5日）｜$600（6日以上）</small></div>
+      </div>
+      <div class="price-row">
+        <div>
+          <div class="product-name">DJI Pocket 4 Pro</div>
+          <div class="product-desc">全能套裝｜三軸雙鏡頭手持相機</div>
+        </div>
+        <div class="price">$700 <small>/ 日</small></div>
+      </div>
+      <div class="price-row">
+        <div>
+          <div class="product-name">增距鏡特仕組</div>
+          <div class="product-desc">200mm：$300／日｜400mm：$600／日</div>
+        </div>
+        <div class="price">$300–$600 <small>/ 日</small></div>
+      </div>
+      <div class="price-row">
+        <div>
+          <div class="product-name">雲端上傳服務</div>
+          <div class="product-desc">原畫質上傳，保留 2 週</div>
+        </div>
+        <div class="price">$200 <small>/ 次</small></div>
+      </div>
+    </section>
+
+    <div class="section-title">先查檔期或正式預約</div>
+    <section class="card">
+      <div class="field">
+        <label for="model">租借主機型號</label>
+        <select id="model" onchange="updateLensOptions()">
+          <option value="vivo x300 Ultra">vivo x300 Ultra</option>
+          <option value="vivo x200 Ultra">vivo x200 Ultra</option>
+          <option value="vivo x300 Pro">vivo x300 Pro</option>
+          <option value="OPPO Find X9 Ultra">OPPO Find X9 Ultra</option>
+          <option value="iPhone 17 Pro Max">iPhone 17 Pro Max</option>
+          <option value="iPhone 17 Pro">iPhone 17 Pro</option>
+          <option value="DJI Pocket 4 Pro 全能套裝">DJI Pocket 4 Pro 全能套裝</option>
+          <option value="僅租借 G2 增距鏡頭特仕組">僅租借 G2 增距鏡頭特仕組</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="lens">增距鏡配件選配</label>
+        <select id="lens">
+          <option value="無加選配件 (單機身)">無加選配件 (單機身)</option>
+          <option value="加租 200mm 增距鏡 (+$300/D)">加租 200mm 增距鏡 (+$300/D)</option>
+          <option value="加租 400mm 增距鏡 (+$600/D)">加租 400mm 增距鏡 (+$600/D)</option>
+        </select>
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label for="pickupDate">預計取機日期</label>
+          <input type="date" id="pickupDate" onchange="syncPickupDateTime()">
+        </div>
+        <div class="field">
+          <label for="pickupClock">預計取機時間</label>
+          <select id="pickupClock" onchange="syncPickupDateTime()">
+            <option value="">請選擇時間</option>
+            <option value="12:00">12:00</option>
+            <option value="12:30">12:30</option>
+            <option value="13:00">13:00</option>
+            <option value="13:30">13:30</option>
+            <option value="14:00">14:00</option>
+            <option value="14:30">14:30</option>
+            <option value="15:00">15:00</option>
+            <option value="15:30">15:30</option>
+            <option value="16:00">16:00</option>
+            <option value="16:30">16:30</option>
+            <option value="17:00">17:00</option>
+            <option value="17:30">17:30</option>
+            <option value="18:00">18:00</option>
+            <option value="18:30">18:30</option>
+            <option value="19:00">19:00</option>
+            <option value="19:30">19:30</option>
+            <option value="20:00">20:00</option>
+          </select>
+          <input type="hidden" id="pickupTime">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="returnDate">預計歸還日期</label>
+        <input type="date" id="returnDate">
+      </div>
+
+      <button type="button" class="secondary" onclick="inquireAvailability()">先詢問設備檔期</button>
+      <div class="notice">熱門檔期先選設備與日期即可查詢，不必先填姓名、電話或證件。</div>
+
+      <div class="section-title" style="margin:20px 0 10px;">確認可租後，填寫正式預約資料</div>
+
+      <div class="field">
+        <label for="cloudService">雲端上傳服務</label>
+        <select id="cloudService">
+          <option value="No">不需要（現場自行傳檔取機）</option>
+          <option value="Yes">需要（+$200／次，原畫質雲端下載）</option>
+        </select>
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label for="name">承租人姓名</label>
+          <input type="text" id="name" autocomplete="name" placeholder="身分證姓名">
+        </div>
+        <div class="field">
+          <label for="phone">聯絡手機</label>
+          <input type="tel" id="phone" autocomplete="tel" inputmode="tel" placeholder="同 LINE 門號">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="idType">門市押附證件正本</label>
+        <select id="idType">
+          <option value="身分證正本">身分證正本</option>
+          <option value="健保卡正本">健保卡正本</option>
+          <option value="駕照正本">駕照正本</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="isStore">交還方式</label>
+        <select id="isStore">
+          <option value="Yes（大巨蛋門市親取親還）">Yes（大巨蛋門市親取親還）</option>
+          <option value="No（需寄送，依免證件押金 NT$30,000 計）">No（需寄送，依免證件押金 NT$30,000 計）</option>
+        </select>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="primary" onclick="createFormalBooking()">複製正式預約資料</button>
+      </div>
+    </section>
+
+    <div class="terms">
+      • 基礎訂金 700 元起，可全額折抵租金，實際以報價與確認結果為準。<br>
+      • 門市交機：本人有效證件＋現金押金 NT$3,000；免證件寄送押金 NT$30,000。<br>
+      • 增距鏡如因場館規定無法使用，租金不退款，可轉為 12 個月有效折抵金。<br>
+      • 本頁只整理詢問／預約資料；回到 LINE 聊天室後請貼上並自行確認傳送。
+    </div>
+  </main>
+
+  <section id="sheet" class="sheet" aria-live="polite">
+    <h2 id="sheetTitle">內容已複製</h2>
+    <p id="sheetGuide">請回到 LINE 聊天室，在輸入框長按後選擇「貼上」，確認後自行傳送。</p>
+    <textarea id="resultText" readonly></textarea>
+    <div class="sheet-buttons">
+      <button class="secondary" type="button" onclick="closeSheet()">返回表單</button>
+      <button class="primary" type="button" onclick="copyAgain()">再次複製</button>
+    </div>
+  </section>
+
+  <script>
+    /*
+      本頁刻意不使用 LIFF SDK、liff.init、liff.login 或 liff.sendMessages。
+      LIFF 網址僅作為表單入口，因此不會因 access token 或登入狀態而送出失敗。
+    */
+
+    let currentMessage = "";
+
+    function updateLensOptions() {
+      const model = document.getElementById("model").value;
+      const lens = document.getElementById("lens");
+
+      if (model === "vivo x300 Ultra") {
+        lens.innerHTML = `
+          <option value="無加選配件 (單機身)">無加選配件 (單機身)</option>
+          <option value="加租 200mm 增距鏡 (+$300/D)">加租 200mm 增距鏡 (+$300/D)</option>
+          <option value="加租 400mm 增距鏡 (+$600/D)">加租 400mm 增距鏡 (+$600/D)</option>
+        `;
+      } else if (model === "vivo x200 Ultra" || model === "vivo x300 Pro") {
+        lens.innerHTML = `
+          <option value="無加選配件 (單機身)">無加選配件 (單機身)</option>
+          <option value="加租 200mm 增距鏡 (+$300/D)">加租 200mm 增距鏡 (+$300/D)</option>
+        `;
+      } else if (model === "OPPO Find X9 Ultra") {
+        lens.innerHTML = `
+          <option value="無加選配件 (單機身)">無加選配件 (單機身)</option>
+          <option value="加租 400mm 增距鏡 (+$600/D)">加租 400mm 增距鏡 (+$600/D)</option>
+        `;
+      } else if (model === "僅租借 G2 增距鏡頭特仕組") {
+        lens.innerHTML = `
+          <option value="單租 200mm 增距鏡 ($300/D)">單租 200mm 增距鏡 ($300/D)</option>
+          <option value="單租 400mm 增距鏡 ($600/D)">單租 400mm 增距鏡 ($600/D)</option>
+        `;
+      } else {
+        lens.innerHTML = `<option value="無適配增距鏡">無適配增距鏡 (單機身)</option>`;
+      }
+    }
+
+    function syncPickupDateTime() {
+      const date = document.getElementById("pickupDate").value;
+      const time = document.getElementById("pickupClock").value;
+      document.getElementById("pickupTime").value = date && time ? `${date}T${time}` : "";
+
+      const returnDate = document.getElementById("returnDate");
+      if (date) {
+        returnDate.min = date;
+        if (returnDate.value && returnDate.value < date) {
+          returnDate.value = date;
+        }
+      }
+    }
+
+    function setMinimumDates() {
+      const now = new Date();
+      const localToday = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+        .toISOString()
+        .split("T")[0];
+      document.getElementById("pickupDate").min = localToday;
+      document.getElementById("returnDate").min = localToday;
+    }
+
+    function equipmentText() {
+      const model = document.getElementById("model").value;
+      const lens = document.getElementById("lens").value;
+      if (lens === "無加選配件 (單機身)" || lens === "無適配增距鏡") {
+        return model;
+      }
+      return `${model} + ${lens}`;
+    }
+
+    function calculateDays() {
+      const pickup = document.getElementById("pickupTime").value;
+      const returnDate = document.getElementById("returnDate").value;
+
+      if (!pickup || !returnDate) return null;
+
+      const start = new Date(pickup);
+      const end = new Date(`${returnDate}T00:00:00`);
+
+      if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end < start) {
+        return null;
+      }
+
+      return Math.max(1, Math.ceil((end - start) / 86400000));
+    }
+
+    function inquireAvailability() {
+      const pickup = document.getElementById("pickupTime").value;
+      const returnDate = document.getElementById("returnDate").value;
+
+      if (!pickup || !returnDate) {
+        alert("請先選擇預計取機日期、取機時間與歸還日期。");
+        return;
+      }
+
+      const days = calculateDays();
+      if (!days) {
+        alert("歸還日期需晚於或等於取機日期。");
+        return;
+      }
+
+      currentMessage = `您好，想先詢問設備是否還有檔期：\n\n租借器材：${equipmentText()}\n預計取機：${pickup.replace("T", " ")}\n預計歸還：${returnDate}\n預計租借：約 ${days} 天\n\n請協助確認是否可租，謝謝。`;
+
+      openSheet(
+        "詢問內容已複製",
+        "請回到 LINE 聊天室，在輸入框長按後選擇「貼上」，確認後自行傳送。"
+      );
+    }
+
+    function createFormalBooking() {
+      const pickup = document.getElementById("pickupTime").value;
+      const returnDate = document.getElementById("returnDate").value;
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+
+      if (!pickup || !returnDate || !name || !phone) {
+        alert("正式預約請填寫取機日期、取機時間、歸還日期、姓名與聯絡電話。");
+        return;
+      }
+
+      const days = calculateDays();
+      if (!days) {
+        alert("歸還日期需晚於或等於取機日期。");
+        return;
+      }
+
+      const cloudService = document.getElementById("cloudService").value === "Yes"
+        ? "需要（+$200／次）"
+        : "不需要";
+
+      const idType = document.getElementById("idType").value;
+      const isStore = document.getElementById("isStore").value;
+
+      currentMessage = `※正式預約申請\n※租借器材：${equipmentText()}\n※雲端上傳：${cloudService}\n※預約日期：${pickup.replace("T", " ")} 取 / ${returnDate} 還\n※租借天數：約 ${days} 天\n※姓名：${name}\n※電話：${phone}\n押附證件：${idType}\n台北大巨蛋門市交還機：${isStore}\n\n基礎訂金：700 元起（可抵扣租金，以最終報價為準）\n押金支付方式：現金（交還設備確認無誤後退還）`;
+
+      openSheet(
+        "正式預約內容已複製",
+        "請回到 LINE 聊天室，在輸入框長按後選擇「貼上」，確認後自行傳送。"
+      );
+    }
+
+    async function copyText(text) {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (error) {
+        console.warn("Clipboard API unavailable", error);
+      }
+
+      try {
+        const helper = document.createElement("textarea");
+        helper.value = text;
+        helper.setAttribute("readonly", "");
+        helper.style.position = "fixed";
+        helper.style.left = "-9999px";
+        document.body.appendChild(helper);
+        helper.select();
+        const copied = document.execCommand("copy");
+        helper.remove();
+        return copied;
+      } catch (error) {
+        console.warn("Fallback copy failed", error);
+        return false;
+      }
+    }
+
+    async function openSheet(title, guide) {
+      document.getElementById("sheetTitle").textContent = title;
+      document.getElementById("sheetGuide").textContent = guide;
+
+      const resultText = document.getElementById("resultText");
+      resultText.value = currentMessage;
+
+      document.getElementById("sheet").classList.add("show");
+      resultText.focus();
+      resultText.select();
+
+      const copied = await copyText(currentMessage);
+      if (!copied) {
+        document.getElementById("sheetTitle").textContent = "請手動複製以下內容";
+        document.getElementById("sheetGuide").textContent = "長按文字後選擇複製，再回到 LINE 聊天室貼上並自行傳送。";
+      }
+    }
+
+    async function copyAgain() {
+      const copied = await copyText(currentMessage);
+      alert(copied ? "已複製。請回到 LINE 聊天室貼上並傳送。" : "請長按上方文字後手動複製。");
+    }
+
+    function closeSheet() {
+      document.getElementById("sheet").classList.remove("show");
+    }
+
+    document.addEventListener("DOMContentLoaded", setMinimumDates);
+  </script>
 </body>
 </html>
