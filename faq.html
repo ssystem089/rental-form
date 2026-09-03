@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0b0d">
+  <title>FIX iT RiGHT｜租借須知與常見問題</title>
+  <style>
+    :root { --bg:#0b0b0d; --card:#17171a; --line:#2d2d32; --text:#f4f4f5; --muted:#a1a1aa; --sub:#71717a; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang TC","Noto Sans TC","Helvetica Neue",Arial,sans-serif; -webkit-font-smoothing:antialiased; }
+    .wrap { width:min(100%,500px); margin:0 auto; padding:14px 14px 34px; }
+    .topbar { display:flex; justify-content:flex-end; min-height:38px; margin-bottom:4px; }
+    .lang-toggle { width:auto; min-height:34px; padding:6px 11px; border:1px solid #595961; border-radius:8px; background:#202024; color:#fff; font:inherit; font-size:12px; font-weight:750; cursor:pointer; }
+    .header { padding:7px 4px 18px; border-bottom:1px solid var(--line); margin-bottom:18px; }
+    .brand { font-size:22px; font-weight:800; letter-spacing:.3px; }
+    .subtitle { margin-top:4px; color:var(--muted); font-size:13px; }
+    .intro { margin-top:10px; color:var(--sub); font-size:12px; line-height:1.6; }
+    .section-title { margin:20px 4px 8px; color:var(--muted); font-size:12px; font-weight:700; letter-spacing:.5px; }
+    .faq-list { overflow:hidden; border:1px solid var(--line); border-radius:12px; background:var(--card); }
+    details { border-bottom:1px solid rgba(255,255,255,.06); }
+    details:last-child { border-bottom:0; }
+    summary { position:relative; padding:15px 42px 15px 14px; color:var(--text); font-size:14px; font-weight:700; line-height:1.45; list-style:none; cursor:pointer; }
+    summary::-webkit-details-marker { display:none; }
+    summary::after { content:"+"; position:absolute; right:15px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:21px; font-weight:400; }
+    details[open] summary::after { content:"−"; }
+    .answer { padding:0 14px 15px; color:var(--muted); font-size:13px; line-height:1.7; }
+    .answer strong { color:var(--text); font-weight:700; }
+    .answer ol { margin:8px 0 0; padding-left:20px; }.answer li { margin:4px 0; }
+    .notice { margin-top:14px; padding:13px; border:1px solid var(--line); border-radius:12px; background:var(--card); color:var(--sub); font-size:12px; line-height:1.65; }
+    .notice-title { display:block; margin-bottom:4px; color:var(--text); font-size:13px; font-weight:750; }
+    .action-button { display:block; width:100%; min-height:46px; margin-top:14px; padding:12px; border:1px solid #fff; border-radius:8px; background:#fff; color:#111; font:inherit; font-size:14px; font-weight:750; text-align:center; text-decoration:none; }
+    .footer { margin:18px 4px 0; color:var(--sub); font-size:11px; line-height:1.65; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="topbar"><button type="button" class="lang-toggle" id="languageButton" onclick="toggleLanguage()">English</button></div>
+    <header class="header">
+      <div class="brand">FIX iT RiGHT</div>
+      <div class="subtitle" data-i18n="subtitle">演唱會器材租借｜須知與常見問題</div>
+      <div class="intro" data-i18n="intro">租借前請先閱讀以下須知；熱門檔期可先透過「器材租借」查詢設備與日期，確認可租後再完成正式預約。</div>
+    </header>
+
+    <div class="section-title" data-i18n="rentalNotice">租借須知</div>
+    <section class="faq-list">
+      <details>
+        <summary data-i18n="rq1">租借需要準備什麼？</summary>
+        <div class="answer" data-i18n="ra1">請攜帶<strong>本人有效證件正本</strong>（身分證、駕照或健保卡擇一）及<strong>現金押金</strong>辦理。實際押金金額、付款與取機條件，請以客服確認之報價和租借安排為準。</div>
+      </details>
+      <details>
+        <summary data-i18n="rq2">租金包含哪些設備與配件？</summary>
+        <div class="answer" data-i18n="ra2">一般租金包含<strong>主機本體、充電器及收納包</strong>。增距鏡、雲端代客上傳與其他加值選配，依實際選擇項目另外計費；取機時請與現場人員一同確認設備內容與外觀狀況。</div>
+      </details>
+      <details>
+        <summary data-i18n="rq3">歸還後，我的照片、影片和帳號資料會怎麼處理？</summary>
+        <div class="answer" data-i18n="ra3">您的隱私安全至上。設備歸還後，我們將執行<strong>恢復原廠設定</strong>，清除留存在設備內的個人資料。歸還前請務必自行備份所需檔案，並登出所有個人帳號，例如 Apple ID、Google 帳號、社群平台與其他已登入服務。</div>
+      </details>
+      <details>
+        <summary data-i18n="rq4">設備損壞、遺失或無法正常使用時怎麼辦？</summary>
+        <div class="answer" data-i18n="ra4">租借期間請妥善保管設備並保持聯繫。若設備損壞、遺失或有異常，請立即通知客服；租借人需依租賃合約負擔必要的維修或賠償費用。請勿自行拆卸、維修或交由非授權人員處理。</div>
+      </details>
+    </section>
+
+    <div class="section-title" data-i18n="valueAdded">加值服務｜雲端代客上傳</div>
+    <section class="faq-list">
+      <details>
+        <summary data-i18n="cq1">來不及備份大量照片或影片，怎麼處理？</summary>
+        <div class="answer" data-i18n="ca1">可加購<strong>雲端代客上傳</strong>服務。我們可協助將原始照片或影片上傳至雲端空間，例如 Google Drive 或 Dropbox，服務費為<strong>新臺幣 200 元／次</strong>。下載後可於電腦或手機觀看原始資料畫質。</div>
+      </details>
+      <details>
+        <summary data-i18n="cq2">雲端檔案可以保留多久？</summary>
+        <div class="answer" data-i18n="ca2">提供下載連結後，為保障資料安全，請於<strong>14 天內</strong>完成下載與備份。逾期後檔案可能由系統不定時刪除，恕不另行通知，亦不負保管責任。</div>
+      </details>
+    </section>
+
+    <div class="section-title" data-i18n="transferTitle">租借器材檔案傳輸教學</div>
+    <section class="faq-list">
+      <details>
+        <summary data-i18n="vq1">Vivo 手機如何用 EasyShare 傳到自己的手機？</summary>
+        <div class="answer" data-i18n="va1"><strong>手機對傳：</strong><ol><li>兩支手機皆開啟 EasyShare App，選擇「傳送檔案」。</li><li>租借的 Vivo 手機選擇「我要傳送」；您的手機選擇「我要接收」。</li><li>掃描 QR Code 完成配對，勾選照片、影片或其他資料後即可開始傳輸。</li></ol></div>
+      </details>
+      <details>
+        <summary data-i18n="vq2">Vivo 手機如何傳到 Windows 或 Mac 電腦？</summary>
+        <div class="answer" data-i18n="va2"><strong>傳到電腦：</strong><ol><li>在 Vivo 手機上選擇「分享到電腦」。</li><li>於電腦瀏覽器開啟 <strong>http://vs.vivo.com/</strong>。</li><li>以手機掃描網頁顯示的 QR Code；連線成功後即可傳輸檔案。</li></ol></div>
+      </details>
+      <details>
+        <summary data-i18n="iq1">iPhone 如何用 AirDrop 傳輸照片與影片？</summary>
+        <div class="answer" data-i18n="ia1"><ol><li>兩支 iPhone 均開啟 Wi‑Fi 與藍牙。</li><li>在「控制中心」將 AirDrop 設定為「所有人」。</li><li>於媒體檔案按「分享」，選擇「AirDrop」。</li><li>點選您的裝置，並在自己的 iPhone 按下「接受」即可完成。</li></ol></div>
+      </details>
+      <details>
+        <summary data-i18n="dq1">DJI Pocket 如何下載素材？</summary>
+        <div class="answer" data-i18n="da1"><ol><li>先至 DJI 官方網站安裝最新版 <strong>DJI Mimo App</strong>。</li><li>開啟 DJI Pocket，並確認手機 Wi‑Fi 與藍牙皆已開啟。</li><li>打開 DJI Mimo App，點選左上角「相機」圖示後選擇裝置連線。</li><li>連線成功後即可下載素材，或調整相機相關設定。</li></ol></div>
+      </details>
+    </section>
+
+    <div class="section-title" data-i18n="concertFaq">演唱會租借 FAQ</div>
+    <section class="faq-list">
+      <details>
+        <summary data-i18n="q1">熱門演唱會檔期，怎麼確認設備是否還有？</summary>
+        <div class="answer" data-i18n="a1">請進入「器材租借」頁面，選擇設備、取機日期／時間及歸還日期，再按「先詢問設備檔期」。此階段<strong>不需要先填姓名、電話或證件</strong>；客服確認設備與最終報價後，再進行正式預約。</div>
+      </details>
+      <details>
+        <summary data-i18n="q2">送出詢問後，就代表已保留設備嗎？</summary>
+        <div class="answer" data-i18n="a2">不代表。檔期詢問僅供客服確認庫存、交機安排與報價。設備以<strong>客服確認可租，並依指示完成訂金／款項</strong>後才算完成保留；熱門場次以實際完成確認的順序為準。</div>
+      </details>
+      <details>
+        <summary data-i18n="q3">可以只租一天、演唱會當日取還嗎？</summary>
+        <div class="answer" data-i18n="a3">可以。標有 24hr 彈性制的方案，如遇演唱會當日租還或特殊行程，將依實際使用時間或場次安排。最終取還時間與交還日期，請以客服協調確認為準。</div>
+      </details>
+      <details>
+        <summary data-i18n="q4">取機和歸還時間是什麼時候？</summary>
+        <div class="answer" data-i18n="a4">大巨蛋門市一般交還機時間為<strong>12:00–20:00</strong>。演唱會日可能開放額外營業時段，或依現場安排延長至 23:00；請以當次客服確認時間為準。非公告例外時段逾時歸還，原則上以隔日計。</div>
+      </details>
+      <details>
+        <summary data-i18n="q5">第一次拍演唱會，該選哪一台設備？</summary>
+        <div class="answer" data-i18n="a5"><strong>想要最強長焦與遠距離舞台細節：</strong>vivo x300 Ultra。<br><strong>想兼顧預算與長焦拍攝：</strong>vivo x300 Pro 或 vivo x200 Ultra。<br><strong>以錄影、穩定手持畫面為主：</strong>DJI Pocket 4 Pro 全能套裝。<br>實際選擇仍取決於座位區、場館距離、主辦單位規範與拍攝需求。</div>
+      </details>
+      <details>
+        <summary data-i18n="q6">增距鏡可以搭配哪些手機？</summary>
+        <div class="answer" data-i18n="a6">vivo x300 Ultra 支援 200mm 與 400mm 增距鏡；vivo x200 Ultra 與 vivo x300 Pro 支援 200mm 增距鏡；OPPO Find X9 Ultra 支援 400mm 增距鏡。iPhone 與 DJI Pocket 4 Pro 不適用此增距鏡特仕組。</div>
+      </details>
+      <details>
+        <summary data-i18n="q7">場館或主辦單位禁止增距鏡，怎麼辦？</summary>
+        <div class="answer" data-i18n="a7">租借前請自行確認演唱會主辦與場館規定。若因主辦禁帶導致增距鏡無法使用，增距鏡租金<strong>不退款</strong>，但可轉為<strong>12 個月有效的折抵金</strong>。建議在正式預約前先確認規範，避免現場爭議。</div>
+      </details>
+    </section>
+
+    <div class="notice"><span class="notice-title" data-i18n="noticeTitle">仍有其他問題？</span><span data-i18n="noticeBody">請回到 LINE 對話框輸入「真人客服」，並告知演唱會日期、場館、座位區與想租的設備，客服會協助建議適合的拍攝方案。</span></div>
+    <a class="action-button" href="https://liff.line.me/2011411630-pdbfMEEs" data-i18n="bookingButton">前往器材租借／查詢檔期</a>
+    <div class="footer" data-i18n="footer">最終設備庫存、報價、取還時間與場館規範，均以 LINE 客服確認內容為準。</div>
+  </main>
+
+  <script>
+    let currentLang = "zh";
+    const copy = {
+      zh: {
+        subtitle:"演唱會器材租借｜須知與常見問題",intro:"租借前請先閱讀以下須知；熱門檔期可先透過「器材租借」查詢設備與日期，確認可租後再完成正式預約。",rentalNotice:"租借須知",rq1:"租借需要準備什麼？",ra1:"請攜帶<strong>本人有效證件正本</strong>（身分證、駕照或健保卡擇一）及<strong>現金押金</strong>辦理。實際押金金額、付款與取機條件，請以客服確認之報價和租借安排為準。",rq2:"租金包含哪些設備與配件？",ra2:"一般租金包含<strong>主機本體、充電器及收納包</strong>。增距鏡、雲端代客上傳與其他加值選配，依實際選擇項目另外計費；取機時請與現場人員一同確認設備內容與外觀狀況。",rq3:"歸還後，我的照片、影片和帳號資料會怎麼處理？",ra3:"您的隱私安全至上。設備歸還後，我們將執行<strong>恢復原廠設定</strong>，清除留存在設備內的個人資料。歸還前請務必自行備份所需檔案，並登出所有個人帳號，例如 Apple ID、Google 帳號、社群平台與其他已登入服務。",rq4:"設備損壞、遺失或無法正常使用時怎麼辦？",ra4:"租借期間請妥善保管設備並保持聯繫。若設備損壞、遺失或有異常，請立即通知客服；租借人需依租賃合約負擔必要的維修或賠償費用。請勿自行拆卸、維修或交由非授權人員處理。",valueAdded:"加值服務｜雲端代客上傳",cq1:"來不及備份大量照片或影片，怎麼處理？",ca1:"可加購<strong>雲端代客上傳</strong>服務。我們可協助將原始照片或影片上傳至雲端空間，例如 Google Drive 或 Dropbox，服務費為<strong>新臺幣 200 元／次</strong>。下載後可於電腦或手機觀看原始資料畫質。",cq2:"雲端檔案可以保留多久？",ca2:"提供下載連結後，為保障資料安全，請於<strong>14 天內</strong>完成下載與備份。逾期後檔案可能由系統不定時刪除，恕不另行通知，亦不負保管責任。",transferTitle:"租借器材檔案傳輸教學",vq1:"Vivo 手機如何用 EasyShare 傳到自己的手機？",va1:"<strong>手機對傳：</strong><ol><li>兩支手機皆開啟 EasyShare App，選擇「傳送檔案」。</li><li>租借的 Vivo 手機選擇「我要傳送」；您的手機選擇「我要接收」。</li><li>掃描 QR Code 完成配對，勾選照片、影片或其他資料後即可開始傳輸。</li></ol>",vq2:"Vivo 手機如何傳到 Windows 或 Mac 電腦？",va2:"<strong>傳到電腦：</strong><ol><li>在 Vivo 手機上選擇「分享到電腦」。</li><li>於電腦瀏覽器開啟 <strong>http://vs.vivo.com/</strong>。</li><li>以手機掃描網頁顯示的 QR Code；連線成功後即可傳輸檔案。</li></ol>",iq1:"iPhone 如何用 AirDrop 傳輸照片與影片？",ia1:"<ol><li>兩支 iPhone 均開啟 Wi‑Fi 與藍牙。</li><li>在「控制中心」將 AirDrop 設定為「所有人」。</li><li>於媒體檔案按「分享」，選擇「AirDrop」。</li><li>點選您的裝置，並在自己的 iPhone 按下「接受」即可完成。</li></ol>",dq1:"DJI Pocket 如何下載素材？",da1:"<ol><li>先至 DJI 官方網站安裝最新版 <strong>DJI Mimo App</strong>。</li><li>開啟 DJI Pocket，並確認手機 Wi‑Fi 與藍牙皆已開啟。</li><li>打開 DJI Mimo App，點選左上角「相機」圖示後選擇裝置連線。</li><li>連線成功後即可下載素材，或調整相機相關設定。</li></ol>",concertFaq:"演唱會租借 FAQ",q1:"熱門演唱會檔期，怎麼確認設備是否還有？",a1:"請進入「器材租借」頁面，選擇設備、取機日期／時間及歸還日期，再按「先詢問設備檔期」。此階段<strong>不需要先填姓名、電話或證件</strong>；客服確認設備與最終報價後，再進行正式預約。",q2:"送出詢問後，就代表已保留設備嗎？",a2:"不代表。檔期詢問僅供客服確認庫存、交機安排與報價。設備以<strong>客服確認可租，並依指示完成訂金／款項</strong>後才算完成保留；熱門場次以實際完成確認的順序為準。",q3:"可以只租一天、演唱會當日取還嗎？",a3:"可以。標有 24hr 彈性制的方案，如遇演唱會當日租還或特殊行程，將依實際使用時間或場次安排。最終取還時間與交還日期，請以客服協調確認為準。",q4:"取機和歸還時間是什麼時候？",a4:"大巨蛋門市一般交還機時間為<strong>12:00–20:00</strong>。演唱會日可能開放額外營業時段，或依現場安排延長至 23:00；請以當次客服確認時間為準。非公告例外時段逾時歸還，原則上以隔日計。",q5:"第一次拍演唱會，該選哪一台設備？",a5:"<strong>想要最強長焦與遠距離舞台細節：</strong>vivo x300 Ultra。<br><strong>想兼顧預算與長焦拍攝：</strong>vivo x300 Pro 或 vivo x200 Ultra。<br><strong>以錄影、穩定手持畫面為主：</strong>DJI Pocket 4 Pro 全能套裝。<br>實際選擇仍取決於座位區、場館距離、主辦單位規範與拍攝需求。",q6:"增距鏡可以搭配哪些手機？",a6:"vivo x300 Ultra 支援 200mm 與 400mm 增距鏡；vivo x200 Ultra 與 vivo x300 Pro 支援 200mm 增距鏡；OPPO Find X9 Ultra 支援 400mm 增距鏡。iPhone 與 DJI Pocket 4 Pro 不適用此增距鏡特仕組。",q7:"場館或主辦單位禁止增距鏡，怎麼辦？",a7:"租借前請自行確認演唱會主辦與場館規定。若因主辦禁帶導致增距鏡無法使用，增距鏡租金<strong>不退款</strong>，但可轉為<strong>12 個月有效的折抵金</strong>。建議在正式預約前先確認規範，避免現場爭議。",noticeTitle:"仍有其他問題？",noticeBody:"請回到 LINE 對話框輸入「真人客服」，並告知演唱會日期、場館、座位區與想租的設備，客服會協助建議適合的拍攝方案。",bookingButton:"前往器材租借／查詢檔期",footer:"最終設備庫存、報價、取還時間與場館規範，均以 LINE 客服確認內容為準。"
+      },
+      en: {
+        subtitle:"Concert Equipment Rental｜Guide & FAQ",intro:"Please read this guide before renting. For high-demand dates, check equipment availability and dates first, then complete a formal booking after confirmation.",rentalNotice:"RENTAL GUIDE",rq1:"What do I need to bring for pickup?",ra1:"Please bring your <strong>original valid ID</strong> (national ID card, driver's license, or National Health Insurance card) and a <strong>cash security deposit</strong>. The final deposit amount, payment, and pickup requirements are subject to customer-service confirmation.",rq2:"What is included with the rental?",ra2:"Standard rental includes the <strong>device body, charger, and carrying case</strong>. Telephoto extenders, cloud-assisted upload, and other add-ons are charged separately. Please confirm all items and their condition with staff at pickup.",rq3:"What happens to my photos, videos, and account data after return?",ra3:"Your privacy is important to us. After the device is returned, we perform a <strong>factory reset</strong> to erase personal data stored on the device. Before return, please back up your files and sign out of all accounts, including Apple ID, Google, social media, and other logged-in services.",rq4:"What if the equipment is damaged, lost, or not working properly?",ra4:"Please take proper care of the equipment and remain reachable during the rental. If there is damage, loss, or any issue, contact customer service immediately. The renter is responsible for necessary repair or compensation costs under the rental agreement. Do not disassemble or repair the device yourself.",valueAdded:"ADD-ON SERVICE｜CLOUD-ASSISTED UPLOAD",cq1:"What if I do not have time to back up a large number of photos or videos?",ca1:"You may add our <strong>cloud-assisted upload</strong> service. We can upload original photos or videos to cloud storage such as Google Drive or Dropbox for <strong>NT$200 per use</strong>. Downloaded files retain their original data quality for viewing on a computer or phone.",cq2:"How long are cloud files retained?",ca2:"After the download link is provided, please download and back up your files within <strong>14 days</strong> for data security. Files may be deleted without further notice after the retention period, and we cannot provide storage responsibility after expiry.",transferTitle:"FILE TRANSFER GUIDE",vq1:"How do I transfer files from a Vivo phone using EasyShare?",va1:"<strong>Phone-to-phone transfer:</strong><ol><li>Open the EasyShare App on both phones and select Send files.</li><li>On the rental Vivo phone, select Send; on your phone, select Receive.</li><li>Scan the QR code to pair the phones, select your photos, videos, or files, and start the transfer.</li></ol>",vq2:"How do I transfer files from a Vivo phone to Windows or Mac?",va2:"<strong>Transfer to computer:</strong><ol><li>On the Vivo phone, select Share to computer.</li><li>Open <strong>http://vs.vivo.com/</strong> in your computer browser.</li><li>Scan the QR code shown on the webpage with the phone. Once connected, you can transfer files.</li></ol>",iq1:"How do I transfer photos and videos from an iPhone with AirDrop?",ia1:"<ol><li>Turn on Wi‑Fi and Bluetooth on both iPhones.</li><li>In Control Center, set AirDrop to Everyone.</li><li>Tap Share on the media file and choose AirDrop.</li><li>Select your device and tap Accept on your iPhone to complete the transfer.</li></ol>",dq1:"How do I download footage from DJI Pocket?",da1:"<ol><li>Install the latest <strong>DJI Mimo App</strong> from DJI's official website.</li><li>Turn on DJI Pocket and make sure Wi‑Fi and Bluetooth are enabled on your phone.</li><li>Open DJI Mimo, tap the camera icon at the upper left, and connect to the device.</li><li>After connecting, download footage or adjust camera settings in the app.</li></ol>",concertFaq:"CONCERT RENTAL FAQ",q1:"How can I check availability for a popular concert date?",a1:"Open the Rental Booking page, choose the device, pickup date/time, and return date, then tap Check Availability. <strong>Your name, phone number, and ID are not required at this stage.</strong> Complete the formal booking after customer service confirms availability and the final quote.",q2:"Does sending an inquiry mean the device is reserved?",a2:"No. An inquiry only lets us check inventory, pickup arrangements, and pricing. A device is reserved only after <strong>customer service confirms availability and you complete the required deposit/payment</strong>. Popular event bookings are confirmed in order of completion.",q3:"Can I rent for one day or pick up and return on the concert day?",a3:"Yes. For items under the 24-hour flexible plan, same-day concert rentals and special schedules may be arranged according to actual use time or event sessions. Final pickup and return times must be confirmed with customer service.",q4:"What are the pickup and return hours?",a4:"Normal pickup and return hours at the Taipei Dome Store are <strong>12:00–20:00</strong>. On concert days, additional hours may be available or hours may extend to 23:00. Please follow the time confirmed by customer service. Outside announced exceptions, late returns are generally charged as an additional day.",q5:"Which device should I choose for my first concert?",a5:"<strong>For the strongest long zoom and distant stage detail:</strong> vivo x300 Ultra.<br><strong>For a balance of budget and long zoom:</strong> vivo x300 Pro or vivo x200 Ultra.<br><strong>For video and stable handheld footage:</strong> DJI Pocket 4 Pro Creator Combo.<br>Your seat, venue distance, organizer rules, and filming needs should guide the final choice.",q6:"Which phones work with the telephoto extender?",a6:"vivo x300 Ultra supports 200mm and 400mm extenders. vivo x200 Ultra and vivo x300 Pro support the 200mm extender. OPPO Find X9 Ultra supports the 400mm extender. The special extender set is not compatible with iPhone or DJI Pocket 4 Pro.",q7:"What if the venue or organizer prohibits telephoto extenders?",a7:"Please confirm organizer and venue rules before renting. If an extender cannot be used because it is prohibited, the extender rental fee is <strong>non-refundable</strong>, but it may be converted to <strong>store credit valid for 12 months</strong>. We recommend confirming the rules before booking.",noticeTitle:"Need more help?",noticeBody:"Return to the LINE chat and type ‘真人客服’ (human support). Include the concert date, venue, seat area, and device you want to rent so our team can recommend a suitable setup.",bookingButton:"Rental booking / Check availability",footer:"Final availability, pricing, pickup/return time, and venue requirements are subject to confirmation in the LINE chat."
+      }
+    };
+
+    function chooseInitialLanguage() {
+      const saved = localStorage.getItem("fir-faq-language");
+      if (saved === "zh" || saved === "en") return saved;
+      return (navigator.language || "zh").toLowerCase().startsWith("zh") ? "zh" : "en";
+    }
+
+    function applyLanguage(language) {
+      currentLang = language;
+      document.documentElement.lang = language === "zh" ? "zh-TW" : "en";
+      document.getElementById("languageButton").textContent = language === "zh" ? "English" : "繁體中文";
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const key = element.dataset.i18n;
+        if (copy[language][key]) element.innerHTML = copy[language][key];
+      });
+    }
+
+    function toggleLanguage() {
+      const next = currentLang === "zh" ? "en" : "zh";
+      localStorage.setItem("fir-faq-language", next);
+      applyLanguage(next);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => applyLanguage(chooseInitialLanguage()));
+  </script>
+</body>
+</html>
