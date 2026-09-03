@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0b0d">
+  <title>FIX iT RiGHT｜租借流程</title>
+  <style>
+    :root { --bg:#0b0b0d; --card:#17171a; --card2:#202024; --line:#2d2d32; --text:#f4f4f5; --muted:#a1a1aa; --sub:#71717a; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang TC","Noto Sans TC","Helvetica Neue",Arial,sans-serif; -webkit-font-smoothing:antialiased; }
+    .wrap { width:min(100%,500px); margin:0 auto; padding:14px 14px 34px; }
+    .topbar { display:flex; justify-content:flex-end; min-height:38px; margin-bottom:4px; }
+    .lang-toggle { width:auto; min-height:34px; padding:6px 11px; border:1px solid #595961; border-radius:8px; background:#202024; color:#fff; font:inherit; font-size:12px; font-weight:750; cursor:pointer; }
+    .header { padding:7px 4px 18px; border-bottom:1px solid var(--line); margin-bottom:18px; }
+    .brand { font-size:22px; font-weight:800; letter-spacing:.3px; }
+    .subtitle { margin-top:4px; color:var(--muted); font-size:13px; }
+    .intro { margin-top:10px; color:var(--sub); font-size:12px; line-height:1.6; }
+    .section-title { margin:20px 4px 8px; color:var(--muted); font-size:12px; font-weight:700; letter-spacing:.5px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px; }
+    .step { display:grid; grid-template-columns:28px 1fr; gap:10px; padding:3px 0 14px; }
+    .step:last-child { padding-bottom:0; }
+    .step-number { width:28px; height:28px; display:flex; align-items:center; justify-content:center; border:1px solid #4a4a52; border-radius:50%; color:#fff; font-size:12px; font-weight:750; }
+    .step-title { color:var(--text); font-size:14px; font-weight:750; line-height:1.5; }
+    .step-body { margin-top:4px; color:var(--muted); font-size:13px; line-height:1.7; }
+    .step-body ol { margin:7px 0 0; padding-left:20px; }.step-body li { margin:4px 0; }
+    .link-button { display:block; margin-top:10px; padding:11px 12px; border:1px solid #fff; border-radius:8px; background:#fff; color:#111; font-size:13px; font-weight:750; text-align:center; text-decoration:none; }
+    .notice { margin-top:14px; padding:13px; border:1px solid var(--line); border-radius:12px; background:var(--card); color:var(--sub); font-size:12px; line-height:1.7; }
+    .notice-title { display:block; margin-bottom:5px; color:var(--text); font-size:13px; font-weight:750; }
+    .notice ol { margin:7px 0 0; padding-left:20px; }.notice li { margin:5px 0; }
+    .footer { margin:18px 4px 0; color:var(--sub); font-size:11px; line-height:1.65; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="topbar"><button type="button" class="lang-toggle" id="languageButton" onclick="toggleLanguage()">English</button></div>
+    <header class="header">
+      <div class="brand">FIX iT RiGHT</div>
+      <div class="subtitle" data-i18n="subtitle">器材租借流程</div>
+      <div class="intro" data-i18n="intro">從查詢檔期、確認預約、門市交機到歸還設備的完整流程。實際設備庫存、金額與交還時間，以 LINE 客服最後確認內容為準。</div>
+    </header>
+
+    <div class="section-title" data-i18n="preTitle">預約前期｜查詢與完成預約</div>
+    <section class="card">
+      <div class="step"><div class="step-number">A</div><div><div class="step-title" data-i18n="preStep1Title">進入器材租借頁面</div><div class="step-body" data-i18n="preStep1Body">點擊下方圖文選單的「器材租借」，或透過連結進入表單；選擇設備及預計取還時間後，可先查詢檔期。熱門檔期可先詢問，不必先填姓名與電話。</div><a class="link-button" href="https://reurl.cc/3yKydR" data-i18n="bookingLink">前往器材租借／查詢檔期</a></div></div>
+      <div class="step"><div class="step-number">B</div><div><div class="step-title" data-i18n="preStep2Title">確認檔期與報價</div><div class="step-body" data-i18n="preStep2Body">客服確認預約日期、設備庫存與交還安排後，將開立報價單。請依客服指示，以屬名本人帳戶匯款支付定金。</div></div></div>
+      <div class="step"><div class="step-number">C</div><div><div class="step-title" data-i18n="preStep3Title">完成預約</div><div class="step-body" data-i18n="preStep3Body">客服完成對帳後，將回傳租賃憑證；收到憑證即代表預約完成。熱門檔期以客服確認及款項完成時間為準。</div></div></div>
+    </section>
+
+    <div class="section-title" data-i18n="duringTitle">預約中期｜門市交機</div>
+    <section class="card">
+      <div class="step"><div class="step-number">A</div><div><div class="step-title" data-i18n="duringStep1Title">依約抵達門市</div><div class="step-body" data-i18n="duringStep1Body">請於約定交機時間抵達門市，並預留約 5–10 分鐘完成點交。現場將簽署手機租賃合約一式兩份、交付餘款並簽收租賃憑證。</div></div></div>
+      <div class="step"><div class="step-number">B</div><div><div class="step-title" data-i18n="duringStep2Title">辦理證件與押金</div><div class="step-body" data-i18n="duringStep2Body">請備妥器材現金押金及本人有效證件正本。確認門號與本人身分後，證件將裝入信封袋，由租借人簽名並裝釘封口。</div></div></div>
+      <div class="step"><div class="step-number">C</div><div><div class="step-title" data-i18n="duringStep3Title">檢查器材並完成交機</div><div class="step-body" data-i18n="duringStep3Body">請與現場人員確認主機功能、外觀及所有配件。確認無誤後完成交機與租賃程序。</div></div></div>
+    </section>
+
+    <div class="section-title" data-i18n="postTitle">預約後期｜歸還與退還押金</div>
+    <section class="card">
+      <div class="step"><div class="step-number">A</div><div><div class="step-title" data-i18n="postStep1Title">依約歸還設備</div><div class="step-body" data-i18n="postStep1Body">請於約定歸還日與時間保持聯繫並抵達門市交還設備。現場將檢查主機功能、外觀及配件是否完整。</div></div></div>
+      <div class="step"><div class="step-number">B</div><div><div class="step-title" data-i18n="postStep2Title">確認設備歸還</div><div class="step-body" data-i18n="postStep2Body">設備檢查無問題後，雙方簽署確認歸還的手機租賃合約，完成歸還程序。</div></div></div>
+      <div class="step"><div class="step-number">C</div><div><div class="step-title" data-i18n="postStep3Title">現場確認押金與證件</div><div class="step-body" data-i18n="postStep3Body">客服歸還屬名裝釘信封袋；租借人現場拆封確認現金押金與證件無誤後，即完成本次租賃流程。</div></div></div>
+    </section>
+
+    <section class="notice">
+      <span class="notice-title" data-i18n="noticeTitle">注意事項</span>
+      <ol>
+        <li data-i18n="notice1">請務必依約定時間交還設備，以避免產生逾時費用。</li>
+        <li data-i18n="notice2">非門市交還機之租借，須依價目表／客服確認的免證件押金金額支付後，才會安排寄送。</li>
+        <li data-i18n="notice3">租借期間請保持電話及 LINE 暢通；如有任何問題請即時與客服聯繫，以確保流程順利進行。</li>
+      </ol>
+    </section>
+
+    <div class="footer" data-i18n="footer">最終設備庫存、租金、定金、押金、取還時間與寄送安排，均以 LINE 客服確認內容為準。</div>
+  </main>
+
+  <script>
+    let currentLang = "zh";
+    const copy = {
+      zh: {
+        subtitle:"器材租借流程",
+        intro:"從查詢檔期、確認預約、門市交機到歸還設備的完整流程。實際設備庫存、金額與交還時間，以 LINE 客服最後確認內容為準。",
+        preTitle:"預約前期｜查詢與完成預約",
+        preStep1Title:"進入器材租借頁面",
+        preStep1Body:"點擊下方圖文選單的「器材租借」，或透過連結進入表單；選擇設備及預計取還時間後，可先查詢檔期。熱門檔期可先詢問，不必先填姓名與電話。",
+        bookingLink:"前往器材租借／查詢檔期",
+        preStep2Title:"確認檔期與報價",
+        preStep2Body:"客服確認預約日期、設備庫存與交還安排後，將開立報價單。請依客服指示，以屬名本人帳戶匯款支付定金。",
+        preStep3Title:"完成預約",
+        preStep3Body:"客服完成對帳後，將回傳租賃憑證；收到憑證即代表預約完成。熱門檔期以客服確認及款項完成時間為準。",
+        duringTitle:"預約中期｜門市交機",
+        duringStep1Title:"依約抵達門市",
+        duringStep1Body:"請於約定交機時間抵達門市，並預留約 5–10 分鐘完成點交。現場將簽署手機租賃合約一式兩份、交付餘款並簽收租賃憑證。",
+        duringStep2Title:"辦理證件與押金",
+        duringStep2Body:"請備妥器材現金押金及本人有效證件正本。確認門號與本人身分後，證件將裝入信封袋，由租借人簽名並裝釘封口。",
+        duringStep3Title:"檢查器材並完成交機",
+        duringStep3Body:"請與現場人員確認主機功能、外觀及所有配件。確認無誤後完成交機與租賃程序。",
+        postTitle:"預約後期｜歸還與退還押金",
+        postStep1Title:"依約歸還設備",
+        postStep1Body:"請於約定歸還日與時間保持聯繫並抵達門市交還設備。現場將檢查主機功能、外觀及配件是否完整。",
+        postStep2Title:"確認設備歸還",
+        postStep2Body:"設備檢查無問題後，雙方簽署確認歸還的手機租賃合約，完成歸還程序。",
+        postStep3Title:"現場確認押金與證件",
+        postStep3Body:"客服歸還屬名裝釘信封袋；租借人現場拆封確認現金押金與證件無誤後，即完成本次租賃流程。",
+        noticeTitle:"注意事項",
+        notice1:"請務必依約定時間交還設備，以避免產生逾時費用。",
+        notice2:"非門市交還機之租借，須依價目表／客服確認的免證件押金金額支付後，才會安排寄送。",
+        notice3:"租借期間請保持電話及 LINE 暢通；如有任何問題請即時與客服聯繫，以確保流程順利進行。",
+        footer:"最終設備庫存、租金、定金、押金、取還時間與寄送安排，均以 LINE 客服確認內容為準。"
+      },
+      en: {
+        subtitle:"Equipment Rental Process",
+        intro:"A complete guide from checking availability and confirming your booking to in-store handover and return. Final device availability, pricing, and pickup/return times are subject to LINE customer-service confirmation.",
+        preTitle:"BEFORE BOOKING｜INQUIRY & CONFIRMATION",
+        preStep1Title:"Open the rental booking page",
+        preStep1Body:"Tap Rental Booking in the rich menu below, or open the booking link. Select the device and estimated pickup/return times to check availability. For high-demand dates, you can inquire first without entering your name or phone number.",
+        bookingLink:"Rental booking / Check availability",
+        preStep2Title:"Confirm availability and quotation",
+        preStep2Body:"After customer service confirms the date, device availability, and handover arrangement, a quotation will be issued. Please pay the booking deposit from an account under the renter's name as instructed.",
+        preStep3Title:"Complete the reservation",
+        preStep3Body:"After payment is verified, customer service will send a rental voucher. Receipt of the voucher confirms the booking. For popular dates, confirmation follows customer-service approval and payment completion time.",
+        duringTitle:"AT PICKUP｜IN-STORE HANDOVER",
+        duringStep1Title:"Arrive at the store at the agreed time",
+        duringStep1Body:"Please arrive at the agreed pickup time and allow approximately 5–10 minutes for handover. You will sign two copies of the mobile-device rental agreement, pay the remaining balance, and acknowledge the rental voucher.",
+        duringStep2Title:"Complete ID and deposit procedure",
+        duringStep2Body:"Prepare the required cash security deposit and your original valid ID. After your phone number and identity are confirmed, the ID will be placed in an envelope, signed by the renter, and sealed.",
+        duringStep3Title:"Inspect equipment and complete handover",
+        duringStep3Body:"Please check the device functions, condition, and all accessories with staff. The rental begins after both parties confirm the handover is complete.",
+        postTitle:"AT RETURN｜INSPECTION & DEPOSIT RETURN",
+        postStep1Title:"Return the equipment as agreed",
+        postStep1Body:"Stay reachable and return to the store on the agreed date and time. Staff will inspect device functions, condition, and whether all accessories are present.",
+        postStep2Title:"Confirm the equipment return",
+        postStep2Body:"After the equipment passes inspection, both parties sign the return confirmation on the rental agreement to complete the return procedure.",
+        postStep3Title:"Verify the deposit and ID in person",
+        postStep3Body:"Customer service returns the sealed envelope under the renter's name. The renter opens it on site to confirm that the cash deposit and ID are correct, completing the rental process.",
+        noticeTitle:"IMPORTANT NOTES",
+        notice1:"Please return equipment on time to avoid late-return charges.",
+        notice2:"For rentals that are not picked up and returned at the store, delivery is arranged only after the no-ID deposit amount confirmed in the price list or by customer service has been paid.",
+        notice3:"Please remain reachable by phone and LINE throughout the rental. Contact customer service promptly if any issue arises to ensure a smooth rental process.",
+        footer:"Final device availability, rental fees, booking deposit, security deposit, pickup/return time, and delivery arrangements are subject to LINE customer-service confirmation."
+      }
+    };
+
+    function chooseInitialLanguage() {
+      const saved = localStorage.getItem("fir-process-language");
+      if (saved === "zh" || saved === "en") return saved;
+      return (navigator.language || "zh").toLowerCase().startsWith("zh") ? "zh" : "en";
+    }
+
+    function applyLanguage(language) {
+      currentLang = language;
+      document.documentElement.lang = language === "zh" ? "zh-TW" : "en";
+      document.getElementById("languageButton").textContent = language === "zh" ? "English" : "繁體中文";
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const key = element.dataset.i18n;
+        if (copy[language][key]) element.innerHTML = copy[language][key];
+      });
+    }
+
+    function toggleLanguage() {
+      const next = currentLang === "zh" ? "en" : "zh";
+      localStorage.setItem("fir-process-language", next);
+      applyLanguage(next);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => applyLanguage(chooseInitialLanguage()));
+  </script>
+</body>
+</html>
