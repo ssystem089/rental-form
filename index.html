@@ -3,102 +3,167 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>📱 器材租借快速預約</title>
+  <title>📱 演唱會相機/手機租借預約</title>
   <!-- 載入 LINE LIFF SDK -->
   <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f7f9fa; padding: 16px; color: #333; margin: 0; }
-    .card { background: white; padding: 20px; border-radius: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); max-width: 450px; margin: 0 auto; }
-    h2 { margin-top: 0; color: #06C755; text-align: center; font-size: 20px; font-weight: 800; }
-    .form-group { margin-bottom: 14px; }
-    label { display: block; font-weight: bold; margin-bottom: 6px; font-size: 14px; color: #222; }
-    input, select { width: 100%; padding: 11px; border: 1px solid #dcdfe6; border-radius: 8px; box-sizing: border-box; font-size: 15px; background: #fff; outline: none; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f2f4f7; padding: 14px; color: #333; margin: 0; }
+    .container { max-width: 460px; margin: 0 auto; }
+    .card { background: white; padding: 18px; border-radius: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); margin-bottom: 14px; }
+    h2 { margin: 0 0 12px 0; color: #06C755; text-align: center; font-size: 19px; font-weight: 800; }
+    h3 { margin: 0 0 10px 0; font-size: 15px; color: #111; display: flex; align-items: center; gap: 6px; }
+    
+    /* 價目表格樣式 */
+    .price-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 4px; }
+    .price-table th { background: #f8fafc; color: #475569; padding: 8px 6px; text-align: left; font-weight: 600; border-bottom: 2px solid #e2e8f0; }
+    .price-table td { padding: 9px 6px; border-bottom: 1px solid #edf2f7; vertical-align: middle; }
+    .tag { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; background: #e8f8f0; color: #05a847; margin-top: 3px; }
+    .price-num { font-weight: bold; color: #e11d48; }
+
+    /* 表單樣式 */
+    .form-group { margin-bottom: 13px; }
+    label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 13px; color: #333; }
+    input, select { width: 100%; padding: 10px; border: 1px solid #dcdfe6; border-radius: 8px; box-sizing: border-box; font-size: 14px; background: #fff; outline: none; }
     input:focus, select:focus { border-color: #06C755; }
     .row { display: flex; gap: 10px; }
     .row .form-group { flex: 1; }
-    .btn-submit { width: 100%; padding: 14px; background-color: #06C755; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+    .btn-submit { width: 100%; padding: 14px; background-color: #06C755; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 8px; }
     .btn-submit:active { background-color: #05a847; }
-    .note { font-size: 12px; color: #888; margin-top: 12px; line-height: 1.6; background: #f9f9f9; padding: 10px; border-radius: 6px; }
+    .note { font-size: 11px; color: #64748b; line-height: 1.6; background: #f8fafc; padding: 10px; border-radius: 8px; margin-top: 10px; border-left: 3px solid #06C755; }
   </style>
 </head>
 <body>
 
-<div class="card">
-  <h2>📱 演唱會相機/手機租借預約</h2>
+<div class="container">
   
-  <div class="form-group">
-    <label>※ 租借主機型號</label>
-    <select id="model" onchange="updateLensOptions()">
-      <option value="Vivo X300 Ultra">Vivo X300 Ultra</option>
-      <option value="Vivo X200 Ultra">Vivo X200 Ultra</option>
-      <option value="Vivo X300 Pro">Vivo X300 Pro</option>
-      <option value="OPPO Find X9 Ultra">OPPO Find X9 Ultra</option>
-      <option value="iPhone 17 Pro Max">iPhone 17 Pro Max</option>
-      <option value="僅租借 G2 增距鏡頭">僅租借 G2 增距鏡頭</option>
-    </select>
-  </div>
-
-  <div class="form-group" id="lensGroup">
-    <label>※ 加選增距鏡頭配件</label>
-    <select id="lens">
-      <option value="無加購增距鏡 (單機身)">無加購增距鏡 (單機身)</option>
-      <option value="加購 G2 200mm 增距鏡">加購 G2 200mm 增距鏡</option>
-      <option value="加購 G2 Ultra 400mm 增距鏡">加購 G2 Ultra 400mm 增距鏡</option>
-    </select>
-  </div>
-
-  <div class="row">
-    <div class="form-group">
-      <label>※ 取機日期與時間</label>
-      <input type="datetime-local" id="pickupTime">
+  <!-- 頂部：最新設備價目表卡片 -->
+  <div class="card">
+    <h3>🏷️ 最新租借設備價目表</h3>
+    <table class="price-table">
+      <thead>
+        <tr>
+          <th>設備型號</th>
+          <th>日租金</th>
+          <th>可選增距鏡</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Vivo X300 Ultra</b></td>
+          <td class="price-num">NT$ 900</td>
+          <td><span class="tag">200mm / 400mm</span></td>
+        </tr>
+        <tr>
+          <td><b>Vivo X200 Ultra</b></td>
+          <td class="price-num">NT$ 800</td>
+          <td><span class="tag">200mm</span></td>
+        </tr>
+        <tr>
+          <td><b>Vivo X300 Pro</b></td>
+          <td class="price-num">NT$ 750</td>
+          <td><span class="tag">200mm</span></td>
+        </tr>
+        <tr>
+          <td><b>OPPO Find X9 Ultra</b></td>
+          <td class="price-num">NT$ 850</td>
+          <td><span class="tag">400mm</span></td>
+        </tr>
+        <tr>
+          <td><b>iPhone 17 Pro Max</b></td>
+          <td class="price-num">NT$ 800</td>
+          <td style="color:#94a3b8; font-size:11px;">無適配</td>
+        </tr>
+        <tr>
+          <td><b>G2 增距鏡頭 (單租)</b></td>
+          <td class="price-num">NT$ 200~300</td>
+          <td><span class="tag">200mm / 400mm</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size: 11px; color: #94a3b8; margin-top: 6px; text-align: right;">
+      ※ 均附防摔殼、保護貼、專用充電線與收納包
     </div>
+  </div>
+
+  <!-- 下方：預約填寫表單 -->
+  <div class="card">
+    <h2>📝 填寫預約需求</h2>
+    
     <div class="form-group">
-      <label>※ 歸還日期</label>
-      <input type="date" id="returnDate">
+      <label>※ 租借主機型號</label>
+      <select id="model" onchange="updateLensOptions()">
+        <option value="Vivo X300 Ultra">Vivo X300 Ultra</option>
+        <option value="Vivo X200 Ultra">Vivo X200 Ultra</option>
+        <option value="Vivo X300 Pro">Vivo X300 Pro</option>
+        <option value="OPPO Find X9 Ultra">OPPO Find X9 Ultra</option>
+        <option value="iPhone 17 Pro Max">iPhone 17 Pro Max</option>
+        <option value="僅租借 G2 增距鏡頭">僅租借 G2 增距鏡頭</option>
+      </select>
+    </div>
+
+    <div class="form-group" id="lensGroup">
+      <label>※ 加選增距鏡頭配件</label>
+      <select id="lens">
+        <option value="無加購增距鏡 (單機身)">無加購增距鏡 (單機身)</option>
+        <option value="加購 G2 200mm 增距鏡">加購 G2 200mm 增距鏡</option>
+        <option value="加購 G2 Ultra 400mm 增距鏡">加購 G2 Ultra 400mm 增距鏡</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label>※ 取機時間</label>
+        <input type="datetime-local" id="pickupTime">
+      </div>
+      <div class="form-group">
+        <label>※ 歸還日期</label>
+        <input type="date" id="returnDate">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label>※ 承租人姓名</label>
+        <input type="text" id="name" placeholder="身分證姓名">
+      </div>
+      <div class="form-group">
+        <label>※ 聯絡手機</label>
+        <input type="tel" id="phone" placeholder="同 LINE 門號">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>※ 押附證件正本</label>
+      <select id="idType">
+        <option value="身分證">身分證正本</option>
+        <option value="健保卡">健保卡正本</option>
+        <option value="駕照">駕照正本</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>※ 台北大巨蛋門市交還機</label>
+      <select id="isStore">
+        <option value="Yes">Yes (大巨蛋門市親取親還)</option>
+        <option value="No">No (需寄送，依免證件押金計)</option>
+      </select>
+    </div>
+
+    <button class="btn-submit" onclick="submitBooking()">確認送出預約</button>
+    
+    <div class="note">
+      • 基礎訂金 700 元起（可全額抵扣租金/以報價為主）<br>
+      • 預付定金方式：同名本人帳號匯款<br>
+      • 押金支付方式：門市現場現金點交（退還時當場返還）<br>
+      • 送出後客服將為您核對檔期並提供專屬報價單！
     </div>
   </div>
 
-  <div class="row">
-    <div class="form-group">
-      <label>※ 承租人姓名</label>
-      <input type="text" id="name" placeholder="身分證姓名">
-    </div>
-    <div class="form-group">
-      <label>※ 聯絡手機</label>
-      <input type="tel" id="phone" placeholder="同 LINE 門號">
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label>※ 押附證件正本</label>
-    <select id="idType">
-      <option value="身分證">身分證正本</option>
-      <option value="健保卡">健保卡正本</option>
-      <option value="駕照">駕照正本</option>
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label>※ 台北大巨蛋門市交還機</label>
-    <select id="isStore">
-      <option value="Yes">Yes (大巨蛋門市親取親還)</option>
-      <option value="No">No (需寄送，依免證件押金計)</option>
-    </select>
-  </div>
-
-  <button class="btn-submit" onclick="submitBooking()">確認送出預約</button>
-  
-  <div class="note">
-    💡 基礎訂金 700 元起（可全額抵扣租金）<br>
-    💡 預付定金方式：同名本人帳號匯款<br>
-    💡 押金支付方式：門市現場現金點交（退還時返還）<br>
-    💡 送出後客服將為您保留檔期並發送專屬報價單！
-  </div>
 </div>
 
 <script>
   // === 填入你的 LIFF ID ===
-  const MY_LIFF_ID = "200xxxxxxx-xxxxxxx"; // 請替換成你在 LINE Developers 取得的 LIFF ID
+  const MY_LIFF_ID = "200xxxxxxx-xxxxxxx"; // 請替換成你的 LIFF ID
 
   // 初始化 LIFF
   liff.init({ liffId: MY_LIFF_ID }).then(() => {
