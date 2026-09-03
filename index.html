@@ -3,116 +3,171 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>📱 演唱會相機/手機租借預約</title>
+  <title>FIX iT RiGHT 器材租借預約系統</title>
   <!-- 載入 LINE LIFF SDK -->
   <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f2f4f7; padding: 14px; color: #333; margin: 0; }
-    .container { max-width: 460px; margin: 0 auto; }
-    .card { background: white; padding: 18px; border-radius: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); margin-bottom: 14px; }
-    h2 { margin: 0 0 12px 0; color: #06C755; text-align: center; font-size: 19px; font-weight: 800; }
-    h3 { margin: 0 0 10px 0; font-size: 15px; color: #111; display: flex; align-items: center; gap: 6px; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #121212; color: #f1f5f9; padding: 12px; margin: 0; }
+    .container { max-width: 480px; margin: 0 auto; }
     
-    /* 價目表格樣式 */
-    .price-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 4px; }
-    .price-table th { background: #f8fafc; color: #475569; padding: 8px 6px; text-align: left; font-weight: 600; border-bottom: 2px solid #e2e8f0; }
-    .price-table td { padding: 9px 6px; border-bottom: 1px solid #edf2f7; vertical-align: middle; }
-    .tag { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; background: #e8f8f0; color: #05a847; margin-top: 3px; }
-    .price-num { font-weight: bold; color: #e11d48; }
+    /* 品牌標題卡片 */
+    .header-card { background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid #334155; padding: 16px; border-radius: 12px; text-align: center; margin-bottom: 12px; }
+    .brand-title { font-size: 22px; font-weight: 900; letter-spacing: 1px; color: #fff; margin: 0; }
+    .brand-sub { font-size: 13px; color: #94a3b8; margin-top: 4px; }
+    .store-info { font-size: 11px; color: #cbd5e1; background: rgba(255,255,255,0.06); padding: 6px 10px; border-radius: 6px; margin-top: 8px; line-height: 1.4; }
 
-    /* 表單樣式 */
-    .form-group { margin-bottom: 13px; }
-    label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 13px; color: #333; }
-    input, select { width: 100%; padding: 10px; border: 1px solid #dcdfe6; border-radius: 8px; box-sizing: border-box; font-size: 14px; background: #fff; outline: none; }
-    input:focus, select:focus { border-color: #06C755; }
-    .row { display: flex; gap: 10px; }
+    /* 區塊卡片 */
+    .card { background: #1e1e1e; border: 1px solid #2d2d2d; padding: 16px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); margin-bottom: 12px; }
+    h3 { margin: 0 0 10px 0; font-size: 15px; color: #38ef7d; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 6px; }
+    
+    /* 價目表格 */
+    .price-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 6px; }
+    .price-table th { background: #262626; color: #a3a3a3; padding: 7px 5px; text-align: left; font-weight: 600; }
+    .price-table td { padding: 8px 5px; border-bottom: 1px solid #2a2a2a; vertical-align: middle; }
+    .p-tier { color: #f87171; font-weight: bold; }
+    .tag-g2 { background: #1e3a8a; color: #93c5fd; font-size: 10px; padding: 1px 4px; border-radius: 3px; font-weight: bold; }
+    .tag-g2u { background: #831843; color: #fbcfe8; font-size: 10px; padding: 1px 4px; border-radius: 3px; font-weight: bold; }
+    .deposit-tag { font-size: 11px; color: #fbbf24; background: rgba(251,191,36,0.1); padding: 4px 8px; border-radius: 4px; margin-top: 6px; }
+
+    /* 表單元件 */
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 13px; color: #e2e8f0; }
+    input, select { width: 100%; padding: 10px; border: 1px solid #404040; border-radius: 6px; box-sizing: border-box; font-size: 14px; background: #262626; color: #fff; outline: none; }
+    input:focus, select:focus { border-color: #38ef7d; }
+    .row { display: flex; gap: 8px; }
     .row .form-group { flex: 1; }
-    .btn-submit { width: 100%; padding: 14px; background-color: #06C755; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 8px; }
-    .btn-submit:active { background-color: #05a847; }
-    .note { font-size: 11px; color: #64748b; line-height: 1.6; background: #f8fafc; padding: 10px; border-radius: 8px; margin-top: 10px; border-left: 3px solid #06C755; }
+    .btn-submit { width: 100%; padding: 14px; background: linear-gradient(135deg, #11998e, #38ef7d); color: #000; border: none; border-radius: 8px; font-size: 16px; font-weight: 900; cursor: pointer; margin-top: 6px; letter-spacing: 0.5px; }
+    .btn-submit:active { opacity: 0.9; }
+    .rules { font-size: 11px; color: #94a3b8; line-height: 1.6; background: #181818; padding: 10px; border-radius: 6px; border-left: 3px solid #38ef7d; margin-top: 10px; }
   </style>
 </head>
 <body>
 
 <div class="container">
   
-  <!-- 頂部：最新設備價目表卡片 -->
+  <!-- 品牌抬頭與門市資訊 -->
+  <div class="header-card">
+    <div class="brand-title">FIX iT RiGHT</div>
+    <div class="brand-sub">器材租借 SS價目表 (2026.08.10 修正版)</div>
+    <div class="store-info">
+      📍 台北大巨蛋門市：台北市大安區光復南路88號1樓<br>
+      ⏰ 營業時間：12:00 - 20:00 (近國父紀念館站1號出口)
+    </div>
+  </div>
+
+  <!-- 頂部：完整官方價目表 -->
   <div class="card">
-    <h3>🏷️ 最新租借設備價目表</h3>
+    <h3>🏷️ 最新器材租借價目一覽 <span style="font-size:11px; color:#a3a3a3;">24H彈性制</span></h3>
     <table class="price-table">
       <thead>
         <tr>
           <th>設備型號</th>
-          <th>日租金</th>
-          <th>可選增距鏡</th>
+          <th>1-2日</th>
+          <th>3-5日</th>
+          <th>6日up</th>
+          <th>支援增距鏡</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><b>Vivo X300 Ultra</b></td>
-          <td class="price-num">NT$ 900</td>
-          <td><span class="tag">200mm / 400mm</span></td>
+          <td><b>vivo x300 Ultra</b></td>
+          <td class="p-tier">$1,200</td>
+          <td>$1,000</td>
+          <td>$900</td>
+          <td><span class="tag-g2">200</span> <span class="tag-g2u">400</span></td>
         </tr>
         <tr>
-          <td><b>Vivo X200 Ultra</b></td>
-          <td class="price-num">NT$ 800</td>
-          <td><span class="tag">200mm</span></td>
+          <td><b>vivo x200 Ultra</b></td>
+          <td class="p-tier">$1,000</td>
+          <td>$900</td>
+          <td>$800</td>
+          <td><span class="tag-g2">200</span></td>
         </tr>
         <tr>
-          <td><b>Vivo X300 Pro</b></td>
-          <td class="price-num">NT$ 750</td>
-          <td><span class="tag">200mm</span></td>
+          <td><b>vivo x300 Pro</b></td>
+          <td class="p-tier">$900</td>
+          <td>$800</td>
+          <td>$700</td>
+          <td><span class="tag-g2">200</span></td>
         </tr>
         <tr>
           <td><b>OPPO Find X9 Ultra</b></td>
-          <td class="price-num">NT$ 850</td>
-          <td><span class="tag">400mm</span></td>
+          <td class="p-tier">$1,000</td>
+          <td>$900</td>
+          <td>$800</td>
+          <td><span class="tag-g2u">400</span></td>
         </tr>
         <tr>
-          <td><b>iPhone 17 Pro Max</b></td>
-          <td class="price-num">NT$ 800</td>
-          <td style="color:#94a3b8; font-size:11px;">無適配</td>
+          <td><b>iPhone 17 Pro / Max</b></td>
+          <td class="p-tier">$850</td>
+          <td>$750</td>
+          <td>$600</td>
+          <td style="color:#666;">無</td>
         </tr>
         <tr>
-          <td><b>G2 增距鏡頭 (單租)</b></td>
-          <td class="price-num">NT$ 200~300</td>
-          <td><span class="tag">200mm / 400mm</span></td>
+          <td><b>DJI Pocket 4 Pro</b></td>
+          <td class="p-tier" colspan="3">$700 /日 (全能套裝)</td>
+          <td style="color:#666;">三軸雙鏡</td>
+        </tr>
+        <tr>
+          <td><b>vivo 400mm 增距鏡</b></td>
+          <td class="p-tier" colspan="3">$600 /日 (特仕組)</td>
+          <td><span class="tag-g2u">G2 Ultra</span></td>
+        </tr>
+        <tr>
+          <td><b>vivo 200mm 增距鏡</b></td>
+          <td class="p-tier" colspan="3">$300 /日 (特仕組)</td>
+          <td><span class="tag-g2">G2</span></td>
+        </tr>
+        <tr>
+          <td><b>雲端上傳服務</b></td>
+          <td class="p-tier" colspan="4">$200 /次 (保留2週免現場等待，原畫質下載)</td>
         </tr>
       </tbody>
     </table>
-    <div style="font-size: 11px; color: #94a3b8; margin-top: 6px; text-align: right;">
-      ※ 均附防摔殼、保護貼、專用充電線與收納包
+    <div class="deposit-tag">
+      🛡 押金規範：本人有效證件＋現金押金 NT$ 3,000 (免門市寄送押金 NT$ 30,000)
     </div>
   </div>
 
-  <!-- 下方：預約填寫表單 -->
+  <!-- 下方：預約表單 -->
   <div class="card">
-    <h2>📝 填寫預約需求</h2>
+    <h3>📝 填寫租借需求表單</h3>
     
     <div class="form-group">
       <label>※ 租借主機型號</label>
       <select id="model" onchange="updateLensOptions()">
-        <option value="Vivo X300 Ultra">Vivo X300 Ultra</option>
-        <option value="Vivo X200 Ultra">Vivo X200 Ultra</option>
-        <option value="Vivo X300 Pro">Vivo X300 Pro</option>
-        <option value="OPPO Find X9 Ultra">OPPO Find X9 Ultra</option>
+        <option value="vivo x300 Ultra">vivo x300 Ultra (長焦之王)</option>
+        <option value="vivo x200 Ultra">vivo x200 Ultra (大光圈細節)</option>
+        <option value="vivo x300 Pro">vivo x300 Pro (高CP值首選)</option>
+        <option value="OPPO Find X9 Ultra">OPPO Find X9 Ultra (哈蘇10x光學)</option>
         <option value="iPhone 17 Pro Max">iPhone 17 Pro Max</option>
-        <option value="僅租借 G2 增距鏡頭">僅租借 G2 增距鏡頭</option>
+        <option value="iPhone 17 Pro">iPhone 17 Pro</option>
+        <option value="DJI Pocket 4 Pro 全能套裝">DJI Pocket 4 Pro 全能套裝</option>
+        <option value="僅租借 G2 增距鏡頭特仕組">僅租借 G2 增距鏡頭特仕組</option>
       </select>
     </div>
 
     <div class="form-group" id="lensGroup">
-      <label>※ 加選增距鏡頭配件</label>
+      <label>※ 加選選配項目</label>
       <select id="lens">
-        <option value="無加購增距鏡 (單機身)">無加購增距鏡 (單機身)</option>
-        <option value="加購 G2 200mm 增距鏡">加購 G2 200mm 增距鏡</option>
-        <option value="加購 G2 Ultra 400mm 增距鏡">加購 G2 Ultra 400mm 增距鏡</option>
+        <option value="無加選配件 (單機身)">無加選配件 (單機身)</option>
+        <option value="加租 200mm 增距鏡 (+$300/D)">加租 200mm 增距鏡 (+$300/D)</option>
+        <option value="加租 400mm 增距鏡 (+$600/D)">加租 400mm 增距鏡 (+$600/D)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>※ 雲端上傳服務 (Keep 2 weeks)</label>
+      <select id="cloudService">
+        <option value="No">不需要 (現場自行傳檔取機)</option>
+        <option value="Yes (+$200/次)">需要 (+$200/次，24H原畫質雲端下載)</option>
       </select>
     </div>
 
     <div class="row">
       <div class="form-group">
-        <label>※ 取機時間</label>
+        <label>※ 取機時間 (24H彈性)</label>
         <input type="datetime-local" id="pickupTime">
       </div>
       <div class="form-group">
@@ -123,8 +178,8 @@
 
     <div class="row">
       <div class="form-group">
-        <label>※ 承租人姓名</label>
-        <input type="text" id="name" placeholder="身分證姓名">
+        <label>※ 承租人姓名 (證件名)</label>
+        <input type="text" id="name" placeholder="取機人身分證姓名">
       </div>
       <div class="form-group">
         <label>※ 聯絡手機</label>
@@ -133,11 +188,11 @@
     </div>
 
     <div class="form-group">
-      <label>※ 押附證件正本</label>
+      <label>※ 押附證件正本 (門市點交)</label>
       <select id="idType">
-        <option value="身分證">身分證正本</option>
-        <option value="健保卡">健保卡正本</option>
-        <option value="駕照">駕照正本</option>
+        <option value="身分證正本">身分證正本</option>
+        <option value="健保卡正本">健保卡正本</option>
+        <option value="駕照正本">駕照正本</option>
       </select>
     </div>
 
@@ -145,17 +200,18 @@
       <label>※ 台北大巨蛋門市交還機</label>
       <select id="isStore">
         <option value="Yes">Yes (大巨蛋門市親取親還)</option>
-        <option value="No">No (需寄送，依免證件押金計)</option>
+        <option value="No">No (需寄送，依免證件押金$30,000計)</option>
       </select>
     </div>
 
     <button class="btn-submit" onclick="submitBooking()">確認送出預約</button>
     
-    <div class="note">
-      • 基礎訂金 700 元起（可全額抵扣租金/以報價為主）<br>
-      • 預付定金方式：同名本人帳號匯款<br>
-      • 押金支付方式：門市現場現金點交（退還時當場返還）<br>
-      • 送出後客服將為您核對檔期並提供專屬報價單！
+    <div class="rules">
+      <b>📌 租借方案注意事項：</b><br>
+      • 基礎訂金 700 元起（全額抵扣租金/報價為主，屬名本人帳號匯款）。<br>
+      • 門市交機押金：現金 NT$ 3,000（完好交還當場退還含證件裝釘信封）。<br>
+      • 門市營業時間：12:00 - 20:00（重大演唱會時段延長至 23:00）。<br>
+      • 增距鏡特別條款：若因場館主辦禁帶無法使用，租金不退款但可轉為12個月折抵金。
     </div>
   </div>
 
@@ -163,50 +219,50 @@
 
 <script>
   // === 填入你的 LIFF ID ===
-  const MY_LIFF_ID = "200xxxxxxx-xxxxxxx"; // 請替換成你的 LIFF ID
+  const MY_LIFF_ID = "200xxxxxxx-xxxxxxx"; // 請替換成你的 LINE LIFF ID
 
-  // 初始化 LIFF
   liff.init({ liffId: MY_LIFF_ID }).then(() => {
-    console.log("LIFF 初始化完成");
+    console.log("LIFF Ready");
   }).catch((err) => {
-    console.error("LIFF 初始化失敗", err);
+    console.error("LIFF Init Error", err);
   });
 
-  // 根據主機動態切換可選增距鏡
+  // 根據最新價目表動態切換可選增距鏡
   function updateLensOptions() {
     const model = document.getElementById("model").value;
     const lensSelect = document.getElementById("lens");
     lensSelect.innerHTML = "";
 
-    if (model === "Vivo X300 Ultra") {
+    if (model === "vivo x300 Ultra") {
       lensSelect.innerHTML = `
-        <option value="無加購增距鏡 (單機身)">無加購增距鏡 (單機身)</option>
-        <option value="加購 G2 200mm 增距鏡">加購 G2 200mm 增距鏡</option>
-        <option value="加購 G2 Ultra 400mm 增距鏡">加購 G2 Ultra 400mm 增距鏡</option>
+        <option value="無加選配件 (單機身)">無加選配件 (單機身)</option>
+        <option value="加租 200mm 增距鏡 (+$300/D)">加租 200mm 增距鏡 (+$300/D)</option>
+        <option value="加租 400mm 增距鏡 (+$600/D)">加租 400mm 增距鏡 (+$600/D)</option>
       `;
-    } else if (model === "Vivo X200 Ultra" || model === "Vivo X300 Pro") {
+    } else if (model === "vivo x200 Ultra" || model === "vivo x300 Pro") {
       lensSelect.innerHTML = `
-        <option value="無加購增距鏡 (單機身)">無加購增距鏡 (單機身)</option>
-        <option value="加購 G2 200mm 增距鏡">加購 G2 200mm 增距鏡</option>
+        <option value="無加選配件 (單機身)">無加選配件 (單機身)</option>
+        <option value="加租 200mm 增距鏡 (+$300/D)">加租 200mm 增距鏡 (+$300/D)</option>
       `;
     } else if (model === "OPPO Find X9 Ultra") {
       lensSelect.innerHTML = `
-        <option value="無加購增距鏡 (單機身)">無加購增距鏡 (單機身)</option>
-        <option value="加購 G2 Ultra 400mm 增距鏡">加購 G2 Ultra 400mm 增距鏡</option>
+        <option value="無加選配件 (單機身)">無加選配件 (單機身)</option>
+        <option value="加租 400mm 增距鏡 (+$600/D)">加租 400mm 增距鏡 (+$600/D)</option>
       `;
-    } else if (model === "僅租借 G2 增距鏡頭") {
+    } else if (model === "僅租借 G2 增距鏡頭特仕組") {
       lensSelect.innerHTML = `
-        <option value="單租 G2 200mm 增距鏡">單租 G2 200mm 增距鏡</option>
-        <option value="單租 G2 Ultra 400mm 增距鏡">單租 G2 Ultra 400mm 增距鏡</option>
+        <option value="單租 200mm 增距鏡 ($300/D)">單租 200mm 增距鏡 ($300/D)</option>
+        <option value="單租 400mm 增距鏡 ($600/D)">單租 400mm 增距鏡 ($600/D)</option>
       `;
     } else {
-      lensSelect.innerHTML = `<option value="無配件/無適配增距鏡">無配件/無適配增距鏡</option>`;
+      lensSelect.innerHTML = `<option value="無適配增距鏡">無適配增距鏡 (單機身)</option>`;
     }
   }
 
   function submitBooking() {
     const model = document.getElementById("model").value;
     const lens = document.getElementById("lens").value;
+    const cloud = document.getElementById("cloudService").value;
     const pickupTime = document.getElementById("pickupTime").value.replace("T", " ");
     const returnDate = document.getElementById("returnDate").value;
     const name = document.getElementById("name").value.trim();
@@ -215,7 +271,7 @@
     const isStore = document.getElementById("isStore").value;
 
     if (!pickupTime || !returnDate || !name || !phone) {
-      alert("請填寫完整的預約日期、姓名與聯絡電話！");
+      alert("請填寫完整的預約日期時間、姓名與聯絡電話！");
       return;
     }
 
@@ -224,17 +280,20 @@
     const rDate = new Date(returnDate);
     const days = Math.max(1, Math.round((rDate - pDate) / (1000 * 60 * 60 * 24)));
 
-    // 合併器材與配件說明
-    let equipText = model;
-    if (lens !== "無加購增距鏡 (單機身)" && lens !== "無配件/無適配增距鏡") {
-      equipText += ` (${lens})`;
+    // 彙整設備與加購
+    let itemDetails = model;
+    if (lens !== "無加選配件 (單機身)" && lens !== "無適配增距鏡") {
+      itemDetails += ` + ${lens}`;
+    }
+    if (cloud.startsWith("Yes")) {
+      itemDetails += ` + 雲端上傳服務`;
     }
 
-    // 組裝整齊的預約格式文字
+    // 組裝整齊標準預約格式文字
     const bookingMessage = 
-`※租借器材：${equipText}
+`※租借器材：${itemDetails}
 ※預約日期：${pickupTime} 取 / ${returnDate} 還
-※租借天數：${days}
+※租借天數：${days} 天
 ※姓名：${name}
 ※電話：${phone}
 押附證件：${idType}
@@ -244,7 +303,7 @@
 預付定金方式 - 屬名本人帳號匯款
 押金支付方式 - 現金 (交還退還含證件裝釘信封)`;
 
-    // 發送文字至 LINE 聊天室
+    // 發送訊息至聊天室
     liff.sendMessages([{
       type: "text",
       text: bookingMessage
