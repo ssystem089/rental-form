@@ -1,168 +1,40 @@
-<script>
-  function updateLensOptions() {
-    const model = document.getElementById("model").value;
-    const lensSelect = document.getElementById("lens");
+function askAvailability() {
+  const model = document.getElementById("model").value;
+  const lens = document.getElementById("lens").value;
+  const pickupValue = document.getElementById("pickupTime").value;
+  const returnDate = document.getElementById("returnDate").value;
 
-    if (model === "vivo x300 Ultra") {
-      lensSelect.innerHTML = `
-        <option value="無加選配件 (單機身)">無加選配件 (單機身)</option>
-        <option value="加租 200mm 增距鏡 (+$300/D)">加租 200mm 增距鏡 (+$300/D)</option>
-        <option value="加租 400mm 增距鏡 (+$600/D)">加租 400mm 增距鏡 (+$600/D)</option>
-      `;
-    } else if (model === "vivo x200 Ultra" || model === "vivo x300 Pro") {
-      lensSelect.innerHTML = `
-        <option value="無加選配件 (單機身)">無加選配件 (單機身)</option>
-        <option value="加租 200mm 增距鏡 (+$300/D)">加租 200mm 增距鏡 (+$300/D)</option>
-      `;
-    } else if (model === "OPPO Find X9 Ultra") {
-      lensSelect.innerHTML = `
-        <option value="無加選配件 (單機身)">無加選配件 (單機身)</option>
-        <option value="加租 400mm 增距鏡 (+$600/D)">加租 400mm 增距鏡 (+$600/D)</option>
-      `;
-    } else if (model === "僅租借 G2 增距鏡頭特仕組") {
-      lensSelect.innerHTML = `
-        <option value="單租 200mm 增距鏡 ($300/D)">單租 200mm 增距鏡 ($300/D)</option>
-        <option value="單租 400mm 增距鏡 ($600/D)">單租 400mm 增距鏡 ($600/D)</option>
-      `;
-    } else {
-      lensSelect.innerHTML = `
-        <option value="無適配增距鏡">無適配增距鏡 (單機身)</option>
-      `;
-    }
+  if (!pickupValue || !returnDate) {
+    alert("請先選擇預計取機時間與歸還日期。");
+    return;
   }
 
-  function buildBookingMessage() {
-    const model = document.getElementById("model").value;
-    const lens = document.getElementById("lens").value;
-    const cloud = document.getElementById("cloudService").value;
-    const pickupValue = document.getElementById("pickupTime").value;
-    const returnDate = document.getElementById("returnDate").value;
-    const name = document.getElementById("name").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const idType = document.getElementById("idType").value;
-    const isStore = document.getElementById("isStore").value;
+  let equipment = model;
 
-    if (!pickupValue || !returnDate || !name || !phone) {
-      alert("請填寫完整的預約日期時間、姓名與聯絡電話。");
-      return null;
-    }
-
-    const pickupTime = pickupValue.replace("T", " ");
-    const pickupDate = new Date(pickupValue);
-    const returnedDate = new Date(returnDate + "T00:00:00");
-
-    const days = Math.max(
-      1,
-      Math.ceil((returnedDate - pickupDate) / (1000 * 60 * 60 * 24))
-    );
-
-    let itemDetails = model;
-
-    if (
-      lens !== "無加選配件 (單機身)" &&
-      lens !== "無適配增距鏡"
-    ) {
-      itemDetails += ` + ${lens}`;
-    }
-
-    if (cloud.startsWith("Yes")) {
-      itemDetails += " + 雲端上傳服務";
-    }
-
-    return `※租借器材：${itemDetails}
-※預約日期：${pickupTime} 取 / ${returnDate} 還
-※租借天數：${days} 天
-※姓名：${name}
-※電話：${phone}
-押附證件：${idType}
-台北大巨蛋門市交還機：${isStore}
-
-基礎訂金 - 700元 (抵扣租金/報價為主)
-預付定金方式 - 屬名本人帳號匯款
-押金支付方式 - 現金 (交還退還含證件裝釘信封)`;
+  if (
+    lens !== "無加選配件 (單機身)" &&
+    lens !== "無適配增距鏡"
+  ) {
+    equipment += ` + ${lens}`;
   }
 
-  async function copyBookingText(text) {
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-        return true;
-      }
+  const pickupTime = pickupValue.replace("T", " ");
 
-      const textarea = document.createElement("textarea");
-      textarea.value = text;
-      textarea.setAttribute("readonly", "");
-      textarea.style.position = "fixed";
-      textarea.style.left = "-9999px";
+  const inquiryMessage = `您好，想詢問設備是否有檔期：
 
-      document.body.appendChild(textarea);
-      textarea.select();
+租借器材：${equipment}
+預計取機：${pickupTime}
+預計歸還：${returnDate}
 
-      const result = document.execCommand("copy");
-      document.body.removeChild(textarea);
+請協助確認是否可租，謝謝。`;
 
-      return result;
-    } catch (error) {
-      console.error("複製失敗：", error);
-      return false;
-    }
-  }
+  const officialAccountId = "@你的官方帳號LINE_ID";
 
-  async function submitBooking() {
-    const message = buildBookingMessage();
+  const lineUrl =
+    "https://line.me/R/oaMessage/" +
+    encodeURIComponent(officialAccountId) +
+    "/?" +
+    encodeURIComponent(inquiryMessage);
 
-    if (!message) return;
-
-    const isCopied = await copyBookingText(message);
-
-    showCopyPanel(message, isCopied);
-  }
-
-  function showCopyPanel(message, isCopied) {
-    const previousPanel = document.getElementById("copyPanel");
-
-    if (previousPanel) {
-      previousPanel.remove();
-    }
-
-    const panel = document.createElement("div");
-    panel.id = "copyPanel";
-
-    panel.style.cssText = `
-      position: fixed;
-      z-index: 9999;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 18px;
-      background: #18181b;
-      color: #f4f4f5;
-      border-top: 1px solid #3f3f46;
-      border-radius: 16px 16px 0 0;
-      box-sizing: border-box;
-      box-shadow: 0 -8px 30px rgba(0,0,0,.45);
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", sans-serif;
-    `;
-
-    panel.innerHTML = `
-      <div style="font-size:17px;font-weight:700;margin-bottom:6px;">
-        ${isCopied ? "預約內容已複製" : "請手動複製預約內容"}
-      </div>
-
-      <div style="font-size:13px;line-height:1.55;color:#a1a1aa;margin-bottom:12px;">
-        ${isCopied
-          ? "請回到 LINE 聊天室，在輸入框長按後選擇「貼上」，確認內容後自行送出。"
-          : "請長按下方文字複製，再回到 LINE 聊天室貼上並自行送出。"}
-      </div>
-
-      <textarea
-        id="bookingText"
-        readonly
-        style="
-          width:100%;
-          height:180px;
-          box-sizing:border-box;
-          resize:none;
-          background:#09090b;
-          color:#f4f4f5;
-          border:1px solid
+  window.location.href = lineUrl;
+}
