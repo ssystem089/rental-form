@@ -1,11 +1,36 @@
-<!--
-  重要：LINE LIFF 沒有官方 API 可以「直接把文字塞進聊天室輸入框、讓客人自行按送出」。
-  可行且穩定的替代方案：表單送出後，顯示已整理好的預約文字，客人按「複製預約內容」，
-  再按「回到聊天室」並長按貼上送出。此版本完全移除 liff.sendMessages()，因此不會再出現 access_token 錯誤。
-
-  使用方式：將原 index.html 中的整個 <script>...</script> 區塊替換為本檔內容。
--->
 <script>
+  function updateLensOptions() {
+    const model = document.getElementById("model").value;
+    const lensSelect = document.getElementById("lens");
+
+    if (model === "vivo x300 Ultra") {
+      lensSelect.innerHTML = `
+        <option value="無加選配件 (單機身)">無加選配件 (單機身)</option>
+        <option value="加租 200mm 增距鏡 (+$300/D)">加租 200mm 增距鏡 (+$300/D)</option>
+        <option value="加租 400mm 增距鏡 (+$600/D)">加租 400mm 增距鏡 (+$600/D)</option>
+      `;
+    } else if (model === "vivo x200 Ultra" || model === "vivo x300 Pro") {
+      lensSelect.innerHTML = `
+        <option value="無加選配件 (單機身)">無加選配件 (單機身)</option>
+        <option value="加租 200mm 增距鏡 (+$300/D)">加租 200mm 增距鏡 (+$300/D)</option>
+      `;
+    } else if (model === "OPPO Find X9 Ultra") {
+      lensSelect.innerHTML = `
+        <option value="無加選配件 (單機身)">無加選配件 (單機身)</option>
+        <option value="加租 400mm 增距鏡 (+$600/D)">加租 400mm 增距鏡 (+$600/D)</option>
+      `;
+    } else if (model === "僅租借 G2 增距鏡頭特仕組") {
+      lensSelect.innerHTML = `
+        <option value="單租 200mm 增距鏡 ($300/D)">單租 200mm 增距鏡 ($300/D)</option>
+        <option value="單租 400mm 增距鏡 ($600/D)">單租 400mm 增距鏡 ($600/D)</option>
+      `;
+    } else {
+      lensSelect.innerHTML = `
+        <option value="無適配增距鏡">無適配增距鏡 (單機身)</option>
+      `;
+    }
+  }
+
   function buildBookingMessage() {
     const model = document.getElementById("model").value;
     const lens = document.getElementById("lens").value;
@@ -23,14 +48,23 @@
     }
 
     const pickupTime = pickupValue.replace("T", " ");
-    const pDate = new Date(pickupValue);
-    const rDate = new Date(returnDate + "T00:00:00");
-    const days = Math.max(1, Math.ceil((rDate - pDate) / (1000 * 60 * 60 * 24)));
+    const pickupDate = new Date(pickupValue);
+    const returnedDate = new Date(returnDate + "T00:00:00");
+
+    const days = Math.max(
+      1,
+      Math.ceil((returnedDate - pickupDate) / (1000 * 60 * 60 * 24))
+    );
 
     let itemDetails = model;
-    if (lens !== "無加選配件 (單機身)" && lens !== "無適配增距鏡") {
+
+    if (
+      lens !== "無加選配件 (單機身)" &&
+      lens !== "無適配增距鏡"
+    ) {
       itemDetails += ` + ${lens}`;
     }
+
     if (cloud.startsWith("Yes")) {
       itemDetails += " + 雲端上傳服務";
     }
@@ -48,15 +82,7 @@
 押金支付方式 - 現金 (交還退還含證件裝釘信封)`;
   }
 
-  async function submitBooking() {
-    const message = buildBookingMessage();
-    if (!message) return;
-
-    const copied = await copyText(message);
-    showBookingResult(message, copied);
-  }
-
-  async function copyText(text) {
+  async function copyBookingText(text) {
     try {
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(text);
@@ -67,82 +93,76 @@
       textarea.value = text;
       textarea.setAttribute("readonly", "");
       textarea.style.position = "fixed";
-      textarea.style.opacity = "0";
+      textarea.style.left = "-9999px";
+
       document.body.appendChild(textarea);
       textarea.select();
-      const success = document.execCommand("copy");
+
+      const result = document.execCommand("copy");
       document.body.removeChild(textarea);
-      return success;
-    } catch (err) {
-      console.warn("複製失敗", err);
+
+      return result;
+    } catch (error) {
+      console.error("複製失敗：", error);
       return false;
     }
   }
 
-  function showBookingResult(message, copied) {
-    const old = document.getElementById("bookingResult");
-    if (old) old.remove();
+  async function submitBooking() {
+    const message = buildBookingMessage();
+
+    if (!message) return;
+
+    const isCopied = await copyBookingText(message);
+
+    showCopyPanel(message, isCopied);
+  }
+
+  function showCopyPanel(message, isCopied) {
+    const previousPanel = document.getElementById("copyPanel");
+
+    if (previousPanel) {
+      previousPanel.remove();
+    }
 
     const panel = document.createElement("div");
-    panel.id = "bookingResult";
-    panel.style.cssText = "position:fixed;z-index:9999;left:0;right:0;bottom:0;background:#18181b;color:#f4f4f5;border-top:1px solid #3f3f46;border-radius:16px 16px 0 0;padding:18px;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'PingFang TC',sans-serif;box-shadow:0 -8px 30px rgba(0,0,0,.45);";
+    panel.id = "copyPanel";
 
-    const status = copied ? "預約內容已複製" : "請手動複製下方預約內容";
-    const guide = copied
-      ? "請點下方按鈕回到 LINE 聊天室，在輸入框長按後選擇「貼上」，再自行確認送出。"
-      : "請長按下方文字複製，回到 LINE 聊天室後貼上並送出。";
+    panel.style.cssText = `
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 18px;
+      background: #18181b;
+      color: #f4f4f5;
+      border-top: 1px solid #3f3f46;
+      border-radius: 16px 16px 0 0;
+      box-sizing: border-box;
+      box-shadow: 0 -8px 30px rgba(0,0,0,.45);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", sans-serif;
+    `;
 
     panel.innerHTML = `
-      <div style="font-size:17px;font-weight:700;margin-bottom:6px;">${status}</div>
-      <div style="font-size:13px;line-height:1.55;color:#a1a1aa;margin-bottom:12px;">${guide}</div>
-      <textarea id="bookingText" readonly style="width:100%;height:175px;box-sizing:border-box;resize:none;background:#09090b;color:#f4f4f5;border:1px solid #3f3f46;border-radius:8px;padding:10px;font-size:12px;line-height:1.55;">${escapeHtml(message)}</textarea>
-      <div style="display:flex;gap:8px;margin-top:12px;">
-        <button id="copyAgain" style="flex:1;background:#27272a;border:1px solid #52525b;color:#fff;border-radius:8px;padding:12px;font-size:14px;font-weight:600;">複製預約內容</button>
-        <button id="backToChat" style="flex:1;background:#fff;border:0;color:#000;border-radius:8px;padding:12px;font-size:14px;font-weight:700;">回到聊天室</button>
-      </div>`;
+      <div style="font-size:17px;font-weight:700;margin-bottom:6px;">
+        ${isCopied ? "預約內容已複製" : "請手動複製預約內容"}
+      </div>
 
-    document.body.appendChild(panel);
-    const textArea = document.getElementById("bookingText");
-    textArea.focus();
-    textArea.select();
+      <div style="font-size:13px;line-height:1.55;color:#a1a1aa;margin-bottom:12px;">
+        ${isCopied
+          ? "請回到 LINE 聊天室，在輸入框長按後選擇「貼上」，確認內容後自行送出。"
+          : "請長按下方文字複製，再回到 LINE 聊天室貼上並自行送出。"}
+      </div>
 
-    document.getElementById("copyAgain").addEventListener("click", async () => {
-      const success = await copyText(message);
-      alert(success ? "已複製，請回到聊天室貼上。" : "複製未成功，請長按預約內容手動複製。");
-    });
-
-    document.getElementById("backToChat").addEventListener("click", () => {
-      // 不使用 sendMessages；關閉 LIFF 即回到原本開啟連結的聊天室。
-      if (window.liff && typeof liff.isInClient === "function" && liff.isInClient()) {
-        liff.closeWindow();
-      } else {
-        history.back();
-      }
-    });
-  }
-
-  function escapeHtml(value) {
-    return value.replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/\"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-  function updateLensOptions() {
-    const model = document.getElementById("model").value;
-    const lensSelect = document.getElementById("lens");
-
-    if (model === "vivo x300 Ultra") {
-      lensSelect.innerHTML = `<option value="無加選配件 (單機身)">無加選配件 (單機身)</option><option value="加租 200mm 增距鏡 (+$300/D)">加租 200mm 增距鏡 (+$300/D)</option><option value="加租 400mm 增距鏡 (+$600/D)">加租 400mm 增距鏡 (+$600/D)</option>`;
-    } else if (model === "vivo x200 Ultra" || model === "vivo x300 Pro") {
-      lensSelect.innerHTML = `<option value="無加選配件 (單機身)">無加選配件 (單機身)</option><option value="加租 200mm 增距鏡 (+$300/D)">加租 200mm 增距鏡 (+$300/D)</option>`;
-    } else if (model === "OPPO Find X9 Ultra") {
-      lensSelect.innerHTML = `<option value="無加選配件 (單機身)">無加選配件 (單機身)</option><option value="加租 400mm 增距鏡 (+$600/D)">加租 400mm 增距鏡 (+$600/D)</option>`;
-    } else if (model === "僅租借 G2 增距鏡頭特仕組") {
-      lensSelect.innerHTML = `<option value="單租 200mm 增距鏡 ($300/D)">單租 200mm 增距鏡 ($300/D)</option><option value="單租 400mm 增距鏡 ($600/D)">單租 400mm 增距鏡 ($600/D)</option>`;
-    } else {
-      lensSelect.innerHTML = `<option value="無適配增距鏡">無適配增距鏡 (單機身)</option>`;
-    }
-  }
-</script>
+      <textarea
+        id="bookingText"
+        readonly
+        style="
+          width:100%;
+          height:180px;
+          box-sizing:border-box;
+          resize:none;
+          background:#09090b;
+          color:#f4f4f5;
+          border:1px solid
