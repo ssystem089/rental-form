@@ -1,67 +1,31 @@
-<!-- 修正重點：請將原 index.html 的 LIFF 初始化與 submitBooking 相關程式替換成下方版本 -->
+<!--
+  重要：LINE LIFF 沒有官方 API 可以「直接把文字塞進聊天室輸入框、讓客人自行按送出」。
+  可行且穩定的替代方案：表單送出後，顯示已整理好的預約文字，客人按「複製預約內容」，
+  再按「回到聊天室」並長按貼上送出。此版本完全移除 liff.sendMessages()，因此不會再出現 access_token 錯誤。
+
+  使用方式：將原 index.html 中的整個 <script>...</script> 區塊替換為本檔內容。
+-->
 <script>
-  const MY_LIFF_ID = "2011411630-pdbfMEEs";
-  let liffReady = false;
-  let loginRedirecting = false;
-
-  async function initLiff() {
-    try {
-      await liff.init({ liffId: MY_LIFF_ID });
-      liffReady = true;
-
-      // 外部瀏覽器或未登入時，先完成 LINE 登入，再使用 sendMessages
-      if (!liff.isInClient() && !liff.isLoggedIn() && !loginRedirecting) {
-        loginRedirecting = true;
-        liff.login({ redirectUri: window.location.href });
-      }
-    } catch (err) {
-      console.error("LIFF 初始化失敗", err);
-      alert("LINE 初始化失敗，請從 LINE 聊天室重新開啟預約頁面。");
-    }
-  }
-
-  initLiff();
-
-  async function submitBooking() {
-    const submitBtn = document.getElementById("submitBtn");
+  function buildBookingMessage() {
     const model = document.getElementById("model").value;
     const lens = document.getElementById("lens").value;
     const cloud = document.getElementById("cloudService").value;
-    const pickupTime = document.getElementById("pickupTime").value.replace("T", " ");
+    const pickupValue = document.getElementById("pickupTime").value;
     const returnDate = document.getElementById("returnDate").value;
     const name = document.getElementById("name").value.trim();
     const phone = document.getElementById("phone").value.trim();
     const idType = document.getElementById("idType").value;
     const isStore = document.getElementById("isStore").value;
 
-    if (!pickupTime || !returnDate || !name || !phone) {
+    if (!pickupValue || !returnDate || !name || !phone) {
       alert("請填寫完整的預約日期時間、姓名與聯絡電話。");
-      return;
+      return null;
     }
 
-    if (!liffReady) {
-      alert("LINE 尚未初始化完成，請稍候再試。");
-      return;
-    }
-
-    // sendMessages 不能在重新載入的 LIFF 頁面使用；必須重新從 LINE 聊天室開啟
-    if (!liff.isInClient()) {
-      if (!liff.isLoggedIn()) {
-        liff.login({ redirectUri: window.location.href });
-        return;
-      }
-      alert("請從 LINE 聊天室中的 LIFF 連結重新開啟本頁，再送出預約。");
-      return;
-    }
-
-    if (typeof liff.isApiAvailable === "function" && !liff.isApiAvailable("sendMessages")) {
-      alert("此 LIFF 頁面目前無法傳送訊息。請從 LINE 聊天室重新點開連結，不要使用最近使用服務重新載入。");
-      return;
-    }
-
-    const pDate = new Date(pickupTime.split(" ")[0]);
-    const rDate = new Date(returnDate);
-    const days = Math.max(1, Math.round((rDate - pDate) / (1000 * 60 * 60 * 24)));
+    const pickupTime = pickupValue.replace("T", " ");
+    const pDate = new Date(pickupValue);
+    const rDate = new Date(returnDate + "T00:00:00");
+    const days = Math.max(1, Math.ceil((rDate - pDate) / (1000 * 60 * 60 * 24)));
 
     let itemDetails = model;
     if (lens !== "無加選配件 (單機身)" && lens !== "無適配增距鏡") {
@@ -71,8 +35,7 @@
       itemDetails += " + 雲端上傳服務";
     }
 
-    const bookingMessage =
-`※租借器材：${itemDetails}
+    return `※租借器材：${itemDetails}
 ※預約日期：${pickupTime} 取 / ${returnDate} 還
 ※租借天數：${days} 天
 ※姓名：${name}
@@ -83,20 +46,103 @@
 基礎訂金 - 700元 (抵扣租金/報價為主)
 預付定金方式 - 屬名本人帳號匯款
 押金支付方式 - 現金 (交還退還含證件裝釘信封)`;
+  }
 
-    submitBtn.disabled = true;
-    submitBtn.textContent = "傳送中…";
+  async function submitBooking() {
+    const message = buildBookingMessage();
+    if (!message) return;
 
+    const copied = await copyText(message);
+    showBookingResult(message, copied);
+  }
+
+  async function copyText(text) {
     try {
-      await liff.sendMessages([{ type: "text", text: bookingMessage }]);
-      alert("預約資料已送出。");
-      liff.closeWindow();
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      const success = document.execCommand("copy");
+      document.body.removeChild(textarea);
+      return success;
     } catch (err) {
-      console.error("sendMessages 失敗", err);
-      alert("送出失敗。請從 LINE 聊天室重新開啟預約連結後再試一次。");
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = "送出預約資料";
+      console.warn("複製失敗", err);
+      return false;
+    }
+  }
+
+  function showBookingResult(message, copied) {
+    const old = document.getElementById("bookingResult");
+    if (old) old.remove();
+
+    const panel = document.createElement("div");
+    panel.id = "bookingResult";
+    panel.style.cssText = "position:fixed;z-index:9999;left:0;right:0;bottom:0;background:#18181b;color:#f4f4f5;border-top:1px solid #3f3f46;border-radius:16px 16px 0 0;padding:18px;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'PingFang TC',sans-serif;box-shadow:0 -8px 30px rgba(0,0,0,.45);";
+
+    const status = copied ? "預約內容已複製" : "請手動複製下方預約內容";
+    const guide = copied
+      ? "請點下方按鈕回到 LINE 聊天室，在輸入框長按後選擇「貼上」，再自行確認送出。"
+      : "請長按下方文字複製，回到 LINE 聊天室後貼上並送出。";
+
+    panel.innerHTML = `
+      <div style="font-size:17px;font-weight:700;margin-bottom:6px;">${status}</div>
+      <div style="font-size:13px;line-height:1.55;color:#a1a1aa;margin-bottom:12px;">${guide}</div>
+      <textarea id="bookingText" readonly style="width:100%;height:175px;box-sizing:border-box;resize:none;background:#09090b;color:#f4f4f5;border:1px solid #3f3f46;border-radius:8px;padding:10px;font-size:12px;line-height:1.55;">${escapeHtml(message)}</textarea>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button id="copyAgain" style="flex:1;background:#27272a;border:1px solid #52525b;color:#fff;border-radius:8px;padding:12px;font-size:14px;font-weight:600;">複製預約內容</button>
+        <button id="backToChat" style="flex:1;background:#fff;border:0;color:#000;border-radius:8px;padding:12px;font-size:14px;font-weight:700;">回到聊天室</button>
+      </div>`;
+
+    document.body.appendChild(panel);
+    const textArea = document.getElementById("bookingText");
+    textArea.focus();
+    textArea.select();
+
+    document.getElementById("copyAgain").addEventListener("click", async () => {
+      const success = await copyText(message);
+      alert(success ? "已複製，請回到聊天室貼上。" : "複製未成功，請長按預約內容手動複製。");
+    });
+
+    document.getElementById("backToChat").addEventListener("click", () => {
+      // 不使用 sendMessages；關閉 LIFF 即回到原本開啟連結的聊天室。
+      if (window.liff && typeof liff.isInClient === "function" && liff.isInClient()) {
+        liff.closeWindow();
+      } else {
+        history.back();
+      }
+    });
+  }
+
+  function escapeHtml(value) {
+    return value.replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function updateLensOptions() {
+    const model = document.getElementById("model").value;
+    const lensSelect = document.getElementById("lens");
+
+    if (model === "vivo x300 Ultra") {
+      lensSelect.innerHTML = `<option value="無加選配件 (單機身)">無加選配件 (單機身)</option><option value="加租 200mm 增距鏡 (+$300/D)">加租 200mm 增距鏡 (+$300/D)</option><option value="加租 400mm 增距鏡 (+$600/D)">加租 400mm 增距鏡 (+$600/D)</option>`;
+    } else if (model === "vivo x200 Ultra" || model === "vivo x300 Pro") {
+      lensSelect.innerHTML = `<option value="無加選配件 (單機身)">無加選配件 (單機身)</option><option value="加租 200mm 增距鏡 (+$300/D)">加租 200mm 增距鏡 (+$300/D)</option>`;
+    } else if (model === "OPPO Find X9 Ultra") {
+      lensSelect.innerHTML = `<option value="無加選配件 (單機身)">無加選配件 (單機身)</option><option value="加租 400mm 增距鏡 (+$600/D)">加租 400mm 增距鏡 (+$600/D)</option>`;
+    } else if (model === "僅租借 G2 增距鏡頭特仕組") {
+      lensSelect.innerHTML = `<option value="單租 200mm 增距鏡 ($300/D)">單租 200mm 增距鏡 ($300/D)</option><option value="單租 400mm 增距鏡 ($600/D)">單租 400mm 增距鏡 ($600/D)</option>`;
+    } else {
+      lensSelect.innerHTML = `<option value="無適配增距鏡">無適配增距鏡 (單機身)</option>`;
     }
   }
 </script>
