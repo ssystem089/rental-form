@@ -203,7 +203,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     <div>
       <div class="product-name" id="lensTitle">增距鏡特仕組 <span class="tap-hint">點此選租 ➔</span></div>
       <div class="product-desc" id="lensDesc">含對應手機殼及配件組｜手機可拍距離皆相同，加裝增距鏡專用於提升清晰度與細節！200mm：$300／日｜400mm：$600／日</div>
-      <div class="product-deposit" id="depLens">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$10,000（與手機合租時以手機押金為主，不重複計算）</div>
+      <div class="product-deposit" id="depLens">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$10,000 (與手機合租時以手機押金為主，不重複計算)</div>
     </div>
     <div class="price">$300–$600 <small id="perDayB">/ 日</small></div>
   </div>
@@ -414,13 +414,13 @@ const zh={
   lens200:"加租 G2 200mm 增距鏡（+$300／日）",
   lens400:"加租 G2 Ultra 400mm 增距鏡（+$600／日）",
   
-  rent200_x300u:"單租 G2 200mm 特仕組（含 x300 Ultra 手機殼，+$300／日）",
-  rent200_x500pm:"單租 G2 200mm 特仕組（含 x500 Pro Max 手機殼，+$300／日）",
-  rent200_x200u:"單租 G2 200mm 特仕組（含 x200 Ultra 手機殼，+$300／日）",
-  rent200_x300p:"單租 G2 200mm 特仕組（含 x300 Pro 手機殼，+$300／日）",
-  rent400_x300u:"單租 G2 Ultra 400mm 特仕組（含 x300 Ultra 手機殼，+$600／日）",
-  rent400_x500pm:"單租 G2 Ultra 400mm 特仕組（含 x500 Pro Max 手機殼，+$600／日）",
-  rent400_oppo:"單租 G2 Ultra 400mm 特仕組（含 Find X9 Ultra 手機殼，+$600／日）",
+  rent200_x300u:"G2 200mm ＋ 含 x300 Ultra 手機殼",
+  rent200_x500pm:"G2 200mm ＋ 含 x500 Pro Max 手機殼",
+  rent200_x200u:"G2 200mm ＋ 含 x200 Ultra 手機殼",
+  rent200_x300p:"G2 200mm ＋ 含 x300 Pro 手機殼",
+  rent400_x300u:"G2 Ultra 400mm ＋ 含 x300 Ultra 手機殼",
+  rent400_x500pm:"G2 Ultra 400mm ＋ 含 x500 Pro Max 手機殼",
+  rent400_oppo:"G2 Ultra 400mm ＋ 含 Find X9 Ultra 手機殼",
 
   lensTipClarification:"<strong>增距鏡說明：</strong>手機本身可拍距離皆相同，加裝增距鏡旨在大幅提升清晰度與細節。",
 
@@ -478,13 +478,13 @@ const en={
   lens200:"Add G2 200mm extender (+$300/day)",
   lens400:"Add G2 Ultra 400mm extender (+$600/day)",
   
-  rent200_x300u:"Rent G2 200mm Set (w/ x300 Ultra case, +$300/day)",
-  rent200_x500pm:"Rent G2 200mm Set (w/ x500 Pro Max case, +$300/day)",
-  rent200_x200u:"Rent G2 200mm Set (w/ x200 Ultra case, +$300/day)",
-  rent200_x300p:"Rent G2 200mm Set (w/ x300 Pro case, +$300/day)",
-  rent400_x300u:"Rent G2 Ultra 400mm Set (w/ x300 Ultra case, +$600/day)",
-  rent400_x500pm:"Rent G2 Ultra 400mm Set (w/ x500 Pro Max case, +$600/day)",
-  rent400_oppo:"Rent G2 Ultra 400mm Set (w/ Find X9 Ultra case, +$600/day)",
+  rent200_x300u:"G2 200mm + x300 Ultra Case",
+  rent200_x500pm:"G2 200mm + x500 Pro Max Case",
+  rent200_x200u:"G2 200mm + x200 Ultra Case",
+  rent200_x300p:"G2 200mm + x300 Pro Case",
+  rent400_x300u:"G2 Ultra 400mm + x300 Ultra Case",
+  rent400_x500pm:"G2 Ultra 400mm + x500 Pro Max Case",
+  rent400_oppo:"G2 Ultra 400mm + Find X9 Ultra Case",
 
   lensTipClarification:"<strong>Extender Function:</strong> Phone distance is identical; attaching the lens enhances clarity and detail.",
 
@@ -797,11 +797,15 @@ function sync(){
 
 function equipment(){
   const m=document.getElementById("model").value,l=document.getElementById("lens");
+  if(m === "僅租借 G2 增距鏡頭特仕組") {
+    const selectedOptText = l.options[l.selectedIndex].text;
+    // 將類似 "Rent G2 200mm Set (w/ x300 Ultra case, +$300/day)" 或中文選項轉換為 "G2 200mm + x300 Ultra Case"
+    return selectedOptText;
+  }
   let cleanLens = "";
   if(l.value !== "none") {
     if(l.value === "200") cleanLens = " + 200mm 增距鏡";
     else if(l.value === "400") cleanLens = " + 400mm 增距鏡";
-    else cleanLens = " + 專用特仕組";
   }
   return m + cleanLens;
 }
@@ -838,7 +842,6 @@ function inquiry(){
   try{localStorage.setItem("fir-stage","formal");}catch(e){}
 
   const directLink=`https://liff.line.me/${LIFF_ID}`;
-  // 詢問設備檔期：絕對只傳送標題、設備與日期，不帶入任何STEP 2未確認的個資
   currentMessage = currentLang==="zh"
     ? `【詢問設備檔期】\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (共 ${d.d} 天)\n\n👉 確認有檔期？點此立即補填預約資料：\n${directLink}`
     : `[Equipment Availability Check]\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (${d.d} days)\n\n👉 Complete details here:\n${directLink}`;
@@ -855,7 +858,6 @@ function booking(){
   
   save();
   
-  // 正式預約單：傳送完整詳細資料
   const isStore=document.getElementById("isStore").value==="store";
   const storeName=document.getElementById("storeName").value.trim();
   const cloudVal=document.getElementById("cloudService").value;
