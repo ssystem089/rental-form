@@ -187,12 +187,12 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     <div class="price">$700 <small id="perDayA">/ 日</small></div>
   </div>
 
-  <!-- 增距鏡特仕組 -->
+  <!-- 增距鏡特仕組（明確標示合租免重複累計押金） -->
   <div class="price-row">
     <div>
       <div class="product-name" id="lensTitle">增距鏡特仕組</div>
       <div class="product-desc" id="lensDesc">含對應手機殼以及增距鏡配件組｜200mm：$300／日｜400mm：$600／日</div>
-      <div class="product-deposit" id="depLens">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$10,000</div>
+      <div class="product-deposit" id="depLens">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$10,000（與手機合租時以手機押金為主，不重複計算）</div>
     </div>
     <div class="price">$300–$600 <small id="perDayB">/ 日</small></div>
   </div>
@@ -205,6 +205,11 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
       <div class="product-deposit" id="depCloud">門市代為原畫質雲端上傳，免押金</div>
     </div>
     <div class="price">$200 <small id="perUse">/ 次</small></div>
+  </div>
+
+  <!-- 押金規則總提醒標籤 -->
+  <div class="notice-box" style="margin-top:12px;border-color:#e2b86633" id="depositRuleTip">
+    💡 <strong>押金貼心提醒：</strong>手機與增距鏡一同租借時，以手機押金為主（寄送 NT$30,000 / 門市 NT$3,000+證件），無須重複累計增距鏡押金。
   </div>
 </section>
 
@@ -272,7 +277,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     <div class="field">
       <label for="isStore" id="returnMethodLabel">是否於台北大巨蛋門市交還</label>
       <select id="isStore">
-        <option value="delivery" selected>No（需寄送，依免證件押金 NT$30,000 計）</option>
+        <option value="delivery" selected>No（需寄送，免證件押金制）</option>
         <option value="store">Yes（大巨蛋門市親取親還）</option>
       </select>
     </div>
@@ -296,7 +301,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     <!-- 4. 聯絡手機 -->
     <div class="field">
       <label for="phone" id="phoneLabel">聯絡手機</label>
-      <input id="phone" autocomplete="tel" inputmode="tel" placeholder="需同 LINE 綁定門號">
+      <input id="phone" autocomplete="tel" inputmode="tel" placeholder="需同 LINE 綁定 10 碼門號">
     </div>
 
     <!-- 5. 雲端上傳服務 -->
@@ -356,8 +361,9 @@ const zh={
   cloudTitle:"雲端上傳服務",cloudDesc:"拍完免傳檔，雲端隨時輕鬆載｜保留 2 週",perUse:"/ 次",
   
   depCommon:"門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000",
-  depLensText:"門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$10,000",
+  depLensText:"門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$10,000（與手機合租時以手機押金為主，不重複計算）",
   depCloudText:"門市代為原畫質雲端上傳，免押金",
+  depositRuleTip:"💡 <strong>押金貼心提醒：</strong>手機與增距鏡一同租借時，以手機押金為主（寄送 NT$30,000 / 門市 NT$3,000+證件），無須重複累計增距鏡押金。",
 
   formTitle:"STEP 1. 選擇設備與預約日期（免填個資）",
   modelLabel:"租借主機型號",lensLabel:"增距鏡配件選配",pickupDateLabel:"預計取機日期",pickupTimeLabel:"預計取機時間",selectTime:"請選擇時間",returnDateLabel:"預計歸還日期",
@@ -377,7 +383,6 @@ const zh={
   lens200:"加租 G2 200mm 增距鏡（+$300／日）",
   lens400:"加租 G2 Ultra 400mm 增距鏡（+$600／日）大巨蛋B1 10排後適用",
   
-  /* 單租增距鏡特仕組選項（包含對應手機殼組） */
   rent200_x300u:"單租 G2 200mm 特仕組（含 x300 Ultra 手機殼組，+$300／日）",
   rent200_x500pm:"單租 G2 200mm 特仕組（含 x500 Pro Max 手機殼組，+$300／日）",
   rent200_x200u:"單租 G2 200mm 特仕組（含 x200 Ultra 手機殼組，+$300／日）",
@@ -389,7 +394,8 @@ const zh={
   noteX300U:"<strong>簡易介紹：</strong>長焦首選。防抖穩定性最佳，適合遠距離舞台、手持拍攝與演唱會錄影。",noteX500PM:"<strong>簡易介紹：</strong>長焦電影級專業旗艦。具備頂級長焦與電影級錄影規格，支援 200mm／400mm 增距鏡。",noteX200U:"<strong>簡易介紹：</strong>畫質細節首選。三機中細節表現最佳，適合重視裁切、照片與舞台細節。",noteX300P:"<strong>簡易介紹：</strong>旅行長焦首選。防抖與畫質兼顧，適合長焦、穩定與攜帶性需求。",noteOppo:"<strong>簡易介紹：</strong>哈蘇影像旗艦，支援 400mm 增距鏡。",noteIphone:"<strong>簡易介紹：</strong>適合 iOS 使用者與日常錄影。",noteDji:"<strong>簡易介紹：</strong>適合穩定錄影、移動鏡頭與手持 Vlog。",
   noteLens:"<strong>簡易介紹：</strong>僅單租增距鏡特仕組，包含專屬鏡頭接環手機殼與增距鏡配件，支援指定 vivo 與 OPPO 機型。",
   savedTitle:"已保留上次選擇",savedText:"型號與預約日期已為您帶入；確認可租後，補填姓名與電話即可送出正式預約。",clear:"清除已保存資料",
-  dates:"請先選擇預計取機日期、取機時間與歸還日期。",badDate:"歸還日期可與取機日期相同，或晚於取機日期。",contact:"正式預約請填寫承租人姓名與聯絡電話。",wait:"LINE 尚未初始化完成，請稍候幾秒後再試。",init:"LINE 連線初始化失敗，請從官方帳號一對一聊天室重新開啟。",sending:"送出中…",sent:"已送出",fallbackTitle:"訊息未能自動送出",fallbackGuide:"預約內容已保留，請複製後回到 LINE 聊天室貼上並送出。",back:"返回表單",copy:"複製內容",copied:"已複製，請回到 LINE 貼上並傳送。"
+  dates:"請先選擇預計取機日期、取機時間與歸還日期。",badDate:"歸還日期可與取機日期相同，或晚於取機日期。",contact:"正式預約請填寫承租人真實姓名。",badPhone:"請填寫正確的 10 碼台灣手機門號（如 0912345678）。",
+  wait:"LINE 尚未初始化完成，請稍候幾秒後再試。",init:"LINE 連線初始化失敗，請從官方帳號一對一聊天室重新開啟。",sending:"送出中…",sent:"已送出",fallbackTitle:"訊息未能自動送出",fallbackGuide:"預約內容已保留，請複製後回到 LINE 聊天室貼上並送出。",back:"返回表單",copy:"複製內容",copied:"已複製，請回到 LINE 貼上並傳送。"
 };
 
 const en={
@@ -408,8 +414,9 @@ const en={
   cloudTitle:"Cloud Upload Service",cloudDesc:"Download original quality anytime ｜ retained 2 weeks",perUse:"/ use",
 
   depCommon:"In-store: Original ID + $3,000 deposit ｜ Delivery: NT$30,000 deposit",
-  depLensText:"In-store: Original ID + $3,000 deposit ｜ Delivery: NT$10,000 deposit",
+  depLensText:"In-store: Original ID + $3,000 deposit ｜ Delivery: NT$10,000 deposit (Phone deposit takes precedence if rented together)",
   depCloudText:"In-store cloud upload service, no deposit required",
+  depositRuleTip:"💡 <strong>Deposit Notice:</strong> When renting a phone and an extender together, the phone deposit policy applies (Delivery: NT$30,000 / Store: NT$3,000 + ID). Extender deposit is not stacked.",
 
   formTitle:"STEP 1. Select Device & Dates (No Personal Info Required)",
   modelLabel:"Rental device",lensLabel:"Telephoto extender option",pickupDateLabel:"Pickup date",pickupTimeLabel:"Pickup time",selectTime:"Select time",returnDateLabel:"Return date",
@@ -462,6 +469,7 @@ function applyLang(lang){
     depX300u:"depCommon",depX500pm:"depCommon",depX200u:"depCommon",
     depOppo:"depCommon",depX300p:"depCommon",depIphone:"depCommon",
     depDji:"depCommon",depLens:"depLensText",depCloud:"depCloudText",
+    depositRuleTip:"depositRuleTip",
 
     formTitle:"formTitle",modelLabel:"modelLabel",lensLabel:"lensLabel",
     pickupDateLabel:"pickupDateLabel",pickupTimeLabel:"pickupTimeLabel",selectTime:"selectTime",returnDateLabel:"returnDateLabel",
@@ -471,7 +479,7 @@ function applyLang(lang){
     formalPaymentNotice:"formalPaymentNotice",
     termsTitle:"termsTitle",term1h:"term1h",term1:"term1",term2h:"term2h",term2:"term2",term3h:"term3h",term3:"term3",term4h:"term4h",term4:"term4",term5h:"term5h",term5:"term5"
   };
-  Object.keys(ids).forEach(k=>text(ids[k],x[k],k==="store"||k==="inquiryNotice"||k==="formalPaymentNotice"));
+  Object.keys(ids).forEach(k=>text(ids[k],x[k],k==="store"||k==="inquiryNotice"||k==="formalPaymentNotice"||k==="depositRuleTip"));
   ["d12a","d12x","d12b","d12c","d12d","d12e"].forEach(id=>text(id,x.days));
   text("perDayA",x.perDay);text("perDayB",x.perDay);text("perUse",x.perUse);
   
@@ -479,7 +487,7 @@ function applyLang(lang){
   if(!nameInput.value){
     nameInput.placeholder=lang==="zh"?"身分證真實姓名":"Full legal name (as on ID)";
   }
-  document.getElementById("phone").placeholder=lang==="zh"?"需同 LINE 綁定門號":"Phone number";
+  document.getElementById("phone").placeholder=lang==="zh"?"需同 LINE 綁定 10 碼門號":"Phone number (10 digits)";
   
   const sec=document.getElementById("formalSection");
   const isHidden=sec.style.display==="none"||sec.style.display==="";
@@ -514,31 +522,23 @@ function updateModelLabels(){
   document.getElementById("idType").options[1].text=currentLang==="zh"?"健保卡正本":"National Health Insurance card";
   document.getElementById("idType").options[2].text=currentLang==="zh"?"駕照正本":"Driver's license";
   
-  document.getElementById("isStore").options[0].text=currentLang==="zh"?"No（需寄送，依免證件押金 NT$30,000 計）":"No (delivery required; NT$30,000 no-ID deposit applies)";
+  document.getElementById("isStore").options[0].text=currentLang==="zh"?"No（需寄送，免證件押金制）":"No (delivery required; no-ID deposit applies)";
   document.getElementById("isStore").options[1].text=currentLang==="zh"?"Yes（大巨蛋門市親取親還）":"Yes (pickup and return at Taipei Dome Store)";
 }
 
 function toggleLang(){applyLang(currentLang==="zh"?"en":"zh")}
 
-/* 依需求細分單租與加租配件選項 */
 function updateLens(keep=false){
   const m=document.getElementById("model").value,l=document.getElementById("lens"),old=l.value,x=S();
   let o;
   
-  // 主機加租：x300 Ultra 與 x500 Pro Max 支援 200mm / 400mm
   if(m==="vivo x300 Ultra"||m==="vivo x500 Pro Max"){
     o=[["none",x.noLens],["200",x.lens200],["400",x.lens400]];
-  }
-  // 主機加租：x200 Ultra 與 x300 Pro 支援 200mm
-  else if(m==="vivo x200 Ultra"||m==="vivo x300 Pro"){
+  }else if(m==="vivo x200 Ultra"||m==="vivo x300 Pro"){
     o=[["none",x.noLens],["200",x.lens200]];
-  }
-  // 主機加租：OPPO Find X9 Ultra 支援 400mm
-  else if(m==="OPPO Find X9 Ultra"){
+  }else if(m==="OPPO Find X9 Ultra"){
     o=[["none",x.noLens],["400",x.lens400]];
-  }
-  // 單租增距鏡特仕組（含對應機型手機殼組）
-  else if(m==="僅租借 G2 增距鏡頭特仕組"){
+  }else if(m==="僅租借 G2 增距鏡頭特仕組"){
     o=[
       ["rent200_x300u", x.rent200_x300u],
       ["rent200_x500pm", x.rent200_x500pm],
@@ -548,9 +548,7 @@ function updateLens(keep=false){
       ["rent400_x500pm", x.rent400_x500pm],
       ["rent400_oppo", x.rent400_oppo]
     ];
-  }
-  // 其他設備無增距鏡選項
-  else{
+  }else{
     o=[["none",x.noLens]];
   }
 
@@ -570,24 +568,33 @@ function updateNote(){
   document.getElementById("deviceNote").innerHTML=map[m]||"";
 }
 
+/* 根據「交還方式」與「租借型號」智慧呈現押金說明 */
 function handleDeliveryToggle(){
   const val=document.getElementById("isStore").value;
   const idField=document.getElementById("idTypeField");
   const noteEl=document.getElementById("nameNote");
+  const model=document.getElementById("model").value;
+  const isLensOnly=(model==="僅租借 G2 增距鏡頭特仕組");
 
   if(val==="store"){
     idField.style.display="block";
     if(noteEl){
       noteEl.textContent=currentLang==="zh"
-        ?"⚠️ 門市現場取機需核對身分證正本，請務必確認填寫身分證真實中文姓名。"
-        :"⚠️ In-store pickup requires original ID verification. Please ensure this is your full legal name.";
+        ?"⚠️ 門市現場取機需核對身分證正本+現金押金$3,000，請務必確認填寫身分證真實中文姓名。"
+        :"⚠️ In-store pickup requires original ID verification + NT$3,000 cash deposit. Please ensure this is your legal name.";
     }
   }else{
     idField.style.display="none";
     if(noteEl){
-      noteEl.textContent=currentLang==="zh"
-        ?"📦 選擇外縣市寄送服務：免押證件正本，依免證件押金 NT$30,000 辦理。"
-        :"📦 Delivery service selected: No original ID deposit required; NT$30,000 deposit applies.";
+      if(isLensOnly){
+        noteEl.textContent=currentLang==="zh"
+          ?"📦 選擇外縣市寄送服務：免押證件正本，依增距鏡免證件押金 NT$10,000 辦理。"
+          :"📦 Delivery service selected: No original ID deposit required; NT$10,000 deposit applies for extender set.";
+      }else{
+        noteEl.textContent=currentLang==="zh"
+          ?"📦 選擇外縣市寄送服務：免押證件正本，以手機免證件押金 NT$30,000 為主（增距鏡不重複累計押金）。"
+          :"📦 Delivery service selected: No original ID deposit required; phone NT$30,000 deposit applies (extender deposit is not stacked).";
+      }
     }
   }
 }
@@ -656,11 +663,17 @@ function updateStepper(step){
   });
 }
 
+/* 改進項 2：日期連動平滑自動推移 */
 function sync(){
   const d=document.getElementById("pickupDate").value,t=document.getElementById("pickupClock").value;
   document.getElementById("pickupTime").value=d&&t?`${d}T${t}`:"";
   const r=document.getElementById("returnDate");
-  if(d){r.min=d;if(r.value&&r.value<d)r.value=d}
+  if(d){
+    r.min=d;
+    if(!r.value||r.value<d){
+      r.value=d; // 自動推移至同一天，不彈窗中斷客人操作
+    }
+  }
   save();
 }
 
@@ -689,22 +702,35 @@ function inquiry(){
   send(currentMessage,document.getElementById("inquiryButton"),"inquiry");
 }
 
+/* 改進項 1：手機號碼格式嚴格防呆（10碼、09開頭） */
 function booking(){
   const d=dates();if(!d)return;
   const n=document.getElementById("name").value.trim(),p=document.getElementById("phone").value.trim();
-  if(!n||!p){alert(S().contact);return}save();
+  if(!n){alert(S().contact);return}
+  
+  // 台灣手機防呆驗證
+  const phoneClean = p.replace(/[-\s]/g, "");
+  if (!/^09\d{8}$/.test(phoneClean)) {
+    alert(S().badPhone);
+    return;
+  }
+  save();
   
   const isDelivery=document.getElementById("isStore").value==="delivery";
   const c=document.getElementById("cloudService").options[document.getElementById("cloudService").selectedIndex].text;
   const m=document.getElementById("isStore").options[document.getElementById("isStore").selectedIndex].text;
+  const model=document.getElementById("model").value;
+  const isLensOnly=(model==="僅租借 G2 增距鏡頭特仕組");
   
   const i=isDelivery 
-    ? (currentLang==="zh"?"免押證件（外縣市寄送／押金制）":"No ID deposit (delivery / security deposit)") 
+    ? (isLensOnly
+        ? (currentLang==="zh"?"免押證件（外縣市寄送／鏡頭押金 NT$10,000）":"No ID deposit (delivery / extender deposit NT$10,000)")
+        : (currentLang==="zh"?"免押證件（外縣市寄送／手機押金 NT$30,000，合租不重複計）":"No ID deposit (delivery / phone deposit NT$30,000)"))
     : document.getElementById("idType").options[document.getElementById("idType").selectedIndex].text;
   
   currentMessage=currentLang==="zh"
-    ?`※正式預約申請\n※租借器材：${equipment()}\n※交還方式：${m}\n※姓名：${n}\n※電話：${p}\n※押附證件：${i}\n※雲端上傳：${c}\n※預約日期：${d.p.replace("T"," ")} 取 / ${d.r} 還\n※租借天數：約 ${d.d} 天`
-    :`※Formal booking request\n※Device: ${equipment()}\n※Pickup/return method: ${m}\n※Name: ${n}\n※Phone: ${p}\n※ID provided: ${i}\n※Cloud upload: ${c}\n※Rental period: Pickup ${d.p.replace("T"," ")} / Return ${d.r}\n※Estimated rental: ${d.d} day(s)`;
+    ?`※正式預約申請\n※租借器材：${equipment()}\n※交還方式：${m}\n※姓名：${n}\n※電話：${phoneClean}\n※押附證件：${i}\n※雲端上傳：${c}\n※預約日期：${d.p.replace("T"," ")} 取 / ${d.r} 還\n※租借天數：約 ${d.d} 天`
+    :`※Formal booking request\n※Device: ${equipment()}\n※Pickup/return method: ${m}\n※Name: ${n}\n※Phone: ${phoneClean}\n※ID provided: ${i}\n※Cloud upload: ${c}\n※Rental period: Pickup ${d.p.replace("T"," ")} / Return ${d.r}\n※Estimated rental: ${d.d} day(s)`;
   
   updateStepper(3);
   send(currentMessage,document.getElementById("bookingButton"),"booking");
@@ -813,7 +839,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
 
   document.getElementById("languageButton").onclick=toggleLang;
-  document.getElementById("model").onchange=()=>{updateLens();updateNote();save()};
+  document.getElementById("model").onchange=()=>{updateLens();updateNote();handleDeliveryToggle();save()};
   document.getElementById("lens").onchange=save;
   document.getElementById("pickupDate").onchange=sync;
   document.getElementById("pickupClock").onchange=sync;
