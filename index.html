@@ -1009,6 +1009,12 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("storeName").oninput=save;
   document.getElementById("isStore").onchange=()=>{handleDeliveryToggle();save()};
   
+  // 確實綁定按鈕點擊事件
+  document.getElementById("inquiryButton").onclick=inquiry;
+  document.getElementById("bookingButton").onclick=booking;
+  document.getElementById("backButton").onclick=closeFallback;
+  document.getElementById("copyButton").onclick=copyFallback;
+
   document.getElementById("toggleFormalBtn").onclick=()=>{
     const sec=document.getElementById("formalSection");
     const isHidden=sec.style.display==="none"||sec.style.display==="";
