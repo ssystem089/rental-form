@@ -91,7 +91,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   <div class="store" id="store">FIX iT RiGHT 台北大巨蛋門市｜台北市大安區光復南路88號1樓<br>營業時間 12:00–20:00｜熱門檔期依現場狀況彈性延長</div>
 </header>
 
-<!-- 預約 4 步驟進度引導 -->
+<!-- 預約 4 步驟進度引導：直接將 ID 賦予 span 以確保即時更新多語系 -->
 <div class="stepper">
   <div class="step active" id="st1">
     <div class="step-num">1</div>
@@ -245,7 +245,7 @@ let liffReady=false,currentLang="zh",currentMessage="";
 const zh={
   subtitle:"器材租借預約",store:"FiX iT RiGHT 台北大巨蛋門市｜台北市大安區光復南路88號1樓<br>營業時間 12:00–20:00｜演唱會日依現場狀況彈性延長",
   priceTitle:"租借費率｜24H 彈性制",days:"/ 1–2日",
-  step1:"查檔期",step2:"正式預約",step3:"報價匯款",step4:"完成預訂",
+  step1Text:"查檔期",step2Text:"正式預約",step3Text:"報價匯款",step4Text:"完成預訂",
   x300uDesc:"長焦首選｜防抖穩定表現最佳｜支援 200mm／400mm 增距鏡",x300uPrice:"$1,000（3–5日）｜$900（6日以上）",
   x500pmDesc:"長焦電影級專業｜可搭配 200mm／400mm 增距鏡",x500pmPrice:"$1,000（3–5日）｜$900（6日以上）",
   x200uDesc:"畫質細節首選｜支援 200mm 增距鏡",x200uPrice:"$900（3–5日）｜$800（6日以上）",
@@ -275,7 +275,7 @@ const zh={
 const en={
   ...zh,subtitle:"Equipment Rental Booking",store:"Taipei Dome Store｜No. 88, Guangfu S. Rd., Da'an Dist., Taipei<br>Hours: 12:00–20:00｜Extended hours may apply on concert days",
   priceTitle:"RENTAL RATES｜24-HOUR FLEXIBLE PLAN",days:"/ 1–2 days",
-  step1:"Check Availability",step2:"Formal Booking",step3:"Quote & Payment",step4:"Confirmed",
+  step1Text:"Check Availability",step2Text:"Formal Booking",step3Text:"Quote & Payment",step4Text:"Confirmed",
   x300uDesc:"Best long-zoom choice｜best stabilization｜200mm / 400mm extender compatible",x300uPrice:"$1,000 (3–5 days) ｜ $900 (6+ days)",
   x500pmDesc:"Cinema-grade telephoto professional｜200mm / 400mm extender compatible",x500pmPrice:"$1,000 (3–5 days) ｜ $900 (6+ days)",
   x200uDesc:"Best image detail｜200mm extender compatible",x200uPrice:"$900 (3–5 days) ｜ $800 (6+ days)",
@@ -299,7 +299,7 @@ const en={
   termsTitle:"RENTAL TERMS",
   term1h:"Flexible pricing plan",term1:"Items under the 24-hour flexible plan may be calculated by actual use time or event session. Final return arrangements are confirmed with customer service.",term2h:"Pickup and return policy",term2:"Normal in-store pickup and return hours are 12:00–20:00. Late returns may be charged as an additional day unless otherwise confirmed.",term3h:"Delivery service",term3:"For delivery outside Taipei, the applicable no-ID deposit is required before dispatch. The deposit is refunded after return and inspection.",term4h:"Damage and communication",term4:"Please remain reachable during the rental. Damage, loss, or late return may incur charges under the rental agreement.",term5h:"Telephoto extender terms",term5:"Confirm venue rules before renting. If prohibited by the organizer, rental is non-refundable but may be converted to 12-month store credit.",
   noLens:"No add-on (device + protective case, carrying pouch, charging cable set)",lens200:"Add 200mm extender (+$300/day)",lens400:"Add 400mm extender (+$600/day)",rent200:"Rent 200mm extender only ($300/day)",rent400:"Rent 400mm extender only ($600/day)",
-  noteX300U:"<strong>Quick guide:</strong> Best long-zoom choice with the strongest stabilization among these three models.",noteX500PM:"<strong>Quick guide:</strong> Cinema-grade telephoto professional flagship with 200mm/400mm extender support.",noteX200U:"<strong>Quick guide:</strong> Best image-detail choice, suitable for cropping and fine stage detail.",noteX300P:"<strong>Quick guide:</strong> Travel long-zoom choice with balanced stabilization, detail, and portability.",noteOppo:"<strong>Quick guide:</strong> Hasselblad imaging flagship with 400mm extender support.",noteIphone:"<strong>Quick guide:</strong> Suitable for iOS users and video recording.",noteDji:"<strong>Quick guide:</strong> Suitable for stable video, moving shots, and handheld vlog footage.",noteLens:"<strong>Quick guide:</strong> Extender set only. Confirm compatibility and venue rules first.",
+  noteX300U:"<strong>Quick guide:</strong> Best long-zoom choice with the strongest stabilization among these models.",noteX500PM:"<strong>Quick guide:</strong> Cinema-grade telephoto professional flagship with 200mm/400mm extender support.",noteX200U:"<strong>Quick guide:</strong> Best image-detail choice, suitable for cropping and fine stage detail.",noteX300P:"<strong>Quick guide:</strong> Travel long-zoom choice with balanced stabilization, detail, and portability.",noteOppo:"<strong>Quick guide:</strong> Hasselblad imaging flagship with 400mm extender support.",noteIphone:"<strong>Quick guide:</strong> Suitable for iOS users and video recording.",noteDji:"<strong>Quick guide:</strong> Suitable for stable video, moving shots, and handheld vlog footage.",noteLens:"<strong>Quick guide:</strong> Extender set only. Confirm compatibility and venue rules first.",
   savedTitle:"Saved Selection",savedText:"Device and date choices restored. Complete name and phone number to submit formal booking.",clear:"Clear saved selection"
 };
 
@@ -313,7 +313,7 @@ function applyLang(lang){
   document.getElementById("languageButton").textContent=lang==="zh"?"English":"繁體中文";
   const ids={
     subtitle:"subtitle",store:"store",priceTitle:"priceTitle",
-    step1Text:"step1",step2Text:"step2",step3Text:"step3",step4Text:"step4",
+    step1Text:"step1Text",step2Text:"step2Text",step3Text:"step3Text",step4Text:"step4Text",
     x300uDesc:"x300uDesc",x300uPrice:"x300uPrice",x500pmDesc:"x500pmDesc",x500pmPrice:"x500pmPrice",
     x200uDesc:"x200uDesc",x200uPrice:"x200uPrice",x300pDesc:"x300pDesc",x300pPrice:"x300pPrice",
     oppoDesc:"oppoDesc",oppoPrice:"oppoPrice",iphoneDesc:"iphoneDesc",iphonePrice:"iphonePrice",
@@ -332,7 +332,6 @@ function applyLang(lang){
   document.getElementById("name").placeholder=lang==="zh"?"身分證真實姓名":"Full legal name";
   document.getElementById("phone").placeholder=lang==="zh"?"需同 LINE 綁定門號":"Phone number";
   
-  // 更新展開/收合按鈕狀態文字
   const sec=document.getElementById("formalSection");
   const isHidden=sec.style.display==="none"||sec.style.display==="";
   document.getElementById("toggleFormalBtn").textContent=isHidden?x.toggleFormalOpen:x.toggleFormalClose;
@@ -479,9 +478,10 @@ function dates(){
 
 function inquiry(){
   const d=dates();if(!d)return;save();
+  const directLink=`https://liff.line.me/${LIFF_ID}?step=formal`;
   currentMessage=currentLang==="zh"
-    ?`【詢問設備檔期】\n租借器材：${equipment()}\n預計取機：${d.p.replace("T"," ")}\n預計歸還：${d.r}\n預計天數：約 ${d.d} 天\n\n您好，想先確認這段期間是否有設備檔期可租借，謝謝！`
-    :`[Equipment Availability Check]\nDevice: ${equipment()}\nPickup: ${d.p.replace("T"," ")}\nReturn: ${d.r}\nRental: approx ${d.d} day(s)\n\nPlease check if this device is available. Thank you!`;
+    ?`【詢問設備檔期】\n租借器材：${equipment()}\n預計取機：${d.p.replace("T"," ")}\n預計歸還：${d.r}\n預計天數：約 ${d.d} 天\n\n您好，想先確認這段期間是否有設備檔期可租借，謝謝！\n\n👉 確認有檔期？點此立即補填預約資料：\n${directLink}`
+    :`[Equipment Availability Check]\nDevice: ${equipment()}\nPickup: ${d.p.replace("T"," ")}\nReturn: ${d.r}\nRental: approx ${d.d} day(s)\n\nPlease check if this device is available. Thank you!\n\n👉 Ready to book? Complete details here:\n${directLink}`;
   
   document.getElementById("formalSection").style.display="block";
   document.getElementById("toggleFormalBtn").textContent=S().toggleFormalClose;
@@ -564,6 +564,15 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("returnDate").min=today;
   applyLang(initialLang());
   restore();
+
+  const urlParams=new URLSearchParams(window.location.search);
+  if(urlParams.get("step")==="formal"){
+    const sec=document.getElementById("formalSection");
+    sec.style.display="block";
+    updateStepper(2);
+    document.getElementById("toggleFormalBtn").textContent=S().toggleFormalClose;
+    setTimeout(()=>sec.scrollIntoView({behavior:"smooth"}),200);
+  }
 
   document.getElementById("languageButton").onclick=toggleLang;
   document.getElementById("model").onchange=()=>{updateLens();updateNote();save()};
