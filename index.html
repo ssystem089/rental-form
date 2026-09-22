@@ -306,7 +306,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
       <label for="storeName" id="storeNameLabel">指定 7-11 店到店名稱 / 店號</label>
       <input id="storeName" placeholder="例如：7-11 敦巨門市 (或店號 123456)">
       <div class="delivery-notice">
-        * 租期僅計實際使用天數，往返運送時間完全不計費。設備會提前 2～3 天寄達，活動結束後請於 1～2 天緩衝日內寄回；若逾期未寄回，將自押金中內扣相應之延遲金。
+        * 運送期不計費，提早 2～3 天寄達、用完 1～2 日內寄回；逾期未寄回將由押金內扣延遲金，請如期歸還。
       </div>
     </div>
 
@@ -833,7 +833,8 @@ function scrollToFormalSection(){
   },300);
 }
 
-function getOrderText(d){
+// 產生預訂單格式（依據是否為詢問檔期帶入不同標題）
+function getOrderText(d, isFormal = false){
   const isStore=document.getElementById("isStore").value==="store";
   const storeName=document.getElementById("storeName").value.trim();
   const name=document.getElementById("name").value.trim()||"未填寫";
@@ -847,9 +848,11 @@ function getOrderText(d){
   
   let depositStr = isStore ? "現金3,000+證件正本(三證則一押附)" : "免證件押金3萬";
 
+  const title = isFormal ? "【正式預約單】" : "【詢問設備檔期】";
+
   let baseText = currentLang==="zh"
-    ? `【正式預約單】\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (共 ${d.d} 天)\n交還：${methodStr}\n押金：${depositStr}\n姓名：${name}\n電話：${phone}`
-    : `[Formal Booking]\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (${d.d} days)\nMethod: ${methodStr}\nDeposit: ${depositStr}\nName: ${name}\nPhone: ${phone}`;
+    ? `${title}\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (共 ${d.d} 天)\n交還：${methodStr}\n押金：${depositStr}\n姓名：${name}\n電話：${phone}`
+    : `${title}\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (${d.d} days)\nMethod: ${methodStr}\nDeposit: ${depositStr}\nName: ${name}\nPhone: ${phone}`;
 
   if(cloudVal === "Yes") {
     baseText += currentLang==="zh" ? `\n雲端：YES` : `\nCloud: YES`;
@@ -862,7 +865,8 @@ function inquiry(){
   try{localStorage.setItem("fir-stage","formal");}catch(e){}
 
   const directLink=`https://liff.line.me/${LIFF_ID}`;
-  currentMessage = getOrderText(d) + (currentLang==="zh" ? `\n\n👉 確認有檔期？點此立即補填預約資料：\n${directLink}` : `\n\n👉 Complete details here:\n${directLink}`);
+  // 傳送詢問檔期專用格式（isFormal = false）
+  currentMessage = getOrderText(d, false) + (currentLang==="zh" ? `\n\n👉 確認有檔期？點此立即補填預約資料：\n${directLink}` : `\n\n👉 Complete details here:\n${directLink}`);
   
   scrollToFormalSection();
   send(currentMessage,document.getElementById("inquiryButton"),"inquiry");
@@ -880,7 +884,8 @@ function booking(){
   }
   save();
   
-  currentMessage = getOrderText(d);
+  // 傳送正式預約單格式（isFormal = true）
+  currentMessage = getOrderText(d, true);
   updateStepper(3);
   try{localStorage.removeItem("fir-stage");}catch(e){}
   send(currentMessage,document.getElementById("bookingButton"),"booking");
