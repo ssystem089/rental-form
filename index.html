@@ -65,6 +65,7 @@ input:focus,select:focus{border-color:#606068}
 .small-button{width:auto;min-height:30px;padding:5px 8px;border:1px solid #55705e;border-radius:6px;background:transparent;color:var(--ok);font-size:11px;font-weight:700;cursor:pointer}
 .notice-box{margin-top:10px;padding:10px 12px;border-radius:8px;background:#ffffff09;border:1px dashed #ffffff1f;color:var(--muted);font-size:11.5px;line-height:1.6}
 .lens-tip-box{display:none;margin-top:7px;padding:8px 10px;background:#1a1914;border:1px solid #e2b86644;border-radius:6px;color:var(--accent);font-size:11px;line-height:1.5}
+.delivery-notice{font-size:11.5px;color:var(--accent);margin-top:5px;line-height:1.5;background:#1a1914;padding:8px;border-radius:6px;border:1px solid #e2b86633}
 
 /* 折疊/展開切換面板 */
 .switch-link{text-align:center;margin-top:14px;padding-top:12px;border-top:1px solid #ffffff12}
@@ -304,6 +305,9 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     <div class="field" id="storeNoteField">
       <label for="storeName" id="storeNameLabel">指定 7-11 店到店名稱 / 店號</label>
       <input id="storeName" placeholder="例如：7-11 敦巨門市 (或店號 123456)">
+      <div class="delivery-notice">
+        * 租期僅計實際使用天數，往返運送時間完全不計費。設備會提前 2～3 天寄達，活動結束後請於 1～2 天緩衝日內寄回；若逾期未寄回，將自押金中內扣相應之延遲金。
+      </div>
     </div>
 
     <!-- 3. 承租人姓名 -->
@@ -429,7 +433,7 @@ const zh={
   noteDji:"<strong>簡易介紹：</strong>適合穩定錄影、移動鏡頭與手持 Vlog。",
   noteLens:"<strong>簡易介紹：</strong>僅單租增距鏡特仕組（含對應手機殼與配件）。",
   savedTitle:"已保留上次選擇",savedText:"型號與預約日期已為您帶入；確認可租後，補填姓名與電話即可送出正式預約。",clear:"清除已保存資料",
-  dates:"請先選擇預計取機日期、取機時間與歸還日期。",pastDate:"取機日期不可選擇過去日期！",badDate:"歸還日期可與取機日期相同，或晚於取機日期。",contact:"正式預約請填寫承租人真實姓名。",badPhone:"請填寫正確的 10 碼台灣手機門號（如 0912345678）。",
+  dates:"請先選擇預計取機日期、取機時間與歸還日期。",pastDate:"取機日期不可選擇過去日期！",badDate:"歸還日期可與取機日期相同，或晚於歸還日期。",contact:"正式預約請填寫承租人真實姓名。",badPhone:"請填寫正確的 10 碼台灣手機門號（如 0912345678）。",
   wait:"LINE 尚未初始化完成，請稍候幾秒後再試。",init:"LINE 連線初始化失敗，請從官方帳號一對一聊天室重新開啟。",sending:"送出中…",sent:"已送出",fallbackTitle:"訊息未能自動送出",fallbackGuide:"預約內容已保留，請複製後回到 LINE 聊天室貼上並送出。",back:"返回表單",copy:"複製內容",copied:"已複製，請回到 LINE 貼上並傳送。"
 };
 
@@ -829,7 +833,6 @@ function scrollToFormalSection(){
   },300);
 }
 
-// 產生精簡的預約單格式
 function getOrderText(d){
   const isStore=document.getElementById("isStore").value==="store";
   const storeName=document.getElementById("storeName").value.trim();
