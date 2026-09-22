@@ -91,7 +91,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   <div class="store" id="store">FIX iT RiGHT 台北大巨蛋門市｜台北市大安區光復南路88號1樓<br>營業時間 12:00–20:00｜熱門檔期依現場狀況彈性延長</div>
 </header>
 
-<!-- 預約 4 步驟進度引導：直接將 ID 賦予 span 以確保即時更新多語系 -->
+<!-- 預約 4 步驟進度引導 -->
 <div class="stepper">
   <div class="step active" id="st1">
     <div class="step-num">1</div>
@@ -186,7 +186,10 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
 <div id="formalSection" style="display:none">
   <div class="section-title" style="margin:22px 4px 8px" id="formalTitle">STEP 2. 確認有檔期，填寫正式預訂資料</div>
   <section class="card">
-    <div class="field"><label for="name" id="nameLabel">承租人姓名</label><input id="name" autocomplete="name" placeholder="身分證真實姓名"></div>
+    <div class="field">
+      <label for="name" id="nameLabel">承租人姓名（需同身分證件）</label>
+      <input id="name" autocomplete="name" placeholder="身分證真實姓名">
+    </div>
     <div class="field"><label for="phone" id="phoneLabel">聯絡手機</label><input id="phone" autocomplete="tel" inputmode="tel" placeholder="需同 LINE 綁定門號"></div>
     <div class="field">
       <label for="idType" id="idLabel">門市押附證件正本</label>
@@ -263,7 +266,7 @@ const zh={
   toggleFormalClose:"▲ 收合正式預約欄位",
   formalTitle:"STEP 2. 確認有檔期，填寫正式預訂資料",
   cloudLabel:"雲端上傳服務",cloudNo:"不需要（內建 EasyShare App 傳輸）",cloudYes:"需要（+$200／次，原畫質雲端下載）",
-  nameLabel:"承租人姓名",phoneLabel:"聯絡手機",idLabel:"門市押附證件正本",
+  nameLabel:"承租人姓名（需同身分證件）",phoneLabel:"聯絡手機",idLabel:"門市押附證件正本",
   returnMethodLabel:"是否於台北大巨蛋門市交還",bookingButton:"確認送出正式訂單",
   formalPaymentNotice:"💳 送出後客服將於 LINE 聊天室依您選填內容提供報價與匯款資訊，完成匯款後即鎖定檔期並完成預約。",
   termsTitle:"租借方案注意事項",term1h:"彈性報價方案",term1:"標有 24hr 彈性制，如遇演唱會當日租還或出國，依實際使用時間或場次起算，需配合現場檔期安排；最終交還日以協調確認為準。",term2h:"租還規範",term2:"限 12:00–20:00 於大巨蛋門市完成交還機，逾時則以隔日計。演唱會時段依公告或客服確認辦理。",term3h:"寄送服務資訊",term3:"外縣市寄送依器材標示的免證件押金辦理，款項完成後安排寄送；設備寄回檢查無誤後原路返還押金。",term4h:"損壞與聯繫",term4:"租借期間請保持聯繫；設備損毀、遺失或逾時歸還，依租賃合約負擔相關費用。",term5h:"增距鏡特別條款",term5:"租借前請確認場館規定；若因主辦禁帶無法使用，租金不退款，但可轉為 12 個月有效折抵金。",
@@ -293,7 +296,7 @@ const en={
   toggleFormalClose:"▲ Collapse booking details",
   formalTitle:"STEP 2. Complete Formal Booking Details",
   cloudLabel:"Cloud upload service",cloudNo:"Not needed (transfer via EasyShare App)",cloudYes:"Needed (+$200/use, original-quality download)",
-  nameLabel:"Renter's full name",phoneLabel:"Phone number",idLabel:"Original ID for deposit",returnMethodLabel:"Pickup/return at Taipei Dome Store?",
+  nameLabel:"Renter's Full Legal Name (as on ID)",phoneLabel:"Phone number",idLabel:"Original ID for deposit",returnMethodLabel:"Pickup/return at Taipei Dome Store?",
   bookingButton:"Confirm & Submit Formal Booking",
   formalPaymentNotice:"💳 Customer service will provide quotation and payment details via LINE chat. Once transferred, your reservation will be locked and confirmed.",
   termsTitle:"RENTAL TERMS",
@@ -329,7 +332,11 @@ function applyLang(lang){
   Object.keys(ids).forEach(k=>text(ids[k],x[k],k==="store"||k==="inquiryNotice"||k==="formalPaymentNotice"));
   ["d12a","d12x","d12b","d12c","d12d","d12e"].forEach(id=>text(id,x.days));
   text("perDayA",x.perDay);text("perDayB",x.perDay);text("perUse",x.perUse);
-  document.getElementById("name").placeholder=lang==="zh"?"身分證真實姓名":"Full legal name";
+  
+  const nameInput = document.getElementById("name");
+  if(!nameInput.value){
+    nameInput.placeholder=lang==="zh"?"身分證真實姓名":"Full legal name (as on ID)";
+  }
   document.getElementById("phone").placeholder=lang==="zh"?"需同 LINE 綁定門號":"Phone number";
   
   const sec=document.getElementById("formalSection");
@@ -507,11 +514,48 @@ function booking(){
 
 function status(m){const e=document.getElementById("liffStatus");e.textContent=m;e.classList.add("show")}
 
+// 調用 LINE Profile 優化姓名輸入
+function applyLineProfile(displayName){
+  const nameInput = document.getElementById("name");
+  if(!nameInput) return;
+
+  // 若欄位為空，將 LINE 暱稱填入作為參考
+  if(!nameInput.value.trim()){
+    nameInput.value = displayName;
+    save();
+  }
+
+  nameInput.placeholder = currentLang === "zh" 
+    ? `身分證姓名（目前 LINE：${displayName}）` 
+    : `Full legal name (LINE: ${displayName})`;
+
+  if(!document.getElementById("nameNote")){
+    const note = document.createElement("div");
+    note.id = "nameNote";
+    note.style.cssText = "font-size:11px;color:#e2b866;margin-top:5px;line-height:1.4;";
+    note.textContent = currentLang === "zh" 
+      ? "⚠️ 現場核對身分證正本取機，請務必確認填寫身分證真實中文姓名。" 
+      : "⚠️ In-store pickup requires original ID verification. Please ensure this is your full legal name.";
+    nameInput.parentNode.appendChild(note);
+  }
+}
+
 async function init(){
   try{
     await liff.init({liffId:LIFF_ID});
     liffReady=true;
     document.getElementById("liffStatus").classList.remove("show");
+
+    // 取得 LINE 暱稱輔助填寫
+    if(liff.isLoggedIn()){
+      try{
+        const profile = await liff.getProfile();
+        applyLineProfile(profile.displayName);
+      }catch(err){
+        console.warn("無法取得 LINE 個人檔案:", err);
+      }
+    }
+
     if(!liff.isInClient()&&!liff.isLoggedIn())liff.login({redirectUri:location.href});
   }catch(e){
     console.error(e);
