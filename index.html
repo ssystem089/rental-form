@@ -32,9 +32,18 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,B
 
 .section-title{margin:20px 4px 8px;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.4px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
-.price-row{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #ffffff0f}
+
+/* 費率列互動特效 */
+.price-row{
+  display:flex;justify-content:space-between;gap:10px;padding:12px 8px;
+  border-bottom:1px solid #ffffff0f;border-radius:8px;cursor:pointer;
+  transition:background 0.2s, transform 0.15s;
+}
 .price-row:last-child{border:0}
-.product-name{font-size:14px;font-weight:700}
+.price-row:hover{background:#ffffff0a}
+.price-row:active{transform:scale(0.99);background:#ffffff14}
+.product-name{font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px}
+.tap-hint{font-size:10px;font-weight:normal;color:var(--accent);border:1px solid #e2b86644;padding:1px 5px;border-radius:4px;background:#e2b86611}
 .product-desc{margin-top:3px;color:var(--sub);font-size:11px;line-height:1.45}
 .product-deposit{margin-top:3px;color:#a8976b;font-size:10px;line-height:1.4}
 .price{min-width:140px;text-align:right;font-size:13px;font-weight:700;line-height:1.5}
@@ -43,7 +52,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,B
 .field{margin-bottom:14px}
 .field:last-child{margin-bottom:0}
 label{display:block;margin-bottom:6px;color:var(--muted);font-size:12px;font-weight:650}
-input,select{width:100%;min-height:45px;padding:10px 11px;border:1px solid var(--line);border-radius:8px;background:var(--card2);color:var(--text);font:inherit;font-size:14px;outline:0}
+input,select{width:100%;min-height:45px;padding:10px 11px;border:1px solid var(--line);border-radius:8px;background:var(--card2);color:var(--text);font:inherit;font-size:14px;outline:0;transition:box-shadow 0.3s ease, border-color 0.3s ease}
 input:focus,select:focus{border-color:#606068}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .device-note{margin-top:8px;padding:10px 11px;border-left:2px solid #6b7280;border-radius:0 8px 8px 0;background:#1d1d21;color:var(--muted);font-size:12px;line-height:1.6}
@@ -115,12 +124,12 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   </div>
 </div>
 
-<div class="section-title" id="priceTitle">租借費率｜24H 彈性制</div>
+<div class="section-title" id="priceTitle">租借費率｜24H 彈性制（點擊器材可直接帶入選單）</div>
 <section class="card">
   <!-- vivo x300 Ultra -->
-  <div class="price-row">
+  <div class="price-row" data-model="vivo x300 Ultra">
     <div>
-      <div class="product-name">vivo x300 Ultra</div>
+      <div class="product-name">vivo x300 Ultra <span class="tap-hint">點此選租 ➔</span></div>
       <div class="product-desc" id="x300uDesc">極致影像旗艦，長焦之王｜支援 200mm／400mm 增距鏡</div>
       <div class="product-deposit" id="depX300u">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000</div>
     </div>
@@ -128,9 +137,9 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   </div>
 
   <!-- vivo x500 Pro Max -->
-  <div class="price-row">
+  <div class="price-row" data-model="vivo x500 Pro Max">
     <div>
-      <div class="product-name">vivo x500 Pro Max</div>
+      <div class="product-name">vivo x500 Pro Max <span class="tap-hint">點此選租 ➔</span></div>
       <div class="product-desc" id="x500pmDesc">長焦電影級專業｜可搭配 200mm／400mm 增距鏡</div>
       <div class="product-deposit" id="depX500pm">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000</div>
     </div>
@@ -138,9 +147,9 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   </div>
 
   <!-- vivo x200 Ultra -->
-  <div class="price-row">
+  <div class="price-row" data-model="vivo x200 Ultra">
     <div>
-      <div class="product-name">vivo x200 Ultra</div>
+      <div class="product-name">vivo x200 Ultra <span class="tap-hint">點此選租 ➔</span></div>
       <div class="product-desc" id="x200uDesc">大光圈與細節攝影兼具｜支援 200mm 增距鏡</div>
       <div class="product-deposit" id="depX200u">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000</div>
     </div>
@@ -148,9 +157,9 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   </div>
 
   <!-- OPPO Find X9 Ultra -->
-  <div class="price-row">
+  <div class="price-row" data-model="OPPO Find X9 Ultra">
     <div>
-      <div class="product-name">OPPO Find X9 Ultra</div>
+      <div class="product-name">OPPO Find X9 Ultra <span class="tap-hint">點此選租 ➔</span></div>
       <div class="product-desc" id="oppoDesc">哈蘇影像、10倍原生光學變焦｜支援 400mm 增距鏡</div>
       <div class="product-deposit" id="depOppo">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000</div>
     </div>
@@ -158,9 +167,9 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   </div>
 
   <!-- vivo x300 Pro -->
-  <div class="price-row">
+  <div class="price-row" data-model="vivo x300 Pro">
     <div>
-      <div class="product-name">vivo x300 Pro</div>
+      <div class="product-name">vivo x300 Pro <span class="tap-hint">點此選租 ➔</span></div>
       <div class="product-desc" id="x300pDesc">高CP值的旅行長焦攝影首選｜支援 200mm 增距鏡</div>
       <div class="product-deposit" id="depX300p">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000</div>
     </div>
@@ -168,9 +177,9 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   </div>
 
   <!-- iPhone 17 Pro / Max -->
-  <div class="price-row">
+  <div class="price-row" data-model="iPhone 17 Pro Max">
     <div>
-      <div class="product-name">iPhone 17 Pro／Pro Max</div>
+      <div class="product-name">iPhone 17 Pro／Pro Max <span class="tap-hint">點此選租 ➔</span></div>
       <div class="product-desc" id="iphoneDesc">蘋果最強效能，流暢影片拍攝</div>
       <div class="product-deposit" id="depIphone">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000</div>
     </div>
@@ -178,9 +187,9 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   </div>
 
   <!-- DJI Pocket 4 Pro -->
-  <div class="price-row">
+  <div class="price-row" data-model="DJI Pocket 4 Pro 全能套裝">
     <div>
-      <div class="product-name">DJI Pocket 4 Pro 全能套裝</div>
+      <div class="product-name">DJI Pocket 4 Pro 全能套裝 <span class="tap-hint">點此選租 ➔</span></div>
       <div class="product-desc" id="djiDesc">旗艦級雙鏡頭手持縮放三軸相機</div>
       <div class="product-deposit" id="depDji">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000</div>
     </div>
@@ -188,9 +197,9 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   </div>
 
   <!-- 增距鏡特仕組 -->
-  <div class="price-row">
+  <div class="price-row" data-model="僅租借 G2 增距鏡頭特仕組">
     <div>
-      <div class="product-name" id="lensTitle">增距鏡特仕組</div>
+      <div class="product-name" id="lensTitle">增距鏡特仕組 <span class="tap-hint">點此選租 ➔</span></div>
       <div class="product-desc" id="lensDesc">含對應手機殼以及增距鏡配件組｜200mm：$300／日｜400mm：$600／日</div>
       <div class="product-deposit" id="depLens">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$10,000（與手機合租時以手機押金為主，不重複計算）</div>
     </div>
@@ -198,9 +207,9 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   </div>
 
   <!-- 雲端上傳 -->
-  <div class="price-row">
+  <div class="price-row" data-model="cloud">
     <div>
-      <div class="product-name" id="cloudTitle">雲端上傳服務</div>
+      <div class="product-name" id="cloudTitle">雲端上傳服務 <span class="tap-hint">加選 ➔</span></div>
       <div class="product-desc" id="cloudDesc">拍完免傳檔，雲端隨時輕鬆載｜保留 2 週</div>
       <div class="product-deposit" id="depCloud">門市代為原畫質雲端上傳，免押金</div>
     </div>
@@ -215,7 +224,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
 
 <!-- STEP 1：快速查檔期表單 -->
 <div class="section-title" id="formTitle">STEP 1. 選擇設備與預約日期（免填個資）</div>
-<section class="card">
+<section class="card" id="formSectionStep1">
   <div id="liffStatus" class="status"></div>
   <div id="savedSelection" class="saved-box"></div>
 
@@ -347,7 +356,8 @@ let liffReady=false,currentLang="zh",currentMessage="";
 
 const zh={
   subtitle:"器材租借預約",store:"FiX iT RiGHT 台北大巨蛋門市｜台北市大安區光復南路88號1樓<br>營業時間 12:00–20:00｜演唱會日依現場狀況彈性延長",
-  priceTitle:"租借費率｜24H 彈性制",days:"/ 1–2日",
+  priceTitle:"租借費率｜24H 彈性制（點擊器材可直接帶入選單）",days:"/ 1–2日",
+  tapHint:"點此選租 ➔",tapHintCloud:"加選 ➔",
   step1Text:"查檔期",step2Text:"正式預約",step3Text:"報價匯款",step4Text:"完成預訂",
   x300uDesc:"極致影像旗艦，長焦之王｜支援 200mm／400mm 增距鏡",x300uPrice:"$1,000（3–5日）｜$900（6日以上）",
   x500pmDesc:"長焦電影級專業｜可搭配 200mm／400mm 增距鏡",x500pmPrice:"$1,000（3–5日）｜$900（6日以上）",
@@ -400,7 +410,8 @@ const zh={
 
 const en={
   ...zh,subtitle:"Equipment Rental Booking",store:"Taipei Dome Store｜No. 88, Guangfu S. Rd., Da'an Dist., Taipei<br>Hours: 12:00–20:00｜Extended hours may apply on concert days",
-  priceTitle:"RENTAL RATES｜24-HOUR FLEXIBLE PLAN",days:"/ 1–2 days",
+  priceTitle:"RENTAL RATES｜24H PLAN (Click item to auto-select)",days:"/ 1–2 days",
+  tapHint:"Select ➔",tapHintCloud:"Add ➔",
   step1Text:"Check Availability",step2Text:"Formal Booking",step3Text:"Quote & Payment",step4Text:"Confirmed",
   x300uDesc:"Ultimate imaging flagship, king of zoom ｜ 200mm / 400mm extender compatible",x300uPrice:"$1,000 (3–5 days) ｜ $900 (6+ days)",
   x500pmDesc:"Cinema-grade telephoto professional ｜ 200mm / 400mm extender compatible",x500pmPrice:"$1,000 (3–5 days) ｜ $900 (6+ days)",
@@ -482,6 +493,14 @@ function applyLang(lang){
   Object.keys(ids).forEach(k=>text(ids[k],x[k],k==="store"||k==="inquiryNotice"||k==="formalPaymentNotice"||k==="depositRuleTip"));
   ["d12a","d12x","d12b","d12c","d12d","d12e"].forEach(id=>text(id,x.days));
   text("perDayA",x.perDay);text("perDayB",x.perDay);text("perUse",x.perUse);
+
+  document.querySelectorAll(".tap-hint").forEach(el=>{
+    if(el.closest('[data-model="cloud"]')){
+      el.textContent=x.tapHintCloud;
+    }else{
+      el.textContent=x.tapHint;
+    }
+  });
   
   const nameInput = document.getElementById("name");
   if(!nameInput.value){
@@ -756,6 +775,47 @@ function applyLineProfile(displayName){
   }
 }
 
+/* 設定點擊器材列直接帶入型號並平滑滾動 */
+function setupPriceRowInteractions(){
+  document.querySelectorAll(".price-row").forEach(row => {
+    row.addEventListener("click", () => {
+      const modelVal = row.getAttribute("data-model");
+      if (!modelVal) return;
+
+      if (modelVal === "cloud") {
+        const cloudEl = document.getElementById("cloudService");
+        cloudEl.value = "Yes";
+        save();
+        const sec = document.getElementById("formalSection");
+        sec.style.display = "block";
+        document.getElementById("toggleFormalBtn").textContent = S().toggleFormalClose;
+        updateStepper(2);
+        cloudEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        cloudEl.style.boxShadow = "0 0 0 2px var(--accent)";
+        setTimeout(() => { cloudEl.style.boxShadow = ""; }, 1200);
+        return;
+      }
+
+      const mSelect = document.getElementById("model");
+      mSelect.value = modelVal;
+      updateLens();
+      updateNote();
+      handleDeliveryToggle();
+      save();
+
+      // 平滑滾動至 STEP 1 取機日期區
+      const target = document.getElementById("pickupDate");
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      // 下拉選單金色閃爍提示
+      mSelect.style.boxShadow = "0 0 0 2px var(--accent)";
+      setTimeout(() => {
+        mSelect.style.boxShadow = "";
+      }, 1200);
+    });
+  });
+}
+
 async function init(){
   try{
     await liff.init({liffId:LIFF_ID});
@@ -824,6 +884,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   applyLang(initialLang());
   handleDeliveryToggle();
   restore();
+  setupPriceRowInteractions();
 
   const urlParams=new URLSearchParams(window.location.search);
   if(urlParams.get("step")==="formal"){
