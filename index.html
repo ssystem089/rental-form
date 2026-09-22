@@ -135,7 +135,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
       <div class="product-desc" id="x300uDesc">極致影像旗艦，長焦之王｜支援 200mm／400mm 增距鏡</div>
       <div class="product-deposit" id="depX300u">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000</div>
     </div>
-    <div class="price">$1,200 <small id="d12a">/ 1–2日</small><br><small id="x300uPrice">$1,000（3–5日）｜$900（6日以上）</small></div>
+    <div class="price">$1,200 <small id="d12a">/ 1–2日</small><br><small id="x300uPrice">$1,100（3–5日）｜$1,000（6日以上）</small></div>
   </div>
 
   <!-- vivo x500 Pro Max -->
@@ -379,7 +379,7 @@ const zh={
   priceTitle:"租借費率｜24H 彈性制（點選器材快速帶入）",days:"/ 1–2日",
   tapHint:"點此選租 ➔",tapHintCloud:"加選 ➔",
   step1Text:"查檔期",step2Text:"正式預約",step3Text:"報價匯款",step4Text:"完成預訂",
-  x300uDesc:"極致影像旗艦，長焦之王｜支援 200mm／400mm 增距鏡",x300uPrice:"$1,000（3–5日）｜$900（6日以上）",
+  x300uDesc:"極致影像旗艦，長焦之王｜支援 200mm／400mm 增距鏡",x300uPrice:"$1,100（3–5日）｜$1,000（6日以上）",
   x500pmDesc:"長焦電影級專業｜可搭配 200mm／400mm 增距鏡",x500pmPrice:"$1,000（3–5日）｜$900（6日以上）",
   x200uDesc:"大光圈與細節攝影兼具｜支援 200mm 增距鏡",x200uPrice:"$900（3–5日）｜$800（6日以上）",
   x300pDesc:"高CP值的旅行長焦攝影首選｜支援 200mm 增距鏡",x300pPrice:"$800（3–5日）｜$700（6日以上）",
@@ -442,7 +442,7 @@ const en={
   priceTitle:"RENTAL RATES｜24H PLAN (Click item to auto-select)",days:"/ 1–2 days",
   tapHint:"Select ➔",tapHintCloud:"Add ➔",
   step1Text:"Check Availability",step2Text:"Formal Booking",step3Text:"Quote & Payment",step4Text:"Confirmed",
-  x300uDesc:"Ultimate imaging flagship, king of zoom ｜ 200mm / 400mm extender compatible",x300uPrice:"$1,000 (3–5 days) ｜ $900 (6+ days)",
+  x300uDesc:"Ultimate imaging flagship, king of zoom ｜ 200mm / 400mm extender compatible",x300uPrice:"$1,100 (3–5 days) ｜ $1,000 (6+ days)",
   x500pmDesc:"Cinema-grade telephoto professional ｜ 200mm / 400mm extender compatible",x500pmPrice:"$1,000 (3–5 days) ｜ $900 (6+ days)",
   x200uDesc:"Large aperture & fine details ｜ 200mm extender compatible",x200uPrice:"$900 (3–5 days) ｜ $800 (6+ days)",
   x300pDesc:"High cost-performance travel telephoto ｜ 200mm extender compatible",x300pPrice:"$800 (3–5 days) ｜ $700 (6+ days)",
@@ -802,7 +802,6 @@ function equipment(){
     if(l.value === "200") cleanLens = " + 200mm 增距鏡";
     else if(l.value === "400") cleanLens = " + 400mm 增距鏡";
     else {
-      // 針對僅單租增距鏡特仕組，直接取得繁體中文選單文字
       return l.options[l.selectedIndex].text;
     }
   }
@@ -866,7 +865,6 @@ function booking(){
     methodStr += ` (7-11: ${storeName})`;
   }
 
-  // 正式預約單格式：去除重複的押金欄位
   let baseText = currentLang==="zh"
     ? `【正式預約單】\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (共 ${d.d} 天)\n交還：${methodStr}`
     : `[Formal Booking]\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (${d.d} days)\nMethod: ${methodStr}`;
