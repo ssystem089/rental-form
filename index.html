@@ -161,7 +161,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   <div class="price-row" data-model="OPPO Find X9 Ultra">
     <div>
       <div class="product-name">OPPO Find X9 Ultra <span class="tap-hint">點此選租 ➔</span></div>
-      <div class="product-desc" id="oppoDesc">哈蘇影像、10倍原生光學變焦｜支援 400mm 增距鏡</div>
+      <div class="product-desc" id="oppoDesc">哈蘇影像, 10倍原生光學變焦｜支援 400mm 增距鏡</div>
       <div class="product-deposit" id="depOppo">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000</div>
     </div>
     <div class="price">$1,000 <small id="d12d">/ 1–2日</small><br><small id="oppoPrice">$900（3–5日）｜$800（6日以上）</small></div>
@@ -434,7 +434,7 @@ const zh={
   noteLens:"<strong>簡易介紹：</strong>僅單租增距鏡特仕組。手機本體可拍攝距離皆相同，加裝增距鏡主旨在於大幅提升遠距高倍率下的畫質清晰度與細節表現。含對應手機殼與配件組。",
   savedTitle:"已保留上次選擇",savedText:"型號與預約日期已為您帶入；確認可租後，補填姓名與電話即可送出正式預約。",clear:"清除已保存資料",
   dates:"請先選擇預計取機日期、取機時間與歸還日期。",pastDate:"取機日期不可選擇過去日期！",badDate:"歸還日期可與取機日期相同，或晚於取機日期。",contact:"正式預約請填寫承租人真實姓名。",badPhone:"請填寫正確的 10 碼台灣手機門號（如 0912345678）。",
-  wait:"LINE 尚未初始化完成，請稍候幾秒後再試。",init:"LINE 連線初始化失敗，請從官方帳號一對一聊天室重新開啟。",sending:"送出中…",sent:"已送出",fallbackTitle:"訊息未能自動送出",fallbackGuide:"預約內容已保留，請複製後回到 LINE 聊天室貼上並送出。",back:"返回表單",copy:"複製內容",copied:"已複製，請回到 LINE 貼上並傳送。"
+  wait:"LINE 尚未初始化完成，請稍候幾秒後再試。",init:"LINE 連線初始化失敗，請從官方帳號一對一聊天室重新開啟.",sending:"送出中…",sent:"已送出",fallbackTitle:"訊息未能自動送出",fallbackGuide:"預約內容已保留，請複製後回到 LINE 聊天室貼上並送出。",back:"返回表單",copy:"複製內容",copied:"已複製，請回到 LINE 貼上並傳送。"
 };
 
 const en={
@@ -551,7 +551,6 @@ function applyLang(lang){
   document.getElementById("toggleFormalBtn").textContent=isHidden?x.toggleFormalOpen:x.toggleFormalClose;
 
   updateModelLabels();
-  updateLens(true);
   updateNote();
   handleDeliveryToggle();
   renderSaved();
@@ -701,21 +700,23 @@ function save(){
   }catch(e){}
 }
 
-/* 強化版資料還原：先確保日期、時間與器材全部完整填回 */
+/* 完美還原所有暫存欄位（包含日期、時間、鏡頭選配與個資） */
 function restore(){
   const d=getDraft();if(!d)return;
   const m=document.getElementById("model");
   if(d.model)m.value=d.model;
-  updateLens(true);
+  
+  updateLens(true); // 先依暫存還原鏡頭選配
   if(d.lens)document.getElementById("lens").value=d.lens;
   
-  if(d.pickupDate){
+  const today=getTodayStr();
+  if(d.pickupDate && d.pickupDate>=today){
     document.getElementById("pickupDate").value=d.pickupDate;
   }
   if(d.pickupClock){
     document.getElementById("pickupClock").value=d.pickupClock;
   }
-  if(d.returnDate){
+  if(d.returnDate && d.returnDate>=today){
     document.getElementById("returnDate").value=d.returnDate;
   }
   if(d.pickupDate && d.pickupClock){
@@ -1008,15 +1009,15 @@ document.addEventListener("DOMContentLoaded",()=>{
   pEl.min=today;
   rEl.min=today;
 
-  // 1. 先還原儲存的器材與日期時間（確保資料不被空值覆蓋）
+  // 1. 優先還原所有暫存資料（模型、鏡頭、日期、時間、個資）
   restore();
 
-  // 2. 套用語系
+  // 2. 套用語系與處理介面
   applyLang(initialLang());
   handleDeliveryToggle();
   setupPriceRowInteractions();
 
-  // 3. 檢查是否自動滾動至 STEP 2
+  // 3. 檢查是否需要自動滾動至 STEP 2 填寫姓名電話
   const urlParams=new URLSearchParams(window.location.search);
   let savedStage=null;
   try{savedStage=localStorage.getItem("fir-stage");}catch(e){}
@@ -1025,6 +1026,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     scrollToFormalSection();
   }
 
+  // 4. 事件綁定（確保所有異動都會即時 save）
   document.getElementById("languageButton").onclick=toggleLang;
   document.getElementById("model").onchange=()=>{
     updateLens(false);
@@ -1041,6 +1043,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("phone").oninput=save;
   document.getElementById("idType").onchange=save;
   document.getElementById("isStore").onchange=()=>{handleDeliveryToggle();save()};
+  
   document.getElementById("inquiryButton").onclick=inquiry;
   document.getElementById("bookingButton").onclick=booking;
   document.getElementById("backButton").onclick=closeFallback;
