@@ -187,7 +187,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     <div class="price">$700 <small id="perDayA">/ 日</small></div>
   </div>
 
-  <!-- 增距鏡特仕組（明確標示合租免重複累計押金） -->
+  <!-- 增距鏡特仕組 -->
   <div class="price-row">
     <div>
       <div class="product-name" id="lensTitle">增距鏡特仕組</div>
@@ -568,7 +568,6 @@ function updateNote(){
   document.getElementById("deviceNote").innerHTML=map[m]||"";
 }
 
-/* 根據「交還方式」與「租借型號」智慧呈現押金說明 */
 function handleDeliveryToggle(){
   const val=document.getElementById("isStore").value;
   const idField=document.getElementById("idTypeField");
@@ -663,7 +662,6 @@ function updateStepper(step){
   });
 }
 
-/* 改進項 2：日期連動平滑自動推移 */
 function sync(){
   const d=document.getElementById("pickupDate").value,t=document.getElementById("pickupClock").value;
   document.getElementById("pickupTime").value=d&&t?`${d}T${t}`:"";
@@ -671,7 +669,7 @@ function sync(){
   if(d){
     r.min=d;
     if(!r.value||r.value<d){
-      r.value=d; // 自動推移至同一天，不彈窗中斷客人操作
+      r.value=d;
     }
   }
   save();
@@ -691,7 +689,7 @@ function dates(){
 
 function inquiry(){
   const d=dates();if(!d)return;save();
-  const directLink=`https://liff.line.me/${LIFF_ID}?step=formal`;
+  const directLink=`https://liff.line.me/${LIFF_ID}`;
   currentMessage=currentLang==="zh"
     ?`【詢問設備檔期】\n租借器材：${equipment()}\n預計取機：${d.p.replace("T"," ")}\n預計歸還：${d.r}\n預計天數：約 ${d.d} 天\n\n您好，想先確認這段期間是否有設備檔期可租借，謝謝！\n\n👉 確認有檔期？點此立即補填預約資料：\n${directLink}`
     :`[Equipment Availability Check]\nDevice: ${equipment()}\nPickup: ${d.p.replace("T"," ")}\nReturn: ${d.r}\nRental: approx ${d.d} day(s)\n\nPlease check if this device is available. Thank you!\n\n👉 Ready to book? Complete details here:\n${directLink}`;
@@ -702,13 +700,11 @@ function inquiry(){
   send(currentMessage,document.getElementById("inquiryButton"),"inquiry");
 }
 
-/* 改進項 1：手機號碼格式嚴格防呆（10碼、09開頭） */
 function booking(){
   const d=dates();if(!d)return;
   const n=document.getElementById("name").value.trim(),p=document.getElementById("phone").value.trim();
   if(!n){alert(S().contact);return}
   
-  // 台灣手機防呆驗證
   const phoneClean = p.replace(/[-\s]/g, "");
   if (!/^09\d{8}$/.test(phoneClean)) {
     alert(S().badPhone);
