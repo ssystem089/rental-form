@@ -319,7 +319,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     <!-- 4. 聯絡手機 -->
     <div class="field">
       <label for="phone" id="phoneLabel">取件手機門號</label>
-      <input id="phone" autocomplete="tel" inputmode="tel" placeholder="需同 LINE 綁定 10 碼門號">
+      <input id="phone" autocomplete="tel" inputmode="tel" placeholder="台灣 10 碼或外國旅客請填聯絡方式">
     </div>
 
     <!-- 5. 雲端上傳服務 -->
@@ -433,7 +433,7 @@ const zh={
   noteDji:"<strong>簡易介紹：</strong>適合穩定錄影、移動鏡頭與手持 Vlog。",
   noteLens:"<strong>簡易介紹：</strong>僅單租增距鏡特仕組（含對應手機殼與配件）。",
   savedTitle:"已保留上次選擇",savedText:"型號與預約日期已為您帶入；確認可租後，補填姓名與電話即可送出正式預約。",clear:"清除已保存資料",
-  dates:"請先選擇預計取機日期、取機時間與歸還日期。",pastDate:"取機日期不可選擇過去日期！",badDate:"歸還日期可與取機日期相同，或晚於歸還日期。",contact:"正式預約請填寫承租人真實姓名。",badPhone:"請填寫正確的 10 碼台灣手機門號（如 0912345678）。",
+  dates:"請先選擇預計取機日期、取機時間與歸還日期。",pastDate:"取機日期不可選擇過去日期！",badDate:"歸還日期可與取機日期相同，或晚於歸還日期。",contact:"正式預約請填寫承租人真實姓名。",badPhone:"請填寫聯絡電話或手機號碼。",
   wait:"LINE 尚未初始化完成，請稍候幾秒後再試。",init:"LINE 連線初始化失敗，請從官方帳號一對一聊天室重新開啟。",sending:"送出中…",sent:"已送出",fallbackTitle:"訊息未能自動送出",fallbackGuide:"預約內容已保留，請複製後回到 LINE 聊天室貼上並送出。",back:"返回表單",copy:"複製內容",copied:"已複製，請回到 LINE 貼上並傳送。"
 };
 
@@ -544,7 +544,7 @@ function applyLang(lang){
   if(!nameInput.value){
     nameInput.placeholder=lang==="zh"?"身分證真實姓名":"Full legal name (as on ID)";
   }
-  document.getElementById("phone").placeholder=lang==="zh"?"需同 LINE 綁定 10 碼門號":"Phone number (10 digits)";
+  document.getElementById("phone").placeholder=lang==="zh"?"台灣 10 碼或外國旅客請填聯絡方式":"Phone number";
   
   const sec=document.getElementById("formalSection");
   const isHidden=sec.style.display==="none"||sec.style.display==="";
@@ -833,48 +833,15 @@ function scrollToFormalSection(){
   },300);
 }
 
-// 修改點：區分「詢問檔期」與「正式預約」所帶入的欄位資訊
-function getOrderText(d, isFormal = false){
-  const title = isFormal ? "【正式預約單】" : "【詢問設備檔期】";
-
-  // 若是「詢問檔期」階段（isFormal = false），只需回傳設備與日期
-  if(!isFormal) {
-    return currentLang==="zh"
-      ? `${title}\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (共 ${d.d} 天)`
-      : `${title}\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (${d.d} days)`;
-  }
-
-  // 若是「正式預約」階段（isFormal = true），帶入全部詳細資訊
-  const isStore=document.getElementById("isStore").value==="store";
-  const storeName=document.getElementById("storeName").value.trim();
-  const name=document.getElementById("name").value.trim()||"未填寫";
-  const phone=document.getElementById("phone").value.trim()||"未填寫";
-  const cloudVal=document.getElementById("cloudService").value;
-  
-  let methodStr = isStore ? "大巨蛋門市本人親取" : "免證件押金3萬寄送";
-  if(!isStore && storeName) {
-    methodStr += ` (7-11: ${storeName})`;
-  }
-  
-  let depositStr = isStore ? "現金3,000+證件正本(三證則一押附)" : "免證件押金3萬";
-
-  let baseText = currentLang==="zh"
-    ? `${title}\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (共 ${d.d} 天)\n交還：${methodStr}\n押金：${depositStr}\n姓名：${name}\n電話：${phone}`
-    : `${title}\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (${d.d} days)\nMethod: ${methodStr}\nDeposit: ${depositStr}\nName: ${name}\nPhone: ${phone}`;
-
-  if(cloudVal === "Yes") {
-    baseText += currentLang==="zh" ? `\n雲端：YES` : `\nCloud: YES`;
-  }
-  return baseText;
-}
-
 function inquiry(){
   const d=dates();if(!d)return;save();
   try{localStorage.setItem("fir-stage","formal");}catch(e){}
 
   const directLink=`https://liff.line.me/${LIFF_ID}`;
-  // 呼叫詢問檔期格式（isFormal = false），只帶入設備與日期
-  currentMessage = getOrderText(d, false) + (currentLang==="zh" ? `\n\n👉 確認有檔期？點此立即補填預約資料：\n${directLink}` : `\n\n👉 Complete details here:\n${directLink}`);
+  // 詢問設備檔期：絕對只傳送標題、設備與日期，不帶入任何STEP 2未確認的個資
+  currentMessage = currentLang==="zh"
+    ? `【詢問設備檔期】\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (共 ${d.d} 天)\n\n👉 確認有檔期？點此立即補填預約資料：\n${directLink}`
+    : `[Equipment Availability Check]\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (${d.d} days)\n\n👉 Complete details here:\n${directLink}`;
   
   scrollToFormalSection();
   send(currentMessage,document.getElementById("inquiryButton"),"inquiry");
@@ -884,16 +851,30 @@ function booking(){
   const d=dates();if(!d)return;
   const n=document.getElementById("name").value.trim(),p=document.getElementById("phone").value.trim();
   if(!n){alert(S().contact);return}
+  if(!p){alert(S().badPhone);return}
   
-  const phoneClean=p.replace(/[-\s]/g,"");
-  if(!/^09\d{8}$/.test(phoneClean)){
-    alert(S().badPhone);
-    return;
-  }
   save();
   
-  // 呼叫正式預約單格式（isFormal = true），帶入全部詳細資訊
-  currentMessage = getOrderText(d, true);
+  // 正式預約單：傳送完整詳細資料
+  const isStore=document.getElementById("isStore").value==="store";
+  const storeName=document.getElementById("storeName").value.trim();
+  const cloudVal=document.getElementById("cloudService").value;
+  
+  let methodStr = isStore ? "大巨蛋門市本人親取" : "免證件押金3萬寄送";
+  if(!isStore && storeName) {
+    methodStr += ` (7-11: ${storeName})`;
+  }
+  
+  let depositStr = isStore ? "現金3,000+證件正本(三證則一押附)" : "免證件押金3萬";
+
+  currentMessage = currentLang==="zh"
+    ? `【正式預約單】\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (共 ${d.d} 天)\n交還：${methodStr}\n押金：${depositStr}\n姓名：${n}\n電話：${p}`
+    : `[Formal Booking]\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (${d.d} days)\nMethod: ${methodStr}\nDeposit: ${depositStr}\nName: ${n}\nPhone: ${p}`;
+
+  if(cloudVal === "Yes") {
+    currentMessage += currentLang==="zh" ? `\n雲端：YES` : `\nCloud: YES`;
+  }
+
   updateStepper(3);
   try{localStorage.removeItem("fir-stage");}catch(e){}
   send(currentMessage,document.getElementById("bookingButton"),"booking");
