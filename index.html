@@ -24,11 +24,11 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,B
 
 /* 預約流程視覺指示條 */
 .stepper{display:flex;justify-content:space-between;align-items:center;margin:14px 0 20px;padding:12px;background:var(--card);border:1px solid var(--line);border-radius:10px}
-.step{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--sub);flex:1;position:relative}
+.step{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--sub);flex:1;position:relative;text-align:center}
 .step-num{width:22px;height:22px;border-radius:50%;background:var(--card2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--muted)}
 .step.active .step-num{background:var(--accent);border-color:var(--accent);color:#111}
 .step.active span{color:var(--text);font-weight:700}
-.step-line{flex:0.5;height:1px;background:var(--line);margin-top:-14px}
+.step-line{flex:0.4;height:1px;background:var(--line);margin-top:-14px}
 
 .section-title{margin:20px 4px 8px;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.4px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
@@ -95,22 +95,22 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
 <div class="stepper">
   <div class="step active" id="st1">
     <div class="step-num">1</div>
-    <span>查檔期</span>
+    <span id="step1Text">查檔期</span>
   </div>
   <div class="step-line"></div>
   <div class="step" id="st2">
     <div class="step-num">2</div>
-    <span>正式預約</span>
+    <span id="step2Text">正式預約</span>
   </div>
   <div class="step-line"></div>
   <div class="step" id="st3">
     <div class="step-num">3</div>
-    <span>報價匯款</span>
+    <span id="step3Text">報價匯款</span>
   </div>
   <div class="step-line"></div>
   <div class="step" id="st4">
     <div class="step-num">4</div>
-    <span>完成預訂</span>
+    <span id="step4Text">完成預訂</span>
   </div>
 </div>
 
@@ -182,7 +182,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   </div>
 </section>
 
-<!-- STEP 2：正式預約資料（確認檔期後填寫） -->
+<!-- STEP 2：正式預約資料 -->
 <div id="formalSection" style="display:none">
   <div class="section-title" style="margin:22px 4px 8px" id="formalTitle">STEP 2. 確認有檔期，填寫正式預訂資料</div>
   <section class="card">
@@ -214,7 +214,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     <div style="margin-top:14px">
       <button id="bookingButton" type="button" class="btn-submit">確認送出正式訂單</button>
     </div>
-    <div class="notice-box" style="margin-top:10px">
+    <div class="notice-box" style="margin-top:10px" id="formalPaymentNotice">
       💳 送出後客服將於 LINE 聊天室依您選填內容提供報價與匯款資訊，完成匯款後即鎖定檔期並完成預約。
     </div>
   </section>
@@ -245,6 +245,7 @@ let liffReady=false,currentLang="zh",currentMessage="";
 const zh={
   subtitle:"器材租借預約",store:"FiX iT RiGHT 台北大巨蛋門市｜台北市大安區光復南路88號1樓<br>營業時間 12:00–20:00｜演唱會日依現場狀況彈性延長",
   priceTitle:"租借費率｜24H 彈性制",days:"/ 1–2日",
+  step1:"查檔期",step2:"正式預約",step3:"報價匯款",step4:"完成預訂",
   x300uDesc:"長焦首選｜防抖穩定表現最佳｜支援 200mm／400mm 增距鏡",x300uPrice:"$1,000（3–5日）｜$900（6日以上）",
   x500pmDesc:"長焦電影級專業｜可搭配 200mm／400mm 增距鏡",x500pmPrice:"$1,000（3–5日）｜$900（6日以上）",
   x200uDesc:"畫質細節首選｜支援 200mm 增距鏡",x200uPrice:"$900（3–5日）｜$800（6日以上）",
@@ -258,10 +259,13 @@ const zh={
   modelLabel:"租借主機型號",lensLabel:"增距鏡配件選配",pickupDateLabel:"預計取機日期",pickupTimeLabel:"預計取機時間",selectTime:"請選擇時間",returnDateLabel:"預計歸還日期",
   inquiryButton:"送出詢問設備檔期",
   inquiryNotice:"💡 <strong>安心詢問：</strong>先查詢是否有設備空檔即可，系統會自動暫存選擇。客服在 LINE 回覆確認有檔期後，即可接著完成正式預訂。",
+  toggleFormalOpen:"已確認有檔期？直接填寫預約資料 ▼",
+  toggleFormalClose:"▲ 收合正式預約欄位",
   formalTitle:"STEP 2. 確認有檔期，填寫正式預訂資料",
   cloudLabel:"雲端上傳服務",cloudNo:"不需要（內建 EasyShare App 傳輸）",cloudYes:"需要（+$200／次，原畫質雲端下載）",
   nameLabel:"承租人姓名",phoneLabel:"聯絡手機",idLabel:"門市押附證件正本",
   returnMethodLabel:"是否於台北大巨蛋門市交還",bookingButton:"確認送出正式訂單",
+  formalPaymentNotice:"💳 送出後客服將於 LINE 聊天室依您選填內容提供報價與匯款資訊，完成匯款後即鎖定檔期並完成預約。",
   termsTitle:"租借方案注意事項",term1h:"彈性報價方案",term1:"標有 24hr 彈性制，如遇演唱會當日租還或出國，依實際使用時間或場次起算，需配合現場檔期安排；最終交還日以協調確認為準。",term2h:"租還規範",term2:"限 12:00–20:00 於大巨蛋門市完成交還機，逾時則以隔日計。演唱會時段依公告或客服確認辦理。",term3h:"寄送服務資訊",term3:"外縣市寄送依器材標示的免證件押金辦理，款項完成後安排寄送；設備寄回檢查無誤後原路返還押金。",term4h:"損壞與聯繫",term4:"租借期間請保持聯繫；設備損毀、遺失或逾時歸還，依租賃合約負擔相關費用。",term5h:"增距鏡特別條款",term5:"租借前請確認場館規定；若因主辦禁帶無法使用，租金不退款，但可轉為 12 個月有效折抵金。",
   noLens:"無加選（單主機＋保護殼 含收納包｜充電線組）",lens200:"加租 200mm 增距鏡（+$300／日）",lens400:"加租 400mm 增距鏡（+$600／日）大巨蛋B1 10排後適用",rent200:"單租 200mm 增距鏡（$300／日）",rent400:"單租 400mm 增距鏡（$600／日）大巨蛋B1 10排後適用",
   noteX300U:"<strong>簡易介紹：</strong>長焦首選。防抖穩定性最佳，適合遠距離舞台、手持拍攝與演唱會錄影。",noteX500PM:"<strong>簡易介紹：</strong>長焦電影級專業旗艦。具備頂級長焦與電影級錄影規格，支援 200mm／400mm 增距鏡。",noteX200U:"<strong>簡易介紹：</strong>畫質細節首選。三機中細節表現最佳，適合重視裁切、照片與舞台細節。",noteX300P:"<strong>簡易介紹：</strong>旅行長焦首選。防抖與畫質兼顧，適合長焦、穩定與攜帶性需求。",noteOppo:"<strong>簡易介紹：</strong>哈蘇影像旗艦，支援 400mm 增距鏡。",noteIphone:"<strong>簡易介紹：</strong>適合 iOS 使用者與日常錄影。",noteDji:"<strong>簡易介紹：</strong>適合穩定錄影、移動鏡頭與手持 Vlog。",noteLens:"<strong>簡易介紹：</strong>僅租借增距鏡，請先確認相容性與場館規範。",
@@ -271,6 +275,7 @@ const zh={
 const en={
   ...zh,subtitle:"Equipment Rental Booking",store:"Taipei Dome Store｜No. 88, Guangfu S. Rd., Da'an Dist., Taipei<br>Hours: 12:00–20:00｜Extended hours may apply on concert days",
   priceTitle:"RENTAL RATES｜24-HOUR FLEXIBLE PLAN",days:"/ 1–2 days",
+  step1:"Check Availability",step2:"Formal Booking",step3:"Quote & Payment",step4:"Confirmed",
   x300uDesc:"Best long-zoom choice｜best stabilization｜200mm / 400mm extender compatible",x300uPrice:"$1,000 (3–5 days) ｜ $900 (6+ days)",
   x500pmDesc:"Cinema-grade telephoto professional｜200mm / 400mm extender compatible",x500pmPrice:"$1,000 (3–5 days) ｜ $900 (6+ days)",
   x200uDesc:"Best image detail｜200mm extender compatible",x200uPrice:"$900 (3–5 days) ｜ $800 (6+ days)",
@@ -283,15 +288,19 @@ const en={
   formTitle:"STEP 1. Select Device & Dates (No Personal Info Required)",
   modelLabel:"Rental device",lensLabel:"Telephoto extender option",pickupDateLabel:"Pickup date",pickupTimeLabel:"Pickup time",selectTime:"Select time",returnDateLabel:"Return date",
   inquiryButton:"Check Availability",
-  inquiryNotice:"💡 Check device availability first. Once confirmed via LINE chat, proceed to step 2 to complete formal reservation.",
-  formalTitle:"STEP 2. Complete Booking Details",
+  inquiryNotice:"💡 <strong>No Commitment:</strong> Check device availability first. Once confirmed via LINE chat, proceed to step 2 to complete formal booking.",
+  toggleFormalOpen:"Already confirmed? Complete booking details ▼",
+  toggleFormalClose:"▲ Collapse booking details",
+  formalTitle:"STEP 2. Complete Formal Booking Details",
   cloudLabel:"Cloud upload service",cloudNo:"Not needed (transfer via EasyShare App)",cloudYes:"Needed (+$200/use, original-quality download)",
   nameLabel:"Renter's full name",phoneLabel:"Phone number",idLabel:"Original ID for deposit",returnMethodLabel:"Pickup/return at Taipei Dome Store?",
-  bookingButton:"Submit Formal Booking",
+  bookingButton:"Confirm & Submit Formal Booking",
+  formalPaymentNotice:"💳 Customer service will provide quotation and payment details via LINE chat. Once transferred, your reservation will be locked and confirmed.",
   termsTitle:"RENTAL TERMS",
   term1h:"Flexible pricing plan",term1:"Items under the 24-hour flexible plan may be calculated by actual use time or event session. Final return arrangements are confirmed with customer service.",term2h:"Pickup and return policy",term2:"Normal in-store pickup and return hours are 12:00–20:00. Late returns may be charged as an additional day unless otherwise confirmed.",term3h:"Delivery service",term3:"For delivery outside Taipei, the applicable no-ID deposit is required before dispatch. The deposit is refunded after return and inspection.",term4h:"Damage and communication",term4:"Please remain reachable during the rental. Damage, loss, or late return may incur charges under the rental agreement.",term5h:"Telephoto extender terms",term5:"Confirm venue rules before renting. If prohibited by the organizer, rental is non-refundable but may be converted to 12-month store credit.",
   noLens:"No add-on (device + protective case, carrying pouch, charging cable set)",lens200:"Add 200mm extender (+$300/day)",lens400:"Add 400mm extender (+$600/day)",rent200:"Rent 200mm extender only ($300/day)",rent400:"Rent 400mm extender only ($600/day)",
-  noteX300U:"<strong>Quick guide:</strong> Best long-zoom choice with the strongest stabilization among these three models.",noteX500PM:"<strong>Quick guide:</strong> Cinema-grade telephoto professional flagship with 200mm/400mm extender support.",noteX200U:"<strong>Quick guide:</strong> Best image-detail choice, suitable for cropping and fine stage detail.",noteX300P:"<strong>Quick guide:</strong> Travel long-zoom choice with balanced stabilization, detail, and portability.",noteOppo:"<strong>Quick guide:</strong> Hasselblad imaging flagship with 400mm extender support.",noteIphone:"<strong>Quick guide:</strong> Suitable for iOS users and video recording.",noteDji:"<strong>Quick guide:</strong> Suitable for stable video, moving shots, and handheld vlog footage.",noteLens:"<strong>Quick guide:</strong> Extender set only. Confirm compatibility and venue rules first."
+  noteX300U:"<strong>Quick guide:</strong> Best long-zoom choice with the strongest stabilization among these three models.",noteX500PM:"<strong>Quick guide:</strong> Cinema-grade telephoto professional flagship with 200mm/400mm extender support.",noteX200U:"<strong>Quick guide:</strong> Best image-detail choice, suitable for cropping and fine stage detail.",noteX300P:"<strong>Quick guide:</strong> Travel long-zoom choice with balanced stabilization, detail, and portability.",noteOppo:"<strong>Quick guide:</strong> Hasselblad imaging flagship with 400mm extender support.",noteIphone:"<strong>Quick guide:</strong> Suitable for iOS users and video recording.",noteDji:"<strong>Quick guide:</strong> Suitable for stable video, moving shots, and handheld vlog footage.",noteLens:"<strong>Quick guide:</strong> Extender set only. Confirm compatibility and venue rules first.",
+  savedTitle:"Saved Selection",savedText:"Device and date choices restored. Complete name and phone number to submit formal booking.",clear:"Clear saved selection"
 };
 
 function S(){return currentLang==="zh"?zh:en}
@@ -304,6 +313,7 @@ function applyLang(lang){
   document.getElementById("languageButton").textContent=lang==="zh"?"English":"繁體中文";
   const ids={
     subtitle:"subtitle",store:"store",priceTitle:"priceTitle",
+    step1Text:"step1",step2Text:"step2",step3Text:"step3",step4Text:"step4",
     x300uDesc:"x300uDesc",x300uPrice:"x300uPrice",x500pmDesc:"x500pmDesc",x500pmPrice:"x500pmPrice",
     x200uDesc:"x200uDesc",x200uPrice:"x200uPrice",x300pDesc:"x300pDesc",x300pPrice:"x300pPrice",
     oppoDesc:"oppoDesc",oppoPrice:"oppoPrice",iphoneDesc:"iphoneDesc",iphonePrice:"iphonePrice",
@@ -313,13 +323,20 @@ function applyLang(lang){
     inquiryButton:"inquiryButton",inquiryNotice:"inquiryNotice",
     formalTitle:"formalTitle",cloudLabel:"cloudLabel",nameLabel:"nameLabel",phoneLabel:"phoneLabel",idLabel:"idLabel",
     returnMethodLabel:"returnMethodLabel",bookingButton:"bookingButton",
+    formalPaymentNotice:"formalPaymentNotice",
     termsTitle:"termsTitle",term1h:"term1h",term1:"term1",term2h:"term2h",term2:"term2",term3h:"term3h",term3:"term3",term4h:"term4h",term4:"term4",term5h:"term5h",term5:"term5"
   };
-  Object.keys(ids).forEach(k=>text(ids[k],x[k],k==="store"||k==="inquiryNotice"));
+  Object.keys(ids).forEach(k=>text(ids[k],x[k],k==="store"||k==="inquiryNotice"||k==="formalPaymentNotice"));
   ["d12a","d12x","d12b","d12c","d12d","d12e"].forEach(id=>text(id,x.days));
   text("perDayA",x.perDay);text("perDayB",x.perDay);text("perUse",x.perUse);
   document.getElementById("name").placeholder=lang==="zh"?"身分證真實姓名":"Full legal name";
   document.getElementById("phone").placeholder=lang==="zh"?"需同 LINE 綁定門號":"Phone number";
+  
+  // 更新展開/收合按鈕狀態文字
+  const sec=document.getElementById("formalSection");
+  const isHidden=sec.style.display==="none"||sec.style.display==="";
+  document.getElementById("toggleFormalBtn").textContent=isHidden?x.toggleFormalOpen:x.toggleFormalClose;
+
   updateModelLabels();
   updateLens(true);
   updateNote();
@@ -410,10 +427,10 @@ function restore(){
   if(d.id)document.getElementById("idType").value=d.id;
   if(d.method)document.getElementById("isStore").value=d.method;
   
-  // 若先前已有留存姓名手機，主動展開第二階段
   if(d.name||d.phone){
     document.getElementById("formalSection").style.display="block";
     updateStepper(2);
+    document.getElementById("toggleFormalBtn").textContent=S().toggleFormalClose;
   }
   sync();
   updateNote();
@@ -423,7 +440,8 @@ function restore(){
 function renderSaved(){
   const d=getDraft(),box=document.getElementById("savedSelection");
   if(!d||!d.model){box.classList.remove("show");return}
-  box.innerHTML=`<strong>${S().savedTitle}</strong><br>${d.model}<br>${S().savedText}<div class="saved-actions"><button type="button" class="small-button" id="clearDraft">${S().clear}</button></div>`;
+  const x=S();
+  box.innerHTML=`<strong>${x.savedTitle}</strong><br>${d.model}<br>${x.savedText}<div class="saved-actions"><button type="button" class="small-button" id="clearDraft">${x.clear}</button></div>`;
   box.classList.add("show");
   document.getElementById("clearDraft").onclick=()=>{
     try{localStorage.removeItem(STORAGE_KEY)}catch(e){}
@@ -465,8 +483,8 @@ function inquiry(){
     ?`【詢問設備檔期】\n租借器材：${equipment()}\n預計取機：${d.p.replace("T"," ")}\n預計歸還：${d.r}\n預計天數：約 ${d.d} 天\n\n您好，想先確認這段期間是否有設備檔期可租借，謝謝！`
     :`[Equipment Availability Check]\nDevice: ${equipment()}\nPickup: ${d.p.replace("T"," ")}\nReturn: ${d.r}\nRental: approx ${d.d} day(s)\n\nPlease check if this device is available. Thank you!`;
   
-  // 送出後自動解鎖展開 Step 2
   document.getElementById("formalSection").style.display="block";
+  document.getElementById("toggleFormalBtn").textContent=S().toggleFormalClose;
   updateStepper(2);
   send(currentMessage,document.getElementById("inquiryButton"),"inquiry");
 }
@@ -563,12 +581,12 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("backButton").onclick=closeFallback;
   document.getElementById("copyButton").onclick=copyFallback;
 
-  // 切換展開/收合第二階段正式預約
   document.getElementById("toggleFormalBtn").onclick=()=>{
     const sec=document.getElementById("formalSection");
     const isHidden=sec.style.display==="none"||sec.style.display==="";
     sec.style.display=isHidden?"block":"none";
-    document.getElementById("toggleFormalBtn").textContent=isHidden?"▲ 收合正式預約欄位":"已確認有檔期？直接填寫預約資料 ▼";
+    const x=S();
+    document.getElementById("toggleFormalBtn").textContent=isHidden?x.toggleFormalClose:x.toggleFormalOpen;
     if(isHidden){
       updateStepper(2);
       sec.scrollIntoView({behavior:"smooth"});
@@ -581,4 +599,4 @@ document.addEventListener("DOMContentLoaded",()=>{
 });
 </script>
 </body>
-</html> 
+</html>
