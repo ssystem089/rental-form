@@ -64,6 +64,7 @@ input:focus,select:focus{border-color:#606068}
 .saved-actions{margin-top:8px}
 .small-button{width:auto;min-height:30px;padding:5px 8px;border:1px solid #55705e;border-radius:6px;background:transparent;color:var(--ok);font-size:11px;font-weight:700;cursor:pointer}
 .notice-box{margin-top:10px;padding:10px 12px;border-radius:8px;background:#ffffff09;border:1px dashed #ffffff1f;color:var(--muted);font-size:11.5px;line-height:1.6}
+.lens-tip-box{display:none;margin-top:7px;padding:8px 10px;background:#1a1914;border:1px solid #e2b86644;border-radius:6px;color:var(--accent);font-size:11px;line-height:1.5}
 
 /* 折疊/展開切換面板 */
 .switch-link{text-align:center;margin-top:14px;padding-top:12px;border-top:1px solid #ffffff12}
@@ -124,7 +125,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   </div>
 </div>
 
-<div class="section-title" id="priceTitle">租借費率｜24H 彈性制（點擊器材可直接帶入選單）</div>
+<div class="section-title" id="priceTitle">租借費率｜24H 彈性制（點選器材快速帶入）</div>
 <section class="card">
   <!-- vivo x300 Ultra -->
   <div class="price-row" data-model="vivo x300 Ultra">
@@ -196,11 +197,11 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     <div class="price">$700 <small id="perDayA">/ 日</small></div>
   </div>
 
-  <!-- 增距鏡特仕組 -->
+  <!-- 增距鏡特仕組（明確標示：手機拍攝距離皆相同，加裝增距鏡用於提升清晰度與細節） -->
   <div class="price-row" data-model="僅租借 G2 增距鏡頭特仕組">
     <div>
       <div class="product-name" id="lensTitle">增距鏡特仕組 <span class="tap-hint">點此選租 ➔</span></div>
-      <div class="product-desc" id="lensDesc">含對應手機殼以及增距鏡配件組｜200mm：$300／日｜400mm：$600／日</div>
+      <div class="product-desc" id="lensDesc">含對應手機殼及配件組｜手機可拍距離皆相同，加裝增距鏡專用於提升清晰度與細節！200mm：$300／日｜400mm：$600／日</div>
       <div class="product-deposit" id="depLens">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$10,000（與手機合租時以手機押金為主，不重複計算）</div>
     </div>
     <div class="price">$300–$600 <small id="perDayB">/ 日</small></div>
@@ -243,7 +244,11 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     <div id="deviceNote" class="device-note"></div>
   </div>
 
-  <div class="field"><label for="lens" id="lensLabel">增距鏡配件選配</label><select id="lens"></select></div>
+  <div class="field">
+    <label for="lens" id="lensLabel">增距鏡配件選配</label>
+    <select id="lens"></select>
+    <div id="lensDetailTip" class="lens-tip-box"></div>
+  </div>
 
   <div class="grid">
     <div class="field"><label for="pickupDate" id="pickupDateLabel">預計取機日期</label><input type="date" id="pickupDate"></div>
@@ -265,7 +270,11 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     </div>
   </div>
 
-  <div class="field"><label for="returnDate" id="returnDateLabel">預計歸還日期</label><input type="date" id="returnDate"></div>
+  <div class="field">
+    <label for="returnDate" id="returnDateLabel">預計歸還日期</label>
+    <input type="date" id="returnDate">
+    <div id="daysSummary" style="display:none;margin-top:6px;font-size:12px;color:var(--accent);font-weight:600"></div>
+  </div>
 
   <button id="inquiryButton" type="button" class="secondary">送出詢問設備檔期</button>
   <div class="notice-box" id="inquiryNotice">
@@ -356,7 +365,7 @@ let liffReady=false,currentLang="zh",currentMessage="";
 
 const zh={
   subtitle:"器材租借預約",store:"FiX iT RiGHT 台北大巨蛋門市｜台北市大安區光復南路88號1樓<br>營業時間 12:00–20:00｜演唱會日依現場狀況彈性延長",
-  priceTitle:"租借費率｜24H 彈性制（點擊器材可直接帶入選單）",days:"/ 1–2日",
+  priceTitle:"租借費率｜24H 彈性制（點選器材快速帶入）",days:"/ 1–2日",
   tapHint:"點此選租 ➔",tapHintCloud:"加選 ➔",
   step1Text:"查檔期",step2Text:"正式預約",step3Text:"報價匯款",step4Text:"完成預訂",
   x300uDesc:"極致影像旗艦，長焦之王｜支援 200mm／400mm 增距鏡",x300uPrice:"$1,000（3–5日）｜$900（6日以上）",
@@ -367,7 +376,7 @@ const zh={
   iphoneDesc:"蘋果最強效能，流暢影片拍攝",iphonePrice:"$750（3–5日）｜$600（6日以上）",
   djiDesc:"旗艦級雙鏡頭手持縮放三軸相機",perDay:"/ 日",
   lensTitle:"增距鏡特仕組",
-  lensDesc:"含對應手機殼以及增距鏡配件組｜200mm：$300／日｜400mm：$600／日",
+  lensDesc:"含對應手機殼及配件組｜手機可拍距離皆相同，加裝增距鏡專用於提升清晰度與細節！200mm：$300／日｜400mm：$600／日",
   cloudTitle:"雲端上傳服務",cloudDesc:"拍完免傳檔，雲端隨時輕鬆載｜保留 2 週",perUse:"/ 次",
   
   depCommon:"門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000",
@@ -401,8 +410,16 @@ const zh={
   rent400_x500pm:"單租 G2 Ultra 400mm 特仕組（含 x500 Pro Max 手機殼組，+$600／日）",
   rent400_oppo:"單租 G2 Ultra 400mm 特仕組（含 Find X9 Ultra 手機殼組，+$600／日）",
 
-  noteX300U:"<strong>簡易介紹：</strong>長焦首選。防抖穩定性最佳，適合遠距離舞台、手持拍攝與演唱會錄影。",noteX500PM:"<strong>簡易介紹：</strong>長焦電影級專業旗艦。具備頂級長焦與電影級錄影規格，支援 200mm／400mm 增距鏡。",noteX200U:"<strong>簡易介紹：</strong>畫質細節首選。三機中細節表現最佳，適合重視裁切、照片與舞台細節。",noteX300P:"<strong>簡易介紹：</strong>旅行長焦首選。防抖與畫質兼顧，適合長焦、穩定與攜帶性需求。",noteOppo:"<strong>簡易介紹：</strong>哈蘇影像旗艦，支援 400mm 增距鏡。",noteIphone:"<strong>簡易介紹：</strong>適合 iOS 使用者與日常錄影。",noteDji:"<strong>簡易介紹：</strong>適合穩定錄影、移動鏡頭與手持 Vlog。",
-  noteLens:"<strong>簡易介紹：</strong>僅單租增距鏡特仕組，包含專屬鏡頭接環手機殼與增距鏡配件，支援指定 vivo 與 OPPO 機型。",
+  lensTipClarification:"🔍 <strong>增距鏡核心效果說明：</strong>手機本身可拍攝距離皆相同；加裝外掛光學增距鏡主旨在於「顯著提升望遠時的清晰度與光學細節」，防止高倍數位放大模糊。",
+
+  noteX300U:"<strong>簡易介紹：</strong>長焦首選。防抖穩定性最佳，適合遠距離舞台、手持拍攝與演唱會錄影。",
+  noteX500PM:"<strong>簡易介紹：</strong>長焦電影級專業旗艦。具備頂級長焦與電影級錄影規格，支援 200mm／400mm 增距鏡。",
+  noteX200U:"<strong>簡易介紹：</strong>畫質細節首選。三機中細節表現最佳，適合重視裁切、照片與舞台細節。",
+  noteX300P:"<strong>簡易介紹：</strong>旅行長焦首選。防抖與畫質兼顧，適合長焦、穩定與攜帶性需求。",
+  noteOppo:"<strong>簡易介紹：</strong>哈蘇影像旗艦，支援 400mm 增距鏡。",
+  noteIphone:"<strong>簡易介紹：</strong>適合 iOS 使用者與日常錄影。",
+  noteDji:"<strong>簡易介紹：</strong>適合穩定錄影、移動鏡頭與手持 Vlog。",
+  noteLens:"<strong>簡易介紹：</strong>僅單租增距鏡特仕組。手機本體可拍攝距離皆相同，加裝增距鏡主旨在於大幅提升遠距高倍率下的畫質清晰度與細節表現。含對應手機殼與配件組。",
   savedTitle:"已保留上次選擇",savedText:"型號與預約日期已為您帶入；確認可租後，補填姓名與電話即可送出正式預約。",clear:"清除已保存資料",
   dates:"請先選擇預計取機日期、取機時間與歸還日期。",badDate:"歸還日期可與取機日期相同，或晚於取機日期。",contact:"正式預約請填寫承租人真實姓名。",badPhone:"請填寫正確的 10 碼台灣手機門號（如 0912345678）。",
   wait:"LINE 尚未初始化完成，請稍候幾秒後再試。",init:"LINE 連線初始化失敗，請從官方帳號一對一聊天室重新開啟。",sending:"送出中…",sent:"已送出",fallbackTitle:"訊息未能自動送出",fallbackGuide:"預約內容已保留，請複製後回到 LINE 聊天室貼上並送出。",back:"返回表單",copy:"複製內容",copied:"已複製，請回到 LINE 貼上並傳送。"
@@ -421,7 +438,7 @@ const en={
   iphoneDesc:"Apple flagship performance, smooth video recording",iphonePrice:"$750 (3–5 days) ｜ $600 (6+ days)",
   djiDesc:"Flagship dual-lens 3-axis zoom camera",perDay:"/ day",
   lensTitle:"Telephoto Extender Set",
-  lensDesc:"Includes phone case & extender accessory set ｜ 200mm: $300/day ｜ 400mm: $600/day",
+  lensDesc:"Includes phone case & accessories ｜ Phone shooting distance is identical; attaching the extender lens is specifically for maximizing clarity and optical detail! 200mm: $300/day ｜ 400mm: $600/day",
   cloudTitle:"Cloud Upload Service",cloudDesc:"Download original quality anytime ｜ retained 2 weeks",perUse:"/ use",
 
   depCommon:"In-store: Original ID + $3,000 deposit ｜ Delivery: NT$30,000 deposit",
@@ -456,8 +473,16 @@ const en={
   rent400_x500pm:"Rent G2 Ultra 400mm Set (w/ x500 Pro Max case, +$600/day)",
   rent400_oppo:"Rent G2 Ultra 400mm Set (w/ Find X9 Ultra case, +$600/day)",
 
-  noteX300U:"<strong>Quick guide:</strong> Best long-zoom choice with the strongest stabilization among these models.",noteX500PM:"<strong>Quick guide:</strong> Cinema-grade telephoto professional flagship with 200mm/400mm extender support.",noteX200U:"<strong>Quick guide:</strong> Best image-detail choice, suitable for cropping and fine stage detail.",noteX300P:"<strong>Quick guide:</strong> Travel long-zoom choice with balanced stabilization, detail, and portability.",noteOppo:"<strong>Quick guide:</strong> Hasselblad imaging flagship with 400mm extender support.",noteIphone:"<strong>Quick guide:</strong> Suitable for iOS users and video recording.",noteDji:"<strong>Quick guide:</strong> Suitable for stable video, moving shots, and handheld vlog footage.",
-  noteLens:"<strong>Quick guide:</strong> Extender set only. Includes dedicated phone mount case and accessories for specified models.",
+  lensTipClarification:"🔍 <strong>Extender Function:</strong> The phone's shooting distance remains the same. Attaching an extender lens significantly enhances clarity and optical detail, preventing digital zoom distortion.",
+
+  noteX300U:"<strong>Quick guide:</strong> Best long-zoom choice with the strongest stabilization among these models.",
+  noteX500PM:"<strong>Quick guide:</strong> Cinema-grade telephoto professional flagship with 200mm/400mm extender support.",
+  noteX200U:"<strong>Quick guide:</strong> Best image-detail choice, suitable for cropping and fine stage detail.",
+  noteX300P:"<strong>Quick guide:</strong> Travel long-zoom choice with balanced stabilization, detail, and portability.",
+  noteOppo:"<strong>Quick guide:</strong> Hasselblad imaging flagship with 400mm extender support.",
+  noteIphone:"<strong>Quick guide:</strong> Suitable for iOS users and video recording.",
+  noteDji:"<strong>Quick guide:</strong> Suitable for stable video, moving shots, and handheld vlog footage.",
+  noteLens:"<strong>Quick guide:</strong> Extender set only. The phone shooting distance is identical; attaching the lens enhances clarity and optical detail at zoom.",
   savedTitle:"Saved Selection",savedText:"Device and date choices restored. Complete name and phone number to submit formal booking.",clear:"Clear saved selection"
 };
 
@@ -517,6 +542,7 @@ function applyLang(lang){
   updateNote();
   handleDeliveryToggle();
   renderSaved();
+  sync();
 }
 
 function updateModelLabels(){
@@ -573,6 +599,18 @@ function updateLens(keep=false){
 
   l.innerHTML=o.map(a=>`<option value="${a[0]}">${a[1]}</option>`).join("");
   if(keep&&o.some(a=>a[0]===old))l.value=old;
+  checkLensTip();
+}
+
+function checkLensTip(){
+  const val=document.getElementById("lens").value;
+  const tipEl=document.getElementById("lensDetailTip");
+  if(val && val!=="none"){
+    tipEl.innerHTML=S().lensTipClarification;
+    tipEl.style.display="block";
+  }else{
+    tipEl.style.display="none";
+  }
 }
 
 function updateNote(){
@@ -659,6 +697,7 @@ function restore(){
   sync();
   updateNote();
   renderSaved();
+  checkLensTip();
 }
 
 function renderSaved(){
@@ -685,11 +724,20 @@ function sync(){
   const d=document.getElementById("pickupDate").value,t=document.getElementById("pickupClock").value;
   document.getElementById("pickupTime").value=d&&t?`${d}T${t}`:"";
   const r=document.getElementById("returnDate");
+  const daysSummary=document.getElementById("daysSummary");
+
   if(d){
     r.min=d;
     if(!r.value||r.value<d){
       r.value=d;
     }
+    const daysCalc = Math.max(1, Math.ceil((new Date(`${r.value}T00:00:00`) - new Date(d)) / 86400000));
+    daysSummary.textContent = currentLang === "zh" 
+      ? `📅 預估租期天數：約 ${daysCalc} 天` 
+      : `📅 Estimated Rental: approx ${daysCalc} day(s)`;
+    daysSummary.style.display = "block";
+  }else{
+    daysSummary.style.display = "none";
   }
   save();
 }
@@ -775,7 +823,6 @@ function applyLineProfile(displayName){
   }
 }
 
-/* 設定點擊器材列直接帶入型號並平滑滾動 */
 function setupPriceRowInteractions(){
   document.querySelectorAll(".price-row").forEach(row => {
     row.addEventListener("click", () => {
@@ -803,11 +850,9 @@ function setupPriceRowInteractions(){
       handleDeliveryToggle();
       save();
 
-      // 平滑滾動至 STEP 1 取機日期區
       const target = document.getElementById("pickupDate");
       target.scrollIntoView({ behavior: "smooth", block: "center" });
 
-      // 下拉選單金色閃爍提示
       mSelect.style.boxShadow = "0 0 0 2px var(--accent)";
       setTimeout(() => {
         mSelect.style.boxShadow = "";
@@ -897,10 +942,10 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   document.getElementById("languageButton").onclick=toggleLang;
   document.getElementById("model").onchange=()=>{updateLens();updateNote();handleDeliveryToggle();save()};
-  document.getElementById("lens").onchange=save;
+  document.getElementById("lens").onchange=()=>{checkLensTip();save()};
   document.getElementById("pickupDate").onchange=sync;
   document.getElementById("pickupClock").onchange=sync;
-  document.getElementById("returnDate").onchange=save;
+  document.getElementById("returnDate").onchange=sync;
   document.getElementById("cloudService").onchange=save;
   document.getElementById("name").oninput=save;
   document.getElementById("phone").oninput=save;
