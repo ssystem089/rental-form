@@ -36,6 +36,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,B
 .price-row:last-child{border:0}
 .product-name{font-size:14px;font-weight:700}
 .product-desc{margin-top:3px;color:var(--sub);font-size:11px;line-height:1.45}
+.product-deposit{margin-top:3px;color:#a8976b;font-size:10px;line-height:1.4}
 .price{min-width:140px;text-align:right;font-size:13px;font-weight:700;line-height:1.5}
 .price small{color:var(--muted);font-size:10px;font-weight:500}
 
@@ -116,15 +117,95 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
 
 <div class="section-title" id="priceTitle">租借費率｜24H 彈性制</div>
 <section class="card">
-  <div class="price-row"><div><div class="product-name">vivo x300 Ultra</div><div class="product-desc" id="x300uDesc">長焦首選｜防抖穩定表現最佳｜支援 200mm／400mm 增距鏡</div></div><div class="price">$1,200 <small id="d12a">/ 1–2日</small><br><small id="x300uPrice">$1,000（3–5日）｜$900（6日以上）</small></div></div>
-  <div class="price-row"><div><div class="product-name">vivo x500 Pro Max</div><div class="product-desc" id="x500pmDesc">長焦電影級專業｜可搭配 200mm／400mm 增距鏡</div></div><div class="price">$1,100 <small id="d12x">/ 1–2日</small><br><small id="x500pmPrice">$1,000（3–5日）｜$900（6日以上）</small></div></div>
-  <div class="price-row"><div><div class="product-name">vivo x200 Ultra</div><div class="product-desc" id="x200uDesc">畫質細節首選｜支援 200mm 增距鏡</div></div><div class="price">$1,000 <small id="d12b">/ 1–2日</small><br><small id="x200uPrice">$900（3–5日）｜$800（6日以上）</small></div></div>
-  <div class="price-row"><div><div class="product-name">OPPO Find X9 Ultra</div><div class="product-desc" id="oppoDesc">哈蘇影像旗艦｜支援 400mm 增距鏡</div></div><div class="price">$1,000 <small id="d12d">/ 1–2日</small><br><small id="oppoPrice">$900（3–5日）｜$800（6日以上）</small></div></div>
-  <div class="price-row"><div><div class="product-name">vivo x300 Pro</div><div class="product-desc" id="x300pDesc">旅行長焦｜防抖與畫質兼顧｜支援 200mm 增距鏡</div></div><div class="price">$900 <small id="d12c">/ 1–2日</small><br><small id="x300pPrice">$800（3–5日）｜$700（6日以上）</small></div></div>
-  <div class="price-row"><div><div class="product-name">iPhone 17 Pro／Pro Max</div><div class="product-desc" id="iphoneDesc">旗艦錄影與日常使用體驗</div></div><div class="price">$850 <small id="d12e">/ 1–2日</small><br><small id="iphonePrice">$750（3–5日）｜$600（6日以上）</small></div></div>
-  <div class="price-row"><div><div class="product-name">DJI Pocket 4 Pro</div><div class="product-desc" id="djiDesc">全能套裝｜三軸雙鏡頭手持相機</div></div><div class="price">$700 <small id="perDayA">/ 日</small></div></div>
-  <div class="price-row"><div><div class="product-name" id="lensTitle">增距鏡特仕組</div><div class="product-desc" id="lensDesc">含對應手機殼以及增距鏡配件組｜200mm：$300／日｜400mm：$600／日</div></div><div class="price">$300–$600 <small id="perDayB">/ 日</small></div></div>
-  <div class="price-row"><div><div class="product-name" id="cloudTitle">雲端上傳服務</div><div class="product-desc" id="cloudDesc">原畫質上傳，保留 2 週</div></div><div class="price">$200 <small id="perUse">/ 次</small></div></div>
+  <!-- vivo x300 Ultra -->
+  <div class="price-row">
+    <div>
+      <div class="product-name">vivo x300 Ultra</div>
+      <div class="product-desc" id="x300uDesc">極致影像旗艦，長焦之王｜支援 200mm／400mm 增距鏡</div>
+      <div class="product-deposit" id="depX300u">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000</div>
+    </div>
+    <div class="price">$1,200 <small id="d12a">/ 1–2日</small><br><small id="x300uPrice">$1,000（3–5日）｜$900（6日以上）</small></div>
+  </div>
+
+  <!-- vivo x500 Pro Max -->
+  <div class="price-row">
+    <div>
+      <div class="product-name">vivo x500 Pro Max</div>
+      <div class="product-desc" id="x500pmDesc">長焦電影級專業｜可搭配 200mm／400mm 增距鏡</div>
+      <div class="product-deposit" id="depX500pm">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000</div>
+    </div>
+    <div class="price">$1,100 <small id="d12x">/ 1–2日</small><br><small id="x500pmPrice">$1,000（3–5日）｜$900（6日以上）</small></div>
+  </div>
+
+  <!-- vivo x200 Ultra -->
+  <div class="price-row">
+    <div>
+      <div class="product-name">vivo x200 Ultra</div>
+      <div class="product-desc" id="x200uDesc">大光圈與細節攝影兼具｜支援 200mm 增距鏡</div>
+      <div class="product-deposit" id="depX200u">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000</div>
+    </div>
+    <div class="price">$1,000 <small id="d12b">/ 1–2日</small><br><small id="x200uPrice">$900（3–5日）｜$800（6日以上）</small></div>
+  </div>
+
+  <!-- OPPO Find X9 Ultra -->
+  <div class="price-row">
+    <div>
+      <div class="product-name">OPPO Find X9 Ultra</div>
+      <div class="product-desc" id="oppoDesc">哈蘇影像、10倍原生光學變焦｜支援 400mm 增距鏡</div>
+      <div class="product-deposit" id="depOppo">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000</div>
+    </div>
+    <div class="price">$1,000 <small id="d12d">/ 1–2日</small><br><small id="oppoPrice">$900（3–5日）｜$800（6日以上）</small></div>
+  </div>
+
+  <!-- vivo x300 Pro -->
+  <div class="price-row">
+    <div>
+      <div class="product-name">vivo x300 Pro</div>
+      <div class="product-desc" id="x300pDesc">高CP值的旅行長焦攝影首選｜支援 200mm 增距鏡</div>
+      <div class="product-deposit" id="depX300p">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000</div>
+    </div>
+    <div class="price">$900 <small id="d12c">/ 1–2日</small><br><small id="x300pPrice">$800（3–5日）｜$700（6日以上）</small></div>
+  </div>
+
+  <!-- iPhone 17 Pro / Max -->
+  <div class="price-row">
+    <div>
+      <div class="product-name">iPhone 17 Pro／Pro Max</div>
+      <div class="product-desc" id="iphoneDesc">蘋果最強效能，流暢影片拍攝</div>
+      <div class="product-deposit" id="depIphone">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000</div>
+    </div>
+    <div class="price">$850 <small id="d12e">/ 1–2日</small><br><small id="iphonePrice">$750（3–5日）｜$600（6日以上）</small></div>
+  </div>
+
+  <!-- DJI Pocket 4 Pro -->
+  <div class="price-row">
+    <div>
+      <div class="product-name">DJI Pocket 4 Pro 全能套裝</div>
+      <div class="product-desc" id="djiDesc">旗艦級雙鏡頭手持縮放三軸相機</div>
+      <div class="product-deposit" id="depDji">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000</div>
+    </div>
+    <div class="price">$700 <small id="perDayA">/ 日</small></div>
+  </div>
+
+  <!-- 增距鏡特仕組 -->
+  <div class="price-row">
+    <div>
+      <div class="product-name" id="lensTitle">增距鏡特仕組</div>
+      <div class="product-desc" id="lensDesc">含對應手機殼以及增距鏡配件組｜200mm：$300／日｜400mm：$600／日</div>
+      <div class="product-deposit" id="depLens">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$10,000</div>
+    </div>
+    <div class="price">$300–$600 <small id="perDayB">/ 日</small></div>
+  </div>
+
+  <!-- 雲端上傳 -->
+  <div class="price-row">
+    <div>
+      <div class="product-name" id="cloudTitle">雲端上傳服務</div>
+      <div class="product-desc" id="cloudDesc">拍完免傳檔，雲端隨時輕鬆載｜保留 2 週</div>
+      <div class="product-deposit" id="depCloud">門市代為原畫質雲端上傳，免押金</div>
+    </div>
+    <div class="price">$200 <small id="perUse">/ 次</small></div>
+  </div>
 </section>
 
 <!-- STEP 1：快速查檔期表單 -->
@@ -182,7 +263,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   </div>
 </section>
 
-<!-- STEP 2：正式預約資料（依優化邏輯重新排序） -->
+<!-- STEP 2：正式預約資料 -->
 <div id="formalSection" style="display:none">
   <div class="section-title" style="margin:22px 4px 8px" id="formalTitle">STEP 2. 確認有檔期，填寫正式預訂資料</div>
   <section class="card">
@@ -263,16 +344,21 @@ const zh={
   subtitle:"器材租借預約",store:"FiX iT RiGHT 台北大巨蛋門市｜台北市大安區光復南路88號1樓<br>營業時間 12:00–20:00｜演唱會日依現場狀況彈性延長",
   priceTitle:"租借費率｜24H 彈性制",days:"/ 1–2日",
   step1Text:"查檔期",step2Text:"正式預約",step3Text:"報價匯款",step4Text:"完成預訂",
-  x300uDesc:"長焦首選｜防抖穩定表現最佳｜支援 200mm／400mm 增距鏡",x300uPrice:"$1,000（3–5日）｜$900（6日以上）",
+  x300uDesc:"極致影像旗艦，長焦之王｜支援 200mm／400mm 增距鏡",x300uPrice:"$1,000（3–5日）｜$900（6日以上）",
   x500pmDesc:"長焦電影級專業｜可搭配 200mm／400mm 增距鏡",x500pmPrice:"$1,000（3–5日）｜$900（6日以上）",
-  x200uDesc:"畫質細節首選｜支援 200mm 增距鏡",x200uPrice:"$900（3–5日）｜$800（6日以上）",
-  x300pDesc:"旅行長焦｜防抖與畫質兼顧｜支援 200mm 增距鏡",x300pPrice:"$800（3–5日）｜$700（6日以上）",
-  oppoDesc:"哈蘇影像旗艦｜支援 400mm 增距鏡",oppoPrice:"$900（3–5日）｜$800（6日以上）",
-  iphoneDesc:"旗艦錄影與日常使用體驗",iphonePrice:"$750（3–5日）｜$600（6日以上）",
-  djiDesc:"全能套裝｜三軸雙鏡頭手持相機",perDay:"/ 日",
+  x200uDesc:"大光圈與細節攝影兼具｜支援 200mm 增距鏡",x200uPrice:"$900（3–5日）｜$800（6日以上）",
+  x300pDesc:"高CP值的旅行長焦攝影首選｜支援 200mm 增距鏡",x300pPrice:"$800（3–5日）｜$700（6日以上）",
+  oppoDesc:"哈蘇影像、10倍原生光學變焦｜支援 400mm 增距鏡",oppoPrice:"$900（3–5日）｜$800（6日以上）",
+  iphoneDesc:"蘋果最強效能，流暢影片拍攝",iphonePrice:"$750（3–5日）｜$600（6日以上）",
+  djiDesc:"旗艦級雙鏡頭手持縮放三軸相機",perDay:"/ 日",
   lensTitle:"增距鏡特仕組",
   lensDesc:"含對應手機殼以及增距鏡配件組｜200mm：$300／日｜400mm：$600／日",
-  cloudTitle:"雲端上傳服務",cloudDesc:"原畫質上傳，保留 2 週",perUse:"/ 次",
+  cloudTitle:"雲端上傳服務",cloudDesc:"拍完免傳檔，雲端隨時輕鬆載｜保留 2 週",perUse:"/ 次",
+  
+  depCommon:"門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000",
+  depLensText:"門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$10,000",
+  depCloudText:"門市代為原畫質雲端上傳，免押金",
+
   formTitle:"STEP 1. 選擇設備與預約日期（免填個資）",
   modelLabel:"租借主機型號",lensLabel:"增距鏡配件選配",pickupDateLabel:"預計取機日期",pickupTimeLabel:"預計取機時間",selectTime:"請選擇時間",returnDateLabel:"預計歸還日期",
   inquiryButton:"送出詢問設備檔期",
@@ -290,26 +376,41 @@ const zh={
   noLens:"無加選（單主機＋保護殼 含收納包｜充電線組）",
   lens200:"加租 G2 200mm 增距鏡（+$300／日）",
   lens400:"加租 G2 Ultra 400mm 增距鏡（+$600／日）大巨蛋B1 10排後適用",
-  rent200:"單租 G2 200mm 增距鏡（$300／日）",
-  rent400:"單租 G2 Ultra 400mm 增距鏡（$600／日）大巨蛋B1 10排後適用",
-  noteX300U:"<strong>簡易介紹：</strong>長焦首選。防抖穩定性最佳，適合遠距離舞台、手持拍攝與演唱會錄影。",noteX500PM:"<strong>簡易介紹：</strong>長焦電影級專業旗艦。具備頂級長焦與電影級錄影規格，支援 200mm／400mm 增距鏡。",noteX200U:"<strong>簡易介紹：</strong>畫質細節首選。三機中細節表現最佳，適合重視裁切、照片與舞台細節。",noteX300P:"<strong>簡易介紹：</strong>旅行長焦首選。防抖與畫質兼顧，適合長焦、穩定與攜帶性需求。",noteOppo:"<strong>簡易介紹：</strong>哈蘇影像旗艦，支援 400mm 增距鏡。",noteIphone:"<strong>簡易介紹：</strong>適合 iOS 使用者與日常錄影。",noteDji:"<strong>簡易介紹：</strong>適合穩定錄影、移動鏡頭與手持 Vlog。",noteLens:"<strong>簡易介紹：</strong>僅租借增距鏡，請先確認相容性與場館規範。",
+  
+  /* 單租增距鏡特仕組選項（包含對應手機殼組） */
+  rent200_x300u:"單租 G2 200mm 特仕組（含 x300 Ultra 手機殼組，+$300／日）",
+  rent200_x500pm:"單租 G2 200mm 特仕組（含 x500 Pro Max 手機殼組，+$300／日）",
+  rent200_x200u:"單租 G2 200mm 特仕組（含 x200 Ultra 手機殼組，+$300／日）",
+  rent200_x300p:"單租 G2 200mm 特仕組（含 x300 Pro 手機殼組，+$300／日）",
+  rent400_x300u:"單租 G2 Ultra 400mm 特仕組（含 x300 Ultra 手機殼組，+$600／日）",
+  rent400_x500pm:"單租 G2 Ultra 400mm 特仕組（含 x500 Pro Max 手機殼組，+$600／日）",
+  rent400_oppo:"單租 G2 Ultra 400mm 特仕組（含 Find X9 Ultra 手機殼組，+$600／日）",
+
+  noteX300U:"<strong>簡易介紹：</strong>長焦首選。防抖穩定性最佳，適合遠距離舞台、手持拍攝與演唱會錄影。",noteX500PM:"<strong>簡易介紹：</strong>長焦電影級專業旗艦。具備頂級長焦與電影級錄影規格，支援 200mm／400mm 增距鏡。",noteX200U:"<strong>簡易介紹：</strong>畫質細節首選。三機中細節表現最佳，適合重視裁切、照片與舞台細節。",noteX300P:"<strong>簡易介紹：</strong>旅行長焦首選。防抖與畫質兼顧，適合長焦、穩定與攜帶性需求。",noteOppo:"<strong>簡易介紹：</strong>哈蘇影像旗艦，支援 400mm 增距鏡。",noteIphone:"<strong>簡易介紹：</strong>適合 iOS 使用者與日常錄影。",noteDji:"<strong>簡易介紹：</strong>適合穩定錄影、移動鏡頭與手持 Vlog。",
+  noteLens:"<strong>簡易介紹：</strong>僅單租增距鏡特仕組，包含專屬鏡頭接環手機殼與增距鏡配件，支援指定 vivo 與 OPPO 機型。",
   savedTitle:"已保留上次選擇",savedText:"型號與預約日期已為您帶入；確認可租後，補填姓名與電話即可送出正式預約。",clear:"清除已保存資料",
   dates:"請先選擇預計取機日期、取機時間與歸還日期。",badDate:"歸還日期可與取機日期相同，或晚於取機日期。",contact:"正式預約請填寫承租人姓名與聯絡電話。",wait:"LINE 尚未初始化完成，請稍候幾秒後再試。",init:"LINE 連線初始化失敗，請從官方帳號一對一聊天室重新開啟。",sending:"送出中…",sent:"已送出",fallbackTitle:"訊息未能自動送出",fallbackGuide:"預約內容已保留，請複製後回到 LINE 聊天室貼上並送出。",back:"返回表單",copy:"複製內容",copied:"已複製，請回到 LINE 貼上並傳送。"
 };
+
 const en={
   ...zh,subtitle:"Equipment Rental Booking",store:"Taipei Dome Store｜No. 88, Guangfu S. Rd., Da'an Dist., Taipei<br>Hours: 12:00–20:00｜Extended hours may apply on concert days",
   priceTitle:"RENTAL RATES｜24-HOUR FLEXIBLE PLAN",days:"/ 1–2 days",
   step1Text:"Check Availability",step2Text:"Formal Booking",step3Text:"Quote & Payment",step4Text:"Confirmed",
-  x300uDesc:"Best long-zoom choice｜best stabilization｜200mm / 400mm extender compatible",x300uPrice:"$1,000 (3–5 days) ｜ $900 (6+ days)",
-  x500pmDesc:"Cinema-grade telephoto professional｜200mm / 400mm extender compatible",x500pmPrice:"$1,000 (3–5 days) ｜ $900 (6+ days)",
-  x200uDesc:"Best image detail｜200mm extender compatible",x200uPrice:"$900 (3–5 days) ｜ $800 (6+ days)",
-  x300pDesc:"Travel long zoom｜balanced stabilization and detail｜200mm extender compatible",x300pPrice:"$800 (3–5 days) ｜ $700 (6+ days)",
-  oppoDesc:"Hasselblad imaging flagship｜400mm extender compatible",oppoPrice:"$900 (3–5 days) ｜ $800 (6+ days)",
-  iphoneDesc:"Flagship video and familiar everyday use",iphonePrice:"$750 (3–5 days) ｜ $600 (6+ days)",
-  djiDesc:"Creator Combo｜dual-lens 3-axis handheld camera",perDay:"/ day",
+  x300uDesc:"Ultimate imaging flagship, king of zoom ｜ 200mm / 400mm extender compatible",x300uPrice:"$1,000 (3–5 days) ｜ $900 (6+ days)",
+  x500pmDesc:"Cinema-grade telephoto professional ｜ 200mm / 400mm extender compatible",x500pmPrice:"$1,000 (3–5 days) ｜ $900 (6+ days)",
+  x200uDesc:"Large aperture & fine details ｜ 200mm extender compatible",x200uPrice:"$900 (3–5 days) ｜ $800 (6+ days)",
+  x300pDesc:"High cost-performance travel telephoto ｜ 200mm extender compatible",x300pPrice:"$800 (3–5 days) ｜ $700 (6+ days)",
+  oppoDesc:"Hasselblad imaging, 10x optical zoom ｜ 400mm extender compatible",oppoPrice:"$900 (3–5 days) ｜ $800 (6+ days)",
+  iphoneDesc:"Apple flagship performance, smooth video recording",iphonePrice:"$750 (3–5 days) ｜ $600 (6+ days)",
+  djiDesc:"Flagship dual-lens 3-axis zoom camera",perDay:"/ day",
   lensTitle:"Telephoto Extender Set",
   lensDesc:"Includes phone case & extender accessory set ｜ 200mm: $300/day ｜ 400mm: $600/day",
-  cloudTitle:"Cloud Upload Service",cloudDesc:"Original-quality upload, retained for 2 weeks",perUse:"/ use",
+  cloudTitle:"Cloud Upload Service",cloudDesc:"Download original quality anytime ｜ retained 2 weeks",perUse:"/ use",
+
+  depCommon:"In-store: Original ID + $3,000 deposit ｜ Delivery: NT$30,000 deposit",
+  depLensText:"In-store: Original ID + $3,000 deposit ｜ Delivery: NT$10,000 deposit",
+  depCloudText:"In-store cloud upload service, no deposit required",
+
   formTitle:"STEP 1. Select Device & Dates (No Personal Info Required)",
   modelLabel:"Rental device",lensLabel:"Telephoto extender option",pickupDateLabel:"Pickup date",pickupTimeLabel:"Pickup time",selectTime:"Select time",returnDateLabel:"Return date",
   inquiryButton:"Check Availability",
@@ -328,9 +429,17 @@ const en={
   noLens:"No add-on (device + protective case, carrying pouch, charging cable set)",
   lens200:"Add G2 200mm extender (+$300/day)",
   lens400:"Add G2 Ultra 400mm extender (+$600/day)",
-  rent200:"Rent G2 200mm extender only ($300/day)",
-  rent400:"Rent G2 Ultra 400mm extender only ($600/day)",
-  noteX300U:"<strong>Quick guide:</strong> Best long-zoom choice with the strongest stabilization among these models.",noteX500PM:"<strong>Quick guide:</strong> Cinema-grade telephoto professional flagship with 200mm/400mm extender support.",noteX200U:"<strong>Quick guide:</strong> Best image-detail choice, suitable for cropping and fine stage detail.",noteX300P:"<strong>Quick guide:</strong> Travel long-zoom choice with balanced stabilization, detail, and portability.",noteOppo:"<strong>Quick guide:</strong> Hasselblad imaging flagship with 400mm extender support.",noteIphone:"<strong>Quick guide:</strong> Suitable for iOS users and video recording.",noteDji:"<strong>Quick guide:</strong> Suitable for stable video, moving shots, and handheld vlog footage.",noteLens:"<strong>Quick guide:</strong> Extender set only. Confirm compatibility and venue rules first.",
+  
+  rent200_x300u:"Rent G2 200mm Set (w/ x300 Ultra case, +$300/day)",
+  rent200_x500pm:"Rent G2 200mm Set (w/ x500 Pro Max case, +$300/day)",
+  rent200_x200u:"Rent G2 200mm Set (w/ x200 Ultra case, +$300/day)",
+  rent200_x300p:"Rent G2 200mm Set (w/ x300 Pro case, +$300/day)",
+  rent400_x300u:"Rent G2 Ultra 400mm Set (w/ x300 Ultra case, +$600/day)",
+  rent400_x500pm:"Rent G2 Ultra 400mm Set (w/ x500 Pro Max case, +$600/day)",
+  rent400_oppo:"Rent G2 Ultra 400mm Set (w/ Find X9 Ultra case, +$600/day)",
+
+  noteX300U:"<strong>Quick guide:</strong> Best long-zoom choice with the strongest stabilization among these models.",noteX500PM:"<strong>Quick guide:</strong> Cinema-grade telephoto professional flagship with 200mm/400mm extender support.",noteX200U:"<strong>Quick guide:</strong> Best image-detail choice, suitable for cropping and fine stage detail.",noteX300P:"<strong>Quick guide:</strong> Travel long-zoom choice with balanced stabilization, detail, and portability.",noteOppo:"<strong>Quick guide:</strong> Hasselblad imaging flagship with 400mm extender support.",noteIphone:"<strong>Quick guide:</strong> Suitable for iOS users and video recording.",noteDji:"<strong>Quick guide:</strong> Suitable for stable video, moving shots, and handheld vlog footage.",
+  noteLens:"<strong>Quick guide:</strong> Extender set only. Includes dedicated phone mount case and accessories for specified models.",
   savedTitle:"Saved Selection",savedText:"Device and date choices restored. Complete name and phone number to submit formal booking.",clear:"Clear saved selection"
 };
 
@@ -349,6 +458,11 @@ function applyLang(lang){
     x200uDesc:"x200uDesc",x200uPrice:"x200uPrice",x300pDesc:"x300pDesc",x300pPrice:"x300pPrice",
     oppoDesc:"oppoDesc",oppoPrice:"oppoPrice",iphoneDesc:"iphoneDesc",iphonePrice:"iphonePrice",
     djiDesc:"djiDesc",lensTitle:"lensTitle",lensDesc:"lensDesc",cloudTitle:"cloudTitle",cloudDesc:"cloudDesc",
+    
+    depX300u:"depCommon",depX500pm:"depCommon",depX200u:"depCommon",
+    depOppo:"depCommon",depX300p:"depCommon",depIphone:"depCommon",
+    depDji:"depCommon",depLens:"depLensText",depCloud:"depCloudText",
+
     formTitle:"formTitle",modelLabel:"modelLabel",lensLabel:"lensLabel",
     pickupDateLabel:"pickupDateLabel",pickupTimeLabel:"pickupTimeLabel",selectTime:"selectTime",returnDateLabel:"returnDateLabel",
     inquiryButton:"inquiryButton",inquiryNotice:"inquiryNotice",
@@ -380,7 +494,7 @@ function applyLang(lang){
 
 function updateModelLabels(){
   const labels=currentLang==="zh"
-    ?["vivo x300 Ultra","vivo x500 Pro Max","vivo x200 Ultra","vivo x300 Pro","OPPO Find X9 Ultra","iPhone 17 Pro / Max","DJI Pocket 4 Pro 全能套裝","單 G2 增距鏡頭含對應手機殼特仕組"]
+    ?["vivo x300 Ultra","vivo x500 Pro Max","vivo x200 Ultra","vivo x300 Pro","OPPO Find X9 Ultra","iPhone 17 Pro / Max","DJI Pocket 4 Pro 全能套裝","僅租借 G2 增距鏡頭特仕組"]
     :[
       "vivo x300 Ultra — Best long zoom",
       "vivo x500 Pro Max — Cinema telephoto",
@@ -400,26 +514,43 @@ function updateModelLabels(){
   document.getElementById("idType").options[1].text=currentLang==="zh"?"健保卡正本":"National Health Insurance card";
   document.getElementById("idType").options[2].text=currentLang==="zh"?"駕照正本":"Driver's license";
   
-  // 保持 delivery 為第 0 項首選
   document.getElementById("isStore").options[0].text=currentLang==="zh"?"No（需寄送，依免證件押金 NT$30,000 計）":"No (delivery required; NT$30,000 no-ID deposit applies)";
   document.getElementById("isStore").options[1].text=currentLang==="zh"?"Yes（大巨蛋門市親取親還）":"Yes (pickup and return at Taipei Dome Store)";
 }
 
 function toggleLang(){applyLang(currentLang==="zh"?"en":"zh")}
 
+/* 依需求細分單租與加租配件選項 */
 function updateLens(keep=false){
   const m=document.getElementById("model").value,l=document.getElementById("lens"),old=l.value,x=S();
   let o;
   
+  // 主機加租：x300 Ultra 與 x500 Pro Max 支援 200mm / 400mm
   if(m==="vivo x300 Ultra"||m==="vivo x500 Pro Max"){
     o=[["none",x.noLens],["200",x.lens200],["400",x.lens400]];
-  }else if(m==="vivo x200 Ultra"||m==="vivo x300 Pro"){
+  }
+  // 主機加租：x200 Ultra 與 x300 Pro 支援 200mm
+  else if(m==="vivo x200 Ultra"||m==="vivo x300 Pro"){
     o=[["none",x.noLens],["200",x.lens200]];
-  }else if(m==="OPPO Find X9 Ultra"){
+  }
+  // 主機加租：OPPO Find X9 Ultra 支援 400mm
+  else if(m==="OPPO Find X9 Ultra"){
     o=[["none",x.noLens],["400",x.lens400]];
-  }else if(m==="僅租借 G2 增距鏡頭特仕組"){
-    o=[["200only",x.rent200],["400only",x.rent400]];
-  }else{
+  }
+  // 單租增距鏡特仕組（含對應機型手機殼組）
+  else if(m==="僅租借 G2 增距鏡頭特仕組"){
+    o=[
+      ["rent200_x300u", x.rent200_x300u],
+      ["rent200_x500pm", x.rent200_x500pm],
+      ["rent200_x200u", x.rent200_x200u],
+      ["rent200_x300p", x.rent200_x300p],
+      ["rent400_x300u", x.rent400_x300u],
+      ["rent400_x500pm", x.rent400_x500pm],
+      ["rent400_oppo", x.rent400_oppo]
+    ];
+  }
+  // 其他設備無增距鏡選項
+  else{
     o=[["none",x.noLens]];
   }
 
@@ -439,14 +570,12 @@ function updateNote(){
   document.getElementById("deviceNote").innerHTML=map[m]||"";
 }
 
-/* 切換交還方式時：動態隱藏/顯示「押附證件正本」 */
 function handleDeliveryToggle(){
   const val=document.getElementById("isStore").value;
   const idField=document.getElementById("idTypeField");
   const noteEl=document.getElementById("nameNote");
 
   if(val==="store"){
-    // 門市親取：顯示證件選單
     idField.style.display="block";
     if(noteEl){
       noteEl.textContent=currentLang==="zh"
@@ -454,7 +583,6 @@ function handleDeliveryToggle(){
         :"⚠️ In-store pickup requires original ID verification. Please ensure this is your full legal name.";
     }
   }else{
-    // 寄送免押證：隱藏證件選單
     idField.style.display="none";
     if(noteEl){
       noteEl.textContent=currentLang==="zh"
@@ -570,7 +698,6 @@ function booking(){
   const c=document.getElementById("cloudService").options[document.getElementById("cloudService").selectedIndex].text;
   const m=document.getElementById("isStore").options[document.getElementById("isStore").selectedIndex].text;
   
-  // 若為寄送免押證，押證標記為免押證；若為親取則帶出證件選項
   const i=isDelivery 
     ? (currentLang==="zh"?"免押證件（外縣市寄送／押金制）":"No ID deposit (delivery / security deposit)") 
     : document.getElementById("idType").options[document.getElementById("idType").selectedIndex].text;
@@ -603,7 +730,7 @@ function applyLineProfile(displayName){
     note.id = "nameNote";
     note.style.cssText = "font-size:11px;color:#e2b866;margin-top:5px;line-height:1.4;";
     nameInput.parentNode.appendChild(note);
-    handleDeliveryToggle(); // 依交還方式刷新提示文案
+    handleDeliveryToggle();
   }
 }
 
@@ -673,7 +800,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("pickupDate").min=today;
   document.getElementById("returnDate").min=today;
   applyLang(initialLang());
-  handleDeliveryToggle(); // 初始化交還方式邏輯
+  handleDeliveryToggle();
   restore();
 
   const urlParams=new URLSearchParams(window.location.search);
