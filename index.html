@@ -197,7 +197,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     <div class="price">$700 <small id="perDayA">/ 日</small></div>
   </div>
 
-  <!-- 增距鏡特仕組（明確標示：手機拍攝距離皆相同，加裝增距鏡用於提升清晰度與細節） -->
+  <!-- 增距鏡特仕組 -->
   <div class="price-row" data-model="僅租借 G2 增距鏡頭特仕組">
     <div>
       <div class="product-name" id="lensTitle">增距鏡特仕組 <span class="tap-hint">點此選租 ➔</span></div>
@@ -573,6 +573,7 @@ function updateModelLabels(){
 
 function toggleLang(){applyLang(currentLang==="zh"?"en":"zh")}
 
+/* 自動套用最高利潤/價格增距鏡核心函式 */
 function updateLens(keep=false){
   const m=document.getElementById("model").value,l=document.getElementById("lens"),old=l.value,x=S();
   let o;
@@ -585,20 +586,34 @@ function updateLens(keep=false){
     o=[["none",x.noLens],["400",x.lens400]];
   }else if(m==="僅租借 G2 增距鏡頭特仕組"){
     o=[
+      ["rent400_x300u", x.rent400_x300u],
+      ["rent400_x500pm", x.rent400_x500pm],
+      ["rent400_oppo", x.rent400_oppo],
       ["rent200_x300u", x.rent200_x300u],
       ["rent200_x500pm", x.rent200_x500pm],
       ["rent200_x200u", x.rent200_x200u],
-      ["rent200_x300p", x.rent200_x300p],
-      ["rent400_x300u", x.rent400_x300u],
-      ["rent400_x500pm", x.rent400_x500pm],
-      ["rent400_oppo", x.rent400_oppo]
+      ["rent200_x300p", x.rent200_x300p]
     ];
   }else{
     o=[["none",x.noLens]];
   }
 
   l.innerHTML=o.map(a=>`<option value="${a[0]}">${a[1]}</option>`).join("");
-  if(keep&&o.some(a=>a[0]===old))l.value=old;
+  
+  if(keep && o.some(a=>a[0]===old)){
+    l.value=old;
+  }else{
+    // 自動套入最高利潤的增距鏡選項
+    if(o.some(a=>a[0]==="400")){
+      l.value="400"; // 優先套用 400mm (+$600)
+    }else if(o.some(a=>a[0]==="200")){
+      l.value="200"; // 次之套用 200mm (+$300)
+    }else if(o.some(a=>a[0]==="rent400_x300u")){
+      l.value="rent400_x300u"; // 單租時預設 400mm
+    }else{
+      l.value="none";
+    }
+  }
   checkLensTip();
 }
 
@@ -679,7 +694,7 @@ function restore(){
   const d=getDraft();if(!d)return;
   const m=document.getElementById("model");
   if(d.model)m.value=d.model;
-  updateLens();
+  updateLens(true); // 恢復暫存時保留上次客人選擇
   if(d.lens)document.getElementById("lens").value=d.lens;
   ["pickupDate","pickupClock","returnDate"].forEach(k=>{if(d[k])document.getElementById(k).value=d[k]});
   if(d.cloud)document.getElementById("cloudService").value=d.cloud;
@@ -845,7 +860,7 @@ function setupPriceRowInteractions(){
 
       const mSelect = document.getElementById("model");
       mSelect.value = modelVal;
-      updateLens();
+      updateLens(false); // 點擊時強制套用最高利潤增距鏡
       updateNote();
       handleDeliveryToggle();
       save();
@@ -941,7 +956,12 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
 
   document.getElementById("languageButton").onclick=toggleLang;
-  document.getElementById("model").onchange=()=>{updateLens();updateNote();handleDeliveryToggle();save()};
+  document.getElementById("model").onchange=()=>{
+    updateLens(false); // 下拉切換手機時自動帶入最高利潤增距鏡
+    updateNote();
+    handleDeliveryToggle();
+    save();
+  };
   document.getElementById("lens").onchange=()=>{checkLensTip();save()};
   document.getElementById("pickupDate").onchange=sync;
   document.getElementById("pickupClock").onchange=sync;
