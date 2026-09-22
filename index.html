@@ -387,7 +387,7 @@ const zh={
   iphoneDesc:"蘋果最強效能，流暢影片拍攝",iphonePrice:"$750（3–5日）｜$600（6日以上）",
   djiDesc:"旗艦級雙鏡頭手持縮放三軸相機",perDay:"/ 日",
   lensTitle:"增距鏡特仕組",
-  lensDesc:"含對應手機殼及配件組｜手機可拍距離皆相同，加裝增距鏡專用於提升清晰度與細節！200mm：$300／日｜400mm：$600／日",
+  lensDesc:"含對應手機殼及配件組｜手機原生距離皆相同，加裝增距鏡專用於提升清晰度與細節！200mm ($300／日)：自然清晰，性價比高。400mm ($600／日)：旗艦級超長焦，景深層次更深、銳利度與穿網效果更強，遠距離舞台首選。",
   cloudTitle:"雲端上傳服務",cloudDesc:"拍完免傳檔，雲端隨時輕鬆載｜保留 2 週",perUse:"/ 次",
   
   depCommon:"門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000",
@@ -399,12 +399,12 @@ const zh={
   modelLabel:"租借主機型號",lensLabel:"增距鏡配件選配",pickupDateLabel:"預計取機日期",pickupTimeLabel:"預計取機時間",selectTime:"請選擇時間",returnDateLabel:"預計歸還日期",
   inquiryButton:"送出詢問設備檔期",
   inquiryNotice:"<strong>安心詢問：</strong>先查詢是否有設備空檔即可，系統會自動暫存選擇。客服在 LINE 回覆確認有檔期後，即可接著完成正式預訂。",
-  toggleFormalOpen:"已確認有檔期？直接填寫預預約資料 ▼",
+  toggleFormalOpen:"已確認有檔期？直接填寫預約資料 ▼",
   toggleFormalClose:"▲ 收合正式預約欄位",
   formalTitle:"STEP 2. 確認有檔期，填寫正式預訂資料",
   cloudLabel:"雲端上傳服務",
   cloudNo:"不需要",
-  cloudYes:"需要",
+  cloudYes:"需要（+$200／次，原畫質雲端下載，保留 2 週）",
   nameLabel:"承租人姓名 (需同取件人)",phoneLabel:"取件手機門號",
   returnMethodLabel:"交還方式",bookingButton:"確認送出正式訂單",
   formalPaymentNotice:"送出後客服將於 LINE 聊天室依您選填內容提供報價與匯款資訊，完成匯款後即鎖定檔期並完成預約。",
@@ -422,7 +422,7 @@ const zh={
   rent400_x500pm:"G2 Ultra 400mm + x500 Pro Max 手機殼",
   rent400_oppo:"G2 Ultra 400mm + Find X9 Ultra 手機殼",
 
-  lensTipClarification:"<strong>增距鏡說明：</strong>手機本身可拍距離皆相同，加裝增距鏡旨在大幅提升清晰度與細節！配合長焦景深效果，可有效淡化大巨蛋護網（穿網），讓遠距離畫面更清晰無阻礙。",
+  lensTipClarification:"<strong>增距鏡拍攝小撇步：</strong>手機原生拍攝距離雖然相同，但加裝增距鏡能大幅提升遠景的清晰度與細節！特別適合大巨蛋等場館，透過長焦特性與景深效果，能完美淡化並虛化前方防護網（穿網效果），讓畫面更乾淨通透！",
 
   noteX300U:"<strong>簡易介紹：</strong>極致長焦收音旗艦，藍圖原色。",
   noteX500PM:"<strong>簡易介紹：</strong>長焦電影級專業旗艦，支援 200mm／400mm 增距鏡。",
@@ -450,7 +450,7 @@ const en={
   iphoneDesc:"Apple flagship performance, smooth video recording",iphonePrice:"$750 (3–5 days) ｜ $600 (6+ days)",
   djiDesc:"Flagship dual-lens 3-axis zoom camera",perDay:"/ day",
   lensTitle:"Telephoto Extender Set",
-  lensDesc:"Includes phone case & accessories ｜ Phone shooting distance is identical; attaching the extender lens is specifically for maximizing clarity and optical detail! 200mm: $300/day ｜ 400mm: $600/day",
+  lensDesc:"Includes phone case & accessories ｜ Phone shooting distance is identical; attaching the extender lens is specifically for maximizing clarity and optical detail! 200mm ($300/day): Clear and natural. 400mm ($600/day): Flagship super-telephoto, deeper depth of field and net-masking effect, best for distant stages.",
   cloudTitle:"Cloud Upload Service",cloudDesc:"Download original quality anytime ｜ retained 2 weeks",perUse:"/ use",
 
   depCommon:"In-store: Original ID + $3,000 deposit ｜ Delivery: NT$30,000 deposit",
@@ -466,8 +466,8 @@ const en={
   toggleFormalClose:"▲ Collapse booking details",
   formalTitle:"STEP 2. Complete Formal Booking Details",
   cloudLabel:"Cloud upload service",
-  cloudNo:"No",
-  cloudYes:"Yes",
+  cloudNo:"Not needed",
+  cloudYes:"Needed (+$200/use)",
   nameLabel:"Renter's Full Legal Name (as on ID)",phoneLabel:"Phone number",
   returnMethodLabel:"Fulfillment method",bookingButton:"Confirm & Submit Formal Booking",
   formalPaymentNotice:"Customer service will provide quotation and payment details via LINE chat. Once transferred, your reservation will be locked and confirmed.",
@@ -486,7 +486,7 @@ const en={
   rent400_x500pm:"G2 Ultra 400mm + x500 Pro Max Case",
   rent400_oppo:"G2 Ultra 400mm + Find X9 Ultra Case",
 
-  lensTipClarification:"<strong>Extender Function:</strong> Phone distance is identical; attaching the lens enhances clarity and detail.",
+  lensTipClarification:"<strong>Extender Tip:</strong> Phone distance is identical; attaching the extender greatly enhances clarity and detail! Perfect for venues like Taipei Dome, utilizing telephoto and depth-of-field effects to easily blur out front safety nets for a clear view.",
 
   noteX300U:"<strong>Quick guide:</strong> Ultimate telephoto & audio flagship, Blueprint.",
   noteX500PM:"<strong>Quick guide:</strong> Cinema-grade telephoto professional flagship.",
@@ -1009,6 +1009,11 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("storeName").oninput=save;
   document.getElementById("isStore").onchange=()=>{handleDeliveryToggle();save()};
   
+  document.getElementById("inquiryButton").onclick=inquiry;
+  document.getElementById("bookingButton").onclick=booking;
+  document.getElementById("backButton").onclick=closeFallback;
+  document.getElementById("copyButton").onclick=copyFallback;
+
   document.getElementById("toggleFormalBtn").onclick=()=>{
     const sec=document.getElementById("formalSection");
     const isHidden=sec.style.display==="none"||sec.style.display==="";
