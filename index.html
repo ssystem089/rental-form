@@ -348,6 +348,13 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   <div class="term-item"><span class="term-heading" id="term3h">寄送服務資訊</span><span id="term3">外縣市寄送依器材標示的免證件押金辦理，款項完成後安排寄送；設備寄回檢查無誤後原路返還押金。</span></div>
   <div class="term-item"><span class="term-heading" id="term4h">損壞與聯繫</span><span id="term4">租借期間請保持聯繫；設備損毀、遺失或逾時歸還，依租賃合約負擔相關費用。</span></div>
   <div class="term-item"><span class="term-heading" id="term5h">增距鏡特別條款</span><span id="term5">租借前請確認場館規定；若因主辦禁帶無法使用，租金不退款，但可轉為 12 個月有效折抵金。</span></div>
+
+  <!-- FAQ 直通連結（已更新為 https://ssystem089.github.io/rental-form/faq.html） -->
+  <div style="margin-top:16px;padding-top:14px;border-top:1px solid #ffffff12;text-align:center">
+    <a href="https://ssystem089.github.io/rental-form/faq.html" target="_blank" rel="noopener noreferrer" id="faqLink" style="display:inline-block;width:100%;padding:11px;border-radius:8px;background:#202024;border:1px solid #e2b86655;color:#e2b866;text-decoration:none;font-size:12.5px;font-weight:750;box-sizing:border-box">
+      📖 常見問題 Q&A（押金退款、寄送時程、照片傳輸等）➔
+    </a>
+  </div>
 </section>
 </main>
 
@@ -362,6 +369,11 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
 const LIFF_ID="2011411630-pdbfMEEs";
 const STORAGE_KEY="fir-rental-draft-v5";
 let liffReady=false,currentLang="zh",currentMessage="";
+
+function getTodayStr(){
+  const n=new Date();
+  return new Date(n.getTime()-n.getTimezoneOffset()*60000).toISOString().split("T")[0];
+}
 
 const zh={
   subtitle:"器材租借預約",store:"FiX iT RiGHT 台北大巨蛋門市｜台北市大安區光復南路88號1樓<br>營業時間 12:00–20:00｜演唱會日依現場狀況彈性延長",
@@ -398,6 +410,7 @@ const zh={
   returnMethodLabel:"是否於台北大巨蛋門市交還",bookingButton:"確認送出正式訂單",
   formalPaymentNotice:"💳 送出後客服將於 LINE 聊天室依您選填內容提供報價與匯款資訊，完成匯款後即鎖定檔期並完成預約。",
   termsTitle:"租借方案注意事項",term1h:"彈性報價方案",term1:"標有 24hr 彈性制，如遇演唱會當日租還或出國，依實際使用時間或場次起算，需配合現場檔期安排；最終交還日以協調確認為準。",term2h:"租還規範",term2:"限 12:00–20:00 於大巨蛋門市完成交還機，逾時則以隔日計。演唱會時段依公告或客服確認辦理。",term3h:"寄送服務資訊",term3:"外縣市寄送依器材標示的免證件押金辦理，款項完成後安排寄送；設備寄回檢查無誤後原路返還押金。",term4h:"損壞與聯繫",term4:"租借期間請保持聯繫；設備損毀、遺失或逾時歸還，依租賃合約負擔相關費用。",term5h:"增距鏡特別條款",term5:"租借前請確認場館規定；若因主辦禁帶無法使用，租金不退款，但可轉為 12 個月有效折抵金。",
+  faqLinkText:"📖 常見問題 Q&A（押金退款、寄送時程、照片傳輸等）➔",
   noLens:"無加選（單主機＋保護殼 含收納包｜充電線組）",
   lens200:"加租 G2 200mm 增距鏡（+$300／日）",
   lens400:"加租 G2 Ultra 400mm 增距鏡（+$600／日）大巨蛋B1 10排後適用",
@@ -421,7 +434,7 @@ const zh={
   noteDji:"<strong>簡易介紹：</strong>適合穩定錄影、移動鏡頭與手持 Vlog。",
   noteLens:"<strong>簡易介紹：</strong>僅單租增距鏡特仕組。手機本體可拍攝距離皆相同，加裝增距鏡主旨在於大幅提升遠距高倍率下的畫質清晰度與細節表現。含對應手機殼與配件組。",
   savedTitle:"已保留上次選擇",savedText:"型號與預約日期已為您帶入；確認可租後，補填姓名與電話即可送出正式預約。",clear:"清除已保存資料",
-  dates:"請先選擇預計取機日期、取機時間與歸還日期。",badDate:"歸還日期可與取機日期相同，或晚於取機日期。",contact:"正式預約請填寫承租人真實姓名。",badPhone:"請填寫正確的 10 碼台灣手機門號（如 0912345678）。",
+  dates:"請先選擇預計取機日期、取機時間與歸還日期。",pastDate:"取機日期不可選擇過去日期！",badDate:"歸還日期可與取機日期相同，或晚於取機日期。",contact:"正式預約請填寫承租人真實姓名。",badPhone:"請填寫正確的 10 碼台灣手機門號（如 0912345678）。",
   wait:"LINE 尚未初始化完成，請稍候幾秒後再試。",init:"LINE 連線初始化失敗，請從官方帳號一對一聊天室重新開啟。",sending:"送出中…",sent:"已送出",fallbackTitle:"訊息未能自動送出",fallbackGuide:"預約內容已保留，請複製後回到 LINE 聊天室貼上並送出。",back:"返回表單",copy:"複製內容",copied:"已複製，請回到 LINE 貼上並傳送。"
 };
 
@@ -461,6 +474,7 @@ const en={
   formalPaymentNotice:"💳 Customer service will provide quotation and payment details via LINE chat. Once transferred, your reservation will be locked and confirmed.",
   termsTitle:"RENTAL TERMS",
   term1h:"Flexible pricing plan",term1:"Items under the 24-hour flexible plan may be calculated by actual use time or event session. Final return arrangements are confirmed with customer service.",term2h:"Pickup and return policy",term2:"Normal in-store pickup and return hours are 12:00–20:00. Late returns may be charged as an additional day unless otherwise confirmed.",term3h:"Delivery service",term3:"For delivery outside Taipei, the applicable no-ID deposit is required before dispatch. The deposit is refunded after return and inspection.",term4h:"Damage and communication",term4:"Please remain reachable during the rental. Damage, loss, or late return may incur charges under the rental agreement.",term5h:"Telephoto extender terms",term5:"Confirm venue rules before renting. If prohibited by the organizer, rental is non-refundable but may be converted to 12-month store credit.",
+  faqLinkText:"📖 FAQ & Guidelines (Deposit refunds, shipping, file transfer) ➔",
   noLens:"No add-on (device + protective case, carrying pouch, charging cable set)",
   lens200:"Add G2 200mm extender (+$300/day)",
   lens400:"Add G2 Ultra 400mm extender (+$600/day)",
@@ -505,7 +519,7 @@ function applyLang(lang){
     depX300u:"depCommon",depX500pm:"depCommon",depX200u:"depCommon",
     depOppo:"depCommon",depX300p:"depCommon",depIphone:"depCommon",
     depDji:"depCommon",depLens:"depLensText",depCloud:"depCloudText",
-    depositRuleTip:"depositRuleTip",
+    depositRuleTip:"depositRuleTip",faqLink:"faqLinkText",
 
     formTitle:"formTitle",modelLabel:"modelLabel",lensLabel:"lensLabel",
     pickupDateLabel:"pickupDateLabel",pickupTimeLabel:"pickupTimeLabel",selectTime:"selectTime",returnDateLabel:"returnDateLabel",
@@ -515,7 +529,7 @@ function applyLang(lang){
     formalPaymentNotice:"formalPaymentNotice",
     termsTitle:"termsTitle",term1h:"term1h",term1:"term1",term2h:"term2h",term2:"term2",term3h:"term3h",term3:"term3",term4h:"term4h",term4:"term4",term5h:"term5h",term5:"term5"
   };
-  Object.keys(ids).forEach(k=>text(ids[k],x[k],k==="store"||k==="inquiryNotice"||k==="formalPaymentNotice"||k==="depositRuleTip"));
+  Object.keys(ids).forEach(k=>text(ids[k],x[k],k==="store"||k==="inquiryNotice"||k==="formalPaymentNotice"||k==="depositRuleTip"||k==="faqLink"));
   ["d12a","d12x","d12b","d12c","d12d","d12e"].forEach(id=>text(id,x.days));
   text("perDayA",x.perDay);text("perDayB",x.perDay);text("perUse",x.perUse);
 
@@ -573,7 +587,6 @@ function updateModelLabels(){
 
 function toggleLang(){applyLang(currentLang==="zh"?"en":"zh")}
 
-/* 自動套用最高利潤/價格增距鏡核心函式 */
 function updateLens(keep=false){
   const m=document.getElementById("model").value,l=document.getElementById("lens"),old=l.value,x=S();
   let o;
@@ -603,13 +616,12 @@ function updateLens(keep=false){
   if(keep && o.some(a=>a[0]===old)){
     l.value=old;
   }else{
-    // 自動套入最高利潤的增距鏡選項
     if(o.some(a=>a[0]==="400")){
-      l.value="400"; // 優先套用 400mm (+$600)
+      l.value="400";
     }else if(o.some(a=>a[0]==="200")){
-      l.value="200"; // 次之套用 200mm (+$300)
+      l.value="200";
     }else if(o.some(a=>a[0]==="rent400_x300u")){
-      l.value="rent400_x300u"; // 單租時預設 400mm
+      l.value="rent400_x300u";
     }else{
       l.value="none";
     }
@@ -694,20 +706,24 @@ function restore(){
   const d=getDraft();if(!d)return;
   const m=document.getElementById("model");
   if(d.model)m.value=d.model;
-  updateLens(true); // 恢復暫存時保留上次客人選擇
+  updateLens(true);
   if(d.lens)document.getElementById("lens").value=d.lens;
-  ["pickupDate","pickupClock","returnDate"].forEach(k=>{if(d[k])document.getElementById(k).value=d[k]});
+  
+  const today=getTodayStr();
+  if(d.pickupDate && d.pickupDate>=today){
+    document.getElementById("pickupDate").value=d.pickupDate;
+  }
+  if(d.pickupClock)document.getElementById("pickupClock").value=d.pickupClock;
+  if(d.returnDate && d.returnDate>=today){
+    document.getElementById("returnDate").value=d.returnDate;
+  }
+
   if(d.cloud)document.getElementById("cloudService").value=d.cloud;
   if(d.name)document.getElementById("name").value=d.name;
   if(d.phone)document.getElementById("phone").value=d.phone;
   if(d.id)document.getElementById("idType").value=d.id;
   if(d.method)document.getElementById("isStore").value=d.method;
   
-  if(d.name||d.phone){
-    document.getElementById("formalSection").style.display="block";
-    updateStepper(2);
-    document.getElementById("toggleFormalBtn").textContent=S().toggleFormalClose;
-  }
   handleDeliveryToggle();
   sync();
   updateNote();
@@ -722,8 +738,14 @@ function renderSaved(){
   box.innerHTML=`<strong>${x.savedTitle}</strong><br>${d.model}<br>${x.savedText}<div class="saved-actions"><button type="button" class="small-button" id="clearDraft">${x.clear}</button></div>`;
   box.classList.add("show");
   document.getElementById("clearDraft").onclick=()=>{
-    try{localStorage.removeItem(STORAGE_KEY)}catch(e){}
+    try{
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem("fir-stage");
+    }catch(e){}
     box.classList.remove("show");
+    document.getElementById("formalSection").style.display="none";
+    updateStepper(1);
+    document.getElementById("toggleFormalBtn").textContent=S().toggleFormalOpen;
   };
 }
 
@@ -735,24 +757,42 @@ function updateStepper(step){
   });
 }
 
+function validateDates(){
+  const today=getTodayStr();
+  const pInput=document.getElementById("pickupDate");
+  const rInput=document.getElementById("returnDate");
+
+  if(pInput.value){
+    if(pInput.value<today){
+      alert(currentLang==="zh"?"⚠️ 取機日期不可選擇過去的日期！已自動為您調整為今日。":"⚠️ Pickup date cannot be in the past. Reset to today.");
+      pInput.value=today;
+    }
+    rInput.min=pInput.value;
+    if(!rInput.value || rInput.value<pInput.value){
+      rInput.value=pInput.value;
+    }
+  }
+
+  if(rInput.value && rInput.value<today){
+    rInput.value=pInput.value||today;
+  }
+}
+
 function sync(){
+  validateDates();
   const d=document.getElementById("pickupDate").value,t=document.getElementById("pickupClock").value;
   document.getElementById("pickupTime").value=d&&t?`${d}T${t}`:"";
   const r=document.getElementById("returnDate");
   const daysSummary=document.getElementById("daysSummary");
 
-  if(d){
-    r.min=d;
-    if(!r.value||r.value<d){
-      r.value=d;
-    }
-    const daysCalc = Math.max(1, Math.ceil((new Date(`${r.value}T00:00:00`) - new Date(d)) / 86400000));
-    daysSummary.textContent = currentLang === "zh" 
-      ? `📅 預估租期天數：約 ${daysCalc} 天` 
-      : `📅 Estimated Rental: approx ${daysCalc} day(s)`;
-    daysSummary.style.display = "block";
+  if(d && r.value){
+    const daysCalc=Math.max(1,Math.ceil((new Date(`${r.value}T00:00:00`)-new Date(d))/86400000));
+    daysSummary.textContent=currentLang==="zh"
+      ?`📅 預估租期天數：約 ${daysCalc} 天`
+      :`📅 Estimated Rental: approx ${daysCalc} day(s)`;
+    daysSummary.style.display="block";
   }else{
-    daysSummary.style.display = "none";
+    daysSummary.style.display="none";
   }
   save();
 }
@@ -763,22 +803,42 @@ function equipment(){
 }
 
 function dates(){
+  validateDates();
   const p=document.getElementById("pickupTime").value,r=document.getElementById("returnDate").value;
+  const today=getTodayStr();
+
   if(!p||!r){alert(S().dates);return null}
+  if(p.slice(0,10)<today){alert(S().pastDate);return null}
   if(r<p.slice(0,10)){alert(S().badDate);return null}
   return{p,r,d:Math.max(1,Math.ceil((new Date(`${r}T00:00:00`)-new Date(p))/86400000))};
 }
 
+function scrollToFormalSection(){
+  const sec=document.getElementById("formalSection");
+  sec.style.display="block";
+  updateStepper(2);
+  document.getElementById("toggleFormalBtn").textContent=S().toggleFormalClose;
+
+  setTimeout(()=>{
+    sec.scrollIntoView({behavior:"smooth",block:"start"});
+    const nameEl=document.getElementById("name");
+    if(nameEl){
+      nameEl.style.boxShadow="0 0 0 2px var(--accent)";
+      setTimeout(()=>{nameEl.style.boxShadow="";},1600);
+    }
+  },300);
+}
+
 function inquiry(){
   const d=dates();if(!d)return;save();
+  try{localStorage.setItem("fir-stage","formal");}catch(e){}
+
   const directLink=`https://liff.line.me/${LIFF_ID}`;
   currentMessage=currentLang==="zh"
     ?`【詢問設備檔期】\n租借器材：${equipment()}\n預計取機：${d.p.replace("T"," ")}\n預計歸還：${d.r}\n預計天數：約 ${d.d} 天\n\n您好，想先確認這段期間是否有設備檔期可租借，謝謝！\n\n👉 確認有檔期？點此立即補填預約資料：\n${directLink}`
     :`[Equipment Availability Check]\nDevice: ${equipment()}\nPickup: ${d.p.replace("T"," ")}\nReturn: ${d.r}\nRental: approx ${d.d} day(s)\n\nPlease check if this device is available. Thank you!\n\n👉 Ready to book? Complete details here:\n${directLink}`;
   
-  document.getElementById("formalSection").style.display="block";
-  document.getElementById("toggleFormalBtn").textContent=S().toggleFormalClose;
-  updateStepper(2);
+  scrollToFormalSection();
   send(currentMessage,document.getElementById("inquiryButton"),"inquiry");
 }
 
@@ -787,8 +847,8 @@ function booking(){
   const n=document.getElementById("name").value.trim(),p=document.getElementById("phone").value.trim();
   if(!n){alert(S().contact);return}
   
-  const phoneClean = p.replace(/[-\s]/g, "");
-  if (!/^09\d{8}$/.test(phoneClean)) {
+  const phoneClean=p.replace(/[-\s]/g,"");
+  if(!/^09\d{8}$/.test(phoneClean)){
     alert(S().badPhone);
     return;
   }
@@ -811,6 +871,7 @@ function booking(){
     :`※Formal booking request\n※Device: ${equipment()}\n※Pickup/return method: ${m}\n※Name: ${n}\n※Phone: ${phoneClean}\n※ID provided: ${i}\n※Cloud upload: ${c}\n※Rental period: Pickup ${d.p.replace("T"," ")} / Return ${d.r}\n※Estimated rental: ${d.d} day(s)`;
   
   updateStepper(3);
+  try{localStorage.removeItem("fir-stage");}catch(e){}
   send(currentMessage,document.getElementById("bookingButton"),"booking");
 }
 
@@ -848,19 +909,13 @@ function setupPriceRowInteractions(){
         const cloudEl = document.getElementById("cloudService");
         cloudEl.value = "Yes";
         save();
-        const sec = document.getElementById("formalSection");
-        sec.style.display = "block";
-        document.getElementById("toggleFormalBtn").textContent = S().toggleFormalClose;
-        updateStepper(2);
-        cloudEl.scrollIntoView({ behavior: "smooth", block: "center" });
-        cloudEl.style.boxShadow = "0 0 0 2px var(--accent)";
-        setTimeout(() => { cloudEl.style.boxShadow = ""; }, 1200);
+        scrollToFormalSection();
         return;
       }
 
       const mSelect = document.getElementById("model");
       mSelect.value = modelVal;
-      updateLens(false); // 點擊時強制套用最高利潤增距鏡
+      updateLens(false);
       updateNote();
       handleDeliveryToggle();
       save();
@@ -938,26 +993,28 @@ async function copyFallback(){
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
-  const n=new Date(),today=new Date(n.getTime()-n.getTimezoneOffset()*60000).toISOString().split("T")[0];
-  document.getElementById("pickupDate").min=today;
-  document.getElementById("returnDate").min=today;
+  const today=getTodayStr();
+  const pEl=document.getElementById("pickupDate");
+  const rEl=document.getElementById("returnDate");
+  pEl.min=today;
+  rEl.min=today;
+
   applyLang(initialLang());
   handleDeliveryToggle();
   restore();
   setupPriceRowInteractions();
 
   const urlParams=new URLSearchParams(window.location.search);
-  if(urlParams.get("step")==="formal"){
-    const sec=document.getElementById("formalSection");
-    sec.style.display="block";
-    updateStepper(2);
-    document.getElementById("toggleFormalBtn").textContent=S().toggleFormalClose;
-    setTimeout(()=>sec.scrollIntoView({behavior:"smooth"}),200);
+  let savedStage=null;
+  try{savedStage=localStorage.getItem("fir-stage");}catch(e){}
+
+  if(urlParams.get("step")==="formal" || savedStage==="formal"){
+    scrollToFormalSection();
   }
 
   document.getElementById("languageButton").onclick=toggleLang;
   document.getElementById("model").onchange=()=>{
-    updateLens(false); // 下拉切換手機時自動帶入最高利潤增距鏡
+    updateLens(false);
     updateNote();
     handleDeliveryToggle();
     save();
@@ -984,7 +1041,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     document.getElementById("toggleFormalBtn").textContent=isHidden?x.toggleFormalClose:x.toggleFormalOpen;
     if(isHidden){
       updateStepper(2);
-      sec.scrollIntoView({behavior:"smooth"});
+      sec.scrollIntoView({behavior:"smooth",block:"start"});
     }else{
       updateStepper(1);
     }
