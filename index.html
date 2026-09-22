@@ -349,7 +349,6 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   <div class="term-item"><span class="term-heading" id="term4h">損壞與聯繫</span><span id="term4">租借期間請保持聯繫；設備損毀、遺失或逾時歸還，依租賃合約負擔相關費用。</span></div>
   <div class="term-item"><span class="term-heading" id="term5h">增距鏡特別條款</span><span id="term5">租借前請確認場館規定；若因主辦禁帶無法使用，租金不退款，但可轉為 12 個月有效折抵金。</span></div>
 
-  <!-- FAQ 直通連結（已更新為 https://ssystem089.github.io/rental-form/faq.html） -->
   <div style="margin-top:16px;padding-top:14px;border-top:1px solid #ffffff12;text-align:center">
     <a href="https://ssystem089.github.io/rental-form/faq.html" target="_blank" rel="noopener noreferrer" id="faqLink" style="display:inline-block;width:100%;padding:11px;border-radius:8px;background:#202024;border:1px solid #e2b86655;color:#e2b866;text-decoration:none;font-size:12.5px;font-weight:750;box-sizing:border-box">
       📖 常見問題 Q&A（押金退款、寄送時程、照片傳輸等）➔
@@ -556,7 +555,7 @@ function applyLang(lang){
   updateNote();
   handleDeliveryToggle();
   renderSaved();
-  sync();
+  updateDaysSummary();
 }
 
 function updateModelLabels(){
@@ -702,6 +701,7 @@ function save(){
   }catch(e){}
 }
 
+/* 強化版資料還原：先確保日期、時間與器材全部完整填回 */
 function restore(){
   const d=getDraft();if(!d)return;
   const m=document.getElementById("model");
@@ -709,13 +709,17 @@ function restore(){
   updateLens(true);
   if(d.lens)document.getElementById("lens").value=d.lens;
   
-  const today=getTodayStr();
-  if(d.pickupDate && d.pickupDate>=today){
+  if(d.pickupDate){
     document.getElementById("pickupDate").value=d.pickupDate;
   }
-  if(d.pickupClock)document.getElementById("pickupClock").value=d.pickupClock;
-  if(d.returnDate && d.returnDate>=today){
+  if(d.pickupClock){
+    document.getElementById("pickupClock").value=d.pickupClock;
+  }
+  if(d.returnDate){
     document.getElementById("returnDate").value=d.returnDate;
+  }
+  if(d.pickupDate && d.pickupClock){
+    document.getElementById("pickupTime").value=`${d.pickupDate}T${d.pickupClock}`;
   }
 
   if(d.cloud)document.getElementById("cloudService").value=d.cloud;
@@ -725,10 +729,10 @@ function restore(){
   if(d.method)document.getElementById("isStore").value=d.method;
   
   handleDeliveryToggle();
-  sync();
   updateNote();
   renderSaved();
   checkLensTip();
+  updateDaysSummary();
 }
 
 function renderSaved(){
@@ -757,6 +761,22 @@ function updateStepper(step){
   });
 }
 
+function updateDaysSummary(){
+  const d=document.getElementById("pickupDate").value;
+  const r=document.getElementById("returnDate").value;
+  const daysSummary=document.getElementById("daysSummary");
+
+  if(d && r){
+    const daysCalc=Math.max(1,Math.ceil((new Date(`${r}T00:00:00`)-new Date(`${d}T00:00:00`))/86400000));
+    daysSummary.textContent=currentLang==="zh"
+      ?`📅 預估租期天數：約 ${daysCalc} 天`
+      :`📅 Estimated Rental: approx ${daysCalc} day(s)`;
+    daysSummary.style.display="block";
+  }else{
+    daysSummary.style.display="none";
+  }
+}
+
 function validateDates(){
   const today=getTodayStr();
   const pInput=document.getElementById("pickupDate");
@@ -782,18 +802,7 @@ function sync(){
   validateDates();
   const d=document.getElementById("pickupDate").value,t=document.getElementById("pickupClock").value;
   document.getElementById("pickupTime").value=d&&t?`${d}T${t}`:"";
-  const r=document.getElementById("returnDate");
-  const daysSummary=document.getElementById("daysSummary");
-
-  if(d && r.value){
-    const daysCalc=Math.max(1,Math.ceil((new Date(`${r.value}T00:00:00`)-new Date(d))/86400000));
-    daysSummary.textContent=currentLang==="zh"
-      ?`📅 預估租期天數：約 ${daysCalc} 天`
-      :`📅 Estimated Rental: approx ${daysCalc} day(s)`;
-    daysSummary.style.display="block";
-  }else{
-    daysSummary.style.display="none";
-  }
+  updateDaysSummary();
   save();
 }
 
@@ -999,11 +1008,15 @@ document.addEventListener("DOMContentLoaded",()=>{
   pEl.min=today;
   rEl.min=today;
 
+  // 1. 先還原儲存的器材與日期時間（確保資料不被空值覆蓋）
+  restore();
+
+  // 2. 套用語系
   applyLang(initialLang());
   handleDeliveryToggle();
-  restore();
   setupPriceRowInteractions();
 
+  // 3. 檢查是否自動滾動至 STEP 2
   const urlParams=new URLSearchParams(window.location.search);
   let savedStage=null;
   try{savedStage=localStorage.getItem("fir-stage");}catch(e){}
