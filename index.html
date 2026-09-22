@@ -182,16 +182,22 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   </div>
 </section>
 
-<!-- STEP 2：正式預約資料 -->
+<!-- STEP 2：正式預約資料（依優化邏輯重新排序） -->
 <div id="formalSection" style="display:none">
   <div class="section-title" style="margin:22px 4px 8px" id="formalTitle">STEP 2. 確認有檔期，填寫正式預訂資料</div>
   <section class="card">
+
+    <!-- 1. 是否於台北大巨蛋門市交還（預設首選項為 No） -->
     <div class="field">
-      <label for="name" id="nameLabel">承租人姓名（需同身分證件）</label>
-      <input id="name" autocomplete="name" placeholder="身分證真實姓名">
+      <label for="isStore" id="returnMethodLabel">是否於台北大巨蛋門市交還</label>
+      <select id="isStore">
+        <option value="delivery" selected>No（需寄送，依免證件押金 NT$30,000 計）</option>
+        <option value="store">Yes（大巨蛋門市親取親還）</option>
+      </select>
     </div>
-    <div class="field"><label for="phone" id="phoneLabel">聯絡手機</label><input id="phone" autocomplete="tel" inputmode="tel" placeholder="需同 LINE 綁定門號"></div>
-    <div class="field">
+
+    <!-- 2. 門市押附證件正本（僅在選 Yes 時展開） -->
+    <div class="field" id="idTypeField" style="display:none">
       <label for="idType" id="idLabel">門市押附證件正本</label>
       <select id="idType">
         <option value="id">身分證正本</option>
@@ -199,6 +205,20 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
         <option value="driver">駕照正本</option>
       </select>
     </div>
+
+    <!-- 3. 承租人姓名 -->
+    <div class="field">
+      <label for="name" id="nameLabel">承租人姓名（需同身分證件）</label>
+      <input id="name" autocomplete="name" placeholder="身分證真實姓名">
+    </div>
+
+    <!-- 4. 聯絡手機 -->
+    <div class="field">
+      <label for="phone" id="phoneLabel">聯絡手機</label>
+      <input id="phone" autocomplete="tel" inputmode="tel" placeholder="需同 LINE 綁定門號">
+    </div>
+
+    <!-- 5. 雲端上傳服務 -->
     <div class="field">
       <label for="cloudService" id="cloudLabel">雲端上傳服務</label>
       <select id="cloudService">
@@ -206,14 +226,8 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
         <option value="Yes">需要（+$200／次，原畫質雲端下載，保留 2 週）</option>
       </select>
     </div>
-    <div class="field">
-      <label for="isStore" id="returnMethodLabel">是否於台北大巨蛋門市交還</label>
-      <select id="isStore">
-        <option value="store">Yes（大巨蛋門市親取親還）</option>
-        <option value="delivery">No（需外縣市寄送，依免證件押金 NT$30,000 計）</option>
-      </select>
-    </div>
 
+    <!-- 6. 送出正式訂單按鈕 -->
     <div style="margin-top:14px">
       <button id="bookingButton" type="button" class="btn-submit">確認送出正式訂單</button>
     </div>
@@ -360,6 +374,7 @@ function applyLang(lang){
   updateModelLabels();
   updateLens(true);
   updateNote();
+  handleDeliveryToggle();
   renderSaved();
 }
 
@@ -384,35 +399,27 @@ function updateModelLabels(){
   document.getElementById("idType").options[0].text=currentLang==="zh"?"身分證正本":"National ID card";
   document.getElementById("idType").options[1].text=currentLang==="zh"?"健保卡正本":"National Health Insurance card";
   document.getElementById("idType").options[2].text=currentLang==="zh"?"駕照正本":"Driver's license";
-  document.getElementById("isStore").options[0].text=currentLang==="zh"?"Yes（大巨蛋門市親取親還）":"Yes (pickup and return at Taipei Dome Store)";
-  document.getElementById("isStore").options[1].text=currentLang==="zh"?"No（需寄送，依免證件押金 NT$30,000 計）":"No (delivery required; NT$30,000 no-ID deposit applies)";
+  
+  // 保持 delivery 為第 0 項首選
+  document.getElementById("isStore").options[0].text=currentLang==="zh"?"No（需寄送，依免證件押金 NT$30,000 計）":"No (delivery required; NT$30,000 no-ID deposit applies)";
+  document.getElementById("isStore").options[1].text=currentLang==="zh"?"Yes（大巨蛋門市親取親還）":"Yes (pickup and return at Taipei Dome Store)";
 }
 
 function toggleLang(){applyLang(currentLang==="zh"?"en":"zh")}
 
-/* 依需求精確綁定 G2 200mm 與 G2 Ultra 400mm 支援機種 */
 function updateLens(keep=false){
   const m=document.getElementById("model").value,l=document.getElementById("lens"),old=l.value,x=S();
   let o;
   
-  // x300 Ultra 與 x500 Pro Max 支援 G2 200mm 與 G2 Ultra 400mm
   if(m==="vivo x300 Ultra"||m==="vivo x500 Pro Max"){
     o=[["none",x.noLens],["200",x.lens200],["400",x.lens400]];
-  }
-  // x200 Ultra 與 x300 Pro 支援 G2 200mm
-  else if(m==="vivo x200 Ultra"||m==="vivo x300 Pro"){
+  }else if(m==="vivo x200 Ultra"||m==="vivo x300 Pro"){
     o=[["none",x.noLens],["200",x.lens200]];
-  }
-  // OPPO Find X9 Ultra 支援 400mm
-  else if(m==="OPPO Find X9 Ultra"){
+  }else if(m==="OPPO Find X9 Ultra"){
     o=[["none",x.noLens],["400",x.lens400]];
-  }
-  // 單租增距鏡特仕組
-  else if(m==="僅租借 G2 增距鏡頭特仕組"){
+  }else if(m==="僅租借 G2 增距鏡頭特仕組"){
     o=[["200only",x.rent200],["400only",x.rent400]];
-  }
-  // 其他機型無增距鏡
-  else{
+  }else{
     o=[["none",x.noLens]];
   }
 
@@ -430,6 +437,31 @@ function updateNote(){
     "僅租借 G2 增距鏡頭特仕組":x.noteLens
   };
   document.getElementById("deviceNote").innerHTML=map[m]||"";
+}
+
+/* 切換交還方式時：動態隱藏/顯示「押附證件正本」 */
+function handleDeliveryToggle(){
+  const val=document.getElementById("isStore").value;
+  const idField=document.getElementById("idTypeField");
+  const noteEl=document.getElementById("nameNote");
+
+  if(val==="store"){
+    // 門市親取：顯示證件選單
+    idField.style.display="block";
+    if(noteEl){
+      noteEl.textContent=currentLang==="zh"
+        ?"⚠️ 門市現場取機需核對身分證正本，請務必確認填寫身分證真實中文姓名。"
+        :"⚠️ In-store pickup requires original ID verification. Please ensure this is your full legal name.";
+    }
+  }else{
+    // 寄送免押證：隱藏證件選單
+    idField.style.display="none";
+    if(noteEl){
+      noteEl.textContent=currentLang==="zh"
+        ?"📦 選擇外縣市寄送服務：免押證件正本，依免證件押金 NT$30,000 辦理。"
+        :"📦 Delivery service selected: No original ID deposit required; NT$30,000 deposit applies.";
+    }
+  }
 }
 
 function getDraft(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"null")}catch(e){return null}}
@@ -470,6 +502,7 @@ function restore(){
     updateStepper(2);
     document.getElementById("toggleFormalBtn").textContent=S().toggleFormalClose;
   }
+  handleDeliveryToggle();
   sync();
   updateNote();
   renderSaved();
@@ -532,13 +565,19 @@ function booking(){
   const d=dates();if(!d)return;
   const n=document.getElementById("name").value.trim(),p=document.getElementById("phone").value.trim();
   if(!n||!p){alert(S().contact);return}save();
-  const c=document.getElementById("cloudService").options[document.getElementById("cloudService").selectedIndex].text,
-        i=document.getElementById("idType").options[document.getElementById("idType").selectedIndex].text,
-        m=document.getElementById("isStore").options[document.getElementById("isStore").selectedIndex].text;
+  
+  const isDelivery=document.getElementById("isStore").value==="delivery";
+  const c=document.getElementById("cloudService").options[document.getElementById("cloudService").selectedIndex].text;
+  const m=document.getElementById("isStore").options[document.getElementById("isStore").selectedIndex].text;
+  
+  // 若為寄送免押證，押證標記為免押證；若為親取則帶出證件選項
+  const i=isDelivery 
+    ? (currentLang==="zh"?"免押證件（外縣市寄送／押金制）":"No ID deposit (delivery / security deposit)") 
+    : document.getElementById("idType").options[document.getElementById("idType").selectedIndex].text;
   
   currentMessage=currentLang==="zh"
-    ?`※正式預約申請\n※租借器材：${equipment()}\n※姓名：${n}\n※電話：${p}\n※押附證件：${i}\n※雲端上傳：${c}\n※是否於台北大巨蛋門市交還：${m}\n※預約日期：${d.p.replace("T"," ")} 取 / ${d.r} 還\n※租借天數：約 ${d.d} 天`
-    :`※Formal booking request\n※Device: ${equipment()}\n※Name: ${n}\n※Phone: ${p}\n※ID provided: ${i}\n※Cloud upload: ${c}\n※Pickup/return at Taipei Dome Store: ${m}\n※Rental period: Pickup ${d.p.replace("T"," ")} / Return ${d.r}\n※Estimated rental: ${d.d} day(s)`;
+    ?`※正式預約申請\n※租借器材：${equipment()}\n※交還方式：${m}\n※姓名：${n}\n※電話：${p}\n※押附證件：${i}\n※雲端上傳：${c}\n※預約日期：${d.p.replace("T"," ")} 取 / ${d.r} 還\n※租借天數：約 ${d.d} 天`
+    :`※Formal booking request\n※Device: ${equipment()}\n※Pickup/return method: ${m}\n※Name: ${n}\n※Phone: ${p}\n※ID provided: ${i}\n※Cloud upload: ${c}\n※Rental period: Pickup ${d.p.replace("T"," ")} / Return ${d.r}\n※Estimated rental: ${d.d} day(s)`;
   
   updateStepper(3);
   send(currentMessage,document.getElementById("bookingButton"),"booking");
@@ -563,10 +602,8 @@ function applyLineProfile(displayName){
     const note = document.createElement("div");
     note.id = "nameNote";
     note.style.cssText = "font-size:11px;color:#e2b866;margin-top:5px;line-height:1.4;";
-    note.textContent = currentLang === "zh" 
-      ? "⚠️ 現場核對身分證正本取機，請務必確認填寫身分證真實中文姓名。" 
-      : "⚠️ In-store pickup requires original ID verification. Please ensure this is your full legal name.";
     nameInput.parentNode.appendChild(note);
+    handleDeliveryToggle(); // 依交還方式刷新提示文案
   }
 }
 
@@ -636,6 +673,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("pickupDate").min=today;
   document.getElementById("returnDate").min=today;
   applyLang(initialLang());
+  handleDeliveryToggle(); // 初始化交還方式邏輯
   restore();
 
   const urlParams=new URLSearchParams(window.location.search);
@@ -657,7 +695,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("name").oninput=save;
   document.getElementById("phone").oninput=save;
   document.getElementById("idType").onchange=save;
-  document.getElementById("isStore").onchange=save;
+  document.getElementById("isStore").onchange=()=>{handleDeliveryToggle();save()};
   document.getElementById("inquiryButton").onclick=inquiry;
   document.getElementById("bookingButton").onclick=booking;
   document.getElementById("backButton").onclick=closeFallback;
