@@ -734,16 +734,19 @@ handleDeliveryToggle();
   updateDaysSummary();
 }
 function updateDepositAmount() {
-  const model = document.getElementById("model").value;
+  const modelEl = document.getElementById("model");
   const depositAmount = document.getElementById("depositAmount");
 
-  if (!depositAmount) return;
+  if (!modelEl || !depositAmount) return;
+
+  const mainModel = modelEl.value.trim();
 
   // 僅租借 G2 增距鏡頭特仕組
-  if (model === "僅租借 G2 增距鏡頭特仕組") {
+  // 不論後面選哪一款手機殼／相容手機型號，押金固定 10,000
+  if (mainModel === "僅租借 G2 增距鏡頭特仕組") {
     depositAmount.textContent = "10,000";
   } else {
-    // 手機／手機＋增距鏡
+    // 其他包含手機的租借方案
     depositAmount.textContent = "30,000";
   }
 }
@@ -917,11 +920,12 @@ function booking(){
   const isStore=document.getElementById("isStore").value==="store";
   const storeName=document.getElementById("storeName").value.trim();
   const cloudVal=document.getElementById("cloudService").value;
-  const model = document.getElementById("model").value;
+  const model = document.getElementById("model").value.trim();
 
-let deliveryDeposit = model === "僅租借 G2 增距鏡頭特仕組"
-  ? "10,000"
-  : "30,000";
+const deliveryDeposit =
+  model === "僅租借 G2 增距鏡頭特仕組"
+    ? "10,000"
+    : "30,000";
 
 let methodStr = isStore
   ? "大巨蛋門市本人親取"
@@ -1063,7 +1067,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
 
   document.getElementById("languageButton").onclick=toggleLang;
-  document.getElementById("model").onchange=()=>{
+  document.getElementById("model").onchange = () => {
   updateLens(false);
   updateNote();
   updateDepositAmount();
