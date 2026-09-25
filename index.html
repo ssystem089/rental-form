@@ -716,7 +716,13 @@ function restore(){
   if(d.name)document.getElementById("name").value=d.name;
   if(d.phone)document.getElementById("phone").value=d.phone;
   if(d.storeName)document.getElementById("storeName").value=d.storeName;
-  if(d.method)document.getElementById("isStore").value=d.method;
+  if (d.method) {
+  document.getElementById("isStore").value = d.method;
+} else {
+  document.getElementById("isStore").value = "store";
+}
+
+handleDeliveryToggle();
   
   handleDeliveryToggle();
   updateNote();
