@@ -308,7 +308,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     <div class="field">
       <label for="isStore" id="returnMethodLabel">交還方式</label>
       <select id="isStore">
-        <option value="delivery">免證件押金3萬寄送</option>
+        <option value="delivery">店到店寄送（免證件・需押金）</option>
         <option value="store" selected>大巨蛋門市本人親取</option>
       </select>
     </div>
@@ -317,10 +317,13 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     <div class="field" id="storeNoteField">
       <label for="storeName" id="storeNameLabel">指定 7-11 店到店名稱 / 店號</label>
       <input id="storeName" placeholder="例如：7-11 敦巨門市 (或店號 123456)">
-      <div class="delivery-notice">
-        * 運送期不計費，提早 2～3 天寄達、用完 1～2 日內寄回；逾期未寄回將由押金內扣延遲金，請如期歸還。
-      </div>
-    </div>
+      <div class="delivery-notice" id="deliveryNotice">
+  * 運送期不計費，免證件需押金
+  <span id="depositAmount">30,000</span>
+  元寄送。押金於出貨前通知轉帳，歸還確認無損後 24 小時內退還。
+  器材會提前 2～3 天寄達，使用完畢後請於 1～2 日內寄回；
+  逾期將由押金扣除延遲費。
+</div>
 
     <!-- 5. 雲端上傳服務 -->
     <div class="field">
@@ -390,8 +393,8 @@ const zh={
   lensDesc:"含對應手機殼及配件組｜手機原生距離皆相同，加裝增距鏡專用於提升清晰度與細節！200mm ($300／日)：自然清晰，性價比高。400mm ($600／日)：旗艦級超長焦，景深層次更深、銳利度與穿網效果更強，遠距離舞台首選。",
   cloudTitle:"雲端上傳服務",cloudDesc:"拍完免傳檔，雲端隨時輕鬆載｜保留 2 週",perUse:"/ 次",
   
-  depCommon:"門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$30,000",
-  depLensText:"門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$10,000（與手機合租時以手機押金為主，不重複計算）",
+  depCommon:"門市：證件正本+押金 $3,000｜店到店：免證件，押金 NT$30,000",
+  depLensText:"門市：證件正本+押金 $3,000｜店到店：免證件，押金 NT$10,000",
   depCloudText:"門市代為原畫質雲端上傳，免押金",
   depositRuleTip:"<strong>押金貼心提醒：</strong>手機與增距鏡一同租借時，以手機押金為主（寄送 NT$30,000 / 門市 NT$3,000+證件），無須重複累計增距鏡押金。",
 
@@ -577,7 +580,7 @@ function updateModelLabels(){
   document.getElementById("cloudService").options[0].text=x.cloudNo;
   document.getElementById("cloudService").options[1].text=x.cloudYes;
   
-  document.getElementById("isStore").options[0].text=currentLang==="zh"?"免證件押金3萬寄送":"Delivery (No ID, NT$30k deposit)";
+  document.getElementById("isStore").options[0].text=currentLang==="zh"?"店到店寄送（免證件・需押金）":"Delivery (No ID, Deposit Required)";
   document.getElementById("isStore").options[1].text=currentLang==="zh"?"大巨蛋門市本人親取":"In-store pickup at Taipei Dome";
 }
 
@@ -730,6 +733,54 @@ handleDeliveryToggle();
   checkLensTip();
   updateDaysSummary();
 }
+function updateDepositAmount() {
+  const model = document.getElementById("model").value;
+  const depositAmount = document.getElementById("depositAmount");
+
+  if (!depositAmount) return;
+
+  // 僅租借 G2 增距鏡頭特仕組
+  if (model === "僅租借 G2 增距鏡頭特仕組") {
+    depositAmount.textContent = "10,000";
+  } else {
+    // 手機／手機＋增距鏡
+    depositAmount.textContent = "30,000";
+  }
+}
+
+
+// 頁面載入時先更新一次
+updateDepositAmount();
+
+
+function renderSaved() {
+  const d = getDraft();
+  const box = document.getElementById("savedSelection");
+
+  if (!d || !d.model) {
+    box.classList.remove("show");
+    return;
+  }
+
+  const x = S();
+
+  box.innerHTML = `
+    <strong>${x.savedTitle}</strong><br>
+    ${d.model}<br>
+    ${x.savedText}
+    <div class="saved-actions">
+      <button type="button" class="small-button" id="clearDraft">
+        ${x.clear}
+      </button>
+    </div>
+  `;
+
+  box.classList.add("show");
+
+  document.getElementById("clearDraft").onclick = () => {
+    // 原本後續程式
+  };
+}
 
 function renderSaved(){
   const d=getDraft(),box=document.getElementById("savedSelection");
@@ -866,20 +917,33 @@ function booking(){
   const isStore=document.getElementById("isStore").value==="store";
   const storeName=document.getElementById("storeName").value.trim();
   const cloudVal=document.getElementById("cloudService").value;
-  
-  let methodStr = isStore ? "大巨蛋門市本人親取" : "免證件押金3萬寄送";
-  if(!isStore && storeName) {
-    methodStr += ` (7-11: ${storeName})`;
-  }
+  const model = document.getElementById("model").value;
 
+let deliveryDeposit = model === "僅租借 G2 增距鏡頭特仕組"
+  ? "10,000"
+  : "30,000";
+
+let methodStr = isStore
+  ? "大巨蛋門市本人親取"
+  : `店到店寄送（免證件・押金 NT$${deliveryDeposit}）`;
+
+if(!isStore && storeName) {
+  methodStr += ` (7-11: ${storeName})`;
+}
   // 依指示更新排列順序：設備 -> 日期 -> 姓名 -> 電話 -> 交還 -> 押金
   let baseText = currentLang==="zh"
     ? `【正式預約單】\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (共 ${d.d} 天)\n姓名：${n}\n電話：${p}\n交還：${methodStr}`
     : `[Formal Booking]\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (${d.d} days)\nName: ${n}\nPhone: ${p}\nMethod: ${methodStr}`;
 
   if(isStore) {
-    baseText += currentLang==="zh" ? `\n押金：現金3,000+證件正本(三證則一押附)` : `\nDeposit: Cash $3,000 + ID`;
-  }
+  baseText += currentLang==="zh"
+    ? `\n押金：現金3,000+證件正本(三證則一押附)`
+    : `\nDeposit: Cash $3,000 + ID`;
+} else {
+  baseText += currentLang==="zh"
+    ? `\n押金：NT$${deliveryDeposit}（出貨前轉帳）`
+    : `\nDeposit: NT$${deliveryDeposit} (Bank transfer before dispatch)`;
+}
 
   if(cloudVal === "Yes") {
     baseText += currentLang==="zh" ? `\n雲端：YES` : `\nCloud: YES`;
@@ -1000,11 +1064,12 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   document.getElementById("languageButton").onclick=toggleLang;
   document.getElementById("model").onchange=()=>{
-    updateLens(false);
-    updateNote();
-    handleDeliveryToggle();
-    save();
-  };
+  updateLens(false);
+  updateNote();
+  updateDepositAmount();
+  handleDeliveryToggle();
+  save();
+};
   document.getElementById("lens").onchange=()=>{checkLensTip();save()};
   document.getElementById("pickupDate").onchange=sync;
   document.getElementById("pickupClock").onchange=sync;
