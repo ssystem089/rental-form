@@ -296,45 +296,69 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
       <label for="phone" id="phoneLabel">取件手機門號</label>
       <input id="phone" autocomplete="tel" inputmode="tel" placeholder="台灣 10 碼或外國旅客請填聯絡方式">
     </div>
+<!-- 3. 交還方式 -->
+<div class="field">
+  <label for="isStore" id="returnMethodLabel">交還方式</label>
 
-    <!-- 3. 交還方式 -->
-    <div class="field">
-      <label for="isStore" id="returnMethodLabel">交還方式</label>
-      <select id="isStore">
-        <option value="delivery">店到店寄送（免證件・需押金）</option>
-        <option value="store" selected>大巨蛋門市本人親取</option>
-      </select>
-    </div>
-
-    <!-- 4. 7-11店到店備註欄（僅在選寄送時展開） -->
-    <div class="field" id="storeNoteField">
-      <label for="storeName" id="storeNameLabel">指定 7-11 店到店名稱 / 店號</label>
-      <input id="storeName" placeholder="例如：7-11 敦巨門市 (或店號 123456)">
-   <div class="delivery-notice">
-  * 運送期不計費，免證件押金
-  <span id="depositAmount">30,000</span>
-  元寄送，押金於出貨前通知轉帳，歸還確認無損後 24 小時內退還。器材會提前 2～3 天寄達，使用完畢後請於 1～2 日內寄回；逾期將由押金扣除延遲費。
+  <select id="isStore">
+    <option value="delivery">店到店寄送（免證件・需押金）</option>
+    <option value="store" selected>大巨蛋門市本人親取</option>
+  </select>
 </div>
 
-    <!-- 5. 雲端上傳服務 -->
-    <div class="field">
-      <label for="cloudService" id="cloudLabel">雲端上傳服務</label>
-      <select id="cloudService">
-        <option value="No">不需要</option>
-        <option value="Yes">需要（+$200／次，原畫質雲端下載，保留 2 週）</option>
-      </select>
-    </div>
+<!-- 4. 7-11 店到店備註欄（僅在選寄送時展開） -->
+<div class="field" id="storeNoteField">
+  <label for="storeName" id="storeNameLabel">
+    指定 7-11 店到店名稱 / 店號
+  </label>
 
-    <!-- 6. 送出正式訂單按鈕 -->
-    <div style="margin-top:14px">
-      <button id="bookingButton" type="button" class="btn-submit">確認送出正式訂單</button>
-    </div>
-    <div class="notice-box" style="margin-top:10px" id="formalPaymentNotice">
-      送出後客服將於 LINE 聊天室依您選填內容提供報價與匯款資訊，完成匯款後即鎖定檔期並完成預約。
-    </div>
-  </section>
+  <input
+    id="storeName"
+    placeholder="例如：7-11 敦巨門市（或店號 123456）"
+  >
+
+  <div class="delivery-notice">
+    * 運送期不計費，免證件押金
+    <span id="depositAmount">30,000</span>
+    元寄送，押金於出貨前通知轉帳，歸還確認無損後 24 小時內退還。器材會提前 2～3 天寄達，使用完畢後請於 1～2 日內寄回；逾期將由押金扣除延遲費。
+  </div>
 </div>
 
+<!-- 注意：上面這個 </div> 很重要 -->
+<!-- 它是用來關閉 storeNoteField -->
+
+<!-- 5. 雲端上傳服務 -->
+<div class="field">
+  <label for="cloudService" id="cloudLabel">
+    雲端上傳服務
+  </label>
+
+  <select id="cloudService">
+    <option value="No">不需要</option>
+    <option value="Yes">
+      需要（+$200／次，原畫質雲端下載，保留 2 週）
+    </option>
+  </select>
+</div>
+
+<!-- 6. 送出正式訂單按鈕 -->
+<div style="margin-top:14px">
+  <button
+    id="bookingButton"
+    type="button"
+    class="btn-submit"
+  >
+    確認送出正式訂單
+  </button>
+</div>
+
+<div
+  class="notice-box"
+  style="margin-top:10px"
+  id="formalPaymentNotice"
+>
+  送出後客服將於 LINE 聊天室依您選填內容提供報價與匯款資訊，完成匯款後即鎖定檔期並完成預約。
+</div>
 <div class="section-title" id="termsTitle">租借方案注意事項</div>
 <section class="card terms">
   <div class="term-item"><span class="term-heading" id="term1h">彈性報價方案</span><span id="term1">標有 24hr 彈性制，如遇演唱會當日租還或出國，依實際使用時間或場次起算，需配合現場檔期安排；最終交還日以協調確認為準。</span></div>
@@ -359,6 +383,22 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
 </section>
 
 <script>
+const isStore = document.getElementById("isStore");
+
+function updateReturnMethod() {
+  const storeNoteField =
+    document.getElementById("storeNoteField");
+
+  if (!isStore || !storeNoteField) return;
+
+  const isDelivery = isStore.value === "delivery";
+
+  storeNoteField.style.display = isDelivery ? "" : "none";
+}
+
+isStore.addEventListener("change", updateReturnMethod);
+updateReturnMethod();
+  
 const LIFF_ID="2011411630-pdbfMEEs";
 const STORAGE_KEY="fir-rental-draft-v5";
 let liffReady=false,currentLang="zh",currentMessage="";
