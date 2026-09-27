@@ -34,7 +34,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,B
 .section-title{margin:20px 4px 8px;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.4px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
 
-/* 費率卡片：自適應多層架構，徹底解決折行失真 */
+/* 費率卡片：自適應多層架構 */
 .price-row{
   display:flex;flex-direction:column;gap:5px;padding:12px 10px;
   border-bottom:1px solid rgba(255,255,255,0.06);border-radius:8px;cursor:pointer;
@@ -44,43 +44,87 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,B
 .price-row:hover{background:rgba(255,255,255,0.04)}
 .price-row:active{transform:scale(0.99);background:rgba(255,255,255,0.08)}
 
-.price-row-top{
-  display:flex;justify-content:space-between;align-items:center;gap:8px;
-}
-.product-name-box{
-  display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0;
-}
-.product-name{
-  font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;
-}
+.price-row-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.product-name-box{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0}
+.product-name{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap}
 .tap-hint{
   font-size:10px;font-weight:600;color:var(--accent);border:1px solid rgba(226,184,102,0.4);
   padding:1px 6px;border-radius:4px;background:rgba(226,184,102,0.1);
   white-space:nowrap;flex-shrink:0;line-height:1.4;
 }
-.price-main{
-  font-size:15px;font-weight:800;color:var(--accent);white-space:nowrap;text-align:right;flex-shrink:0;
-}
-.price-main small{
-  font-size:11px;font-weight:500;color:var(--muted);margin-left:2px;
-}
-.product-desc{
-  color:var(--sub);font-size:11px;line-height:1.45;
-}
-.price-tier{
-  color:var(--muted);font-size:11px;line-height:1.4;margin-top:1px;
-}
-.product-deposit{
-  margin-top:2px;color:#a8976b;font-size:10px;line-height:1.4;
-}
+.price-main{font-size:15px;font-weight:800;color:var(--accent);white-space:nowrap;text-align:right;flex-shrink:0}
+.price-main small{font-size:11px;font-weight:500;color:var(--muted);margin-left:2px}
+.product-desc{color:var(--sub);font-size:11px;line-height:1.45}
+.price-tier{color:var(--muted);font-size:11px;line-height:1.4;margin-top:1px}
+.product-deposit{margin-top:2px;color:#a8976b;font-size:10px;line-height:1.4}
 
 .field{margin-bottom:14px}
 .field:last-child{margin-bottom:0}
 label{display:block;margin-bottom:6px;color:var(--muted);font-size:12px;font-weight:650}
-input,select{width:100%;min-height:45px;padding:10px 11px;border:1px solid var(--line);border-radius:8px;background:var(--card2);color:var(--text);font:inherit;font-size:14px;outline:0;transition:box-shadow 0.25s ease, border-color 0.25s ease}
-input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-glow)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+select,input[type="text"]{width:100%;min-height:45px;padding:10px 11px;border:1px solid var(--line);border-radius:8px;background:var(--card2);color:var(--text);font:inherit;font-size:14px;outline:0;transition:box-shadow 0.25s ease, border-color 0.25s ease}
+select:focus,input[type="text"]:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-glow)}
 .device-note{margin-top:8px;padding:10px 11px;border-left:2px solid var(--accent);border-radius:0 8px 8px 0;background:#1d1d21;color:var(--muted);font-size:12px;line-height:1.6}
+
+/* 整合式雙擊區間月曆 */
+.calendar-box{
+  background:var(--card2);border:1px solid var(--line);border-radius:10px;
+  padding:12px;margin-bottom:14px;
+}
+.cal-nav{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;
+}
+.cal-title{font-size:14px;font-weight:750;color:var(--text)}
+.cal-btn{
+  background:#2b2b32;border:1px solid var(--line);color:var(--text);border-radius:6px;
+  width:32px;height:32px;min-height:32px;padding:0;display:flex;align-items:center;
+  justify-content:center;cursor:pointer;font-size:13px;
+}
+.cal-weekdays{
+  display:grid;grid-template-columns:repeat(7,1fr);text-align:center;
+  font-size:11px;color:var(--muted);font-weight:600;margin-bottom:6px;
+}
+.cal-grid{
+  display:grid;grid-template-columns:repeat(7,1fr);gap:2px;row-gap:4px;
+}
+.cal-cell{
+  height:38px;display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:600;border-radius:6px;cursor:pointer;
+  color:var(--text);position:relative;user-select:none;transition:background 0.15s;
+}
+.cal-cell:hover:not(.disabled){background:rgba(226,184,102,0.2)}
+.cal-cell.disabled{color:#3f3f46;cursor:not-allowed;opacity:0.35}
+.cal-cell.today::after{
+  content:"";position:absolute;bottom:3px;width:4px;height:4px;
+  border-radius:50%;background:var(--accent);
+}
+.cal-cell.range-start{
+  background:var(--accent)!important;color:#111!important;font-weight:800;border-radius:6px 0 0 6px;
+}
+.cal-cell.range-end{
+  background:var(--accent)!important;color:#111!important;font-weight:800;border-radius:0 6px 6px 0;
+}
+.cal-cell.range-start.range-end{border-radius:6px!important}
+.cal-cell.range-mid{
+  background:rgba(226,184,102,0.22)!important;color:var(--accent);border-radius:0;
+}
+.cal-cell.range-start.today::after,.cal-cell.range-end.today::after{background:#111}
+
+/* 時間快捷膠囊 */
+.time-pill-section{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08)}
+.time-pill-label{font-size:12px;color:var(--muted);font-weight:650;margin-bottom:8px}
+.time-pills{display:flex;flex-wrap:wrap;gap:6px}
+.time-pill{
+  width:auto;min-height:unset;padding:6px 11px;border-radius:6px;font-size:12px;
+  font-weight:600;background:#17171a;border:1px solid var(--line);color:var(--text);
+  cursor:pointer;transition:all 0.15s;
+}
+.time-pill.active{background:var(--accent);color:#111;border-color:var(--accent);font-weight:750}
+
+.cal-summary{
+  margin-top:12px;padding:9px 12px;background:rgba(226,184,102,0.1);
+  border:1px solid rgba(226,184,102,0.25);border-radius:8px;color:var(--accent);
+  font-size:12px;font-weight:600;display:flex;justify-content:space-between;align-items:center;
+}
 
 /* 狀態盒與提示 */
 .saved-box{display:none;margin:0 0 14px;padding:11px;border:1px solid #31503b;border-radius:8px;background:#142319;color:var(--ok);font-size:12px;line-height:1.6}
@@ -119,7 +163,6 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .fallback p{color:var(--muted);font-size:13px;line-height:1.55}
 textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--text);border:1px solid #45454d;border-radius:8px;resize:none}
 .sheet-buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
-@media(max-width:360px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -304,31 +347,48 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     <div id="lensDetailTip" class="lens-tip-box"></div>
   </div>
 
-  <div class="grid">
-    <div class="field"><label for="pickupDate" id="pickupDateLabel">預計取機日期</label><input type="date" id="pickupDate"></div>
-    <div class="field">
-      <label for="pickupClock" id="pickupTimeLabel">預計取機時間</label>
-      <select id="pickupClock">
-        <option value="" id="selectTime">請選擇時間</option>
-        <option value="12:00">12:00</option><option value="12:30">12:30</option>
-        <option value="13:00">13:00</option><option value="13:30">13:30</option>
-        <option value="14:00">14:00</option><option value="14:30">14:30</option>
-        <option value="15:00">15:00</option><option value="15:30">15:30</option>
-        <option value="16:00">16:00</option><option value="16:30">16:30</option>
-        <option value="17:00">17:00</option><option value="17:30">17:30</option>
-        <option value="18:00">18:00</option><option value="18:30">18:30</option>
-        <option value="19:00">19:00</option><option value="19:30">19:30</option>
-        <option value="20:00">20:00</option>
-      </select>
-      <input type="hidden" id="pickupTime">
+  <!-- 整合式區間月曆與時間快捷膠囊 -->
+  <div class="field">
+    <label id="calendarTitle">預約檔期與取機時間（點選起訖日）</label>
+    <div class="calendar-box">
+      <div class="cal-nav">
+        <button type="button" class="cal-btn" id="calPrevBtn">◀</button>
+        <span class="cal-title" id="calMonthTitle">2026 年 10 月</span>
+        <button type="button" class="cal-btn" id="calNextBtn">▶</button>
+      </div>
+      <div class="cal-weekdays">
+        <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+      </div>
+      <div class="cal-grid" id="calDaysGrid"></div>
+
+      <!-- 取機時間膠囊選單 -->
+      <div class="time-pill-section">
+        <div class="time-pill-label" id="timePillLabel">🕒 預計取機時間（營業時間 12:00–20:00）：</div>
+        <div class="time-pills" id="timePillContainer">
+          <button type="button" class="time-pill active" data-time="12:00">12:00</button>
+          <button type="button" class="time-pill" data-time="13:00">13:00</button>
+          <button type="button" class="time-pill" data-time="14:00">14:00</button>
+          <button type="button" class="time-pill" data-time="15:00">15:00</button>
+          <button type="button" class="time-pill" data-time="16:00">16:00</button>
+          <button type="button" class="time-pill" data-time="17:00">17:00</button>
+          <button type="button" class="time-pill" data-time="18:00">18:00</button>
+          <button type="button" class="time-pill" data-time="19:00">19:00</button>
+          <button type="button" class="time-pill" data-time="20:00">20:00</button>
+        </div>
+      </div>
+
+      <!-- 檔期即時統計 -->
+      <div class="cal-summary" id="calSummaryText">
+        請點選月曆選擇取機日期與歸還日期
+      </div>
     </div>
   </div>
 
-  <div class="field">
-    <label for="returnDate" id="returnDateLabel">預計歸還日期</label>
-    <input type="date" id="returnDate">
-    <div id="daysSummary" style="display:none;margin-top:6px;font-size:12px;color:var(--accent);font-weight:600"></div>
-  </div>
+  <!-- 隱藏原生欄位，完全相容底層存取 -->
+  <input type="hidden" id="pickupDate">
+  <input type="hidden" id="pickupClock" value="12:00">
+  <input type="hidden" id="pickupTime">
+  <input type="hidden" id="returnDate">
 
   <button id="inquiryButton" type="button" class="secondary">送出詢問設備檔期</button>
   <div class="notice-box" id="inquiryNotice">
@@ -348,12 +408,12 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
 
     <div class="field">
       <label for="name" id="nameLabel">承租人姓名 (需同取件人)</label>
-      <input id="name" autocomplete="name" placeholder="證件姓名">
+      <input type="text" id="name" autocomplete="name" placeholder="證件姓名">
     </div>
 
     <div class="field">
       <label for="phone" id="phoneLabel">取件手機門號</label>
-      <input id="phone" autocomplete="tel" inputmode="tel" placeholder="台灣 10 碼或外國旅客請填聯絡方式">
+      <input type="text" id="phone" autocomplete="tel" inputmode="tel" placeholder="台灣 10 碼或外國旅客請填聯絡方式">
     </div>
 
     <div class="field">
@@ -366,7 +426,7 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
 
     <div class="field" id="storeNoteField" style="display:none">
       <label for="storeName" id="storeNameLabel">指定 7-11 店到店名稱 / 店號</label>
-      <input id="storeName" placeholder="例如：敦巨門市(或店號 123456）">
+      <input type="text" id="storeName" placeholder="例如：敦巨門市(或店號 123456）">
       <div class="delivery-notice">
         * 運送期不計費，免證件押金 <span id="depositAmount">30,000</span> 元寄送，押金於出貨前通知轉帳，歸還確認無損後 24 小時內退還。器材會提前 2～3 天寄達，使用完畢後請於 1～2 日內寄回；逾期將由押金扣除延遲費。
       </div>
@@ -429,6 +489,12 @@ const LIFF_ID="2011411630-pdbfMEEs";
 const STORAGE_KEY="fir-rental-draft-v5";
 let liffReady=false,currentLang="zh",currentMessage="";
 
+// 日曆核心狀態
+let calCurrentMonth = new Date();
+let calStartDate = "";
+let calEndDate = "";
+let calPickupTime = "12:00";
+
 function getTodayStr(){
   const n=new Date();
   return new Date(n.getTime()-n.getTimezoneOffset()*60000).toISOString().split("T")[0];
@@ -439,6 +505,8 @@ const zh={
   priceTitle:"租借費率｜24H 彈性制（點選器材快速帶入）",days:"/ 1–2日",
   tapHint:"點此選租 ➔",tapHintCloud:"加選 ➔",
   step1Text:"查檔期",step2Text:"正式預約",step3Text:"報價匯款",step4Text:"完成預訂",
+  calendarTitle:"預約檔期與取機時間（點選起訖日）",
+  timePillLabel:"🕒 預計取機時間（營業時間 12:00–20:00）：",
   x300uDesc:"極致長焦收音旗艦 藍圖原色｜支援 200mm／400mm 增距鏡",x300uPrice:"$1,100（3–5日）｜$1,000（6日以上）",
   x500pmDesc:"長焦電影級專業｜可搭配 200mm／400mm 增距鏡",x500pmPrice:"$1,000（3–5日）｜$900（6日以上）",
   x200uDesc:"大光圈與細節攝影兼具｜支援 200mm 增距鏡",x200uPrice:"$900（3–5日）｜$800（6日以上）",
@@ -456,7 +524,7 @@ const zh={
   depositRuleTip:"<strong>押金貼心提醒：</strong>手機與增距鏡一同租借時，以手機押金為主（寄送 NT$30,000 / 門市 NT$3,000+證件），無須重複累計增距鏡押金。",
 
   formTitle:"STEP 1. 選擇設備與預約日期（免填個資）",
-  modelLabel:"租借主機型號",lensLabel:"增距鏡配件選配",pickupDateLabel:"預計取機日期",pickupTimeLabel:"預計取機時間",selectTime:"請選擇時間",returnDateLabel:"預計歸還日期",
+  modelLabel:"租借主機型號",lensLabel:"增距鏡配件選配",
   inquiryButton:"送出詢問設備檔期",
   inquiryNotice:"<strong>安心詢問：</strong>先查詢是否有設備空檔即可，系統會自動暫存選擇。客服在 LINE 回覆確認有檔期後，即可接著完成正式預訂。",
   toggleFormalOpen:"展開直接填寫預約單（含取件方式） ▼",
@@ -493,7 +561,7 @@ const zh={
   noteDji:"<strong>簡易介紹：</strong>適合穩定錄影、移動鏡頭與手持 Vlog。",
   noteLens:"<strong>簡易介紹：</strong>僅單租增距鏡特仕組（含對應手機殼與配件）。",
   savedTitle:"已保留上次選擇",savedText:"型號與預約日期已為您帶入；確認可租後，補填姓名與電話即可送出正式預約。",clear:"清除已保存資料",
-  dates:"請先選擇預計取機日期、取機時間與歸還日期。",pastDate:"取機日期不可選擇過去日期！",badDate:"歸還日期可與取機日期相同，或晚於歸還日期。",contact:"正式預約請填寫承租人真實姓名。",badPhone:"請填寫取件手機門號或聯絡方式。",
+  dates:"請點選月曆選擇預計取機與歸還日期。",pastDate:"取機日期不可選擇過去日期！",badDate:"歸還日期不可早於取機日期。",contact:"正式預約請填寫承租人真實姓名。",badPhone:"請填寫取件手機門號或聯絡方式。",
   wait:"LINE 尚未初始化完成，請稍候幾秒後再試。",init:"LINE 連線初始化失敗，請從官方帳號一對一聊天室重新開啟。",sending:"送出中…",sent:"已送出",fallbackTitle:"訊息未能自動送出",fallbackGuide:"預約內容已保留，請複製後回到 LINE 聊天室貼上並送出。",back:"返回表單",copy:"複製內容",copied:"已複製，請回到 LINE 貼上並傳送。"
 };
 
@@ -502,6 +570,8 @@ const en={
   priceTitle:"RENTAL RATES｜24H PLAN (Click item to auto-select)",days:"/ 1–2 days",
   tapHint:"Select ➔",tapHintCloud:"Add ➔",
   step1Text:"Check Availability",step2Text:"Formal Booking",step3Text:"Quote & Payment",step4Text:"Confirmed",
+  calendarTitle:"Rental Dates & Pickup Time (Tap start & end dates)",
+  timePillLabel:"🕒 Pickup Time (Business hours 12:00–20:00):",
   x300uDesc:"Ultimate telephoto & audio flagship, Blueprint｜200mm / 400mm extender compatible",x300uPrice:"$1,100 (3–5 days) ｜ $1,000 (6+ days)",
   x500pmDesc:"Cinema-grade telephoto professional ｜ 200mm / 400mm extender compatible",x500pmPrice:"$1,000 (3–5 days) ｜ $900 (6+ days)",
   x200uDesc:"Large aperture & fine details ｜ 200mm extender compatible",x200uPrice:"$900 (3–5 days) ｜ $800 (6+ days)",
@@ -519,7 +589,7 @@ const en={
   depositRuleTip:"<strong>Deposit Notice:</strong> When renting a phone and an extender together, the phone deposit policy applies (Delivery: NT$30,000 / Store: NT$3,000 + ID). Extender deposit is not stacked.",
 
   formTitle:"STEP 1. Select Device & Dates (No Personal Info Required)",
-  modelLabel:"Rental device",lensLabel:"Telephoto extender option",pickupDateLabel:"Pickup date",pickupTimeLabel:"Pickup time",selectTime:"Select time",returnDateLabel:"Return date",
+  modelLabel:"Rental device",lensLabel:"Telephoto extender option",
   inquiryButton:"Check Availability",
   inquiryNotice:"<strong>No Commitment:</strong> Check device availability first. Once confirmed via LINE chat, proceed to step 2 to complete formal booking.",
   toggleFormalOpen:"Direct Booking Details (Include Pickup & Cloud) ▼",
@@ -570,6 +640,7 @@ function applyLang(lang){
   const ids={
     subtitle:"subtitle",store:"store",priceTitle:"priceTitle",
     step1Text:"step1Text",step2Text:"step2Text",step3Text:"step3Text",step4Text:"step4Text",
+    calendarTitle:"calendarTitle",timePillLabel:"timePillLabel",
     x300uDesc:"x300uDesc",x300uPrice:"x300uPrice",x500pmDesc:"x500pmDesc",x500pmPrice:"x500pmPrice",
     x200uDesc:"x200uDesc",x200uPrice:"x200uPrice",x300pDesc:"x300pDesc",x300pPrice:"x300pPrice",
     oppoDesc:"oppoDesc",oppoPrice:"oppoPrice",iphoneDesc:"iphoneDesc",iphonePrice:"iphonePrice",
@@ -581,7 +652,6 @@ function applyLang(lang){
     depositRuleTip:"depositRuleTip",faqLink:"faqLinkText",
 
     formTitle:"formTitle",modelLabel:"modelLabel",lensLabel:"lensLabel",
-    pickupDateLabel:"pickupDateLabel",pickupTimeLabel:"pickupTimeLabel",selectTime:"selectTime",returnDateLabel:"returnDateLabel",
     inquiryButton:"inquiryButton",inquiryNotice:"inquiryNotice",
     formalTitle:"formalTitle",cloudLabel:"cloudLabel",nameLabel:"nameLabel",phoneLabel:"phoneLabel",
     returnMethodLabel:"returnMethodLabel",bookingButton:"bookingButton",
@@ -614,7 +684,7 @@ function applyLang(lang){
   updateNote();
   handleDeliveryToggle();
   renderSaved();
-  updateDaysSummary();
+  renderCalendar();
   checkLensTip();
 }
 
@@ -718,6 +788,133 @@ function handleDeliveryToggle(){
   }
 }
 
+// -------------------------------------------------------------
+// 整合式日曆繪製與雙擊邏輯 (Range Calendar Engine)
+// -------------------------------------------------------------
+function renderCalendar(){
+  const grid = document.getElementById("calDaysGrid");
+  const monthTitle = document.getElementById("calMonthTitle");
+  if (!grid || !monthTitle) return;
+
+  const y = calCurrentMonth.getFullYear();
+  const m = calCurrentMonth.getMonth(); // 0-based
+  monthTitle.textContent = currentLang === "zh" ? `${y} 年 ${m + 1} 月` : `${calCurrentMonth.toLocaleString('en', { month: 'long' })} ${y}`;
+
+  grid.innerHTML = "";
+  const firstDay = new Date(y, m, 1).getDay();
+  const totalDays = new Date(y, m + 1, 0).getDate();
+  const todayStr = getTodayStr();
+
+  // 填補月初空白
+  for (let i = 0; i < firstDay; i++) {
+    const blank = document.createElement("div");
+    blank.className = "cal-cell disabled";
+    grid.appendChild(blank);
+  }
+
+  // 填入本月日期
+  for (let d = 1; d <= totalDays; d++) {
+    const cell = document.createElement("div");
+    cell.className = "cal-cell";
+    const mm = String(m + 1).padStart(2, '0');
+    const dd = String(d).padStart(2, '0');
+    const dateStr = `${y}-${mm}-${dd}`;
+
+    cell.textContent = d;
+
+    if (dateStr < todayStr) {
+      cell.classList.add("disabled");
+    } else {
+      if (dateStr === todayStr) cell.classList.add("today");
+
+      // 判斷選取狀態
+      if (calStartDate && dateStr === calStartDate) {
+        cell.classList.add("range-start");
+      }
+      if (calEndDate && dateStr === calEndDate) {
+        cell.classList.add("range-end");
+      }
+      if (calStartDate && calEndDate && dateStr > calStartDate && dateStr < calEndDate) {
+        cell.classList.add("range-mid");
+      }
+
+      cell.onclick = () => onDateCellClick(dateStr);
+    }
+    grid.appendChild(cell);
+  }
+
+  updateCalendarSummary();
+}
+
+function onDateCellClick(dateStr){
+  if (!calStartDate || (calStartDate && calEndDate)) {
+    // 第一次點選：設定起始日
+    calStartDate = dateStr;
+    calEndDate = "";
+  } else if (calStartDate && !calEndDate) {
+    // 第二次點選：設定結束日
+    if (dateStr < calStartDate) {
+      calStartDate = dateStr;
+      calEndDate = "";
+    } else {
+      calEndDate = dateStr;
+    }
+  }
+
+  syncCalendarToHiddenInputs();
+  renderCalendar();
+  save();
+}
+
+function syncCalendarToHiddenInputs(){
+  const pDateInput = document.getElementById("pickupDate");
+  const rDateInput = document.getElementById("returnDate");
+  const pClockInput = document.getElementById("pickupClock");
+  const pTimeInput = document.getElementById("pickupTime");
+
+  pDateInput.value = calStartDate || "";
+  rDateInput.value = calEndDate || calStartDate || "";
+  pClockInput.value = calPickupTime;
+  pTimeInput.value = (calStartDate && calPickupTime) ? `${calStartDate}T${calPickupTime}` : "";
+}
+
+function updateCalendarSummary(){
+  const sumEl = document.getElementById("calSummaryText");
+  if (!sumEl) return;
+
+  if (calStartDate && calEndDate) {
+    const d1 = new Date(calStartDate);
+    const d2 = new Date(calEndDate);
+    const diffDays = Math.max(1, Math.round((d2 - d1) / (1000 * 3600 * 24)) + 1);
+    sumEl.innerHTML = currentLang === "zh"
+      ? `📅 已選：${calStartDate.slice(5)} 至 ${calEndDate.slice(5)}（約 ${diffDays} 天）｜${calPickupTime} 取`
+      : `📅 ${calStartDate.slice(5)} to ${calEndDate.slice(5)} (approx ${diffDays} days) ｜ Pickup ${calPickupTime}`;
+  } else if (calStartDate) {
+    sumEl.innerHTML = currentLang === "zh"
+      ? `👉 已選取機：${calStartDate.slice(5)}（${calPickupTime}），請點選歸還日期`
+      : `👉 Pickup: ${calStartDate.slice(5)} (${calPickupTime}), tap return date`;
+  } else {
+    sumEl.textContent = currentLang === "zh"
+      ? "請點選月曆選擇取機日期與歸還日期"
+      : "Please select pickup and return dates";
+  }
+}
+
+// 時間快捷膠囊綁定
+function setupTimePills(){
+  const pills = document.querySelectorAll(".time-pill");
+  pills.forEach(pill => {
+    pill.addEventListener("click", () => {
+      pills.forEach(p => p.classList.remove("active"));
+      pill.classList.add("active");
+      calPickupTime = pill.getAttribute("data-time") || "12:00";
+      syncCalendarToHiddenInputs();
+      updateCalendarSummary();
+      save();
+    });
+  });
+}
+
 function getDraft(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"null")}catch(e){return null}}
 
 function save(){
@@ -725,9 +922,9 @@ function save(){
     localStorage.setItem(STORAGE_KEY,JSON.stringify({
       model:document.getElementById("model").value,
       lens:document.getElementById("lens").value,
-      pickupDate:document.getElementById("pickupDate").value,
-      pickupClock:document.getElementById("pickupClock").value,
-      returnDate:document.getElementById("returnDate").value,
+      pickupDate:calStartDate,
+      pickupClock:calPickupTime,
+      returnDate:calEndDate,
       cloud:document.getElementById("cloudService").value,
       name:document.getElementById("name").value,
       phone:document.getElementById("phone").value,
@@ -748,17 +945,17 @@ function restore(){
   
   const today=getTodayStr();
   if(d.pickupDate && d.pickupDate>=today){
-    document.getElementById("pickupDate").value=d.pickupDate;
+    calStartDate = d.pickupDate;
+    calEndDate = d.returnDate || d.pickupDate;
   }
   if(d.pickupClock){
-    document.getElementById("pickupClock").value=d.pickupClock;
+    calPickupTime = d.pickupClock;
+    document.querySelectorAll(".time-pill").forEach(p => {
+      p.classList.toggle("active", p.getAttribute("data-time") === calPickupTime);
+    });
   }
-  if(d.returnDate && d.returnDate>=today){
-    document.getElementById("returnDate").value=d.returnDate;
-  }
-  if(d.pickupDate && d.pickupClock){
-    document.getElementById("pickupTime").value=`${d.pickupDate}T${d.pickupClock}`;
-  }
+
+  syncCalendarToHiddenInputs();
 
   if(d.cloud)document.getElementById("cloudService").value=d.cloud;
   if(d.name)document.getElementById("name").value=d.name;
@@ -773,8 +970,8 @@ function restore(){
   handleDeliveryToggle();
   updateNote();
   renderSaved();
+  renderCalendar();
   checkLensTip();
-  updateDaysSummary();
 }
 
 function updateDepositAmount() {
@@ -821,50 +1018,6 @@ function updateStepper(step){
   });
 }
 
-function updateDaysSummary(){
-  const d=document.getElementById("pickupDate").value;
-  const r=document.getElementById("returnDate").value;
-  const daysSummary=document.getElementById("daysSummary");
-
-  if(d && r){
-    const daysCalc=Math.max(1,Math.ceil((new Date(`${r}T00:00:00`)-new Date(`${d}T00:00:00`))/86400000));
-    daysSummary.textContent=currentLang==="zh"
-      ?`預估租期天數：約 ${daysCalc} 天`
-      :`Estimated Rental: approx ${daysCalc} day(s)`;
-    daysSummary.style.display="block";
-  }else{
-    daysSummary.style.display="none";
-  }
-}
-
-function validateDates(){
-  const today=getTodayStr();
-  const pInput=document.getElementById("pickupDate");
-  const rInput=document.getElementById("returnDate");
-
-  if(pInput.value){
-    if(pInput.value<today){
-      alert(currentLang==="zh"?"取機日期不可選擇過去的日期！已自動為您調整為今日。":"Pickup date cannot be in the past. Reset to today.");
-      pInput.value=today;
-    }
-    rInput.min=pInput.value;
-    if(!rInput.value || rInput.value<pInput.value){
-      rInput.value=pInput.value;
-    }
-  }
-  if(rInput.value && rInput.value<today){
-    rInput.value=pInput.value||today;
-  }
-}
-
-function sync(){
-  validateDates();
-  const d=document.getElementById("pickupDate").value,t=document.getElementById("pickupClock").value;
-  document.getElementById("pickupTime").value=d&&t?`${d}T${t}`:"";
-  updateDaysSummary();
-  save();
-}
-
 function equipment(){
   const m=document.getElementById("model").value,l=document.getElementById("lens");
   let cleanLens = "";
@@ -879,14 +1032,20 @@ function equipment(){
 }
 
 function dates(){
-  validateDates();
-  const p=document.getElementById("pickupTime").value,r=document.getElementById("returnDate").value;
+  syncCalendarToHiddenInputs();
+  const p=document.getElementById("pickupTime").value;
+  const r=document.getElementById("returnDate").value;
   const today=getTodayStr();
 
-  if(!p||!r){alert(S().dates);return null}
-  if(p.slice(0,10)<today){alert(S().pastDate);return null}
-  if(r<p.slice(0,10)){alert(S().badDate);return null}
-  return{p,r,d:Math.max(1,Math.ceil((new Date(`${r}T00:00:00`)-new Date(p))/86400000))};
+  if(!calStartDate || !calEndDate){alert(S().dates);return null}
+  if(calStartDate < today){alert(S().pastDate);return null}
+  if(calEndDate < calStartDate){alert(S().badDate);return null}
+
+  const d1 = new Date(calStartDate);
+  const d2 = new Date(calEndDate);
+  const totalDays = Math.max(1, Math.round((d2 - d1) / (1000 * 3600 * 24)) + 1);
+
+  return { p, r, d: totalDays };
 }
 
 function scrollToFormalSection(){
@@ -980,8 +1139,8 @@ function setupPriceRowInteractions(){
       handleDeliveryToggle();
       save();
 
-      const target = document.getElementById("pickupDate");
-      target.scrollIntoView({ behavior: "smooth", block: "center" });
+      const target = document.getElementById("calendarTitle");
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
 
       mSelect.style.boxShadow = "0 0 0 2px var(--accent)";
       setTimeout(() => { mSelect.style.boxShadow = ""; }, 1200);
@@ -1041,11 +1200,16 @@ async function copyFallback(){
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
-  const today=getTodayStr();
-  const pEl=document.getElementById("pickupDate");
-  const rEl=document.getElementById("returnDate");
-  pEl.min=today;
-  rEl.min=today;
+  setupTimePills();
+
+  document.getElementById("calPrevBtn").onclick = () => {
+    calCurrentMonth.setMonth(calCurrentMonth.getMonth() - 1);
+    renderCalendar();
+  };
+  document.getElementById("calNextBtn").onclick = () => {
+    calCurrentMonth.setMonth(calCurrentMonth.getMonth() + 1);
+    renderCalendar();
+  };
 
   restore();
   applyLang(initialLang());
@@ -1069,9 +1233,6 @@ document.addEventListener("DOMContentLoaded",()=>{
     save();
   };
   document.getElementById("lens").onchange=()=>{checkLensTip();save()};
-  document.getElementById("pickupDate").onchange=sync;
-  document.getElementById("pickupClock").onchange=sync;
-  document.getElementById("returnDate").onchange=sync;
   document.getElementById("cloudService").onchange=save;
   document.getElementById("name").oninput=save;
   document.getElementById("phone").oninput=save;
