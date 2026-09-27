@@ -12,11 +12,11 @@
   --text:#f4f4f5;--muted:#a1a1aa;--sub:#71717a;--danger:#fca5a5;
   --ok:#b9e8ca;--accent:#e2b866;--accent-glow:rgba(226,184,102,0.18);
 }
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+*{-webkit-text-size-adjust:100%;text-size-adjust:100%;box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
 .wrap{width:min(100%,500px);margin:auto;padding:14px 14px 34px}
 .topbar{display:flex;justify-content:flex-end;min-height:38px}
-.lang-toggle{width:auto;min-height:34px;padding:6px 12px;border:1px solid #595961;border-radius:8px;background:#202024;color:#fff;font:inherit;font-size:12px;font-weight:750;cursor:pointer;transition:all 0.2s}
+.lang-toggle{width:auto;min-height:34px;padding:6px 12px;border:1px solid #595961;border-radius:8px;background:#202024;color:#fff;font:inherit;font-size:12px;font-weight:750;cursor:pointer}
 .lang-toggle:active{transform:scale(0.96)}
 .header{padding:7px 4px 16px;border-bottom:1px solid var(--line);margin-bottom:16px}
 .brand{font-size:22px;font-weight:800;letter-spacing:0.5px}
@@ -32,23 +32,47 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,B
 .step-line{flex:0.4;height:1px;background:var(--line);margin-top:-14px}
 
 .section-title{margin:20px 4px 8px;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.4px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
 
-/* 費率列互動特效 */
+/* 費率卡片：自適應多層架構，徹底解決折行失真 */
 .price-row{
-  display:flex;justify-content:space-between;gap:10px;padding:12px 8px;
-  border-bottom:1px solid #ffffff0f;border-radius:8px;cursor:pointer;
+  display:flex;flex-direction:column;gap:5px;padding:12px 10px;
+  border-bottom:1px solid rgba(255,255,255,0.06);border-radius:8px;cursor:pointer;
   transition:background 0.2s, transform 0.15s;
 }
-.price-row:last-child{border:0}
-.price-row:hover{background:#ffffff0a}
-.price-row:active{transform:scale(0.99);background:#ffffff14}
-.product-name{font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px}
-.tap-hint{font-size:10px;font-weight:normal;color:var(--accent);border:1px solid #e2b86644;padding:1px 6px;border-radius:4px;background:#e2b86611}
-.product-desc{margin-top:3px;color:var(--sub);font-size:11px;line-height:1.45}
-.product-deposit{margin-top:3px;color:#a8976b;font-size:10px;line-height:1.4}
-.price{min-width:140px;text-align:right;font-size:13px;font-weight:700;line-height:1.5}
-.price small{color:var(--muted);font-size:10px;font-weight:500}
+.price-row:last-child{border-bottom:0}
+.price-row:hover{background:rgba(255,255,255,0.04)}
+.price-row:active{transform:scale(0.99);background:rgba(255,255,255,0.08)}
+
+.price-row-top{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+}
+.product-name-box{
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0;
+}
+.product-name{
+  font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;
+}
+.tap-hint{
+  font-size:10px;font-weight:600;color:var(--accent);border:1px solid rgba(226,184,102,0.4);
+  padding:1px 6px;border-radius:4px;background:rgba(226,184,102,0.1);
+  white-space:nowrap;flex-shrink:0;line-height:1.4;
+}
+.price-main{
+  font-size:15px;font-weight:800;color:var(--accent);white-space:nowrap;text-align:right;flex-shrink:0;
+}
+.price-main small{
+  font-size:11px;font-weight:500;color:var(--muted);margin-left:2px;
+}
+.product-desc{
+  color:var(--sub);font-size:11px;line-height:1.45;
+}
+.price-tier{
+  color:var(--muted);font-size:11px;line-height:1.4;margin-top:1px;
+}
+.product-deposit{
+  margin-top:2px;color:#a8976b;font-size:10px;line-height:1.4;
+}
 
 .field{margin-bottom:14px}
 .field:last-child{margin-bottom:0}
@@ -68,7 +92,7 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--a
 .lens-tip-box{display:none;margin-top:7px;padding:8px 10px;background:#1a1914;border:1px solid #e2b86644;border-radius:6px;color:var(--accent);font-size:11px;line-height:1.5}
 .delivery-notice{font-size:11.5px;color:var(--accent);margin-top:5px;line-height:1.5;background:#1a1914;padding:8px;border-radius:6px;border:1px solid #e2b86633}
 
-/* 一步到位直接預訂切換區塊 (New UX) */
+/* 一步到位直接預訂區塊 */
 .switch-cta-box{margin-top:14px;padding:12px;border-radius:10px;background:linear-gradient(135deg, rgba(226,184,102,0.08) 0%, rgba(23,23,26,0.5) 100%);border:1px solid rgba(226,184,102,0.3);text-align:center}
 .switch-cta-desc{font-size:11.5px;color:var(--muted);margin-bottom:8px;line-height:1.4}
 .link-btn{width:100%;min-height:40px;background:#202024;border:1px solid var(--accent);color:var(--accent);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s}
@@ -95,7 +119,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .fallback p{color:var(--muted);font-size:13px;line-height:1.55}
 textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--text);border:1px solid #45454d;border-radius:8px;resize:none}
 .sheet-buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
-@media(max-width:360px){.grid{grid-template-columns:1fr}.price{min-width:120px}}
+@media(max-width:360px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -134,85 +158,118 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
 <section class="card">
   <!-- vivo x300 Ultra -->
   <div class="price-row" data-model="vivo x300 Ultra">
-    <div>
-      <div class="product-name">vivo x300 Ultra <span class="tap-hint">點此選租 ➔</span></div>
-      <div class="product-desc" id="x300uDesc">極致長焦收音旗艦 藍圖原色｜支援 200mm／400mm 增距鏡</div>
+    <div class="price-row-top">
+      <div class="product-name-box">
+        <span class="product-name">vivo x300 Ultra</span>
+        <span class="tap-hint">點此選租 ➔</span>
+      </div>
+      <div class="price-main">$1,200<small id="d12a">/ 1–2日</small></div>
     </div>
-    <div class="price">$1,200 <small id="d12a">/ 1–2日</small><br><small id="x300uPrice">$1,100（3–5日）｜$1,000（6日以上）</small></div>
+    <div class="product-desc" id="x300uDesc">極致長焦收音旗艦 藍圖原色｜支援 200mm／400mm 增距鏡</div>
+    <div class="price-tier" id="x300uPrice">$1,100（3–5日）｜$1,000（6日以上）</div>
   </div>
 
   <!-- vivo x500 Pro Max -->
   <div class="price-row" data-model="vivo x500 Pro Max">
-    <div>
-      <div class="product-name">vivo x500 Pro Max <span class="tap-hint">點此選租 ➔</span></div>
-      <div class="product-desc" id="x500pmDesc">長焦電影級專業｜可搭配 200mm／400mm 增距鏡</div>
+    <div class="price-row-top">
+      <div class="product-name-box">
+        <span class="product-name">vivo x500 Pro Max</span>
+        <span class="tap-hint">點此選租 ➔</span>
+      </div>
+      <div class="price-main">$1,100<small id="d12x">/ 1–2日</small></div>
     </div>
-    <div class="price">$1,100 <small id="d12x">/ 1–2日</small><br><small id="x500pmPrice">$1,000（3–5日）｜$900（6日以上）</small></div>
+    <div class="product-desc" id="x500pmDesc">長焦電影級專業｜可搭配 200mm／400mm 增距鏡</div>
+    <div class="price-tier" id="x500pmPrice">$1,000（3–5日）｜$900（6日以上）</div>
   </div>
 
   <!-- vivo x200 Ultra -->
   <div class="price-row" data-model="vivo x200 Ultra">
-    <div>
-      <div class="product-name">vivo x200 Ultra <span class="tap-hint">點此選租 ➔</span></div>
-      <div class="product-desc" id="x200uDesc">大光圈與細節攝影兼具｜支援 200mm 增距鏡</div>
+    <div class="price-row-top">
+      <div class="product-name-box">
+        <span class="product-name">vivo x200 Ultra</span>
+        <span class="tap-hint">點此選租 ➔</span>
+      </div>
+      <div class="price-main">$1,000<small id="d12b">/ 1–2日</small></div>
     </div>
-    <div class="price">$1,000 <small id="d12b">/ 1–2日</small><br><small id="x200uPrice">$900（3–5日）｜$800（6日以上）</small></div>
+    <div class="product-desc" id="x200uDesc">大光圈與細節攝影兼具｜支援 200mm 增距鏡</div>
+    <div class="price-tier" id="x200uPrice">$900（3–5日）｜$800（6日以上）</div>
   </div>
 
   <!-- OPPO Find X9 Ultra -->
   <div class="price-row" data-model="OPPO Find X9 Ultra">
-    <div>
-      <div class="product-name">OPPO Find X9 Ultra <span class="tap-hint">點此選租 ➔</span></div>
-      <div class="product-desc" id="oppoDesc">哈蘇影像，10倍原生光學變焦｜支援 400mm 增距鏡</div>
+    <div class="price-row-top">
+      <div class="product-name-box">
+        <span class="product-name">OPPO Find X9 Ultra</span>
+        <span class="tap-hint">點此選租 ➔</span>
+      </div>
+      <div class="price-main">$1,000<small id="d12d">/ 1–2日</small></div>
     </div>
-    <div class="price">$1,000 <small id="d12d">/ 1–2日</small><br><small id="oppoPrice">$900（3–5日）｜$800（6日以上）</small></div>
+    <div class="product-desc" id="oppoDesc">哈蘇影像，10倍原生光學變焦｜支援 400mm 增距鏡</div>
+    <div class="price-tier" id="oppoPrice">$900（3–5日）｜$800（6日以上）</div>
   </div>
 
   <!-- vivo x300 Pro -->
   <div class="price-row" data-model="vivo x300 Pro">
-    <div>
-      <div class="product-name">vivo x300 Pro <span class="tap-hint">點此選租 ➔</span></div>
-      <div class="product-desc" id="x300pDesc">高CP值的旅行長焦攝影首選｜支援 200mm 增距鏡</div>
+    <div class="price-row-top">
+      <div class="product-name-box">
+        <span class="product-name">vivo x300 Pro</span>
+        <span class="tap-hint">點此選租 ➔</span>
+      </div>
+      <div class="price-main">$900<small id="d12c">/ 1–2日</small></div>
     </div>
-    <div class="price">$900 <small id="d12c">/ 1–2日</small><br><small id="x300pPrice">$800（3–5日）｜$700（6日以上）</small></div>
+    <div class="product-desc" id="x300pDesc">高CP值的旅行長焦攝影首選｜支援 200mm 增距鏡</div>
+    <div class="price-tier" id="x300pPrice">$800（3–5日）｜$700（6日以上）</div>
   </div>
 
   <!-- iPhone 17 Pro / Max -->
   <div class="price-row" data-model="iPhone 17 Pro Max">
-    <div>
-      <div class="product-name">iPhone 17 Pro／Pro Max <span class="tap-hint">點此選租 ➔</span></div>
-      <div class="product-desc" id="iphoneDesc">蘋果最強效能，流暢影片拍攝</div>
+    <div class="price-row-top">
+      <div class="product-name-box">
+        <span class="product-name">iPhone 17 Pro / Max</span>
+        <span class="tap-hint">點此選租 ➔</span>
+      </div>
+      <div class="price-main">$850<small id="d12e">/ 1–2日</small></div>
     </div>
-    <div class="price">$850 <small id="d12e">/ 1–2日</small><br><small id="iphonePrice">$750（3–5日）｜$600（6日以上）</small></div>
+    <div class="product-desc" id="iphoneDesc">蘋果最強效能，流暢影片拍攝</div>
+    <div class="price-tier" id="iphonePrice">$750（3–5日）｜$600（6日以上）</div>
   </div>
 
   <!-- DJI Pocket 4 Pro -->
   <div class="price-row" data-model="DJI Pocket 4 Pro 全能套裝">
-    <div>
-      <div class="product-name">DJI Pocket 4 Pro 全能套裝 <span class="tap-hint">點此選租 ➔</span></div>
-      <div class="product-desc" id="djiDesc">旗艦級雙鏡頭手持縮放三軸相機</div>
+    <div class="price-row-top">
+      <div class="product-name-box">
+        <span class="product-name">DJI Pocket 4 Pro 全能套裝</span>
+        <span class="tap-hint">點此選租 ➔</span>
+      </div>
+      <div class="price-main">$700<small id="perDayA">/ 日</small></div>
     </div>
-    <div class="price">$700 <small id="perDayA">/ 日</small></div>
+    <div class="product-desc" id="djiDesc">旗艦級雙鏡頭手持縮放三軸相機</div>
   </div>
 
   <!-- 增距鏡特仕組 -->
   <div class="price-row" data-model="僅租借 G2 增距鏡頭特仕組">
-    <div>
-      <div class="product-name" id="lensTitle">增距鏡特仕組 <span class="tap-hint">點此選租 ➔</span></div>
-      <div class="product-desc" id="lensDesc">含對應手機殼及配件組｜手機原生距離皆相同，加裝增距鏡專用於提升清晰度與細節！200mm ($300／日)：自然清晰，性價比高。400mm ($600／日)：旗艦級超長焦，景深層次更深、銳利度與穿網效果更強，遠距離舞台首選。</div>
-      <div class="product-deposit" id="depLens">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$10,000 (與手機合租時以手機押金為主，不重複計算)</div>
+    <div class="price-row-top">
+      <div class="product-name-box">
+        <span class="product-name" id="lensTitle">增距鏡特仕組</span>
+        <span class="tap-hint">點此選租 ➔</span>
+      </div>
+      <div class="price-main">$300–$600<small id="perDayB">/ 日</small></div>
     </div>
-    <div class="price">$300–$600 <small id="perDayB">/ 日</small></div>
+    <div class="product-desc" id="lensDesc">含對應手機殼及配件組｜手機原生距離皆相同，加裝增距鏡專用於提升清晰度與細節！200mm ($300／日)：自然清晰，性價比高。400mm ($600／日)：旗艦級超長焦，景深層次更深、銳利度與穿網效果更強，遠距離舞台首選。</div>
+    <div class="product-deposit" id="depLens">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$10,000 (與手機合租時以手機押金為主，不重複計算)</div>
   </div>
 
   <!-- 雲端上傳 -->
   <div class="price-row" data-model="cloud">
-    <div>
-      <div class="product-name" id="cloudTitle">雲端上傳服務 <span class="tap-hint">加選 ➔</span></div>
-      <div class="product-desc" id="cloudDesc">拍完免傳檔，雲端隨時輕鬆載｜保留 2 週</div>
-      <div class="product-deposit" id="depCloud">門市代為原畫質雲端上傳</div>
+    <div class="price-row-top">
+      <div class="product-name-box">
+        <span class="product-name" id="cloudTitle">雲端上傳服務</span>
+        <span class="tap-hint">加選 ➔</span>
+      </div>
+      <div class="price-main">$200<small id="perUse">/ 次</small></div>
     </div>
-    <div class="price">$200 <small id="perUse">/ 次</small></div>
+    <div class="product-desc" id="cloudDesc">拍完免傳檔，雲端隨時輕鬆載｜保留 2 週</div>
+    <div class="product-deposit" id="depCloud">門市代為原畫質雲端上傳</div>
   </div>
 
   <div class="notice-box" style="margin-top:12px;border-color:#e2b86633" id="depositRuleTip">
@@ -278,7 +335,6 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     <strong>安心詢問：</strong>先查詢是否有設備空檔即可，系統會自動暫存選擇。客服在 LINE 回覆確認有檔期後，即可接著完成正式預訂。
   </div>
 
-  <!-- 引導一步到位區塊 (避免二次打開網址) -->
   <div class="switch-cta-box">
     <div class="switch-cta-desc">⚡ 想一步到位？免去等檔期後二次開單的時間：</div>
     <button type="button" class="link-btn" id="toggleFormalBtn">展開直接填寫預約單（含取件方式） ▼</button>
@@ -849,17 +905,15 @@ function scrollToFormalSection(){
   },300);
 }
 
-// 核心修復：送出詢問時「不滾動跳頁」，按鈕顯示送出狀態後優雅返回 LINE 聊天室
 function inquiry(){
   const d=dates();if(!d)return;save();
   try{localStorage.setItem("fir-stage","formal");}catch(e){}
 
   const directLink=`https://liff.line.me/${LIFF_ID}`;
   currentMessage = currentLang==="zh"
-    ? `【詢問設備檔期】\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (共 ${d.d} 天)\n\n👉 確認有檔期？點此立即補填預約資料：\n${directLink}`
-    : `[Equipment Availability Check]\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (${d.d} days)\n\n👉 Complete details here:\n${directLink}`;
+    ? `【詢問設備檔期】\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (約 ${d.d} 天)\n\n👉 確認有檔期？點此立即補填預約資料：\n${directLink}`
+    : `[Equipment Availability Check]\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (approx ${d.d} days)\n\n👉 Complete details here:\n${directLink}`;
   
-  // 移除原本導致突然下跳的 scrollToFormalSection()
   send(currentMessage,document.getElementById("inquiryButton"),"inquiry");
 }
 
@@ -884,13 +938,13 @@ function booking(){
   }
 
   let baseText = currentLang==="zh"
-    ? `【正式預約單】\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (共 ${d.d} 天)\n姓名：${n}\n電話：${p}\n交還：${methodStr}`
-    : `[Formal Booking]\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (${d.d} days)\nName: ${n}\nPhone: ${p}\nMethod: ${methodStr}`;
+    ? `【正式預約單】\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (約 ${d.d} 天)\n姓名：${n}\n電話：${p}\n交還：${methodStr}`
+    : `[Formal Booking]\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (approx ${d.d} days)\nName: ${n}\nPhone: ${p}\nMethod: ${methodStr}`;
 
   if(isStore) {
     baseText += currentLang==="zh" ? `\n押金：現金 3,000 + 證件正本(三證擇一押附)` : `\nDeposit: Cash $3,000 + ID`;
   } else {
-    baseText += currentLang==="zh" ? `\n押金：NT$${deliveryDeposit}（出貨前轉帳）` : `\nDeposit: NT$${deliveryDeposit} (Bank transfer before dispatch)`;
+    baseText += currentLang==="zh" ? `\n押金：NT$${deliveryDeposit}（寄出前通知轉帳）` : `\nDeposit: NT$${deliveryDeposit} (Transfer notice before dispatch)`;
   }
 
   if(cloudVal === "Yes") {
@@ -935,7 +989,6 @@ function setupPriceRowInteractions(){
   });
 }
 
-// LIFF 核心流程保持 100% 原版完整
 async function init(){
   try{
     await liff.init({liffId:LIFF_ID});
