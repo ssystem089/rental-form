@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0b0b0d">
 <title>SSystem｜器材租借預約</title>
 <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
@@ -10,23 +10,24 @@
 :root{
   --bg:#0b0b0d;--card:#17171a;--card2:#202024;--line:#2d2d32;
   --text:#f4f4f5;--muted:#a1a1aa;--sub:#71717a;--danger:#fca5a5;
-  --ok:#b9e8ca;--accent:#e2b866;
+  --ok:#b9e8ca;--accent:#e2b866;--accent-glow:rgba(226,184,102,0.18);
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",Arial,sans-serif;-webkit-font-smoothing:antialiased}
 .wrap{width:min(100%,500px);margin:auto;padding:14px 14px 34px}
 .topbar{display:flex;justify-content:flex-end;min-height:38px}
-.lang-toggle{width:auto;min-height:34px;padding:6px 11px;border:1px solid #595961;border-radius:8px;background:#202024;color:#fff;font:inherit;font-size:12px;font-weight:750;cursor:pointer}
+.lang-toggle{width:auto;min-height:34px;padding:6px 12px;border:1px solid #595961;border-radius:8px;background:#202024;color:#fff;font:inherit;font-size:12px;font-weight:750;cursor:pointer;transition:all 0.2s}
+.lang-toggle:active{transform:scale(0.96)}
 .header{padding:7px 4px 16px;border-bottom:1px solid var(--line);margin-bottom:16px}
-.brand{font-size:22px;font-weight:800}
+.brand{font-size:22px;font-weight:800;letter-spacing:0.5px}
 .subtitle{margin-top:4px;color:var(--muted);font-size:13px}
 .store{margin-top:9px;color:var(--sub);font-size:12px;line-height:1.55}
 
 /* 預約流程視覺指示條 */
 .stepper{display:flex;justify-content:space-between;align-items:center;margin:14px 0 20px;padding:12px;background:var(--card);border:1px solid var(--line);border-radius:10px}
 .step{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--sub);flex:1;position:relative;text-align:center}
-.step-num{width:22px;height:22px;border-radius:50%;background:var(--card2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--muted)}
-.step.active .step-num{background:var(--accent);border-color:var(--accent);color:#111}
+.step-num{width:22px;height:22px;border-radius:50%;background:var(--card2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--muted);transition:all 0.3s}
+.step.active .step-num{background:var(--accent);border-color:var(--accent);color:#111;box-shadow:0 0 8px var(--accent-glow)}
 .step.active span{color:var(--text);font-weight:700}
 .step-line{flex:0.4;height:1px;background:var(--line);margin-top:-14px}
 
@@ -43,7 +44,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,B
 .price-row:hover{background:#ffffff0a}
 .price-row:active{transform:scale(0.99);background:#ffffff14}
 .product-name{font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px}
-.tap-hint{font-size:10px;font-weight:normal;color:var(--accent);border:1px solid #e2b86644;padding:1px 5px;border-radius:4px;background:#e2b86611}
+.tap-hint{font-size:10px;font-weight:normal;color:var(--accent);border:1px solid #e2b86644;padding:1px 6px;border-radius:4px;background:#e2b86611}
 .product-desc{margin-top:3px;color:var(--sub);font-size:11px;line-height:1.45}
 .product-deposit{margin-top:3px;color:#a8976b;font-size:10px;line-height:1.4}
 .price{min-width:140px;text-align:right;font-size:13px;font-weight:700;line-height:1.5}
@@ -52,10 +53,10 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,B
 .field{margin-bottom:14px}
 .field:last-child{margin-bottom:0}
 label{display:block;margin-bottom:6px;color:var(--muted);font-size:12px;font-weight:650}
-input,select{width:100%;min-height:45px;padding:10px 11px;border:1px solid var(--line);border-radius:8px;background:var(--card2);color:var(--text);font:inherit;font-size:14px;outline:0;transition:box-shadow 0.3s ease, border-color 0.3s ease}
-input:focus,select:focus{border-color:#606068}
+input,select{width:100%;min-height:45px;padding:10px 11px;border:1px solid var(--line);border-radius:8px;background:var(--card2);color:var(--text);font:inherit;font-size:14px;outline:0;transition:box-shadow 0.25s ease, border-color 0.25s ease}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-glow)}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.device-note{margin-top:8px;padding:10px 11px;border-left:2px solid #6b7280;border-radius:0 8px 8px 0;background:#1d1d21;color:var(--muted);font-size:12px;line-height:1.6}
+.device-note{margin-top:8px;padding:10px 11px;border-left:2px solid var(--accent);border-radius:0 8px 8px 0;background:#1d1d21;color:var(--muted);font-size:12px;line-height:1.6}
 
 /* 狀態盒與提示 */
 .saved-box{display:none;margin:0 0 14px;padding:11px;border:1px solid #31503b;border-radius:8px;background:#142319;color:var(--ok);font-size:12px;line-height:1.6}
@@ -67,19 +68,22 @@ input:focus,select:focus{border-color:#606068}
 .lens-tip-box{display:none;margin-top:7px;padding:8px 10px;background:#1a1914;border:1px solid #e2b86644;border-radius:6px;color:var(--accent);font-size:11px;line-height:1.5}
 .delivery-notice{font-size:11.5px;color:var(--accent);margin-top:5px;line-height:1.5;background:#1a1914;padding:8px;border-radius:6px;border:1px solid #e2b86633}
 
-/* 折疊/展開切換面板 */
-.switch-link{text-align:center;margin-top:14px;padding-top:12px;border-top:1px solid #ffffff12}
-.link-btn{background:none;border:none;color:var(--accent);font-size:12.5px;font-weight:700;text-decoration:underline;cursor:pointer;padding:4px}
+/* 一步到位直接預訂切換區塊 (New UX) */
+.switch-cta-box{margin-top:14px;padding:12px;border-radius:10px;background:linear-gradient(135deg, rgba(226,184,102,0.08) 0%, rgba(23,23,26,0.5) 100%);border:1px solid rgba(226,184,102,0.3);text-align:center}
+.switch-cta-desc{font-size:11.5px;color:var(--muted);margin-bottom:8px;line-height:1.4}
+.link-btn{width:100%;min-height:40px;background:#202024;border:1px solid var(--accent);color:var(--accent);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.link-btn:active{transform:scale(0.98);background:var(--accent);color:#111}
 
 .status{display:none;margin-bottom:14px;padding:10px;border:1px solid #4a3b3b;border-radius:8px;background:#261b1b;color:var(--danger);font-size:12px;line-height:1.55}
 .status.show{display:block}
 
 /* 按鈕風格 */
-button{width:100%;min-height:46px;padding:11px;border-radius:8px;font:inherit;font-size:14px;font-weight:750;cursor:pointer}
+button{width:100%;min-height:46px;padding:11px;border-radius:8px;font:inherit;font-size:14px;font-weight:750;cursor:pointer;transition:all 0.2s}
 button:disabled{opacity:.45;cursor:not-allowed}
 .secondary{background:#232328;color:var(--text);border:1px solid #55555d}
 .secondary:hover{background:#2b2b32}
 .btn-submit{background:linear-gradient(135deg, #f0cf85 0%, #c9933b 100%);color:#17140e;border:none;font-size:15px;font-weight:800;box-shadow:0 4px 16px rgba(201,147,59,0.25)}
+.btn-submit:active{transform:scale(0.98)}
 
 .terms{margin:16px 4px 0;color:var(--sub);font-size:11px;line-height:1.7}
 .term-item{margin-top:12px}
@@ -211,7 +215,6 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     <div class="price">$200 <small id="perUse">/ 次</small></div>
   </div>
 
-  <!-- 押金規則總提醒標籤 -->
   <div class="notice-box" style="margin-top:12px;border-color:#e2b86633" id="depositRuleTip">
     <strong>押金貼心提醒：</strong>手機與增距鏡一同租借時，以手機押金為主（寄送 NT$30,000 / 門市 NT$3,000+證件），無須重複累計增距鏡押金。
   </div>
@@ -275,8 +278,10 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
     <strong>安心詢問：</strong>先查詢是否有設備空檔即可，系統會自動暫存選擇。客服在 LINE 回覆確認有檔期後，即可接著完成正式預訂。
   </div>
 
-  <div class="switch-link">
-    <button type="button" class="link-btn" id="toggleFormalBtn">已確認有檔期？直接填寫預約資料 ▼</button>
+  <!-- 引導一步到位區塊 (避免二次打開網址) -->
+  <div class="switch-cta-box">
+    <div class="switch-cta-desc">⚡ 想一步到位？免去等檔期後二次開單的時間：</div>
+    <button type="button" class="link-btn" id="toggleFormalBtn">展開直接填寫預約單（含取件方式） ▼</button>
   </div>
 </section>
 
@@ -285,80 +290,50 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
   <div class="section-title" style="margin:22px 4px 8px" id="formalTitle">STEP 2. 確認有檔期，填寫正式預訂資料</div>
   <section class="card">
 
-    <!-- 1. 承租人姓名 (前移至上方) -->
     <div class="field">
       <label for="name" id="nameLabel">承租人姓名 (需同取件人)</label>
       <input id="name" autocomplete="name" placeholder="證件姓名">
     </div>
 
-    <!-- 2. 聯絡手機 (前移至上方) -->
     <div class="field">
       <label for="phone" id="phoneLabel">取件手機門號</label>
       <input id="phone" autocomplete="tel" inputmode="tel" placeholder="台灣 10 碼或外國旅客請填聯絡方式">
     </div>
-<!-- 3. 交還方式 -->
-<div class="field">
-  <label for="isStore" id="returnMethodLabel">交還方式</label>
 
-  <select id="isStore">
-    <option value="delivery">店到店寄送（免證件・需押金）</option>
-    <option value="store" selected>大巨蛋門市本人親取</option>
-  </select>
+    <div class="field">
+      <label for="isStore" id="returnMethodLabel">交還方式</label>
+      <select id="isStore">
+        <option value="store" selected>大巨蛋門市本人親取</option>
+        <option value="delivery">店到店寄送（免證件・需押金）</option>
+      </select>
+    </div>
+
+    <div class="field" id="storeNoteField" style="display:none">
+      <label for="storeName" id="storeNameLabel">指定 7-11 店到店名稱 / 店號</label>
+      <input id="storeName" placeholder="例如：敦巨門市(或店號 123456）">
+      <div class="delivery-notice">
+        * 運送期不計費，免證件押金 <span id="depositAmount">30,000</span> 元寄送，押金於出貨前通知轉帳，歸還確認無損後 24 小時內退還。器材會提前 2～3 天寄達，使用完畢後請於 1～2 日內寄回；逾期將由押金扣除延遲費。
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="cloudService" id="cloudLabel">雲端上傳服務</label>
+      <select id="cloudService">
+        <option value="No">不需要</option>
+        <option value="Yes">需要（+$200／次，原畫質雲端下載，保留 2 週）</option>
+      </select>
+    </div>
+
+    <div style="margin-top:14px">
+      <button id="bookingButton" type="button" class="btn-submit">確認送出正式訂單</button>
+    </div>
+
+    <div class="notice-box" style="margin-top:10px" id="formalPaymentNotice">
+      送出後客服將於 LINE 聊天室依您選填內容提供報價與匯款資訊，完成匯款後即鎖定檔期並完成預約。
+    </div>
+  </section>
 </div>
 
-<!-- 4. 7-11 店到店備註欄（僅在選寄送時展開） -->
-<div class="field" id="storeNoteField">
-  <label for="storeName" id="storeNameLabel">
-    指定 7-11 店到店名稱 / 店號
-  </label>
-
-  <input
-    id="storeName"
-    placeholder="例如：敦巨門市(或店號 123456）"
-  >
-
-  <div class="delivery-notice">
-    * 運送期不計費，免證件押金
-    <span id="depositAmount">30,000</span>
-    元寄送，押金於出貨前通知轉帳，歸還確認無損後 24 小時內退還。器材會提前 2～3 天寄達，使用完畢後請於 1～2 日內寄回；逾期將由押金扣除延遲費。
-  </div>
-</div>
-
-<!-- 注意：上面這個 </div> 很重要 -->
-<!-- 它是用來關閉 storeNoteField -->
-
-<!-- 5. 雲端上傳服務 -->
-<div class="field">
-  <label for="cloudService" id="cloudLabel">
-    雲端上傳服務
-  </label>
-
-  <select id="cloudService">
-    <option value="No">不需要</option>
-    <option value="Yes">
-      需要（+$200／次，原畫質雲端下載，保留 2 週）
-    </option>
-  </select>
-</div>
-
-<!-- 6. 送出正式訂單按鈕 -->
-<div style="margin-top:14px">
-  <button
-    id="bookingButton"
-    type="button"
-    class="btn-submit"
-  >
-    確認送出正式訂單
-  </button>
-</div>
-
-<div
-  class="notice-box"
-  style="margin-top:10px"
-  id="formalPaymentNotice"
->
-  送出後客服將於 LINE 聊天室依您選填內容提供報價與匯款資訊，完成匯款後即鎖定檔期並完成預約。
-</div>
 <div class="section-title" id="termsTitle">租借方案注意事項</div>
 <section class="card terms">
   <div class="term-item"><span class="term-heading" id="term1h">彈性報價方案</span><span id="term1">標有 24hr 彈性制，如遇演唱會當日租還或出國，依實際使用時間或場次起算，需配合現場檔期安排；最終交還日以協調確認為準。</span></div>
@@ -386,16 +361,11 @@ textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--tex
 const isStore = document.getElementById("isStore");
 
 function updateReturnMethod() {
-  const storeNoteField =
-    document.getElementById("storeNoteField");
-
+  const storeNoteField = document.getElementById("storeNoteField");
   if (!isStore || !storeNoteField) return;
-
   const isDelivery = isStore.value === "delivery";
-
   storeNoteField.style.display = isDelivery ? "" : "none";
 }
-
 isStore.addEventListener("change", updateReturnMethod);
 updateReturnMethod();
   
@@ -433,8 +403,8 @@ const zh={
   modelLabel:"租借主機型號",lensLabel:"增距鏡配件選配",pickupDateLabel:"預計取機日期",pickupTimeLabel:"預計取機時間",selectTime:"請選擇時間",returnDateLabel:"預計歸還日期",
   inquiryButton:"送出詢問設備檔期",
   inquiryNotice:"<strong>安心詢問：</strong>先查詢是否有設備空檔即可，系統會自動暫存選擇。客服在 LINE 回覆確認有檔期後，即可接著完成正式預訂。",
-  toggleFormalOpen:"已確認有檔期？直接填寫預約資料 ▼",
-  toggleFormalClose:"▲ 收合正式預約欄位",
+  toggleFormalOpen:"展開直接填寫預約單（含取件方式） ▼",
+  toggleFormalClose:"▲ 收合完整預約欄位",
   formalTitle:"STEP 2. 確認有檔期，填寫正式預訂資料",
   cloudLabel:"雲端上傳服務",
   cloudNo:"不需要",
@@ -496,7 +466,7 @@ const en={
   modelLabel:"Rental device",lensLabel:"Telephoto extender option",pickupDateLabel:"Pickup date",pickupTimeLabel:"Pickup time",selectTime:"Select time",returnDateLabel:"Return date",
   inquiryButton:"Check Availability",
   inquiryNotice:"<strong>No Commitment:</strong> Check device availability first. Once confirmed via LINE chat, proceed to step 2 to complete formal booking.",
-  toggleFormalOpen:"Already confirmed? Complete booking details ▼",
+  toggleFormalOpen:"Direct Booking Details (Include Pickup & Cloud) ▼",
   toggleFormalClose:"▲ Collapse booking details",
   formalTitle:"STEP 2. Complete Formal Booking Details",
   cloudLabel:"Cloud upload service",
@@ -611,8 +581,8 @@ function updateModelLabels(){
   document.getElementById("cloudService").options[0].text=x.cloudNo;
   document.getElementById("cloudService").options[1].text=x.cloudYes;
   
-  document.getElementById("isStore").options[0].text=currentLang==="zh"?"店到店寄送（免證件・需押金）":"Delivery (No ID, Deposit Required)";
-  document.getElementById("isStore").options[1].text=currentLang==="zh"?"大巨蛋門市本人親取":"In-store pickup at Taipei Dome";
+  document.getElementById("isStore").options[0].text=currentLang==="zh"?"大巨蛋門市本人親取":"In-store pickup at Taipei Dome";
+  document.getElementById("isStore").options[1].text=currentLang==="zh"?"店到店寄送（免證件・需押金）":"Delivery (No ID, Deposit Required)";
 }
 
 function toggleLang(){applyLang(currentLang==="zh"?"en":"zh")}
@@ -685,22 +655,10 @@ function updateNote(){
 function handleDeliveryToggle(){
   const val=document.getElementById("isStore").value;
   const storeNoteField=document.getElementById("storeNoteField");
-  const noteEl=document.getElementById("nameNote");
-
   if(val==="store"){
     storeNoteField.style.display="none";
-    if(noteEl){
-      noteEl.textContent=currentLang==="zh"
-        ?"門市現場取機需核對身分證正本+現金押金$3,000"
-        :"In-store pickup requires original ID verification + NT$3,000 cash deposit.";
-    }
   }else{
     storeNoteField.style.display="block";
-    if(noteEl){
-      noteEl.textContent=currentLang==="zh"
-        ?"外縣市寄送：免證件，手機押金 NT$30,000（合租不重複計）"
-        :"Delivery: No ID, phone NT$30,000 deposit (not stacked).";
-    }
   }
 }
 
@@ -751,27 +709,23 @@ function restore(){
   if(d.phone)document.getElementById("phone").value=d.phone;
   if(d.storeName)document.getElementById("storeName").value=d.storeName;
   if (d.method) {
-  document.getElementById("isStore").value = d.method;
-} else {
-  document.getElementById("isStore").value = "store";
-}
+    document.getElementById("isStore").value = d.method;
+  } else {
+    document.getElementById("isStore").value = "store";
+  }
 
-handleDeliveryToggle();
-  
   handleDeliveryToggle();
   updateNote();
   renderSaved();
   checkLensTip();
   updateDaysSummary();
 }
+
 function updateDepositAmount() {
   const modelEl = document.getElementById("model");
   const depositAmount = document.getElementById("depositAmount");
-
   if (!modelEl || !depositAmount) return;
-
   const mainModel = modelEl.value.trim();
-
   if (mainModel === "僅租借 G2 增距鏡頭特仕組") {
     depositAmount.textContent = "10,000";
   } else {
@@ -780,42 +734,10 @@ function updateDepositAmount() {
 }
 
 const modelEl = document.getElementById("model");
-
 if (modelEl) {
   modelEl.addEventListener("change", updateDepositAmount);
 }
-
 updateDepositAmount();
-
-
-function renderSaved() {
-  const d = getDraft();
-  const box = document.getElementById("savedSelection");
-
-  if (!d || !d.model) {
-    box.classList.remove("show");
-    return;
-  }
-
-  const x = S();
-
-  box.innerHTML = `
-    <strong>${x.savedTitle}</strong><br>
-    ${d.model}<br>
-    ${x.savedText}
-    <div class="saved-actions">
-      <button type="button" class="small-button" id="clearDraft">
-        ${x.clear}
-      </button>
-    </div>
-  `;
-
-  box.classList.add("show");
-
-  document.getElementById("clearDraft").onclick = () => {
-    // 保留原本內容
-  };
-}
 
 function renderSaved(){
   const d=getDraft(),box=document.getElementById("savedSelection");
@@ -874,7 +796,6 @@ function validateDates(){
       rInput.value=pInput.value;
     }
   }
-
   if(rInput.value && rInput.value<today){
     rInput.value=pInput.value||today;
   }
@@ -928,6 +849,7 @@ function scrollToFormalSection(){
   },300);
 }
 
+// 核心修復：送出詢問時「不滾動跳頁」，按鈕顯示送出狀態後優雅返回 LINE 聊天室
 function inquiry(){
   const d=dates();if(!d)return;save();
   try{localStorage.setItem("fir-stage","formal");}catch(e){}
@@ -937,7 +859,7 @@ function inquiry(){
     ? `【詢問設備檔期】\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (共 ${d.d} 天)\n\n👉 確認有檔期？點此立即補填預約資料：\n${directLink}`
     : `[Equipment Availability Check]\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (${d.d} days)\n\n👉 Complete details here:\n${directLink}`;
   
-  scrollToFormalSection();
+  // 移除原本導致突然下跳的 scrollToFormalSection()
   send(currentMessage,document.getElementById("inquiryButton"),"inquiry");
 }
 
@@ -954,39 +876,28 @@ function booking(){
   const cloudVal=document.getElementById("cloudService").value;
   const model = document.getElementById("model").value.trim();
 
-const deliveryDeposit =
-  model === "僅租借 G2 增距鏡頭特仕組"
-    ? "10,000"
-    : "30,000";
+  const deliveryDeposit = model === "僅租借 G2 增距鏡頭特仕組" ? "10,000" : "30,000";
+  let methodStr = isStore ? "大巨蛋門市本人親取" : `店到店寄送（免證件・押金 NT$${deliveryDeposit}）`;
 
-let methodStr = isStore
-  ? "大巨蛋門市本人親取"
-  : `店到店寄送（免證件・押金 NT$${deliveryDeposit}）`;
+  if(!isStore && storeName) {
+    methodStr += ` (7-11: ${storeName})`;
+  }
 
-if(!isStore && storeName) {
-  methodStr += ` (7-11: ${storeName})`;
-}
-  // 依指示更新排列順序：設備 -> 日期 -> 姓名 -> 電話 -> 交還 -> 押金
   let baseText = currentLang==="zh"
     ? `【正式預約單】\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (共 ${d.d} 天)\n姓名：${n}\n電話：${p}\n交還：${methodStr}`
     : `[Formal Booking]\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (${d.d} days)\nName: ${n}\nPhone: ${p}\nMethod: ${methodStr}`;
 
   if(isStore) {
-  baseText += currentLang==="zh"
-    ? `\n押金：現金 3,000 + 證件正本(三證擇一押附)`
-    : `\nDeposit: Cash $3,000 + ID`;
-} else {
-  baseText += currentLang==="zh"
-    ? `\n押金：NT$${deliveryDeposit}（出貨前轉帳）`
-    : `\nDeposit: NT$${deliveryDeposit} (Bank transfer before dispatch)`;
-}
+    baseText += currentLang==="zh" ? `\n押金：現金 3,000 + 證件正本(三證擇一押附)` : `\nDeposit: Cash $3,000 + ID`;
+  } else {
+    baseText += currentLang==="zh" ? `\n押金：NT$${deliveryDeposit}（出貨前轉帳）` : `\nDeposit: NT$${deliveryDeposit} (Bank transfer before dispatch)`;
+  }
 
   if(cloudVal === "Yes") {
     baseText += currentLang==="zh" ? `\n雲端：YES` : `\nCloud: YES`;
   }
 
   currentMessage = baseText;
-
   updateStepper(3);
   try{localStorage.removeItem("fir-stage");}catch(e){}
   send(currentMessage,document.getElementById("bookingButton"),"booking");
@@ -1019,19 +930,17 @@ function setupPriceRowInteractions(){
       target.scrollIntoView({ behavior: "smooth", block: "center" });
 
       mSelect.style.boxShadow = "0 0 0 2px var(--accent)";
-      setTimeout(() => {
-        mSelect.style.boxShadow = "";
-      }, 1200);
+      setTimeout(() => { mSelect.style.boxShadow = ""; }, 1200);
     });
   });
 }
 
+// LIFF 核心流程保持 100% 原版完整
 async function init(){
   try{
     await liff.init({liffId:LIFF_ID});
     liffReady=true;
     document.getElementById("liffStatus").classList.remove("show");
-
     if(!liff.isInClient()&&!liff.isLoggedIn())liff.login({redirectUri:location.href});
   }catch(e){
     console.error(e);
@@ -1100,12 +1009,12 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   document.getElementById("languageButton").onclick=toggleLang;
   document.getElementById("model").onchange = () => {
-  updateLens(false);
-  updateNote();
-  updateDepositAmount();
-  handleDeliveryToggle();
-  save();
-};
+    updateLens(false);
+    updateNote();
+    updateDepositAmount();
+    handleDeliveryToggle();
+    save();
+  };
   document.getElementById("lens").onchange=()=>{checkLensTip();save()};
   document.getElementById("pickupDate").onchange=sync;
   document.getElementById("pickupClock").onchange=sync;
@@ -1116,7 +1025,6 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("storeName").oninput=save;
   document.getElementById("isStore").onchange=()=>{handleDeliveryToggle();save()};
   
-  // 嚴格確保按鈕事件綁定正常運作
   document.getElementById("inquiryButton").onclick=inquiry;
   document.getElementById("bookingButton").onclick=booking;
   document.getElementById("backButton").onclick=closeFallback;
