@@ -3,488 +3,531 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#0b0b0d">
 <title>SSystem｜器材租借預約</title>
 <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <style>
-:root{
-  --bg:#0b0b0d;--card:#17171a;--card2:#202024;--line:#2d2d32;
-  --text:#f4f4f5;--muted:#a1a1aa;--sub:#71717a;--danger:#fca5a5;
-  --ok:#b9e8ca;--accent:#e2b866;--accent-glow:rgba(226,184,102,0.18);
+:root {
+  /* 淺色模式變數 */
+  --bg-color: #f4f5f7;
+  --card-bg: #ffffff;
+  --panel-bg: #f8fafc;
+  --sub-card-bg: #fdfdfd;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-light: #64748b;
+  --border-color: #e2e8f0;
+  --border-dark: #0f172a;
+  --accent-blue: #0284c7;
+  --accent-blue-bg: #f0f9ff;
+  --accent-blue-border: #bae6fd;
+  --control-btn-bg: #ffffff;
+  --control-btn-border: #cbd5e1;
+  --toast-bg: #0f172a;
+  --toast-text: #ffffff;
+  --danger-bg: #fef2f2;
+  --danger-border: #fecaca;
+  --danger-text: #b91c1c;
 }
-*{-webkit-text-size-adjust:100%;text-size-adjust:100%;box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
-.wrap{width:min(100%,500px);margin:auto;padding:14px 14px 34px}
-.topbar{display:flex;justify-content:flex-end;min-height:38px}
-.lang-toggle{width:auto;min-height:34px;padding:6px 12px;border:1px solid #595961;border-radius:8px;background:#202024;color:#fff;font:inherit;font-size:12px;font-weight:750;cursor:pointer}
-.lang-toggle:active{transform:scale(0.96)}
-.header{padding:7px 4px 16px;border-bottom:1px solid var(--line);margin-bottom:16px}
-.brand{font-size:22px;font-weight:800;letter-spacing:0.5px}
-.subtitle{margin-top:4px;color:var(--muted);font-size:13px}
-.store{margin-top:9px;color:var(--sub);font-size:12px;line-height:1.55}
 
-/* 預約流程視覺指示條 */
-.stepper{display:flex;justify-content:space-between;align-items:center;margin:14px 0 20px;padding:12px;background:var(--card);border:1px solid var(--line);border-radius:10px}
-.step{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--sub);flex:1;position:relative;text-align:center}
-.step-num{width:22px;height:22px;border-radius:50%;background:var(--card2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--muted);transition:all 0.3s}
-.step.active .step-num{background:var(--accent);border-color:var(--accent);color:#111;box-shadow:0 0 8px var(--accent-glow)}
-.step.active span{color:var(--text);font-weight:700}
-.step-line{flex:0.4;height:1px;background:var(--line);margin-top:-14px}
-
-.section-title{margin:20px 4px 8px;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.4px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
-
-/* 費率卡片：自適應多層架構 */
-.price-row{
-  display:flex;flex-direction:column;gap:5px;padding:12px 10px;
-  border-bottom:1px solid rgba(255,255,255,0.06);border-radius:8px;cursor:pointer;
-  transition:background 0.2s, transform 0.15s;
+/* 深色模式變數 (黑曜石科技黑) */
+[data-theme="dark"] {
+  --bg-color: #0b0f19;
+  --card-bg: #141c2e;
+  --panel-bg: #1a243b;
+  --sub-card-bg: #1e2945;
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+  --text-light: #94a3b8;
+  --border-color: #263352;
+  --border-dark: #64748b;
+  --accent-blue: #38bdf8;
+  --accent-blue-bg: rgba(56, 189, 248, 0.12);
+  --accent-blue-border: rgba(56, 189, 248, 0.35);
+  --control-btn-bg: #1e2945;
+  --control-btn-border: #334155;
+  --toast-bg: #38bdf8;
+  --toast-text: #0b0f19;
+  --danger-bg: #2d1515;
+  --danger-border: #5c2424;
+  --danger-text: #fca5a5;
 }
-.price-row:last-child{border-bottom:0}
-.price-row:hover{background:rgba(255,255,255,0.04)}
-.price-row:active{transform:scale(0.99);background:rgba(255,255,255,0.08)}
 
-.price-row-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.product-name-box{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0}
-.product-name{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap}
-.tap-hint{
-  font-size:10px;font-weight:600;color:var(--accent);border:1px solid rgba(226,184,102,0.4);
-  padding:1px 6px;border-radius:4px;background:rgba(226,184,102,0.1);
-  white-space:nowrap;flex-shrink:0;line-height:1.4;
-}
-.price-main{font-size:15px;font-weight:800;color:var(--accent);white-space:nowrap;text-align:right;flex-shrink:0}
-.price-main small{font-size:11px;font-weight:500;color:var(--muted);margin-left:2px}
-.product-desc{color:var(--sub);font-size:11px;line-height:1.45}
-.price-tier{color:var(--muted);font-size:11px;line-height:1.4;margin-top:1px}
-.product-deposit{margin-top:2px;color:#a8976b;font-size:10px;line-height:1.4}
+* { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease; }
+body { margin: 0; background: var(--bg-color); color: var(--text-main); -webkit-font-smoothing: antialiased; padding: 16px 12px 36px; display: flex; justify-content: center; }
 
-.field{margin-bottom:14px}
-.field:last-child{margin-bottom:0}
-label{display:block;margin-bottom:6px;color:var(--muted);font-size:12px;font-weight:650}
-select,input[type="text"]{width:100%;min-height:45px;padding:10px 11px;border:1px solid var(--line);border-radius:8px;background:var(--card2);color:var(--text);font:inherit;font-size:14px;outline:0;transition:box-shadow 0.25s ease, border-color 0.25s ease}
-select:focus,input[type="text"]:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-glow)}
-.device-note{margin-top:8px;padding:10px 11px;border-left:2px solid var(--accent);border-radius:0 8px 8px 0;background:#1d1d21;color:var(--muted);font-size:12px;line-height:1.6}
+.wrap { width: min(100%, 540px); }
+
+/* 頂部極簡控制列 */
+.utility-bar { display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-bottom: 16px; }
+.control-group { display: inline-flex; border: 1px solid var(--control-btn-border); border-radius: 4px; overflow: hidden; background: var(--control-btn-bg); }
+.control-btn { background: none; border: none; padding: 4px 10px; font-size: 11px; font-weight: 700; color: var(--text-light); cursor: pointer; }
+.control-btn:hover { color: var(--accent-blue); }
+.control-btn.active { background: var(--accent-blue); color: #ffffff; }
+
+/* 頂部商標與門市資訊 */
+.header { padding-bottom: 16px; border-bottom: 2px solid var(--border-dark); margin-bottom: 18px; }
+.brand { font-size: 22px; font-weight: 800; letter-spacing: 0.5px; color: var(--text-main); }
+.subtitle { margin-top: 3px; color: var(--text-light); font-size: 11.5px; letter-spacing: 1.5px; font-weight: 600; text-transform: uppercase; }
+.store { margin-top: 10px; color: var(--text-muted); font-size: 12px; line-height: 1.6; }
+
+/* 預約 4 步驟進度引導 */
+.stepper { display: flex; justify-content: space-between; align-items: center; margin: 16px 0 20px; padding: 12px 14px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+.step { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: var(--text-light); flex: 1; text-align: center; }
+.step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--panel-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--text-light); font-size: 11px; }
+.step.active .step-num { background: var(--accent-blue); border-color: var(--accent-blue); color: #ffffff; }
+.step.active span { color: var(--text-main); font-weight: 700; }
+.step-line { flex: 0.4; height: 1px; background: var(--border-color); margin-top: -14px; }
+
+.section-title { font-size: 11.5px; font-weight: 800; color: var(--text-light); letter-spacing: 1.2px; text-transform: uppercase; margin: 22px 2px 8px; }
+.card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+
+/* 費率卡片清單 */
+.price-row { display: flex; flex-direction: column; gap: 4px; padding: 12px 8px; border-bottom: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; transition: background 0.15s ease; }
+.price-row:last-child { border-bottom: none; }
+.price-row:hover { background: var(--panel-bg); }
+.price-row:active { opacity: 0.85; }
+
+.price-row-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.product-name-box { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 0; }
+.product-name { font-size: 14px; font-weight: 700; color: var(--text-main); }
+.tap-hint { font-size: 10px; font-weight: 700; color: var(--accent-blue); border: 1px solid var(--accent-blue-border); padding: 1px 6px; border-radius: 4px; background: var(--accent-blue-bg); white-space: nowrap; line-height: 1.4; }
+.price-main { font-size: 15px; font-weight: 800; color: var(--text-main); white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
+.price-main small { font-size: 11px; font-weight: 500; color: var(--text-light); margin-left: 2px; }
+.product-desc { color: var(--text-muted); font-size: 11.5px; line-height: 1.5; }
+.price-tier { color: var(--accent-blue); font-size: 11px; line-height: 1.4; margin-top: 1px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.product-deposit { margin-top: 2px; color: var(--text-light); font-size: 10.5px; line-height: 1.4; }
+
+/* 表單欄位 */
+.field { margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
+label { display: block; margin-bottom: 6px; color: var(--text-light); font-size: 11.5px; font-weight: 700; }
+select, input[type="text"] { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--panel-bg); color: var(--text-main); font: inherit; font-size: 13.5px; outline: 0; }
+select:focus, input[type="text"]:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 2px var(--accent-blue-bg); }
+.device-note { margin-top: 8px; padding: 10px 12px; border-left: 2px solid var(--accent-blue); border-radius: 0 6px 6px 0; background: var(--panel-bg); color: var(--text-muted); font-size: 11.5px; line-height: 1.6; }
 
 /* 整合式雙擊區間月曆 */
-.calendar-box{
-  background:var(--card2);border:1px solid var(--line);border-radius:10px;
-  padding:12px;margin-bottom:14px;
-}
-.cal-nav{
-  display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;
-}
-.cal-title{font-size:14px;font-weight:750;color:var(--text)}
-.cal-btn{
-  background:#2b2b32;border:1px solid var(--line);color:var(--text);border-radius:6px;
-  width:32px;height:32px;min-height:32px;padding:0;display:flex;align-items:center;
-  justify-content:center;cursor:pointer;font-size:13px;
-}
-.cal-weekdays{
-  display:grid;grid-template-columns:repeat(7,1fr);text-align:center;
-  font-size:11px;color:var(--muted);font-weight:600;margin-bottom:6px;
-}
-.cal-grid{
-  display:grid;grid-template-columns:repeat(7,1fr);gap:2px;row-gap:4px;
-}
-.cal-cell{
-  height:38px;display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:600;border-radius:6px;cursor:pointer;
-  color:var(--text);position:relative;user-select:none;transition:background 0.15s;
-}
-.cal-cell:hover:not(.disabled){background:rgba(226,184,102,0.2)}
-.cal-cell.disabled{color:#3f3f46;cursor:not-allowed;opacity:0.35}
-.cal-cell.today::after{
-  content:"";position:absolute;bottom:3px;width:4px;height:4px;
-  border-radius:50%;background:var(--accent);
-}
-.cal-cell.range-start{
-  background:var(--accent)!important;color:#111!important;font-weight:800;border-radius:6px 0 0 6px;
-}
-.cal-cell.range-end{
-  background:var(--accent)!important;color:#111!important;font-weight:800;border-radius:0 6px 6px 0;
-}
-.cal-cell.range-start.range-end{border-radius:6px!important}
-.cal-cell.range-mid{
-  background:rgba(226,184,102,0.22)!important;color:var(--accent);border-radius:0;
-}
-.cal-cell.range-start.today::after,.cal-cell.range-end.today::after{background:#111}
+.calendar-box { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 14px; margin-bottom: 14px; }
+.cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.cal-title { font-size: 13.5px; font-weight: 700; color: var(--text-main); }
+.cal-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 4px; width: 32px; height: 32px; min-height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; }
+.cal-btn:hover { border-color: var(--accent-blue); }
+.cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 11px; color: var(--text-light); font-weight: 700; margin-bottom: 8px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; row-gap: 4px; }
+.cal-cell { height: 36px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border-radius: 4px; cursor: pointer; color: var(--text-main); position: relative; user-select: none; font-variant-numeric: tabular-nums; }
+.cal-cell:hover:not(.disabled) { background: var(--accent-blue-bg); }
+.cal-cell.disabled { color: var(--text-light); opacity: 0.35; cursor: not-allowed; }
+.cal-cell.today::after { content: ""; position: absolute; bottom: 3px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent-blue); }
+.cal-cell.range-start { background: var(--accent-blue) !important; color: #ffffff !important; font-weight: 800; border-radius: 4px 0 0 4px; }
+.cal-cell.range-end { background: var(--accent-blue) !important; color: #ffffff !important; font-weight: 800; border-radius: 0 4px 4px 0; }
+.cal-cell.range-start.range-end { border-radius: 4px !important; }
+.cal-cell.range-mid { background: var(--accent-blue-bg) !important; color: var(--accent-blue) !important; border-radius: 0; font-weight: 700; }
+.cal-cell.range-start.today::after, .cal-cell.range-end.today::after { background: #ffffff; }
 
-/* 時間快捷膠囊 */
-.time-pill-section{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08)}
-.time-pill-label{font-size:12px;color:var(--muted);font-weight:650;margin-bottom:8px}
-.time-pills{display:flex;flex-wrap:wrap;gap:6px}
-.time-pill{
-  width:auto;min-height:unset;padding:6px 11px;border-radius:6px;font-size:12px;
-  font-weight:600;background:#17171a;border:1px solid var(--line);color:var(--text);
-  cursor:pointer;transition:all 0.15s;
-}
-.time-pill.active{background:var(--accent);color:#111;border-color:var(--accent);font-weight:750}
+/* 取機時間膠囊 */
+.time-pill-section { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-color); }
+.time-pill-label { font-size: 11.5px; color: var(--text-light); font-weight: 700; margin-bottom: 8px; }
+.time-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.time-pill { width: auto; min-height: unset; padding: 6px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; font-variant-numeric: tabular-nums; }
+.time-pill.active { background: var(--accent-blue); color: #ffffff; border-color: var(--accent-blue); font-weight: 700; }
 
-.cal-summary{
-  margin-top:12px;padding:9px 12px;background:rgba(226,184,102,0.1);
-  border:1px solid rgba(226,184,102,0.25);border-radius:8px;color:var(--accent);
-  font-size:12px;font-weight:600;display:flex;justify-content:space-between;align-items:center;
-}
+.cal-summary { margin-top: 12px; padding: 10px 12px; background: var(--accent-blue-bg); border: 1px solid var(--accent-blue-border); border-radius: 6px; color: var(--accent-blue); font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; font-variant-numeric: tabular-nums; }
 
 /* 狀態盒與提示 */
-.saved-box{display:none;margin:0 0 14px;padding:11px;border:1px solid #31503b;border-radius:8px;background:#142319;color:var(--ok);font-size:12px;line-height:1.6}
-.saved-box.show{display:block}
-.saved-box strong{color:#fff}
-.saved-actions{margin-top:8px}
-.small-button{width:auto;min-height:30px;padding:5px 8px;border:1px solid #55705e;border-radius:6px;background:transparent;color:var(--ok);font-size:11px;font-weight:700;cursor:pointer}
-.notice-box{margin-top:10px;padding:10px 12px;border-radius:8px;background:#ffffff09;border:1px dashed #ffffff1f;color:var(--muted);font-size:11.5px;line-height:1.6}
-.lens-tip-box{display:none;margin-top:7px;padding:8px 10px;background:#1a1914;border:1px solid #e2b86644;border-radius:6px;color:var(--accent);font-size:11px;line-height:1.5}
-.delivery-notice{font-size:11.5px;color:var(--accent);margin-top:5px;line-height:1.5;background:#1a1914;padding:8px;border-radius:6px;border:1px solid #e2b86633}
+.saved-box { display: none; margin: 0 0 14px; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--panel-bg); color: var(--text-main); font-size: 12px; line-height: 1.6; }
+.saved-box.show { display: block; }
+.saved-actions { margin-top: 8px; }
+.small-button { width: auto; min-height: 28px; padding: 4px 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--card-bg); color: var(--text-light); font-size: 11px; font-weight: 700; cursor: pointer; }
+.notice-box { margin-top: 10px; padding: 10px 12px; border-radius: 6px; background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 11.5px; line-height: 1.6; }
+.lens-tip-box { display: none; margin-top: 8px; padding: 10px 12px; background: var(--accent-blue-bg); border: 1px solid var(--accent-blue-border); border-radius: 6px; color: var(--accent-blue); font-size: 11.5px; line-height: 1.55; }
+.delivery-notice { font-size: 11.5px; color: var(--text-muted); margin-top: 6px; line-height: 1.5; background: var(--panel-bg); padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); }
 
-/* 一步到位直接預訂區塊 */
-.switch-cta-box{margin-top:14px;padding:12px;border-radius:10px;background:linear-gradient(135deg, rgba(226,184,102,0.08) 0%, rgba(23,23,26,0.5) 100%);border:1px solid rgba(226,184,102,0.3);text-align:center}
-.switch-cta-desc{font-size:11.5px;color:var(--muted);margin-bottom:8px;line-height:1.4}
-.link-btn{width:100%;min-height:40px;background:#202024;border:1px solid var(--accent);color:var(--accent);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s}
-.link-btn:active{transform:scale(0.98);background:var(--accent);color:#111}
+/* 展開切換區塊 */
+.switch-cta-box { margin-top: 14px; padding: 14px; border-radius: 6px; background: var(--panel-bg); border: 1px solid var(--border-color); text-align: center; }
+.switch-cta-desc { font-size: 11.5px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.4; }
+.link-btn { width: 100%; min-height: 40px; background: var(--card-bg); border: 1px solid var(--accent-blue); color: var(--accent-blue); border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.link-btn:active { background: var(--accent-blue); color: #ffffff; }
 
-.status{display:none;margin-bottom:14px;padding:10px;border:1px solid #4a3b3b;border-radius:8px;background:#261b1b;color:var(--danger);font-size:12px;line-height:1.55}
-.status.show{display:block}
+.status { display: none; margin-bottom: 14px; padding: 10px 12px; border: 1px solid var(--danger-border); border-radius: 6px; background: var(--danger-bg); color: var(--danger-text); font-size: 12px; line-height: 1.5; }
+.status.show { display: block; }
 
 /* 按鈕風格 */
-button{width:100%;min-height:46px;padding:11px;border-radius:8px;font:inherit;font-size:14px;font-weight:750;cursor:pointer;transition:all 0.2s}
-button:disabled{opacity:.45;cursor:not-allowed}
-.secondary{background:#232328;color:var(--text);border:1px solid #55555d}
-.secondary:hover{background:#2b2b32}
-.btn-submit{background:linear-gradient(135deg, #f0cf85 0%, #c9933b 100%);color:#17140e;border:none;font-size:15px;font-weight:800;box-shadow:0 4px 16px rgba(201,147,59,0.25)}
-.btn-submit:active{transform:scale(0.98)}
+button { width: 100%; min-height: 46px; padding: 11px; border-radius: 6px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+.secondary { background: var(--panel-bg); color: var(--text-main); border: 1px solid var(--border-color); }
+.secondary:hover { border-color: var(--accent-blue); }
+.btn-submit { background: var(--accent-blue); color: #ffffff; border: none; font-size: 14.5px; font-weight: 800; }
+.btn-submit:active { opacity: 0.9; }
 
-.terms{margin:16px 4px 0;color:var(--sub);font-size:11px;line-height:1.7}
-.term-item{margin-top:12px}
-.term-item:first-child{margin-top:0}
-.term-heading{display:block;color:var(--muted);font-weight:700}
-.fallback{display:none;position:fixed;z-index:20;left:0;right:0;bottom:0;padding:18px 14px max(18px,env(safe-area-inset-bottom));background:#19191d;border-top:1px solid #45454d;border-radius:16px 16px 0 0}
-.fallback.show{display:block}
-.fallback h2{margin:0 0 6px;font-size:17px}
-.fallback p{color:var(--muted);font-size:13px;line-height:1.55}
-textarea{width:100%;height:180px;padding:10px;background:#09090b;color:var(--text);border:1px solid #45454d;border-radius:8px;resize:none}
-.sheet-buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+/* 注意事項 */
+.terms { margin: 16px 2px 0; color: var(--text-muted); font-size: 11px; line-height: 1.65; }
+.term-item { margin-top: 10px; }
+.term-item:first-child { margin-top: 0; }
+.term-heading { display: block; color: var(--text-main); font-weight: 700; margin-bottom: 2px; }
+
+/* 備用複製抽屜 */
+.fallback { display: none; position: fixed; z-index: 20; left: 0; right: 0; bottom: 0; padding: 18px 14px max(18px, env(safe-area-inset-bottom)); background: var(--card-bg); border-top: 1px solid var(--border-dark); border-radius: 12px 12px 0 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
+.fallback.show { display: block; }
+.fallback h2 { margin: 0 0 6px; font-size: 16px; color: var(--text-main); }
+.fallback p { color: var(--text-muted); font-size: 12.5px; line-height: 1.5; }
+textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 6px; resize: none; font-size: 13px; }
+.sheet-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+
+/* 頂級 Toast 浮動提示（徹底取代系統 alert） */
+.toast-capsule {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background-color: var(--toast-bg);
+  color: var(--toast-text);
+  padding: 10px 22px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+  z-index: 99999;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast-capsule.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
 </style>
 </head>
 <body>
 <main class="wrap">
-<div class="topbar"><button class="lang-toggle" id="languageButton" type="button">English</button></div>
-<header class="header">
-  <div class="brand">SSystem</div>
-  <div class="subtitle" id="subtitle">器材租借預約</div>
-  <div class="store" id="store">FIX iT RiGHT 台北大巨蛋門市｜台北市大安區光復南路88號1樓<br>營業時間 12:00–20:00｜熱門檔期依現場狀況彈性延長</div>
-</header>
 
-<!-- 預約 4 步驟進度引導 -->
-<div class="stepper">
-  <div class="step active" id="st1">
-    <div class="step-num">1</div>
-    <span id="step1Text">查檔期</span>
-  </div>
-  <div class="step-line"></div>
-  <div class="step" id="st2">
-    <div class="step-num">2</div>
-    <span id="step2Text">正式預約</span>
-  </div>
-  <div class="step-line"></div>
-  <div class="step" id="st3">
-    <div class="step-num">3</div>
-    <span id="step3Text">報價匯款</span>
-  </div>
-  <div class="step-line"></div>
-  <div class="step" id="st4">
-    <div class="step-num">4</div>
-    <span id="step4Text">完成預訂</span>
-  </div>
-</div>
-
-<div class="section-title" id="priceTitle">租借費率｜24H 彈性制（點選器材快速帶入）</div>
-<section class="card">
-  <!-- vivo x300 Ultra -->
-  <div class="price-row" data-model="vivo x300 Ultra">
-    <div class="price-row-top">
-      <div class="product-name-box">
-        <span class="product-name">vivo x300 Ultra</span>
-        <span class="tap-hint">點此選租 ➔</span>
-      </div>
-      <div class="price-main">$1,200<small id="d12a">/ 1–2日</small></div>
+  <!-- 0. 頂部簡約控制列（繁體/英文切換 ＆ 淺色/深色切換） -->
+  <div class="utility-bar">
+    <div class="control-group">
+      <button class="control-btn active" id="btn-lang-zh" onclick="setLanguage('zh')">繁體中文</button>
+      <button class="control-btn" id="btn-lang-en" onclick="setLanguage('en')">English</button>
     </div>
-    <div class="product-desc" id="x300uDesc">極致長焦收音旗艦 藍圖原色｜支援 200mm／400mm 增距鏡</div>
-    <div class="price-tier" id="x300uPrice">$1,100（3–5日）｜$1,000（6日以上）</div>
-  </div>
-
-  <!-- vivo x500 Pro Max -->
-  <div class="price-row" data-model="vivo x500 Pro Max">
-    <div class="price-row-top">
-      <div class="product-name-box">
-        <span class="product-name">vivo x500 Pro Max</span>
-        <span class="tap-hint">點此選租 ➔</span>
-      </div>
-      <div class="price-main">$1,100<small id="d12x">/ 1–2日</small></div>
+    <div class="control-group">
+      <button class="control-btn" id="btn-theme-light" onclick="setTheme('light')">淺色</button>
+      <button class="control-btn" id="btn-theme-dark" onclick="setTheme('dark')">深色</button>
     </div>
-    <div class="product-desc" id="x500pmDesc">長焦電影級專業｜可搭配 200mm／400mm 增距鏡</div>
-    <div class="price-tier" id="x500pmPrice">$1,000（3–5日）｜$900（6日以上）</div>
   </div>
 
-  <!-- vivo x200 Ultra -->
-  <div class="price-row" data-model="vivo x200 Ultra">
-    <div class="price-row-top">
-      <div class="product-name-box">
-        <span class="product-name">vivo x200 Ultra</span>
-        <span class="tap-hint">點此選租 ➔</span>
-      </div>
-      <div class="price-main">$1,000<small id="d12b">/ 1–2日</small></div>
+  <header class="header">
+    <div class="brand">SSystem</div>
+    <div class="subtitle" id="subtitle">器材租借預約</div>
+    <div class="store" id="store">FIX iT RiGHT 台北大巨蛋門市｜台北市大安區光復南路88號1樓<br>營業時間 12:00–20:00｜熱門檔期依現場狀況彈性延長</div>
+  </header>
+
+  <!-- 預約 4 步驟進度引導 -->
+  <div class="stepper">
+    <div class="step active" id="st1">
+      <div class="step-num">1</div>
+      <span id="step1Text">查檔期</span>
     </div>
-    <div class="product-desc" id="x200uDesc">大光圈與細節攝影兼具｜支援 200mm 增距鏡</div>
-    <div class="price-tier" id="x200uPrice">$900（3–5日）｜$800（6日以上）</div>
-  </div>
-
-  <!-- OPPO Find X9 Ultra -->
-  <div class="price-row" data-model="OPPO Find X9 Ultra">
-    <div class="price-row-top">
-      <div class="product-name-box">
-        <span class="product-name">OPPO Find X9 Ultra</span>
-        <span class="tap-hint">點此選租 ➔</span>
-      </div>
-      <div class="price-main">$1,000<small id="d12d">/ 1–2日</small></div>
+    <div class="step-line"></div>
+    <div class="step" id="st2">
+      <div class="step-num">2</div>
+      <span id="step2Text">正式預約</span>
     </div>
-    <div class="product-desc" id="oppoDesc">哈蘇影像，10倍原生光學變焦｜支援 400mm 增距鏡</div>
-    <div class="price-tier" id="oppoPrice">$900（3–5日）｜$800（6日以上）</div>
-  </div>
-
-  <!-- vivo x300 Pro -->
-  <div class="price-row" data-model="vivo x300 Pro">
-    <div class="price-row-top">
-      <div class="product-name-box">
-        <span class="product-name">vivo x300 Pro</span>
-        <span class="tap-hint">點此選租 ➔</span>
-      </div>
-      <div class="price-main">$900<small id="d12c">/ 1–2日</small></div>
+    <div class="step-line"></div>
+    <div class="step" id="st3">
+      <div class="step-num">3</div>
+      <span id="step3Text">報價匯款</span>
     </div>
-    <div class="product-desc" id="x300pDesc">高CP值的旅行長焦攝影首選｜支援 200mm 增距鏡</div>
-    <div class="price-tier" id="x300pPrice">$800（3–5日）｜$700（6日以上）</div>
-  </div>
-
-  <!-- iPhone 17 Pro / Max -->
-  <div class="price-row" data-model="iPhone 17 Pro Max">
-    <div class="price-row-top">
-      <div class="product-name-box">
-        <span class="product-name">iPhone 17 Pro / Max</span>
-        <span class="tap-hint">點此選租 ➔</span>
-      </div>
-      <div class="price-main">$850<small id="d12e">/ 1–2日</small></div>
+    <div class="step-line"></div>
+    <div class="step" id="st4">
+      <div class="step-num">4</div>
+      <span id="step4Text">完成預訂</span>
     </div>
-    <div class="product-desc" id="iphoneDesc">蘋果最強效能，流暢影片拍攝</div>
-    <div class="price-tier" id="iphonePrice">$750（3–5日）｜$600（6日以上）</div>
   </div>
 
-  <!-- DJI Pocket 4 Pro -->
-  <div class="price-row" data-model="DJI Pocket 4 Pro 全能套裝">
-    <div class="price-row-top">
-      <div class="product-name-box">
-        <span class="product-name">DJI Pocket 4 Pro 全能套裝</span>
-        <span class="tap-hint">點此選租 ➔</span>
+  <div class="section-title" id="priceTitle">租借費率｜24H 彈性制（點選器材快速帶入）</div>
+  <section class="card">
+    <!-- vivo x300 Ultra -->
+    <div class="price-row" data-model="vivo x300 Ultra">
+      <div class="price-row-top">
+        <div class="product-name-box">
+          <span class="product-name">vivo x300 Ultra</span>
+          <span class="tap-hint">點此選租 ➔</span>
+        </div>
+        <div class="price-main">$1,200<small id="d12a">/ 1–2日</small></div>
       </div>
-      <div class="price-main">$700<small id="perDayA">/ 日</small></div>
+      <div class="product-desc" id="x300uDesc">極致長焦收音旗艦 藍圖原色｜支援 200mm／400mm 增距鏡</div>
+      <div class="price-tier" id="x300uPrice">$1,100（3–5日）｜$1,000（6日以上）</div>
     </div>
-    <div class="product-desc" id="djiDesc">旗艦級雙鏡頭手持縮放三軸相機</div>
-  </div>
 
-  <!-- 增距鏡特仕組 -->
-  <div class="price-row" data-model="僅租借 G2 增距鏡頭特仕組">
-    <div class="price-row-top">
-      <div class="product-name-box">
-        <span class="product-name" id="lensTitle">增距鏡特仕組</span>
-        <span class="tap-hint">點此選租 ➔</span>
+    <!-- vivo x500 Pro Max -->
+    <div class="price-row" data-model="vivo x500 Pro Max">
+      <div class="price-row-top">
+        <div class="product-name-box">
+          <span class="product-name">vivo x500 Pro Max</span>
+          <span class="tap-hint">點此選租 ➔</span>
+        </div>
+        <div class="price-main">$1,100<small id="d12x">/ 1–2日</small></div>
       </div>
-      <div class="price-main">$300–$600<small id="perDayB">/ 日</small></div>
+      <div class="product-desc" id="x500pmDesc">長焦電影級專業｜可搭配 200mm／400mm 增距鏡</div>
+      <div class="price-tier" id="x500pmPrice">$1,000（3–5日）｜$900（6日以上）</div>
     </div>
-    <div class="product-desc" id="lensDesc">含對應手機殼及配件組｜手機原生距離皆相同，加裝增距鏡專用於提升清晰度與細節！200mm ($300／日)：自然清晰，性價比高。400mm ($600／日)：旗艦級超長焦，景深層次更深、銳利度與穿網效果更強，遠距離舞台首選。</div>
-    <div class="product-deposit" id="depLens">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$10,000 (與手機合租時以手機押金為主，不重複計算)</div>
-  </div>
 
-  <!-- 雲端上傳 -->
-  <div class="price-row" data-model="cloud">
-    <div class="price-row-top">
-      <div class="product-name-box">
-        <span class="product-name" id="cloudTitle">雲端上傳服務</span>
-        <span class="tap-hint">加選 ➔</span>
+    <!-- vivo x200 Ultra -->
+    <div class="price-row" data-model="vivo x200 Ultra">
+      <div class="price-row-top">
+        <div class="product-name-box">
+          <span class="product-name">vivo x200 Ultra</span>
+          <span class="tap-hint">點此選租 ➔</span>
+        </div>
+        <div class="price-main">$1,000<small id="d12b">/ 1–2日</small></div>
       </div>
-      <div class="price-main">$200<small id="perUse">/ 次</small></div>
+      <div class="product-desc" id="x200uDesc">大光圈與細節攝影兼具｜支援 200mm 增距鏡</div>
+      <div class="price-tier" id="x200uPrice">$900（3–5日）｜$800（6日以上）</div>
     </div>
-    <div class="product-desc" id="cloudDesc">拍完免傳檔，雲端隨時輕鬆載｜保留 2 週</div>
-    <div class="product-deposit" id="depCloud">門市代為原畫質雲端上傳</div>
-  </div>
 
-  <div class="notice-box" style="margin-top:12px;border-color:#e2b86633" id="depositRuleTip">
-    <strong>押金貼心提醒：</strong>手機與增距鏡一同租借時，以手機押金為主（寄送 NT$30,000 / 門市 NT$3,000+證件），無須重複累計增距鏡押金。
-  </div>
-</section>
-
-<!-- STEP 1：快速查檔期表單 -->
-<div class="section-title" id="formTitle">STEP 1. 選擇設備與預約日期（免填個資）</div>
-<section class="card" id="formSectionStep1">
-  <div id="liffStatus" class="status"></div>
-  <div id="savedSelection" class="saved-box"></div>
-
-  <div class="field">
-    <label for="model" id="modelLabel">租借主機型號</label>
-    <select id="model">
-      <option value="vivo x300 Ultra">vivo x300 Ultra</option>
-      <option value="vivo x500 Pro Max">vivo x500 Pro Max</option>
-      <option value="vivo x200 Ultra">vivo x200 Ultra</option>
-      <option value="vivo x300 Pro">vivo x300 Pro</option>
-      <option value="OPPO Find X9 Ultra">OPPO Find X9 Ultra</option>
-      <option value="iPhone 17 Pro Max">iPhone 17 Pro / Max</option>
-      <option value="DJI Pocket 4 Pro 全能套裝">DJI Pocket 4 Pro 全能套裝</option>
-      <option value="僅租借 G2 增距鏡頭特仕組">僅租借 G2 增距鏡頭特仕組</option>
-    </select>
-    <div id="deviceNote" class="device-note"></div>
-  </div>
-
-  <div class="field">
-    <label for="lens" id="lensLabel">增距鏡配件選配</label>
-    <select id="lens"></select>
-    <div id="lensDetailTip" class="lens-tip-box"></div>
-  </div>
-
-  <!-- 整合式區間月曆與時間快捷膠囊 -->
-  <div class="field">
-    <label id="calendarTitle">預約檔期與取機時間（點選起訖日）</label>
-    <div class="calendar-box">
-      <div class="cal-nav">
-        <button type="button" class="cal-btn" id="calPrevBtn">◀</button>
-        <span class="cal-title" id="calMonthTitle">2026 年 10 月</span>
-        <button type="button" class="cal-btn" id="calNextBtn">▶</button>
+    <!-- OPPO Find X9 Ultra -->
+    <div class="price-row" data-model="OPPO Find X9 Ultra">
+      <div class="price-row-top">
+        <div class="product-name-box">
+          <span class="product-name">OPPO Find X9 Ultra</span>
+          <span class="tap-hint">點此選租 ➔</span>
+        </div>
+        <div class="price-main">$1,000<small id="d12d">/ 1–2日</small></div>
       </div>
-      <div class="cal-weekdays">
-        <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
-      </div>
-      <div class="cal-grid" id="calDaysGrid"></div>
+      <div class="product-desc" id="oppoDesc">哈蘇影像，10倍原生光學變焦｜支援 400mm 增距鏡</div>
+      <div class="price-tier" id="oppoPrice">$900（3–5日）｜$800（6日以上）</div>
+    </div>
 
-      <!-- 取機時間膠囊選單 -->
-      <div class="time-pill-section">
-        <div class="time-pill-label" id="timePillLabel">🕒 預計取機時間（營業時間 12:00–20:00）：</div>
-        <div class="time-pills" id="timePillContainer">
-          <button type="button" class="time-pill active" data-time="12:00">12:00</button>
-          <button type="button" class="time-pill" data-time="13:00">13:00</button>
-          <button type="button" class="time-pill" data-time="14:00">14:00</button>
-          <button type="button" class="time-pill" data-time="15:00">15:00</button>
-          <button type="button" class="time-pill" data-time="16:00">16:00</button>
-          <button type="button" class="time-pill" data-time="17:00">17:00</button>
-          <button type="button" class="time-pill" data-time="18:00">18:00</button>
-          <button type="button" class="time-pill" data-time="19:00">19:00</button>
-          <button type="button" class="time-pill" data-time="20:00">20:00</button>
+    <!-- vivo x300 Pro -->
+    <div class="price-row" data-model="vivo x300 Pro">
+      <div class="price-row-top">
+        <div class="product-name-box">
+          <span class="product-name">vivo x300 Pro</span>
+          <span class="tap-hint">點此選租 ➔</span>
+        </div>
+        <div class="price-main">$900<small id="d12c">/ 1–2日</small></div>
+      </div>
+      <div class="product-desc" id="x300pDesc">高CP值的旅行長焦攝影首選｜支援 200mm 增距鏡</div>
+      <div class="price-tier" id="x300pPrice">$800（3–5日）｜$700（6日以上）</div>
+    </div>
+
+    <!-- iPhone 17 Pro / Max -->
+    <div class="price-row" data-model="iPhone 17 Pro Max">
+      <div class="price-row-top">
+        <div class="product-name-box">
+          <span class="product-name">iPhone 17 Pro / Max</span>
+          <span class="tap-hint">點此選租 ➔</span>
+        </div>
+        <div class="price-main">$850<small id="d12e">/ 1–2日</small></div>
+      </div>
+      <div class="product-desc" id="iphoneDesc">蘋果最強效能，流暢影片拍攝</div>
+      <div class="price-tier" id="iphonePrice">$750（3–5日）｜$600（6日以上）</div>
+    </div>
+
+    <!-- DJI Pocket 4 Pro -->
+    <div class="price-row" data-model="DJI Pocket 4 Pro 全能套裝">
+      <div class="price-row-top">
+        <div class="product-name-box">
+          <span class="product-name">DJI Pocket 4 Pro 全能套裝</span>
+          <span class="tap-hint">點此選租 ➔</span>
+        </div>
+        <div class="price-main">$700<small id="perDayA">/ 日</small></div>
+      </div>
+      <div class="product-desc" id="djiDesc">旗艦級雙鏡頭手持縮放三軸相機</div>
+    </div>
+
+    <!-- 增距鏡特仕組 -->
+    <div class="price-row" data-model="僅租借 G2 增距鏡頭特仕組">
+      <div class="price-row-top">
+        <div class="product-name-box">
+          <span class="product-name" id="lensTitle">增距鏡特仕組</span>
+          <span class="tap-hint">點此選租 ➔</span>
+        </div>
+        <div class="price-main">$300–$600<small id="perDayB">/ 日</small></div>
+      </div>
+      <div class="product-desc" id="lensDesc">含對應手機殼及配件組｜加裝增距鏡專用於提升清晰度與細節！200mm ($300／日)：自然清晰。400mm ($600／日)：旗艦級超長焦，穿網效果更強。</div>
+      <div class="product-deposit" id="depLens">門市：證件正本+押金 $3,000｜寄送：免證件押金 NT$10,000 (手機合租以手機押金為主)</div>
+    </div>
+
+    <!-- 雲端上傳 -->
+    <div class="price-row" data-model="cloud">
+      <div class="price-row-top">
+        <div class="product-name-box">
+          <span class="product-name" id="cloudTitle">雲端上傳服務</span>
+          <span class="tap-hint">加選 ➔</span>
+        </div>
+        <div class="price-main">$200<small id="perUse">/ 次</small></div>
+      </div>
+      <div class="product-desc" id="cloudDesc">拍完免傳檔，雲端隨時輕鬆載｜保留 2 週</div>
+      <div class="product-deposit" id="depCloud">門市代為原畫質雲端上傳</div>
+    </div>
+
+    <div class="notice-box" style="margin-top:12px;" id="depositRuleTip">
+      <strong>押金規範：</strong>手機與增距鏡一同租借時，以手機押金為主（寄送 NT$30,000 / 門市 NT$3,000+證件），無須重複累計增距鏡押金。
+    </div>
+  </section>
+
+  <!-- STEP 1：快速查檔期表單 -->
+  <div class="section-title" id="formTitle">STEP 1. 選擇設備與預約日期（免填個資）</div>
+  <section class="card" id="formSectionStep1">
+    <div id="liffStatus" class="status"></div>
+    <div id="savedSelection" class="saved-box"></div>
+
+    <div class="field">
+      <label for="model" id="modelLabel">租借主機型號</label>
+      <select id="model">
+        <option value="vivo x300 Ultra">vivo x300 Ultra</option>
+        <option value="vivo x500 Pro Max">vivo x500 Pro Max</option>
+        <option value="vivo x200 Ultra">vivo x200 Ultra</option>
+        <option value="vivo x300 Pro">vivo x300 Pro</option>
+        <option value="OPPO Find X9 Ultra">OPPO Find X9 Ultra</option>
+        <option value="iPhone 17 Pro Max">iPhone 17 Pro / Max</option>
+        <option value="DJI Pocket 4 Pro 全能套裝">DJI Pocket 4 Pro 全能套裝</option>
+        <option value="僅租借 G2 增距鏡頭特仕組">僅租借 G2 增距鏡頭特仕組</option>
+      </select>
+      <div id="deviceNote" class="device-note"></div>
+    </div>
+
+    <div class="field">
+      <label for="lens" id="lensLabel">增距鏡配件選配</label>
+      <select id="lens"></select>
+      <div id="lensDetailTip" class="lens-tip-box"></div>
+    </div>
+
+    <!-- 整合式區間月曆與時間快捷膠囊 -->
+    <div class="field">
+      <label id="calendarTitle">預約檔期與取機時間（點選起訖日）</label>
+      <div class="calendar-box">
+        <div class="cal-nav">
+          <button type="button" class="cal-btn" id="calPrevBtn">◀</button>
+          <span class="cal-title" id="calMonthTitle">2026 年 10 月</span>
+          <button type="button" class="cal-btn" id="calNextBtn">▶</button>
+        </div>
+        <div class="cal-weekdays">
+          <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+        </div>
+        <div class="cal-grid" id="calDaysGrid"></div>
+
+        <!-- 取機時間膠囊選單 -->
+        <div class="time-pill-section">
+          <div class="time-pill-label" id="timePillLabel">預計取機時間（營業時間 12:00–20:00）：</div>
+          <div class="time-pills" id="timePillContainer">
+            <button type="button" class="time-pill active" data-time="12:00">12:00</button>
+            <button type="button" class="time-pill" data-time="13:00">13:00</button>
+            <button type="button" class="time-pill" data-time="14:00">14:00</button>
+            <button type="button" class="time-pill" data-time="15:00">15:00</button>
+            <button type="button" class="time-pill" data-time="16:00">16:00</button>
+            <button type="button" class="time-pill" data-time="17:00">17:00</button>
+            <button type="button" class="time-pill" data-time="18:00">18:00</button>
+            <button type="button" class="time-pill" data-time="19:00">19:00</button>
+            <button type="button" class="time-pill" data-time="20:00">20:00</button>
+          </div>
+        </div>
+
+        <!-- 檔期即時統計 -->
+        <div class="cal-summary" id="calSummaryText">
+          請點選月曆選擇取機日期與歸還日期
+        </div>
+      </div>
+    </div>
+
+    <!-- 隱藏原生欄位 -->
+    <input type="hidden" id="pickupDate">
+    <input type="hidden" id="pickupClock" value="12:00">
+    <input type="hidden" id="pickupTime">
+    <input type="hidden" id="returnDate">
+
+    <button id="inquiryButton" type="button" class="secondary">送出詢問設備檔期</button>
+    <div class="notice-box" id="inquiryNotice">
+      <strong>安心詢問：</strong>先查詢是否有設備空檔即可，系統會自動暫存選擇。客服在 LINE 回覆確認有檔期後，即可接著完成正式預訂。
+    </div>
+
+    <div class="switch-cta-box">
+      <div class="switch-cta-desc">想一步到位？免去等檔期後二次開單的時間：</div>
+      <button type="button" class="link-btn" id="toggleFormalBtn">展開直接填寫預約單（含取件方式） ▼</button>
+    </div>
+  </section>
+
+  <!-- STEP 2：正式預約資料 -->
+  <div id="formalSection" style="display:none">
+    <div class="section-title" id="formalTitle">STEP 2. 確認有檔期，填寫正式預訂資料</div>
+    <section class="card">
+
+      <div class="field">
+        <label for="name" id="nameLabel">承租人姓名 (需同取件人)</label>
+        <input type="text" id="name" autocomplete="name" placeholder="證件姓名">
+      </div>
+
+      <div class="field">
+        <label for="phone" id="phoneLabel">取件手機門號</label>
+        <input type="text" id="phone" autocomplete="tel" inputmode="tel" placeholder="台灣 10 碼或外國旅客請填聯絡方式">
+      </div>
+
+      <div class="field">
+        <label for="isStore" id="returnMethodLabel">交還方式</label>
+        <select id="isStore">
+          <option value="store" selected>大巨蛋門市本人親取</option>
+          <option value="delivery">店到店寄送（免證件・需押金）</option>
+        </select>
+      </div>
+
+      <div class="field" id="storeNoteField" style="display:none">
+        <label for="storeName" id="storeNameLabel">指定 7-11 店到店名稱 / 店號</label>
+        <input type="text" id="storeName" placeholder="例如：敦巨門市(或店號 123456）">
+        <div class="delivery-notice">
+          • 寄送方案：店到店寄出前須轉帳完成免證件押金，設備驗收完成後 24 hr 原路返還。<br>
+          • 器材會提前 2～3 天寄達，使用完畢後請於 1～2 日內寄回；逾期將由押金扣除延遲費。
         </div>
       </div>
 
-      <!-- 檔期即時統計 -->
-      <div class="cal-summary" id="calSummaryText">
-        請點選月曆選擇取機日期與歸還日期
+      <div class="field">
+        <label for="cloudService" id="cloudLabel">雲端上傳服務</label>
+        <select id="cloudService">
+          <option value="No">不需要</option>
+          <option value="Yes">需要（+$200／次，原畫質雲端下載，保留 2 週）</option>
+        </select>
       </div>
-    </div>
-  </div>
 
-  <!-- 隱藏原生欄位，完全相容底層存取 -->
-  <input type="hidden" id="pickupDate">
-  <input type="hidden" id="pickupClock" value="12:00">
-  <input type="hidden" id="pickupTime">
-  <input type="hidden" id="returnDate">
-
-  <button id="inquiryButton" type="button" class="secondary">送出詢問設備檔期</button>
-  <div class="notice-box" id="inquiryNotice">
-    <strong>安心詢問：</strong>先查詢是否有設備空檔即可，系統會自動暫存選擇。客服在 LINE 回覆確認有檔期後，即可接著完成正式預訂。
-  </div>
-
-  <div class="switch-cta-box">
-    <div class="switch-cta-desc">⚡ 想一步到位？免去等檔期後二次開單的時間：</div>
-    <button type="button" class="link-btn" id="toggleFormalBtn">展開直接填寫預約單（含取件方式） ▼</button>
-  </div>
-</section>
-
-<!-- STEP 2：正式預約資料 -->
-<div id="formalSection" style="display:none">
-  <div class="section-title" style="margin:22px 4px 8px" id="formalTitle">STEP 2. 確認有檔期，填寫正式預訂資料</div>
-  <section class="card">
-
-    <div class="field">
-      <label for="name" id="nameLabel">承租人姓名 (需同取件人)</label>
-      <input type="text" id="name" autocomplete="name" placeholder="證件姓名">
-    </div>
-
-    <div class="field">
-      <label for="phone" id="phoneLabel">取件手機門號</label>
-      <input type="text" id="phone" autocomplete="tel" inputmode="tel" placeholder="台灣 10 碼或外國旅客請填聯絡方式">
-    </div>
-
-    <div class="field">
-      <label for="isStore" id="returnMethodLabel">交還方式</label>
-      <select id="isStore">
-        <option value="store" selected>大巨蛋門市本人親取</option>
-        <option value="delivery">店到店寄送（免證件・需押金）</option>
-      </select>
-    </div>
-
-    <div class="field" id="storeNoteField" style="display:none">
-      <label for="storeName" id="storeNameLabel">指定 7-11 店到店名稱 / 店號</label>
-      <input type="text" id="storeName" placeholder="例如：敦巨門市(或店號 123456）">
-      <div class="delivery-notice">
-        * 運送期不計費，免證件押金 <span id="depositAmount">30,000</span> 元寄送，押金於出貨前通知轉帳，歸還確認無損後 24 小時內退還。器材會提前 2～3 天寄達，使用完畢後請於 1～2 日內寄回；逾期將由押金扣除延遲費。
+      <div style="margin-top:14px">
+        <button id="bookingButton" type="button" class="btn-submit">確認送出正式訂單</button>
       </div>
-    </div>
 
-    <div class="field">
-      <label for="cloudService" id="cloudLabel">雲端上傳服務</label>
-      <select id="cloudService">
-        <option value="No">不需要</option>
-        <option value="Yes">需要（+$200／次，原畫質雲端下載，保留 2 週）</option>
-      </select>
-    </div>
+      <div class="notice-box" style="margin-top:10px" id="formalPaymentNotice">
+        送出後客服將於 LINE 聊天室依您選填內容提供報價與匯款資訊，完成匯款後即鎖定檔期並完成預約。
+      </div>
+    </section>
+  </div>
 
-    <div style="margin-top:14px">
-      <button id="bookingButton" type="button" class="btn-submit">確認送出正式訂單</button>
-    </div>
+  <div class="section-title" id="termsTitle">租借方案注意事項</div>
+  <section class="card terms">
+    <div class="term-item"><span class="term-heading" id="term1h">彈性報價方案</span><span id="term1">標有 24hr 彈性制，如遇演唱會當日租還或出國，依實際使用時間或場次起算，需配合現場檔期安排；最終交還日以協調確認為準。</span></div>
+    <div class="term-item"><span class="term-heading" id="term2h">租還規範</span><span id="term2">限 12:00–20:00 於大巨蛋門市完成交還機，逾時則以隔日計。演唱會時段依公告或客服確認辦理。</span></div>
+    <div class="term-item"><span class="term-heading" id="term3h">寄送服務資訊</span><span id="term3">外縣市寄送依器材標示的免證件押金辦理，款項完成後安排寄送；設備寄回檢查無誤後原路返還押金。</span></div>
+    <div class="term-item"><span class="term-heading" id="term4h">損壞與聯繫</span><span id="term4">租借期間請保持聯繫；設備損毀、遺失或逾時歸還，依租賃合約負擔相關費用。</span></div>
+    <div class="term-item"><span class="term-heading" id="term5h">增距鏡特別條款</span><span id="term5">租借前請確認場館規定；若因主辦禁帶無法使用，租金不退款，但可轉為 12 個月有效折抵金。</span></div>
 
-    <div class="notice-box" style="margin-top:10px" id="formalPaymentNotice">
-      送出後客服將於 LINE 聊天室依您選填內容提供報價與匯款資訊，完成匯款後即鎖定檔期並完成預約。
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border-color);text-align:center">
+      <a href="https://ssystem089.github.io/rental-form/faq.html" target="_blank" rel="noopener noreferrer" id="faqLink" style="display:inline-block;width:100%;padding:11px;border-radius:6px;background:var(--panel-bg);border:1px solid var(--border-color);color:var(--accent-blue);text-decoration:none;font-size:12px;font-weight:700;">
+        常見問題 Q&A（押金退款、寄送時程、照片傳輸等）➔
+      </a>
     </div>
   </section>
-</div>
-
-<div class="section-title" id="termsTitle">租借方案注意事項</div>
-<section class="card terms">
-  <div class="term-item"><span class="term-heading" id="term1h">彈性報價方案</span><span id="term1">標有 24hr 彈性制，如遇演唱會當日租還或出國，依實際使用時間或場次起算，需配合現場檔期安排；最終交還日以協調確認為準。</span></div>
-  <div class="term-item"><span class="term-heading" id="term2h">租還規範</span><span id="term2">限 12:00–20:00 於大巨蛋門市完成交還機，逾時則以隔日計。演唱會時段依公告或客服確認辦理。</span></div>
-  <div class="term-item"><span class="term-heading" id="term3h">寄送服務資訊</span><span id="term3">外縣市寄送依器材標示的免證件押金辦理，款項完成後安排寄送；設備寄回檢查無誤後原路返還押金。</span></div>
-  <div class="term-item"><span class="term-heading" id="term4h">損壞與聯繫</span><span id="term4">租借期間請保持聯繫；設備損毀、遺失或逾時歸還，依租賃合約負擔相關費用。</span></div>
-  <div class="term-item"><span class="term-heading" id="term5h">增距鏡特別條款</span><span id="term5">租借前請確認場館規定；若因主辦禁帶無法使用，租金不退款，但可轉為 12 個月有效折抵金。</span></div>
-
-  <div style="margin-top:16px;padding-top:14px;border-top:1px solid #ffffff12;text-align:center">
-    <a href="https://ssystem089.github.io/rental-form/faq.html" target="_blank" rel="noopener noreferrer" id="faqLink" style="display:inline-block;width:100%;padding:11px;border-radius:8px;background:#202024;border:1px solid #e2b86655;color:#e2b866;text-decoration:none;font-size:12.5px;font-weight:750;box-sizing:border-box">
-      常見問題 Q&A（押金退款、寄送時程、照片傳輸等）➔
-    </a>
-  </div>
-</section>
 </main>
 
 <section id="fallbackSheet" class="fallback">
   <h2 id="fallbackTitle">訊息未能自動送出</h2>
   <p id="fallbackGuide">預約內容已保留，請複製後回到 LINE 聊天室貼上並送出。</p>
   <textarea id="fallbackText" readonly></textarea>
-  <div class="sheet-buttons"><button class="secondary" type="button" id="backButton">返回表單</button><button class="primary" type="button" id="copyButton">複製內容</button></div>
+  <div class="sheet-buttons">
+    <button class="secondary" type="button" id="backButton">返回表單</button>
+    <button class="btn-submit" type="button" id="copyButton">複製內容</button>
+  </div>
 </section>
 
-<script>
-const isStore = document.getElementById("isStore");
+<!-- 浮動提示膠囊 Toast -->
+<div class="toast-capsule" id="app-toast"></div>
 
-function updateReturnMethod() {
-  const storeNoteField = document.getElementById("storeNoteField");
-  if (!isStore || !storeNoteField) return;
-  const isDelivery = isStore.value === "delivery";
-  storeNoteField.style.display = isDelivery ? "" : "none";
-}
-isStore.addEventListener("change", updateReturnMethod);
-updateReturnMethod();
-  
+<script>
 const LIFF_ID="2011411630-pdbfMEEs";
 const STORAGE_KEY="fir-rental-draft-v5";
 let liffReady=false,currentLang="zh",currentMessage="";
@@ -500,13 +543,14 @@ function getTodayStr(){
   return new Date(n.getTime()-n.getTimezoneOffset()*60000).toISOString().split("T")[0];
 }
 
+// 瑞士無 Emoji 雙語系定義
 const zh={
-  subtitle:"器材租借預約",store:"FiX iT RiGHT 台北大巨蛋門市｜台北市大安區光復南路88號1樓<br>營業時間 12:00–20:00｜演唱會日依現場狀況彈性延長",
+  subtitle:"器材租借預約",store:"FiX iT RiGHT 台北大巨蛋門市｜台北市大安區光復南路88號1樓<br>營業時間 12:00–20:00｜熱門檔期依現場狀況彈性延長",
   priceTitle:"租借費率｜24H 彈性制（點選器材快速帶入）",days:"/ 1–2日",
   tapHint:"點此選租 ➔",tapHintCloud:"加選 ➔",
   step1Text:"查檔期",step2Text:"正式預約",step3Text:"報價匯款",step4Text:"完成預訂",
   calendarTitle:"預約檔期與取機時間（點選起訖日）",
-  timePillLabel:"🕒 預計取機時間（營業時間 12:00–20:00）：",
+  timePillLabel:"預計取機時間（營業時間 12:00–20:00）：",
   x300uDesc:"極致長焦收音旗艦 藍圖原色｜支援 200mm／400mm 增距鏡",x300uPrice:"$1,100（3–5日）｜$1,000（6日以上）",
   x500pmDesc:"長焦電影級專業｜可搭配 200mm／400mm 增距鏡",x500pmPrice:"$1,000（3–5日）｜$900（6日以上）",
   x200uDesc:"大光圈與細節攝影兼具｜支援 200mm 增距鏡",x200uPrice:"$900（3–5日）｜$800（6日以上）",
@@ -515,13 +559,13 @@ const zh={
   iphoneDesc:"蘋果最強效能，流暢影片拍攝",iphonePrice:"$750（3–5日）｜$600（6日以上）",
   djiDesc:"旗艦級雙鏡頭手持縮放三軸相機",perDay:"/ 日",
   lensTitle:"增距鏡特仕組",
-  lensDesc:"含對應手機殼及配件組｜手機原生距離皆相同，加裝增距鏡專用於提升清晰度與細節！200mm ($300／日)：自然清晰，性價比高。400mm ($600／日)：旗艦級超長焦，景深層次更深、銳利度與穿網效果更強，遠距離舞台首選。",
+  lensDesc:"含對應手機殼及配件組｜加裝增距鏡專用於提升清晰度與細節！200mm ($300／日)：自然清晰。400mm ($600／日)：旗艦級超長焦，穿網效果更強。",
   cloudTitle:"雲端上傳服務",cloudDesc:"拍完免傳檔，雲端隨時輕鬆載｜保留 2 週",perUse:"/ 次",
   
   depCommon:"門市：證件正本+押金 $3,000｜店到店：免證件，押金 NT$30,000",
   depLensText:"門市：證件正本+押金 $3,000｜店到店：免證件，押金 NT$10,000",
   depCloudText:"門市代為原畫質雲端上傳",
-  depositRuleTip:"<strong>押金貼心提醒：</strong>手機與增距鏡一同租借時，以手機押金為主（寄送 NT$30,000 / 門市 NT$3,000+證件），無須重複累計增距鏡押金。",
+  depositRuleTip:"<strong>押金規範：</strong>手機與增距鏡一同租借時，以手機押金為主（寄送 NT$30,000 / 門市 NT$3,000+證件），無須重複累計增距鏡押金。",
 
   formTitle:"STEP 1. 選擇設備與預約日期（免填個資）",
   modelLabel:"租借主機型號",lensLabel:"增距鏡配件選配",
@@ -550,28 +594,28 @@ const zh={
   rent400_x500pm:"G2 Ultra 400mm + x500 Pro Max 手機殼",
   rent400_oppo:"G2 Ultra 400mm + Find X9 Ultra 手機殼",
 
-  lensTipClarification:"<strong>增距鏡拍攝小撇步：</strong>手機原生拍攝距離雖然相同，但加裝增距鏡能大幅提升遠景的清晰度與細節！特別適合大巨蛋等場館，透過長焦特性與景深效果，能完美淡化並虛化前方防護網（穿網效果），讓畫面更乾淨通透！",
+  lensTipClarification:"<strong>增距鏡說明：</strong>手機原生拍攝距離相同，加裝增距鏡能提升遠景清晰度與細節，具備良好景深與淡化防護網效果，畫面更通透。",
 
-  noteX300U:"<strong>簡易介紹：</strong>極致長焦收音旗艦，藍圖原色。",
-  noteX500PM:"<strong>簡易介紹：</strong>長焦電影級專業旗艦，支援 200mm／400mm 增距鏡。",
-  noteX200U:"<strong>簡易介紹：</strong>畫質細節首選，適合重視裁切與舞台細節。",
-  noteX300P:"<strong>簡易介紹：</strong>旅行長焦首選，防抖與畫質兼顧。",
-  noteOppo:"<strong>簡易介紹：</strong>哈蘇影像旗艦，支援 400mm 增距鏡。",
-  noteIphone:"<strong>簡易介紹：</strong>適合 iOS 使用者與日常錄影。",
-  noteDji:"<strong>簡易介紹：</strong>適合穩定錄影、移動鏡頭與手持 Vlog。",
-  noteLens:"<strong>簡易介紹：</strong>僅單租增距鏡特仕組（含對應手機殼與配件）。",
-  savedTitle:"已保留上次選擇",savedText:"型號與預約日期已為您帶入；確認可租後，補填姓名與電話即可送出正式預約。",clear:"清除已保存資料",
-  dates:"請點選月曆選擇預計取機與歸還日期。",pastDate:"取機日期不可選擇過去日期！",badDate:"歸還日期不可早於取機日期。",contact:"正式預約請填寫承租人真實姓名。",badPhone:"請填寫取件手機門號或聯絡方式。",
-  wait:"LINE 尚未初始化完成，請稍候幾秒後再試。",init:"LINE 連線初始化失敗，請從官方帳號一對一聊天室重新開啟。",sending:"送出中…",sent:"已送出",fallbackTitle:"訊息未能自動送出",fallbackGuide:"預約內容已保留，請複製後回到 LINE 聊天室貼上並送出。",back:"返回表單",copy:"複製內容",copied:"已複製，請回到 LINE 貼上並傳送。"
+  noteX300U:"<strong>規格摘要：</strong>極致長焦收音旗艦，藍圖原色。",
+  noteX500PM:"<strong>規格摘要：</strong>長焦電影級專業旗艦，支援 200mm／400mm 增距鏡。",
+  noteX200U:"<strong>規格摘要：</strong>畫質細節首選，適合重視裁切與舞台細節。",
+  noteX300P:"<strong>規格摘要：</strong>旅行長焦首選，防抖與畫質兼顧。",
+  noteOppo:"<strong>規格摘要：</strong>哈蘇影像旗艦，支援 400mm 增距鏡。",
+  noteIphone:"<strong>規格摘要：</strong>適合 iOS 使用者與日常錄影。",
+  noteDji:"<strong>規格摘要：</strong>適合穩定錄影、移動鏡頭與手持 Vlog。",
+  noteLens:"<strong>規格摘要：</strong>僅單租增距鏡特仕組（含對應手機殼與配件）。",
+  savedTitle:"已保留上次選擇",savedText:"型號與預約日期已帶入；確認後補填姓名與電話即可送出正式預約。",clear:"清除已保存資料",
+  dates:"請點選月曆選擇預計取機與歸還日期",pastDate:"取機日期不可選擇過去日期",badDate:"歸還日期不可早於取機日期",contact:"正式預約請填寫承租人真實姓名",badPhone:"請填寫取件手機門號或聯絡方式",
+  wait:"LINE 尚未初始化完成，請稍候再試",init:"LINE 連線初始化失敗，請從官方帳號重新開啟",sending:"送出中…",sent:"已送出",fallbackTitle:"訊息未能自動送出",fallbackGuide:"預約內容已保留，請複製後回到 LINE 聊天室貼上並送出。",back:"返回表單",copy:"複製內容",copied:"已複製內容，請回到 LINE 貼上傳送"
 };
 
 const en={
   ...zh,subtitle:"Equipment Rental Booking",store:"Taipei Dome Store｜No. 88, Guangfu S. Rd., Da'an Dist., Taipei<br>Hours: 12:00–20:00｜Extended hours may apply on concert days",
-  priceTitle:"RENTAL RATES｜24H PLAN (Click item to auto-select)",days:"/ 1–2 days",
+  priceTitle:"RENTAL RATES｜24H PLAN (Tap item to auto-select)",days:"/ 1–2 days",
   tapHint:"Select ➔",tapHintCloud:"Add ➔",
   step1Text:"Check Availability",step2Text:"Formal Booking",step3Text:"Quote & Payment",step4Text:"Confirmed",
   calendarTitle:"Rental Dates & Pickup Time (Tap start & end dates)",
-  timePillLabel:"🕒 Pickup Time (Business hours 12:00–20:00):",
+  timePillLabel:"Pickup Time (Business hours 12:00–20:00):",
   x300uDesc:"Ultimate telephoto & audio flagship, Blueprint｜200mm / 400mm extender compatible",x300uPrice:"$1,100 (3–5 days) ｜ $1,000 (6+ days)",
   x500pmDesc:"Cinema-grade telephoto professional ｜ 200mm / 400mm extender compatible",x500pmPrice:"$1,000 (3–5 days) ｜ $900 (6+ days)",
   x200uDesc:"Large aperture & fine details ｜ 200mm extender compatible",x200uPrice:"$900 (3–5 days) ｜ $800 (6+ days)",
@@ -580,30 +624,30 @@ const en={
   iphoneDesc:"Apple flagship performance, smooth video recording",iphonePrice:"$750 (3–5 days) ｜ $600 (6+ days)",
   djiDesc:"Flagship dual-lens 3-axis zoom camera",perDay:"/ day",
   lensTitle:"Telephoto Extender Set",
-  lensDesc:"Includes phone case & accessories ｜ Phone shooting distance is identical; attaching the extender lens is specifically for maximizing clarity and optical detail! 200mm ($300/day): Clear and natural. 400mm ($600/day): Flagship super-telephoto, deeper depth of field and net-masking effect, best for distant stages.",
+  lensDesc:"Includes phone case & accessories ｜ 200mm ($300/day): Clear and natural. 400mm ($600/day): Flagship super-telephoto, deeper depth of field.",
   cloudTitle:"Cloud Upload Service",cloudDesc:"Download original quality anytime ｜ retained 2 weeks",perUse:"/ use",
 
   depCommon:"In-store: Original ID + $3,000 deposit ｜ Delivery: NT$30,000 deposit",
-  depLensText:"In-store: Original ID + $3,000 deposit ｜ Delivery: NT$10,000 deposit (Phone deposit takes precedence if rented together)",
+  depLensText:"In-store: Original ID + $3,000 deposit ｜ Delivery: NT$10,000 deposit (Phone deposit takes precedence)",
   depCloudText:"In-store cloud upload service, no deposit required",
-  depositRuleTip:"<strong>Deposit Notice:</strong> When renting a phone and an extender together, the phone deposit policy applies (Delivery: NT$30,000 / Store: NT$3,000 + ID). Extender deposit is not stacked.",
+  depositRuleTip:"<strong>Deposit Notice:</strong> When renting a phone and an extender together, the phone deposit policy applies.",
 
   formTitle:"STEP 1. Select Device & Dates (No Personal Info Required)",
   modelLabel:"Rental device",lensLabel:"Telephoto extender option",
   inquiryButton:"Check Availability",
-  inquiryNotice:"<strong>No Commitment:</strong> Check device availability first. Once confirmed via LINE chat, proceed to step 2 to complete formal booking.",
+  inquiryNotice:"<strong>No Commitment:</strong> Check device availability first. Once confirmed via LINE chat, proceed to step 2.",
   toggleFormalOpen:"Direct Booking Details (Include Pickup & Cloud) ▼",
   toggleFormalClose:"▲ Collapse booking details",
   formalTitle:"STEP 2. Complete Formal Booking Details",
   cloudLabel:"Cloud upload service",
   cloudNo:"Not needed",
   cloudYes:"Needed (+$200/use)",
-  nameLabel:"Renter's Full Legal Name (as on ID)",phoneLabel:"Phone number",
+  nameLabel:"Renter's Full Legal Name",phoneLabel:"Phone number",
   returnMethodLabel:"Fulfillment method",bookingButton:"Confirm & Submit Formal Booking",
-  formalPaymentNotice:"Customer service will provide quotation and payment details via LINE chat. Once transferred, your reservation will be locked and confirmed.",
+  formalPaymentNotice:"Customer service will provide quotation and payment details via LINE chat.",
   termsTitle:"RENTAL TERMS",
-  term1h:"Flexible pricing plan",term1:"Items under the 24-hour flexible plan may be calculated by actual use time or event session. Final return arrangements are confirmed with customer service.",term2h:"Pickup and return policy",term2:"Normal in-store pickup and return hours are 12:00–20:00. Late returns may be charged as an additional day unless otherwise confirmed.",term3h:"Delivery service",term3:"For delivery outside Taipei, the applicable no-ID deposit is required before dispatch. The deposit is refunded after return and inspection.",term4h:"Damage and communication",term4:"Please remain reachable during the rental. Damage, loss, or late return may incur charges under the rental agreement.",term5h:"Telephoto extender terms",term5:"Confirm venue rules before renting. If prohibited by the organizer, rental is non-refundable but may be converted to 12-month store credit.",
-  faqLinkText:"FAQ & Guidelines (Deposit refunds, shipping, file transfer) ➔",
+  term1h:"Flexible pricing plan",term1:"Items under 24-hour flexible plan calculated by actual use time or session.",term2h:"Pickup and return policy",term2:"Hours: 12:00–20:00. Late returns charged as additional day.",term3h:"Delivery service",term3:"Deposit required before dispatch. Fully refunded post-inspection.",term4h:"Damage and communication",term4:"Tenant liable for factory repair costs if damaged.",term5h:"Telephoto extender terms",term5:"Confirm venue rules before renting. Non-refundable if prohibited.",
+  faqLinkText:"FAQ & Guidelines ➔",
   noLens:"No add-on",
   lens200:"Add G2 200mm extender (+$300/day)",
   lens400:"Add G2 Ultra 400mm extender (+$600/day)",
@@ -616,28 +660,45 @@ const en={
   rent400_x500pm:"G2 Ultra 400mm + x500 Pro Max Case",
   rent400_oppo:"G2 Ultra 400mm + Find X9 Ultra Case",
 
-  lensTipClarification:"<strong>Extender Tip:</strong> Phone distance is identical, but attaching an extender greatly enhances clarity and detail! Perfect for venues like Taipei Dome—using telephoto and depth-of-field effects, it seamlessly blurs out front safety nets (net-masking effect) for a crystal-clear view.",
+  lensTipClarification:"<strong>Extender Tip:</strong> Greatly enhances clarity and optical detail, seamlessly blurring front safety nets.",
 
-  noteX300U:"<strong>Quick guide:</strong> Ultimate telephoto & audio flagship, Blueprint.",
-  noteX500PM:"<strong>Quick guide:</strong> Cinema-grade telephoto professional flagship.",
-  noteX200U:"<strong>Quick guide:</strong> Best image-detail choice, suitable for cropping.",
-  noteX300P:"<strong>Quick guide:</strong> Travel long-zoom choice, balanced stabilization.",
-  noteOppo:"<strong>Quick guide:</strong> Hasselblad imaging flagship.",
-  noteIphone:"<strong>Quick guide:</strong> Suitable for iOS users and video recording.",
-  noteDji:"<strong>Quick guide:</strong> Suitable for stable video and handheld vlogs.",
-  noteLens:"<strong>Quick guide:</strong> Extender set only (includes phone case & accessories).",
-  savedTitle:"Saved Selection",savedText:"Device and date choices restored. Complete name and phone number to submit formal booking.",clear:"Clear saved selection"
+  noteX300U:"<strong>Summary:</strong> Ultimate telephoto & audio flagship, Blueprint.",
+  noteX500PM:"<strong>Summary:</strong> Cinema-grade telephoto professional flagship.",
+  noteX200U:"<strong>Summary:</strong> Best image-detail choice, suitable for cropping.",
+  noteX300P:"<strong>Summary:</strong> Travel long-zoom choice, balanced stabilization.",
+  noteOppo:"<strong>Summary:</strong> Hasselblad imaging flagship.",
+  noteIphone:"<strong>Summary:</strong> Suitable for iOS users and video recording.",
+  noteDji:"<strong>Summary:</strong> Suitable for stable video and handheld vlogs.",
+  noteLens:"<strong>Summary:</strong> Extender set only (includes phone case & accessories).",
+  savedTitle:"Saved Selection",savedText:"Device and date choices restored. Complete name and phone to submit.",clear:"Clear saved selection"
 };
 
 function S(){return currentLang==="zh"?zh:en}
 function text(id,value,html=false){const e=document.getElementById(id);if(e)e[html?"innerHTML":"textContent"]=value}
-function initialLang(){try{const s=localStorage.getItem("fir-language");if(s==="zh"||s==="en")return s}catch(e){}return(navigator.language||"zh").toLowerCase().startsWith("zh")?"zh":"en"}
 
-function applyLang(lang){
-  currentLang=lang;try{localStorage.setItem("fir-language",lang)}catch(e){}const x=S();
-  document.documentElement.lang=lang==="zh"?"zh-TW":"en";
-  document.getElementById("languageButton").textContent=lang==="zh"?"English":"繁體中文";
-  const ids={
+// 極簡浮動 Toast
+function showToast(message) {
+  const toast = document.getElementById("app-toast");
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2200);
+}
+
+// 語系切換
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem("fir-language", lang);
+
+  document.getElementById("btn-lang-zh").classList.toggle("active", lang === "zh");
+  document.getElementById("btn-lang-en").classList.toggle("active", lang === "en");
+  document.documentElement.lang = lang === "zh" ? "zh-TW" : "en";
+
+  const x = S();
+  const ids = {
     subtitle:"subtitle",store:"store",priceTitle:"priceTitle",
     step1Text:"step1Text",step2Text:"step2Text",step3Text:"step3Text",step4Text:"step4Text",
     calendarTitle:"calendarTitle",timePillLabel:"timePillLabel",
@@ -645,12 +706,7 @@ function applyLang(lang){
     x200uDesc:"x200uDesc",x200uPrice:"x200uPrice",x300pDesc:"x300pDesc",x300pPrice:"x300pPrice",
     oppoDesc:"oppoDesc",oppoPrice:"oppoPrice",iphoneDesc:"iphoneDesc",iphonePrice:"iphonePrice",
     djiDesc:"djiDesc",lensTitle:"lensTitle",lensDesc:"lensDesc",cloudTitle:"cloudTitle",cloudDesc:"cloudDesc",
-    
-    depX300u:"depCommon",depX500pm:"depCommon",depX200u:"depCommon",
-    depOppo:"depCommon",depX300p:"depCommon",depIphone:"depCommon",
-    depDji:"depCommon",depLens:"depLensText",depCloud:"depCloudText",
-    depositRuleTip:"depositRuleTip",faqLink:"faqLinkText",
-
+    depLens:"depLensText",depCloud:"depCloudText",depositRuleTip:"depositRuleTip",faqLink:"faqLinkText",
     formTitle:"formTitle",modelLabel:"modelLabel",lensLabel:"lensLabel",
     inquiryButton:"inquiryButton",inquiryNotice:"inquiryNotice",
     formalTitle:"formalTitle",cloudLabel:"cloudLabel",nameLabel:"nameLabel",phoneLabel:"phoneLabel",
@@ -663,22 +719,18 @@ function applyLang(lang){
   text("perDayA",x.perDay);text("perDayB",x.perDay);text("perUse",x.perUse);
 
   document.querySelectorAll(".tap-hint").forEach(el=>{
-    if(el.closest('[data-model="cloud"]')){
-      el.textContent=x.tapHintCloud;
-    }else{
-      el.textContent=x.tapHint;
-    }
+    el.textContent = el.closest('[data-model="cloud"]') ? x.tapHintCloud : x.tapHint;
   });
-  
+
   const nameInput = document.getElementById("name");
   if(!nameInput.value){
-    nameInput.placeholder=lang==="zh"?"證件姓名":"Full legal name (as on ID)";
+    nameInput.placeholder = lang==="zh" ? "證件姓名" : "Full legal name (as on ID)";
   }
-  document.getElementById("phone").placeholder=lang==="zh"?"台灣 10 碼或外國旅客請填聯絡方式":"Phone number";
-  
-  const sec=document.getElementById("formalSection");
-  const isHidden=sec.style.display==="none"||sec.style.display==="";
-  document.getElementById("toggleFormalBtn").textContent=isHidden?x.toggleFormalOpen:x.toggleFormalClose;
+  document.getElementById("phone").placeholder = lang==="zh" ? "台灣 10 碼或外國旅客請填聯絡方式" : "Phone number";
+
+  const sec = document.getElementById("formalSection");
+  const isHidden = sec.style.display==="none"||sec.style.display==="";
+  document.getElementById("toggleFormalBtn").textContent = isHidden ? x.toggleFormalOpen : x.toggleFormalClose;
 
   updateModelLabels();
   updateNote();
@@ -689,34 +741,38 @@ function applyLang(lang){
 }
 
 function updateModelLabels(){
-  const labels=currentLang==="zh"
-    ?["vivo x300 Ultra","vivo x500 Pro Max","vivo x200 Ultra","vivo x300 Pro","OPPO Find X9 Ultra","iPhone 17 Pro / Max","DJI Pocket 4 Pro 全能套裝","僅租借 G2 增距鏡頭特仕組"]
-    :[
-      "vivo x300 Ultra — Best long zoom",
-      "vivo x500 Pro Max — Cinema telephoto",
-      "vivo x200 Ultra — Best image detail",
-      "vivo x300 Pro — Travel long zoom",
-      "OPPO Find X9 Ultra",
-      "iPhone 17 Pro Max",
-      "iPhone 17 Pro",
-      "DJI Pocket 4 Pro Creator Combo",
-      "G2 Telephoto Extender Set Only"
-    ];
+  const labels = currentLang === "zh"
+    ? ["vivo x300 Ultra","vivo x500 Pro Max","vivo x200 Ultra","vivo x300 Pro","OPPO Find X9 Ultra","iPhone 17 Pro / Max","DJI Pocket 4 Pro 全能套裝","僅租借 G2 增距鏡頭特仕組"]
+    : ["vivo x300 Ultra","vivo x500 Pro Max","vivo x200 Ultra","vivo x300 Pro","OPPO Find X9 Ultra","iPhone 17 Pro / Max","DJI Pocket 4 Pro Combo","G2 Extender Set Only"];
   [...document.getElementById("model").options].forEach((o,i)=>{if(labels[i])o.text=labels[i]});
-  const x=S();
-  document.getElementById("cloudService").options[0].text=x.cloudNo;
-  document.getElementById("cloudService").options[1].text=x.cloudYes;
-  
-  document.getElementById("isStore").options[0].text=currentLang==="zh"?"大巨蛋門市本人親取":"In-store pickup at Taipei Dome";
-  document.getElementById("isStore").options[1].text=currentLang==="zh"?"店到店寄送（免證件・需押金）":"Delivery (No ID, Deposit Required)";
+  const x = S();
+  document.getElementById("cloudService").options[0].text = x.cloudNo;
+  document.getElementById("cloudService").options[1].text = x.cloudYes;
+  document.getElementById("isStore").options[0].text = currentLang==="zh" ? "大巨蛋門市本人親取" : "In-store pickup at Taipei Dome";
+  document.getElementById("isStore").options[1].text = currentLang==="zh" ? "店到店寄送（免證件・需押金）" : "Delivery (No ID, Deposit Required)";
 }
 
-function toggleLang(){applyLang(currentLang==="zh"?"en":"zh")}
+// 主題切換邏輯
+function applyTheme(theme) {
+  if (theme === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
+    document.getElementById("btn-theme-dark").classList.add("active");
+    document.getElementById("btn-theme-light").classList.remove("active");
+  } else {
+    document.documentElement.removeAttribute("data-theme");
+    document.getElementById("btn-theme-light").classList.add("active");
+    document.getElementById("btn-theme-dark").classList.remove("active");
+  }
+}
+
+function setTheme(theme) {
+  localStorage.setItem("fir-theme", theme);
+  applyTheme(theme);
+}
 
 function updateLens(keep=false){
   const m=document.getElementById("model").value,l=document.getElementById("lens"),old=l.value,x=S();
   let o;
-  
   if(m==="vivo x300 Ultra"||m==="vivo x500 Pro Max"){
     o=[["none",x.noLens],["200",x.lens200],["400",x.lens400]];
   }else if(m==="vivo x200 Ultra"||m==="vivo x300 Pro"){
@@ -738,19 +794,10 @@ function updateLens(keep=false){
   }
 
   l.innerHTML=o.map(a=>`<option value="${a[0]}">${a[1]}</option>`).join("");
-  
   if(keep && o.some(a=>a[0]===old)){
     l.value=old;
   }else{
-    if(o.some(a=>a[0]==="400")){
-      l.value="400";
-    }else if(o.some(a=>a[0]==="200")){
-      l.value="200";
-    }else if(o.some(a=>a[0]==="rent400_x300u")){
-      l.value="rent400_x300u";
-    }else{
-      l.value="none";
-    }
+    l.value=o.some(a=>a[0]==="400") ? "400" : (o.some(a=>a[0]==="200") ? "200" : o[0][0]);
   }
   checkLensTip();
 }
@@ -780,24 +827,17 @@ function updateNote(){
 
 function handleDeliveryToggle(){
   const val=document.getElementById("isStore").value;
-  const storeNoteField=document.getElementById("storeNoteField");
-  if(val==="store"){
-    storeNoteField.style.display="none";
-  }else{
-    storeNoteField.style.display="block";
-  }
+  document.getElementById("storeNoteField").style.display = (val==="store") ? "none" : "block";
 }
 
-// -------------------------------------------------------------
-// 整合式日曆繪製與雙擊邏輯 (Range Calendar Engine)
-// -------------------------------------------------------------
+// 日曆核心引擎
 function renderCalendar(){
   const grid = document.getElementById("calDaysGrid");
   const monthTitle = document.getElementById("calMonthTitle");
   if (!grid || !monthTitle) return;
 
   const y = calCurrentMonth.getFullYear();
-  const m = calCurrentMonth.getMonth(); // 0-based
+  const m = calCurrentMonth.getMonth();
   monthTitle.textContent = currentLang === "zh" ? `${y} 年 ${m + 1} 月` : `${calCurrentMonth.toLocaleString('en', { month: 'long' })} ${y}`;
 
   grid.innerHTML = "";
@@ -805,14 +845,12 @@ function renderCalendar(){
   const totalDays = new Date(y, m + 1, 0).getDate();
   const todayStr = getTodayStr();
 
-  // 填補月初空白
   for (let i = 0; i < firstDay; i++) {
     const blank = document.createElement("div");
     blank.className = "cal-cell disabled";
     grid.appendChild(blank);
   }
 
-  // 填入本月日期
   for (let d = 1; d <= totalDays; d++) {
     const cell = document.createElement("div");
     cell.className = "cal-cell";
@@ -826,33 +864,21 @@ function renderCalendar(){
       cell.classList.add("disabled");
     } else {
       if (dateStr === todayStr) cell.classList.add("today");
-
-      // 判斷選取狀態
-      if (calStartDate && dateStr === calStartDate) {
-        cell.classList.add("range-start");
-      }
-      if (calEndDate && dateStr === calEndDate) {
-        cell.classList.add("range-end");
-      }
-      if (calStartDate && calEndDate && dateStr > calStartDate && dateStr < calEndDate) {
-        cell.classList.add("range-mid");
-      }
-
+      if (calStartDate && dateStr === calStartDate) cell.classList.add("range-start");
+      if (calEndDate && dateStr === calEndDate) cell.classList.add("range-end");
+      if (calStartDate && calEndDate && dateStr > calStartDate && dateStr < calEndDate) cell.classList.add("range-mid");
       cell.onclick = () => onDateCellClick(dateStr);
     }
     grid.appendChild(cell);
   }
-
   updateCalendarSummary();
 }
 
 function onDateCellClick(dateStr){
   if (!calStartDate || (calStartDate && calEndDate)) {
-    // 第一次點選：設定起始日
     calStartDate = dateStr;
     calEndDate = "";
   } else if (calStartDate && !calEndDate) {
-    // 第二次點選：設定結束日
     if (dateStr < calStartDate) {
       calStartDate = dateStr;
       calEndDate = "";
@@ -860,22 +886,16 @@ function onDateCellClick(dateStr){
       calEndDate = dateStr;
     }
   }
-
   syncCalendarToHiddenInputs();
   renderCalendar();
   save();
 }
 
 function syncCalendarToHiddenInputs(){
-  const pDateInput = document.getElementById("pickupDate");
-  const rDateInput = document.getElementById("returnDate");
-  const pClockInput = document.getElementById("pickupClock");
-  const pTimeInput = document.getElementById("pickupTime");
-
-  pDateInput.value = calStartDate || "";
-  rDateInput.value = calEndDate || calStartDate || "";
-  pClockInput.value = calPickupTime;
-  pTimeInput.value = (calStartDate && calPickupTime) ? `${calStartDate}T${calPickupTime}` : "";
+  document.getElementById("pickupDate").value = calStartDate || "";
+  document.getElementById("returnDate").value = calEndDate || calStartDate || "";
+  document.getElementById("pickupClock").value = calPickupTime;
+  document.getElementById("pickupTime").value = (calStartDate && calPickupTime) ? `${calStartDate}T${calPickupTime}` : "";
 }
 
 function updateCalendarSummary(){
@@ -887,20 +907,17 @@ function updateCalendarSummary(){
     const d2 = new Date(calEndDate);
     const diffDays = Math.max(1, Math.round((d2 - d1) / (1000 * 3600 * 24)) + 1);
     sumEl.innerHTML = currentLang === "zh"
-      ? `📅 已選：${calStartDate.slice(5)} 至 ${calEndDate.slice(5)}（約 ${diffDays} 天）｜${calPickupTime} 取`
-      : `📅 ${calStartDate.slice(5)} to ${calEndDate.slice(5)} (approx ${diffDays} days) ｜ Pickup ${calPickupTime}`;
+      ? `已選檔期：${calStartDate.slice(5)} 至 ${calEndDate.slice(5)}（約 ${diffDays} 天）｜${calPickupTime} 取`
+      : `Rental: ${calStartDate.slice(5)} to ${calEndDate.slice(5)} (${diffDays} days) ｜ ${calPickupTime}`;
   } else if (calStartDate) {
     sumEl.innerHTML = currentLang === "zh"
-      ? `👉 已選取機：${calStartDate.slice(5)}（${calPickupTime}），請點選歸還日期`
-      : `👉 Pickup: ${calStartDate.slice(5)} (${calPickupTime}), tap return date`;
+      ? `已選取機：${calStartDate.slice(5)}（${calPickupTime}），請點選歸還日期`
+      : `Pickup: ${calStartDate.slice(5)} (${calPickupTime}), tap return date`;
   } else {
-    sumEl.textContent = currentLang === "zh"
-      ? "請點選月曆選擇取機日期與歸還日期"
-      : "Please select pickup and return dates";
+    sumEl.textContent = currentLang === "zh" ? "請點選月曆選擇取機日期與歸還日期" : "Please select pickup and return dates";
   }
 }
 
-// 時間快捷膠囊綁定
 function setupTimePills(){
   const pills = document.querySelectorAll(".time-pill");
   pills.forEach(pill => {
@@ -939,7 +956,6 @@ function restore(){
   const d=getDraft();if(!d)return;
   const m=document.getElementById("model");
   if(d.model)m.value=d.model;
-  
   updateLens(true);
   if(d.lens)document.getElementById("lens").value=d.lens;
   
@@ -954,18 +970,13 @@ function restore(){
       p.classList.toggle("active", p.getAttribute("data-time") === calPickupTime);
     });
   }
-
   syncCalendarToHiddenInputs();
 
   if(d.cloud)document.getElementById("cloudService").value=d.cloud;
   if(d.name)document.getElementById("name").value=d.name;
   if(d.phone)document.getElementById("phone").value=d.phone;
   if(d.storeName)document.getElementById("storeName").value=d.storeName;
-  if (d.method) {
-    document.getElementById("isStore").value = d.method;
-  } else {
-    document.getElementById("isStore").value = "store";
-  }
+  document.getElementById("isStore").value = d.method || "store";
 
   handleDeliveryToggle();
   updateNote();
@@ -973,24 +984,6 @@ function restore(){
   renderCalendar();
   checkLensTip();
 }
-
-function updateDepositAmount() {
-  const modelEl = document.getElementById("model");
-  const depositAmount = document.getElementById("depositAmount");
-  if (!modelEl || !depositAmount) return;
-  const mainModel = modelEl.value.trim();
-  if (mainModel === "僅租借 G2 增距鏡頭特仕組") {
-    depositAmount.textContent = "10,000";
-  } else {
-    depositAmount.textContent = "30,000";
-  }
-}
-
-const modelEl = document.getElementById("model");
-if (modelEl) {
-  modelEl.addEventListener("change", updateDepositAmount);
-}
-updateDepositAmount();
 
 function renderSaved(){
   const d=getDraft(),box=document.getElementById("savedSelection");
@@ -1024,9 +1017,7 @@ function equipment(){
   if(l.value !== "none") {
     if(l.value === "200") cleanLens = " + 200mm 增距鏡";
     else if(l.value === "400") cleanLens = " + 400mm 增距鏡";
-    else {
-      return l.options[l.selectedIndex].text;
-    }
+    else return l.options[l.selectedIndex].text;
   }
   return m + cleanLens;
 }
@@ -1037,14 +1028,13 @@ function dates(){
   const r=document.getElementById("returnDate").value;
   const today=getTodayStr();
 
-  if(!calStartDate || !calEndDate){alert(S().dates);return null}
-  if(calStartDate < today){alert(S().pastDate);return null}
-  if(calEndDate < calStartDate){alert(S().badDate);return null}
+  if(!calStartDate || !calEndDate){showToast(S().dates);return null}
+  if(calStartDate < today){showToast(S().pastDate);return null}
+  if(calEndDate < calStartDate){showToast(S().badDate);return null}
 
   const d1 = new Date(calStartDate);
   const d2 = new Date(calEndDate);
   const totalDays = Math.max(1, Math.round((d2 - d1) / (1000 * 3600 * 24)) + 1);
-
   return { p, r, d: totalDays };
 }
 
@@ -1053,15 +1043,9 @@ function scrollToFormalSection(){
   sec.style.display="block";
   updateStepper(2);
   document.getElementById("toggleFormalBtn").textContent=S().toggleFormalClose;
-
   setTimeout(()=>{
     sec.scrollIntoView({behavior:"smooth",block:"start"});
-    const nameEl=document.getElementById("name");
-    if(nameEl){
-      nameEl.style.boxShadow="0 0 0 2px var(--accent)";
-      setTimeout(()=>{nameEl.style.boxShadow="";},1600);
-    }
-  },300);
+  },200);
 }
 
 function inquiry(){
@@ -1070,8 +1054,8 @@ function inquiry(){
 
   const directLink=`https://liff.line.me/${LIFF_ID}`;
   currentMessage = currentLang==="zh"
-    ? `【詢問設備檔期】\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (約 ${d.d} 天)\n\n👉 確認有檔期？點此立即補填預約資料：\n${directLink}`
-    : `[Equipment Availability Check]\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (approx ${d.d} days)\n\n👉 Complete details here:\n${directLink}`;
+    ? `【詢問設備檔期】\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (約 ${d.d} 天)\n\n確認有檔期？點此立即補填預約資料：\n${directLink}`
+    : `[Equipment Availability Check]\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (approx ${d.d} days)\n\nComplete details here:\n${directLink}`;
   
   send(currentMessage,document.getElementById("inquiryButton"),"inquiry");
 }
@@ -1079,8 +1063,8 @@ function inquiry(){
 function booking(){
   const d=dates();if(!d)return;
   const n=document.getElementById("name").value.trim(),p=document.getElementById("phone").value.trim();
-  if(!n){alert(S().contact);return}
-  if(!p){alert(S().badPhone);return}
+  if(!n){showToast(S().contact);return}
+  if(!p){showToast(S().badPhone);return}
   
   save();
   
@@ -1101,9 +1085,9 @@ function booking(){
     : `[Formal Booking]\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (approx ${d.d} days)\nName: ${n}\nPhone: ${p}\nMethod: ${methodStr}`;
 
   if(isStore) {
-    baseText += currentLang==="zh" ? `\n押金：現金 3,000 + 證件正本(三證擇一押附)` : `\nDeposit: Cash $3,000 + ID`;
+    baseText += currentLang==="zh" ? `\n押金：現金 NT$ 3,000 + 證件正本` : `\nDeposit: Cash $3,000 + ID`;
   } else {
-    baseText += currentLang==="zh" ? `\n押金：NT$${deliveryDeposit}（寄出前通知轉帳）` : `\nDeposit: NT$${deliveryDeposit} (Transfer notice before dispatch)`;
+    baseText += currentLang==="zh" ? `\n押金：NT$ ${deliveryDeposit}（寄出前通知轉帳）` : `\nDeposit: NT$ ${deliveryDeposit}`;
   }
 
   if(cloudVal === "Yes") {
@@ -1125,8 +1109,7 @@ function setupPriceRowInteractions(){
       if (!modelVal) return;
 
       if (modelVal === "cloud") {
-        const cloudEl = document.getElementById("cloudService");
-        cloudEl.value = "Yes";
+        document.getElementById("cloudService").value = "Yes";
         save();
         scrollToFormalSection();
         return;
@@ -1141,9 +1124,6 @@ function setupPriceRowInteractions(){
 
       const target = document.getElementById("calendarTitle");
       if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
-
-      mSelect.style.boxShadow = "0 0 0 2px var(--accent)";
-      setTimeout(() => { mSelect.style.boxShadow = ""; }, 1200);
     });
   });
 }
@@ -1196,10 +1176,28 @@ function closeFallback(){document.getElementById("fallbackSheet").classList.remo
 async function copyFallback(){
   const a=document.getElementById("fallbackText");
   try{await navigator.clipboard.writeText(a.value)}catch(e){a.select();document.execCommand("copy")}
-  alert(S().copied);
+  showToast(S().copied);
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
+  // 1. 初始化主題
+  const savedTheme = localStorage.getItem("fir-theme");
+  if (savedTheme) {
+    applyTheme(savedTheme);
+  } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    applyTheme("dark");
+  } else {
+    applyTheme("light");
+  }
+
+  if (window.matchMedia) {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function(e) {
+      if (!localStorage.getItem("fir-theme")) {
+        applyTheme(e.matches ? "dark" : "light");
+      }
+    });
+  }
+
   setupTimePills();
 
   document.getElementById("calPrevBtn").onclick = () => {
@@ -1212,7 +1210,11 @@ document.addEventListener("DOMContentLoaded",()=>{
   };
 
   restore();
-  applyLang(initialLang());
+  
+  // 2. 初始化語系
+  const savedLang = localStorage.getItem("fir-language") || ((navigator.language||"zh").toLowerCase().startsWith("zh") ? "zh" : "en");
+  setLanguage(savedLang);
+
   handleDeliveryToggle();
   setupPriceRowInteractions();
 
@@ -1224,11 +1226,9 @@ document.addEventListener("DOMContentLoaded",()=>{
     scrollToFormalSection();
   }
 
-  document.getElementById("languageButton").onclick=toggleLang;
   document.getElementById("model").onchange = () => {
     updateLens(false);
     updateNote();
-    updateDepositAmount();
     handleDeliveryToggle();
     save();
   };
@@ -1248,8 +1248,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     const sec=document.getElementById("formalSection");
     const isHidden=sec.style.display==="none"||sec.style.display==="";
     sec.style.display=isHidden?"block":"none";
-    const x=S();
-    document.getElementById("toggleFormalBtn").textContent=isHidden?x.toggleFormalClose:x.toggleFormalOpen;
+    document.getElementById("toggleFormalBtn").textContent=isHidden?S().toggleFormalClose:S().toggleFormalOpen;
     if(isHidden){
       updateStepper(2);
       sec.scrollIntoView({behavior:"smooth",block:"start"});
