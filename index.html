@@ -469,7 +469,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
     <input type="hidden" id="pickupTime">
     <input type="hidden" id="returnDate">
 
-    <button id="inquiryButton" type="button" class="secondary">送出設備檔期排程查詢</button>
+    <button id="inquiryButton" type="button" class="secondary">送出檔期查詢</button>
     <div class="notice-box" id="inquiryNotice">
       <strong>排程核對須知：</strong>先行為您核對設備在庫庫存，系統將自動暫存本次選擇。門市客服於 LINE 官方帳號確認檔期無誤後，即可接續完成預訂。
     </div>
@@ -482,7 +482,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
 
   <!-- STEP 2：正式預約資料 -->
   <div id="formalSection" style="display:none">
-    <div class="section-title" id="formalTitle">STEP 2. 承租人資料與履約交機設定</div>
+    <div class="section-title" id="formalTitle">STEP 2. 承租人資料</div>
     <section class="card">
 
       <div class="field">
@@ -521,29 +521,20 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
       </div>
 
       <div style="margin-top:14px">
-        <button id="bookingButton" type="button" class="btn-submit">確認送出正式預約委託</button>
+        <button id="bookingButton" type="button" class="btn-submit">送出正式預約</button>
       </div>
 
       <div class="notice-box" style="margin-top:10px" id="formalPaymentNotice">
-        送出委託後，門市專員將於 LINE 官方聊天室開立正式線上報價單與匯款資訊，完成定金轉帳即正式鎖定設備出貨檔期。
+        送出後，確認定金轉帳後即正式完成預定。
       </div>
     </section>
   </div>
 
-  <div class="section-title" id="termsTitle">租賃合約與出庫作業須知 ｜ TERMS & CONDITIONS</div>
-  <section class="card terms">
-    <div class="term-item"><span class="term-heading" id="term1h">24H 彈性制租期計費</span><span id="term1">標註 24H 彈性制之器材，若逢演唱會場次租還或海外跨國差旅，以實際取機時點起算 24 小時為一日標準，確切排程以門市審核確認為準。</span></div>
-    <div class="term-item"><span class="term-heading" id="term2h">門市點交與身分核驗</span><span id="term2">營業時間 12:00–20:00 於大巨蛋門市辦理現場點交，請務必攜帶承租人有效身分證件正本以供驗核，並完成尾款與現場押金之點交。</span></div>
-    <div class="term-item"><span class="term-heading" id="term3h">店到店物流寄送方案</span><span id="term3">非雙北或外縣市超商寄送，一律依器材規定預先完成轉帳免證件押金；設備驗收無損後於 24 小時內原路全額返還指定帳戶。</span></div>
-    <div class="term-item"><span class="term-heading" id="term4h">設備保管與維護責任</span><span id="term4">承租期間請妥善維護裝置主機及周邊隨附配件；歸還若有人為外力破損、進水或零件短缺，將依原廠專業檢測維修報價求償。</span></div>
-    <div class="term-item"><span class="term-heading" id="term5h">增距鏡活動場館專用條款</span><span id="term5">承租前請自行詳閱並恪遵各演出主辦方之器材攜帶規範；如因現場主辦方管制致無法使用，租金不予折返，但可轉為 12 個月內有效之門市折抵額度。</span></div>
-
-    <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border-color);text-align:center">
-      <a href="https://ssystem089.github.io/rental-form/faq.html" target="_blank" rel="noopener noreferrer" id="faqLink" style="display:inline-block;width:100%;padding:11px;border-radius:6px;background:var(--panel-bg);border:1px solid var(--border-color);color:var(--accent-blue);text-decoration:none;font-size:12px;font-weight:700;">
+    <div style="margin-top:16px;margin-bottom:20px;text-align:center">
+    <a href="https://ssystem089.github.io/rental-form/faq.html" target="_blank" rel="noopener noreferrer" id="faqLink" style="display:inline-block;width:100%;padding:11px;border-radius:6px;background:var(--panel-bg);border:1px solid var(--border-color);color:var(--accent-blue);text-decoration:none;font-size:12px;font-weight:700;">
         常見問題 Q&A 檢索（押金退返、物流時程、資料傳輸等）➔
       </a>
-    </div>
-  </section>
+  </div>
 </main>
 
 <section id="fallbackSheet" class="fallback">
@@ -610,12 +601,12 @@ const zh={
   formTitle:"STEP 1. 租借設備規格與檔期選擇",
   modelLabel:"租借設備機型",
   lensLabel:"增距鏡配件選配",
-  inquiryButton:"送出設備檔期排程查詢",
+  inquiryButton:"送出檔期查詢",
   inquiryNotice:"<strong>排程核對須知：</strong>先行為您核對設備在庫庫存，系統將自動暫存本次選擇。門市客服於 LINE 官方帳號確認檔期無誤後，即可接續完成預訂。",
   switchCtaDesc:"專案快速通道：免除二次來回確認，直接建立正式預約單據",
   toggleFormalOpen:"展開填寫正式預訂資料（含交還方式） ▼",
   toggleFormalClose:"▲ 收合完整預訂欄位",
-  formalTitle:"STEP 2. 承租人資料與履約交機設定",
+  formalTitle:"STEP 2. 承租人資料",
   cloudLabel:"雲端原畫質備份服務",
   cloudNo:"不需要",
   cloudYes:"加選原畫質雲端備份（+NT$ 200／次，保留 14 天）",
@@ -624,19 +615,8 @@ const zh={
   returnMethodLabel:"設備交還方式",
   storeNameLabel:"指定 7-11 取件門市名稱或店號",
   deliveryNotice:"• 寄送方案：店到店寄出前須轉帳完成免證件押金，設備驗收完成後 24 hr 原路返還。<br>• 設備將提前 2～3 日寄達指定超商；租期結束後請於 1～2 日內原箱寄回，逾期將自押金扣抵逾期費用。",
-  bookingButton:"確認送出正式預約委託",
-  formalPaymentNotice:"送出委託後，門市專員將於 LINE 官方聊天室開立正式線上報價單與匯款資訊，完成定金轉帳即正式鎖定設備出貨檔期。",
-  termsTitle:"租賃合約與出庫作業須知 ｜ TERMS & CONDITIONS",
-  term1h:"24H 彈性制租期計費",
-  term1:"標註 24H 彈性制之器材，若逢演唱會場次租還或海外跨國差旅，以實際取機時點起算 24 小時為一日標準，確切排程以門市審核確認為準。",
-  term2h:"門市點交與身分核驗",
-  term2:"營業時間 12:00–20:00 於大巨蛋門市辦理現場點交，請務必攜帶承租人有效身分證件正本以供驗核，並完成尾款與現場押金之點交。",
-  term3h:"店到店物流寄送方案",
-  term3:"非雙北或外縣市超商寄送，一律依器材規定預先完成轉帳免證件押金；設備驗收無損後於 24 小時內原路全額返還指定帳戶。",
-  term4h:"設備保管與維護責任",
-  term4:"承租期間請妥善維護裝置主機及周邊隨附配件；歸還若有人為外力破損、進水或零件短缺，將依原廠專業檢測維修報價求償。",
-  term5h:"增距鏡活動場館專用條款",
-  term5:"承租前請自行詳閱並恪遵各演出主辦方之器材攜帶規範；如因現場主辦方管制致無法使用，租金不予折返，但可轉為 12 個月內有效之門市折抵額度。",
+  bookingButton:"送出正式預約",
+  formalPaymentNotice:"送出後，確認定金轉帳後即正式完成預定。",
   faqLinkText:"常見問題 Q&A 檢索（押金退返、物流時程、資料傳輸等）➔",
   noLens:"無加選鏡頭配件",
   lens200:"加租 G2 200mm 增距鏡（+NT$ 300／日）",
@@ -661,12 +641,12 @@ const zh={
   noteDji:"<strong>規格摘要：</strong>適合高動態穩定運鏡與手持影像創作。",
   noteLens:"<strong>規格摘要：</strong>僅單租增距鏡特仕組（含對應手機外殼與保護配件）。",
   savedTitle:"已暫存預約選擇",
-  savedText:"機型規格與預訂日期已自動帶入；確認排程後補填承租人姓名與電話即可送出正式委託。",
+  savedText:"機型規格與預訂日期已自動帶入；確認排程後補填承租人姓名與電話即可送出正式預約。",
   clear:"清除暫存",
   dates:"請點選月曆選擇預計租賃起訖日期",
   pastDate:"取機日期不可選擇過去日期",
   badDate:"歸還日期不可早於取機日期",
-  contact:"正式預約委託請填寫承租人法定姓名",
+  contact:"正式預約請填寫承租人法定姓名",
   badPhone:"請填寫有效聯絡電話號碼",
   wait:"LINE 尚未初始化完成，請稍候重試",
   init:"LINE 連線初始化失敗，請從官方帳號重新開啟",
@@ -716,12 +696,12 @@ const en={
   formTitle:"STEP 1. Equipment Specifications & Rental Schedule",
   modelLabel:"Rental Device Model",
   lensLabel:"Telephoto Extender Option",
-  inquiryButton:"Check Fleet Availability",
+  inquiryButton:"Check Availability",
   inquiryNotice:"<strong>No Commitment:</strong> Verify fleet schedule before reserving. Details are automatically preserved; customer service will verify availability via LINE.",
   switchCtaDesc:"Express Channel: Proceed directly to formal booking without dual confirmations",
   toggleFormalOpen:"Fill Formal Booking Details (Include Delivery) ▼",
   toggleFormalClose:"▲ Collapse formal booking details",
-  formalTitle:"STEP 2. Lessee Information & Handover Terms",
+  formalTitle:"STEP 2. Lessee Information",
   cloudLabel:"Original Quality Cloud Backup Service",
   cloudNo:"Not Required",
   cloudYes:"Include Cloud Backup (+NT$ 200/event, retained 14 days)",
@@ -730,19 +710,8 @@ const en={
   returnMethodLabel:"Equipment Handover Method",
   storeNameLabel:"Designated 7-Eleven Store Name or Branch ID",
   deliveryNotice:"• Delivery Policy: Deposit must be transferred prior to dispatch; 100% refunded to original account within 24 hr post-inspection.<br>• Equipment arrives 2–3 days early; return parcel within 1–2 days after lease expiration.",
-  bookingButton:"Confirm & Submit Formal Reservation",
-  formalPaymentNotice:"Upon submission, our specialist will issue an official online quotation and bank transfer details in the LINE chat. Date is secured once deposit is verified.",
-  termsTitle:"RENTAL TERMS & HANDOVER CONDITIONS",
-  term1h:"Flexible 24-Hour Rental Calculation",
-  term1:"Items under 24-hour flexible plan calculated by actual use time or session. Confirmed arrangements take precedence.",
-  term2h:"In-Store Pickup & Identity Verification",
-  term2:"Hours: 12:00–20:00 at Taipei Dome Store. Present valid legal photo ID and complete balance payment and security deposit on-site.",
-  term3h:"Store-to-Store Logistics & Deposit",
-  term3:"Out-of-city deliveries require upfront security deposit. 100% refunded to specified bank account within 24 hr post-inspection.",
-  term4h:"Equipment Custody & Damage Liability",
-  term4:"Tenant is responsible for device custody. In case of non-accidental damage or component loss, repair costs apply per factory rate.",
-  term5h:"Telephoto Extender Venue Compliance Clause",
-  term5:"Confirm venue rules before renting. If prohibited by organizer, rental is non-refundable but converted to 12-month store credit.",
+  bookingButton:"Submit Formal Reservation",
+  formalPaymentNotice:"After submission, reservation is officially completed once deposit transfer is confirmed.",
   faqLinkText:"View Rental FAQ & Help Center ➔",
   noLens:"No Extender Added",
   lens200:"Add G2 200mm Extender (+NT$ 300/day)",
@@ -832,7 +801,6 @@ function setLanguage(lang) {
     formalTitle:"formalTitle",cloudLabel:"cloudLabel",nameLabel:"nameLabel",phoneLabel:"phoneLabel",
     returnMethodLabel:"returnMethodLabel",storeNameLabel:"storeNameLabel",deliveryNoticeText:"deliveryNotice",
     bookingButton:"bookingButton",formalPaymentNotice:"formalPaymentNotice",
-    termsTitle:"termsTitle",term1h:"term1h",term1:"term1",term2h:"term2h",term2:"term2",term3h:"term3h",term3:"term3",term4h:"term4h",term4:"term4",term5h:"term5h",term5:"term5",
     fallbackTitle:"fallbackTitle",fallbackGuide:"fallbackGuide",backButton:"back",copyButton:"copy"
   };
   Object.keys(ids).forEach(k=>text(ids[k],x[k],k==="store"||k==="inquiryNotice"||k==="formalPaymentNotice"||k==="depositRuleTip"||k==="faqLink"||k==="deliveryNoticeText"||k==="lensDesc"));
@@ -1045,19 +1013,31 @@ function updateCalendarSummary(){
   const sumEl = document.getElementById("calSummaryText");
   if (!sumEl) return;
 
+  const zhDays = ["(日)", "(一)", "(二)", "(三)", "(四)", "(五)", "(六)"];
+  const enDays = ["(Sun)", "(Mon)", "(Tue)", "(Wed)", "(Thu)", "(Fri)", "(Sat)"];
+
   if (calStartDate && calEndDate) {
-    const d1 = new Date(calStartDate);
-    const d2 = new Date(calEndDate);
-    const diffDays = Math.max(1, Math.round((d2 - d1) / (1000 * 3600 * 24)) + 1);
-    const sDate = calStartDate.slice(5).replace(/-/g, "/");
-    const eDate = calEndDate.slice(5).replace(/-/g, "/");
+    const [y1, m1, d1] = calStartDate.split("-").map(Number);
+    const dt1 = new Date(y1, m1 - 1, d1);
+    const [y2, m2, d2] = calEndDate.split("-").map(Number);
+    const dt2 = new Date(y2, m2 - 1, d2);
+    const diffDays = Math.max(1, Math.round((dt2 - dt1) / (1000 * 3600 * 24)));
+    const sWkZh = zhDays[dt1.getDay()], eWkZh = zhDays[dt2.getDay()];
+    const sWkEn = enDays[dt1.getDay()], eWkEn = enDays[dt2.getDay()];
+    const sDate = calStartDate.replace(/-/g, "/");
+    const eDate = calEndDate.replace(/-/g, "/");
     sumEl.innerHTML = currentLang === "zh"
-      ? `預約租期：${sDate} 至 ${eDate}（約 ${diffDays} 天）｜ ${calPickupTime} 取機`
-      : `Rental Period: ${sDate} to ${eDate} (${diffDays} days) ｜ Pickup ${calPickupTime}`;
+      ? `預約檔期：${sDate} ${sWkZh} ${calPickupTime} 至 ${eDate} ${eWkZh}12:00（約 ${diffDays} 日）`
+      : `Rental Period: ${sDate} ${sWkEn} ${calPickupTime} to ${eDate} ${eWkEn} 12:00 (approx ${diffDays} days)`;
   } else if (calStartDate) {
+    const [y1, m1, d1] = calStartDate.split("-").map(Number);
+    const dt1 = new Date(y1, m1 - 1, d1);
+    const sWkZh = zhDays[dt1.getDay()];
+    const sWkEn = enDays[dt1.getDay()];
+    const sDate = calStartDate.replace(/-/g, "/");
     sumEl.innerHTML = currentLang === "zh"
-      ? `取機時間：${calStartDate.slice(5).replace(/-/g, "/")}（${calPickupTime}），請接續選擇歸還日期`
-      : `Pickup: ${calStartDate.slice(5).replace(/-/g, "/")} (${calPickupTime}), tap to select return date`;
+      ? `取機時間：${sDate} ${sWkZh}（${calPickupTime}），請接續選擇歸還日期`
+      : `Pickup: ${sDate} ${sWkEn} (${calPickupTime}), tap to select return date`;
   } else {
     sumEl.textContent = currentLang === "zh" ? "請點選月曆選擇預定租賃起訖日期" : "Please select pickup and return dates";
   }
@@ -1178,17 +1158,29 @@ function dates(){
   if(calStartDate < today){showToast(S().pastDate);return null}
   if(calEndDate < calStartDate){showToast(S().badDate);return null}
 
-  const d1 = new Date(calStartDate);
-  const d2 = new Date(calEndDate);
-  const totalDays = Math.max(1, Math.round((d2 - d1) / (1000 * 3600 * 24)) + 1);
+  const [y1, m1, day1] = calStartDate.split("-").map(Number);
+  const dt1 = new Date(y1, m1 - 1, day1);
+  const [y2, m2, day2] = (calEndDate || calStartDate).split("-").map(Number);
+  const dt2 = new Date(y2, m2 - 1, day2);
+  const totalDays = Math.max(1, Math.round((dt2 - dt1) / (1000 * 3600 * 24)));
+
+  const zhDays = ["(日)", "(一)", "(二)", "(三)", "(四)", "(五)", "(六)"];
+  const enDays = ["(Sun)", "(Mon)", "(Tue)", "(Wed)", "(Thu)", "(Fri)", "(Sat)"];
+  const startWkZh = zhDays[dt1.getDay()];
+  const endWkZh = zhDays[dt2.getDay()];
+  const startWkEn = enDays[dt1.getDay()];
+  const endWkEn = enDays[dt2.getDay()];
 
   const cleanStartDate = calStartDate.replace(/-/g, "/");
   const cleanEndDate = (calEndDate || calStartDate).split("T")[0].split(" ")[0].replace(/-/g, "/").trim();
   
   const p = `${cleanStartDate} ${calPickupTime}`;
-  const r = cleanEndDate; // 租訖僅純日期，不含任何時間
+  const r = cleanEndDate; // 租訖僅純日期
 
-  return { p, r, d: totalDays };
+  const scheduleZh = `${cleanStartDate} ${startWkZh} ${calPickupTime} 至 ${cleanEndDate} ${endWkZh}12:00  (約${totalDays}日)`;
+  const scheduleEn = `${cleanStartDate} ${startWkEn} ${calPickupTime} to ${cleanEndDate} ${endWkEn} 12:00 (approx ${totalDays} days)`;
+
+  return { p, r, d: totalDays, scheduleZh, scheduleEn };
 }
 
 function scrollToFormalSection(){
@@ -1208,9 +1200,8 @@ function inquiry(){
 
   const directLink=`https://liff.line.me/${LIFF_ID}`;
   currentMessage = currentLang==="zh"
-    ? `【詢問設備檔期】\n設備：${equipment()}\n日期：${d.p} 取 / ${d.r} 還 (約 ${d.d} 天)\n\n確認排程？點此補填預約單：\n${directLink}`
-    : `[Equipment Availability Check]\nDevice: ${equipment()}\nDates: Pickup ${d.p} / Return ${d.r} (approx ${d.d} days)\n\nComplete details here:\n${directLink}`;
-  
+    ? `【詢問設備檔期】\n設備：${equipment()}\n檔期：${d.scheduleZh}\n\n確認排程？點此補填預約單：\n${directLink}`
+    : `[Equipment Availability Check]\nDevice: ${equipment()}\nDates: ${d.scheduleEn}\n\nComplete details here:\n${directLink}`;
   send(currentMessage,document.getElementById("inquiryButton"),"inquiry");
 }
 
@@ -1236,9 +1227,8 @@ function booking(){
   }
 
   let baseText = currentLang==="zh"
-    ? `【正式預約單】\n設備：${equipment()}\n日期：${d.p} 取 / ${d.r} 還 (約 ${d.d} 天)\n姓名：${n}\n電話：${p}\n交還：${methodStr}`
-    : `[Formal Booking]\nDevice: ${equipment()}\nDates: Pickup ${d.p} / Return ${d.r} (approx ${d.d} days)\nName: ${n}\nPhone: ${p}\nMethod: ${methodStr}`;
-
+    ? `【正式預約單】\n設備：${equipment()}\n檔期：${d.scheduleZh}\n姓名：${n}\n電話：${p}\n交還：${methodStr}`
+    : `[Formal Booking]\nDevice: ${equipment()}\nDates: ${d.scheduleEn}\nName: ${n}\nPhone: ${p}\nMethod: ${methodStr}`;
   if(isStore) {
     baseText += currentLang==="zh" ? `\n押金：現金 NT$ 3,000 + 證件正本` : `\nDeposit: Cash NT$ 3,000 + ID`;
   } else {
@@ -1425,3 +1415,8 @@ document.addEventListener("DOMContentLoaded",()=>{
 </script>
 </body>
 </html>
+
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-09-29T03:23:39+08:00.
+</ADDITIONAL_METADATA>
