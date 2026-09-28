@@ -371,7 +371,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
       <div class="product-desc" id="djiDesc">旗艦級雙鏡頭手持光學縮放三軸穩定相機套裝</div>
     </div>
 
-    <!-- 增距鏡特仕組（★ 依指示三行清晰斷行，刪除押金冗字） -->
+    <!-- 增距鏡特仕組（三行結構化斷行，去除押金贅字） -->
     <div class="price-row" data-model="僅租借 G2 增距鏡頭特仕組">
       <div class="price-row-top">
         <span class="product-name" id="lensTitle">vivo G2 增距鏡特仕組</span>
@@ -599,7 +599,7 @@ const zh={
   iphonePrice:"NT$ 750（3–5日）｜ NT$ 600（6日以上）",
   djiDesc:"旗艦級雙鏡頭手持光學縮放三軸穩定相機套裝",
   perDay:"/ 日",
-  lensTitle:"增距鏡特仕組",
+  lensTitle:"vivo G2 增距鏡特仕組",
   lensDesc:`含專用手機外殼及配件組 ｜<br>200mm（NT$ 300／日）：清晰寫實；<br>400mm（NT$ 600／日）：旗艦級超長焦，穿透防護網效果顯著。`,
   cloudTitle:"雲端原畫質備份服務",
   cloudDesc:"拍畢免自行導出傳檔，原畫質雲端載點 ｜ 檔案安全保留 14 天",
@@ -705,7 +705,7 @@ const en={
   iphonePrice:"NT$ 750 (3–5 days) ｜ NT$ 600 (6+ days)",
   djiDesc:"Flagship dual-lens 3-axis optical zoom handheld camera system",
   perDay:"/ day",
-  lensTitle:"Telephoto Extender Set",
+  lensTitle:"vivo G2 Telephoto Extender Set",
   lensDesc:`Includes custom phone case & accessories ｜<br>200mm (NT$ 300/day): Clear and natural;<br>400mm (NT$ 600/day): Flagship super-telephoto, net-masking penetration.`,
   cloudTitle:"Original Quality Cloud Backup Service",
   cloudDesc:"Direct high-speed download without file export ｜ Files retained 14 days",
@@ -1031,11 +1031,14 @@ function onDateCellClick(dateStr){
   save();
 }
 
+// ★ 核心優化：租訖日期（returnDate）絕對維持純日期，絕不帶任何時間
 function syncCalendarToHiddenInputs(){
-  document.getElementById("pickupDate").value = calStartDate || "";
-  document.getElementById("returnDate").value = calEndDate || calStartDate || "";
+  const cleanStart = (calStartDate || "").split("T")[0].split(" ")[0].replace(/-/g, "/");
+  const cleanEnd = (calEndDate || calStartDate || "").split("T")[0].split(" ")[0].replace(/-/g, "/");
+  document.getElementById("pickupDate").value = cleanStart;
+  document.getElementById("returnDate").value = cleanEnd; // 純日期，絕不含時間
   document.getElementById("pickupClock").value = calPickupTime;
-  document.getElementById("pickupTime").value = (calStartDate && calPickupTime) ? `${calStartDate}T${calPickupTime}` : "";
+  document.getElementById("pickupTime").value = (cleanStart && calPickupTime) ? `${cleanStart} ${calPickupTime}` : "";
 }
 
 function updateCalendarSummary(){
@@ -1046,13 +1049,15 @@ function updateCalendarSummary(){
     const d1 = new Date(calStartDate);
     const d2 = new Date(calEndDate);
     const diffDays = Math.max(1, Math.round((d2 - d1) / (1000 * 3600 * 24)) + 1);
+    const sDate = calStartDate.slice(5).replace(/-/g, "/");
+    const eDate = calEndDate.slice(5).replace(/-/g, "/");
     sumEl.innerHTML = currentLang === "zh"
-      ? `預約租期：${calStartDate.slice(5)} 至 ${calEndDate.slice(5)}（約 ${diffDays} 天）｜ ${calPickupTime} 取機`
-      : `Rental Period: ${calStartDate.slice(5)} to ${calEndDate.slice(5)} (${diffDays} days) ｜ Pickup ${calPickupTime}`;
+      ? `預約租期：${sDate} 至 ${eDate}（約 ${diffDays} 天）｜ ${calPickupTime} 取機`
+      : `Rental Period: ${sDate} to ${eDate} (${diffDays} days) ｜ Pickup ${calPickupTime}`;
   } else if (calStartDate) {
     sumEl.innerHTML = currentLang === "zh"
-      ? `取機時間：${calStartDate.slice(5)}（${calPickupTime}），請接續選擇歸還日期`
-      : `Pickup: ${calStartDate.slice(5)} (${calPickupTime}), tap to select return date`;
+      ? `取機時間：${calStartDate.slice(5).replace(/-/g, "/")}（${calPickupTime}），請接續選擇歸還日期`
+      : `Pickup: ${calStartDate.slice(5).replace(/-/g, "/")} (${calPickupTime}), tap to select return date`;
   } else {
     sumEl.textContent = currentLang === "zh" ? "請點選月曆選擇預定租賃起訖日期" : "Please select pickup and return dates";
   }
@@ -1076,12 +1081,14 @@ function getDraft(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"nu
 
 function save(){
   try{
+    const cleanStart = (calStartDate || "").split("T")[0].split(" ")[0].replace(/-/g, "/");
+    const cleanEnd = (calEndDate || calStartDate || "").split("T")[0].split(" ")[0].replace(/-/g, "/");
     localStorage.setItem(STORAGE_KEY,JSON.stringify({
       model:document.getElementById("model").value,
       lens:document.getElementById("lens").value,
-      pickupDate:calStartDate,
+      pickupDate:cleanStart,
       pickupClock:calPickupTime,
-      returnDate:calEndDate,
+      returnDate:cleanEnd,
       cloud:document.getElementById("cloudService").value,
       name:document.getElementById("name").value,
       phone:document.getElementById("phone").value,
@@ -1100,9 +1107,9 @@ function restore(){
   if(d.lens)document.getElementById("lens").value=d.lens;
   
   const today=getTodayStr();
-  if(d.pickupDate && d.pickupDate>=today){
-    calStartDate = d.pickupDate;
-    calEndDate = d.returnDate || d.pickupDate;
+  if(d.pickupDate && d.pickupDate.replace(/\//g, "-")>=today){
+    calStartDate = d.pickupDate.split("T")[0].split(" ")[0].replace(/\//g, "-");
+    calEndDate = (d.returnDate || d.pickupDate).split("T")[0].split(" ")[0].replace(/\//g, "-");
   }
   if(d.pickupClock){
     calPickupTime = d.pickupClock;
@@ -1162,10 +1169,9 @@ function equipment(){
   return m + cleanLens;
 }
 
+// ★ 核心優化：起租包含時分，租訖嚴格保證僅輸出純日期 (YYYY/MM/DD)
 function dates(){
   syncCalendarToHiddenInputs();
-  const p=document.getElementById("pickupTime").value;
-  const r=document.getElementById("returnDate").value;
   const today=getTodayStr();
 
   if(!calStartDate || !calEndDate){showToast(S().dates);return null}
@@ -1175,6 +1181,13 @@ function dates(){
   const d1 = new Date(calStartDate);
   const d2 = new Date(calEndDate);
   const totalDays = Math.max(1, Math.round((d2 - d1) / (1000 * 3600 * 24)) + 1);
+
+  const cleanStartDate = calStartDate.replace(/-/g, "/");
+  const cleanEndDate = (calEndDate || calStartDate).split("T")[0].split(" ")[0].replace(/-/g, "/").trim();
+  
+  const p = `${cleanStartDate} ${calPickupTime}`;
+  const r = cleanEndDate; // 租訖僅純日期，不含任何時間
+
   return { p, r, d: totalDays };
 }
 
@@ -1188,18 +1201,20 @@ function scrollToFormalSection(){
   },200);
 }
 
+// ★ 詢問檔期：租訖純日期（例：2026/12/23 還）
 function inquiry(){
   const d=dates();if(!d)return;save();
   try{localStorage.setItem("fir-stage","formal");}catch(e){}
 
   const directLink=`https://liff.line.me/${LIFF_ID}`;
   currentMessage = currentLang==="zh"
-    ? `【詢問設備檔期】\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (約 ${d.d} 天)\n\n確認排程？點此補填預約單：\n${directLink}`
-    : `[Equipment Availability Check]\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (approx ${d.d} days)\n\nComplete details here:\n${directLink}`;
+    ? `【詢問設備檔期】\n設備：${equipment()}\n日期：${d.p} 取 / ${d.r} 還 (約 ${d.d} 天)\n\n確認排程？點此補填預約單：\n${directLink}`
+    : `[Equipment Availability Check]\nDevice: ${equipment()}\nDates: Pickup ${d.p} / Return ${d.r} (approx ${d.d} days)\n\nComplete details here:\n${directLink}`;
   
   send(currentMessage,document.getElementById("inquiryButton"),"inquiry");
 }
 
+// ★ 正式預約單：租訖純日期（例：2026/12/23 還）
 function booking(){
   const d=dates();if(!d)return;
   const n=document.getElementById("name").value.trim(),p=document.getElementById("phone").value.trim();
@@ -1221,8 +1236,8 @@ function booking(){
   }
 
   let baseText = currentLang==="zh"
-    ? `【正式預約單】\n設備：${equipment()}\n日期：${d.p.replace("T"," ")} 取 / ${d.r} 還 (約 ${d.d} 天)\n姓名：${n}\n電話：${p}\n交還：${methodStr}`
-    : `[Formal Booking]\nDevice: ${equipment()}\nDates: Pickup ${d.p.replace("T"," ")} / Return ${d.r} (approx ${d.d} days)\nName: ${n}\nPhone: ${p}\nMethod: ${methodStr}`;
+    ? `【正式預約單】\n設備：${equipment()}\n日期：${d.p} 取 / ${d.r} 還 (約 ${d.d} 天)\n姓名：${n}\n電話：${p}\n交還：${methodStr}`
+    : `[Formal Booking]\nDevice: ${equipment()}\nDates: Pickup ${d.p} / Return ${d.r} (approx ${d.d} days)\nName: ${n}\nPhone: ${p}\nMethod: ${methodStr}`;
 
   if(isStore) {
     baseText += currentLang==="zh" ? `\n押金：現金 NT$ 3,000 + 證件正本` : `\nDeposit: Cash NT$ 3,000 + ID`;
