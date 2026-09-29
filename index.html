@@ -48,25 +48,55 @@
   --danger-text: #fca5a5;
 }
 
-* { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease; }
-body { margin: 0; background: var(--bg-color); color: var(--text-main); -webkit-font-smoothing: antialiased; padding: 16px 12px 36px; display: flex; justify-content: center; }
+* { 
+  -webkit-text-size-adjust: 100%; 
+  text-size-adjust: 100%; 
+  box-sizing: border-box; 
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease; 
+}
 
-.wrap { width: min(100%, 540px); }
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+}
+
+body { 
+  margin: 0; 
+  background: var(--bg-color); 
+  color: var(--text-main); 
+  -webkit-font-smoothing: antialiased; 
+  padding: 16px 12px 36px; 
+  display: flex; 
+  justify-content: center; 
+}
+
+.wrap { 
+  width: min(100%, 540px); 
+  max-width: 100%;
+}
 
 /* 頂部極簡控制列（單鍵語系 + 日月變形） */
-.utility-bar { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-bottom: 16px; }
+.utility-bar { 
+  display: flex; 
+  justify-content: flex-end; 
+  align-items: center; 
+  gap: 8px; 
+  margin-bottom: 14px; 
+}
 
 .lang-pill-btn {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 6px 12px;
+  padding: 4px 10px;
   border-radius: 6px;
   font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 0.5px;
   cursor: pointer;
-  min-height: 34px;
+  min-height: 32px;
   transition: all 0.2s ease;
 }
 .lang-pill-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
@@ -76,9 +106,9 @@ body { margin: 0; background: var(--bg-color); color: var(--text-main); -webkit-
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  width: 34px;
-  height: 34px;
-  min-height: 34px;
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
   border-radius: 6px;
   display: inline-flex;
   align-items: center;
@@ -100,20 +130,20 @@ body { margin: 0; background: var(--bg-color); color: var(--text-main); -webkit-
 [data-theme="dark"] .sun-rays { transform: rotate(90deg) scale(0.2); opacity: 0; }
 
 /* 頂部商標與門市資訊 */
-.header { padding-bottom: 16px; border-bottom: 2px solid var(--border-dark); margin-bottom: 18px; }
+.header { padding-bottom: 14px; border-bottom: 2px solid var(--border-dark); margin-bottom: 16px; }
 .brand { font-size: 22px; font-weight: 800; letter-spacing: 0.5px; color: var(--text-main); }
 .subtitle { margin-top: 3px; color: var(--text-light); font-size: 11.5px; letter-spacing: 1.5px; font-weight: 600; text-transform: uppercase; }
-.store { margin-top: 10px; color: var(--text-muted); font-size: 12px; line-height: 1.6; }
+.store { margin-top: 8px; color: var(--text-muted); font-size: 12px; line-height: 1.6; }
 
 /* 預約 4 步驟進度引導 */
-.stepper { display: flex; justify-content: space-between; align-items: center; margin: 16px 0 20px; padding: 12px 14px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+.stepper { display: flex; justify-content: space-between; align-items: center; margin: 14px 0 18px; padding: 10px 12px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
 .step { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: var(--text-light); flex: 1; text-align: center; }
 .step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--panel-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--text-light); font-size: 11px; }
 .step.active .step-num { background: var(--accent-blue); border-color: var(--accent-blue); color: #ffffff; }
 .step.active span { color: var(--text-main); font-weight: 700; }
 .step-line { flex: 0.4; height: 1px; background: var(--border-color); margin-top: -14px; }
 
-.section-title { font-size: 11.5px; font-weight: 800; color: var(--text-light); letter-spacing: 1.2px; text-transform: uppercase; margin: 22px 2px 8px; }
+.section-title { font-size: 11.5px; font-weight: 800; color: var(--text-light); letter-spacing: 1.2px; text-transform: uppercase; margin: 20px 2px 8px; }
 .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
 
 /* 費率卡片清單 */
@@ -131,8 +161,8 @@ body { margin: 0; background: var(--bg-color); color: var(--text-main); -webkit-
 .price-row:hover { background: var(--panel-bg); }
 .price-row:active { background: var(--accent-blue-bg); transform: scale(0.995); }
 
-.price-row-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.product-name { font-size: 14px; font-weight: 700; color: var(--text-main); letter-spacing: 0.3px; }
+.price-row-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: nowrap; }
+.product-name { font-size: 14px; font-weight: 700; color: var(--text-main); letter-spacing: 0.3px; white-space: nowrap; }
 .price-main { font-size: 15px; font-weight: 800; color: var(--text-main); white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
 .price-main small { font-size: 11px; font-weight: 500; color: var(--text-light); margin-left: 2px; }
 .product-desc { color: var(--text-muted); font-size: 11.5px; line-height: 1.6; }
@@ -200,12 +230,6 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .btn-submit { background: var(--accent-blue); color: #ffffff; border: none; font-size: 14.5px; font-weight: 800; }
 .btn-submit:active { opacity: 0.9; }
 
-/* 注意事項 */
-.terms { margin: 16px 2px 0; color: var(--text-muted); font-size: 11px; line-height: 1.65; }
-.term-item { margin-top: 10px; }
-.term-item:first-child { margin-top: 0; }
-.term-heading { display: block; color: var(--text-main); font-weight: 700; margin-bottom: 2px; }
-
 /* 備用複製抽屜 */
 .fallback { display: none; position: fixed; z-index: 20; left: 0; right: 0; bottom: 0; padding: 18px 14px max(18px, env(safe-area-inset-bottom)); background: var(--card-bg); border-top: 1px solid var(--border-dark); border-radius: 12px 12px 0 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
 .fallback.show { display: block; }
@@ -245,7 +269,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
 <body>
 <main class="wrap">
 
-  <!-- 0. 頂部極簡控制列（單鍵語系 + 日月變形按鈕） -->
+  <!-- 0. 頂部極簡控制列（乾淨無雜訊） -->
   <div class="utility-bar">
     <button class="lang-pill-btn" id="btn-lang-toggle" onclick="toggleLanguage()">EN</button>
     <button class="theme-morph-btn" id="btn-theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
@@ -371,7 +395,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
       <div class="product-desc" id="djiDesc">旗艦級雙鏡頭手持光學縮放三軸穩定相機套裝</div>
     </div>
 
-    <!-- 增距鏡特仕組（三行結構化斷行，去除押金贅字） -->
+    <!-- 增距鏡特仕組 -->
     <div class="price-row" data-model="僅租借 G2 增距鏡頭特仕組">
       <div class="price-row-top">
         <span class="product-name" id="lensTitle">vivo G2 增距鏡特仕組</span>
@@ -530,10 +554,10 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
     </section>
   </div>
 
-    <div style="margin-top:16px;margin-bottom:20px;text-align:center">
+  <div style="margin-top:16px;margin-bottom:20px;text-align:center">
     <a href="https://ssystem089.github.io/rental-form/faq.html" target="_blank" rel="noopener noreferrer" id="faqLink" style="display:inline-block;width:100%;padding:11px;border-radius:6px;background:var(--panel-bg);border:1px solid var(--border-color);color:var(--accent-blue);text-decoration:none;font-size:12px;font-weight:700;">
-        常見問題 Q&A➔
-      </a>
+      常見問題 Q&A➔
+    </a>
   </div>
 </main>
 
@@ -779,7 +803,7 @@ function updateCalendarWeekdays(lang) {
 
 function setLanguage(lang) {
   currentLang = lang;
-  localStorage.setItem("fir-language", lang);
+  try { localStorage.setItem("fir-language", lang); } catch(e){}
 
   const btn = document.getElementById("btn-lang-toggle");
   if (btn) btn.textContent = (lang === "zh") ? "EN" : "繁中";
@@ -870,7 +894,7 @@ function applyTheme(theme) {
 }
 
 function setTheme(theme) {
-  localStorage.setItem("fir-theme", theme);
+  try { localStorage.setItem("fir-theme", theme); } catch(e){}
   applyTheme(theme);
 }
 
@@ -999,12 +1023,11 @@ function onDateCellClick(dateStr){
   save();
 }
 
-// ★ 核心優化：租訖日期（returnDate）絕對維持純日期，絕不帶任何時間
 function syncCalendarToHiddenInputs(){
   const cleanStart = (calStartDate || "").split("T")[0].split(" ")[0].replace(/-/g, "/");
   const cleanEnd = (calEndDate || calStartDate || "").split("T")[0].split(" ")[0].replace(/-/g, "/");
   document.getElementById("pickupDate").value = cleanStart;
-  document.getElementById("returnDate").value = cleanEnd; // 純日期，絕不含時間
+  document.getElementById("returnDate").value = cleanEnd;
   document.getElementById("pickupClock").value = calPickupTime;
   document.getElementById("pickupTime").value = (cleanStart && calPickupTime) ? `${cleanStart} ${calPickupTime}` : "";
 }
@@ -1149,7 +1172,6 @@ function equipment(){
   return m + cleanLens;
 }
 
-// ★ 核心優化：起租包含時分，租訖嚴格保證僅輸出純日期 (YYYY/MM/DD)
 function dates(){
   syncCalendarToHiddenInputs();
   const today=getTodayStr();
@@ -1175,7 +1197,7 @@ function dates(){
   const cleanEndDate = (calEndDate || calStartDate).split("T")[0].split(" ")[0].replace(/-/g, "/").trim();
   
   const p = `${cleanStartDate} ${calPickupTime}`;
-  const r = cleanEndDate; // 租訖僅純日期
+  const r = cleanEndDate;
 
   const scheduleZh = `${cleanStartDate} ${startWkZh} ${calPickupTime} 至 ${cleanEndDate} ${endWkZh}12:00  (約${totalDays}日)`;
   const scheduleEn = `${cleanStartDate} ${startWkEn} ${calPickupTime} to ${cleanEndDate} ${endWkEn} 12:00 (approx ${totalDays} days)`;
@@ -1193,7 +1215,6 @@ function scrollToFormalSection(){
   },200);
 }
 
-// ★ 詢問檔期：租訖純日期（例：2026/12/23 還）
 function inquiry(){
   const d=dates();if(!d)return;save();
   try{localStorage.setItem("fir-stage","formal");}catch(e){}
@@ -1205,7 +1226,6 @@ function inquiry(){
   send(currentMessage,document.getElementById("inquiryButton"),"inquiry");
 }
 
-// ★ 正式預約單：租訖純日期（例：2026/12/23 還）
 function booking(){
   const d=dates();if(!d)return;
   const n=document.getElementById("name").value.trim(),p=document.getElementById("phone").value.trim();
@@ -1325,21 +1345,24 @@ async function copyFallback(){
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
-  // 1. 主題載入
-  const savedTheme = localStorage.getItem("fir-theme");
-  if (savedTheme) {
-    applyTheme(savedTheme);
-  } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-    applyTheme("dark");
-  } else {
-    applyTheme("light");
-  }
+  try {
+    const savedTheme = localStorage.getItem("fir-theme");
+    if (savedTheme) {
+      applyTheme(savedTheme);
+    } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      applyTheme("dark");
+    } else {
+      applyTheme("light");
+    }
+  } catch(e){}
 
   if (window.matchMedia) {
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function(e) {
-      if (!localStorage.getItem("fir-theme")) {
-        applyTheme(e.matches ? "dark" : "light");
-      }
+      try {
+        if (!localStorage.getItem("fir-theme")) {
+          applyTheme(e.matches ? "dark" : "light");
+        }
+      } catch(err){}
     });
   }
 
@@ -1356,10 +1379,10 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   restore();
   
-  // 2. 語系載入三層架構（優先 URL 參數 > 記憶 > 預設一律繁中）
   const urlParams = new URLSearchParams(window.location.search);
   const paramLang = urlParams.get("lang");
-  const savedLang = localStorage.getItem("fir-language");
+  let savedLang = null;
+  try { savedLang = localStorage.getItem("fir-language"); } catch(e){}
 
   if (paramLang && (paramLang === "en" || paramLang === "zh")) {
     setLanguage(paramLang);
@@ -1415,8 +1438,3 @@ document.addEventListener("DOMContentLoaded",()=>{
 </script>
 </body>
 </html>
-
-</USER_REQUEST>
-<ADDITIONAL_METADATA>
-The current local time is: 2026-09-29T03:23:39+08:00.
-</ADDITIONAL_METADATA>
