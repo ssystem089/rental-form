@@ -195,14 +195,76 @@ select:focus, input[type="text"]:focus { border-color: var(--accent-blue); box-s
 .cal-cell.range-mid { background: var(--accent-blue-bg) !important; color: var(--accent-blue) !important; border-radius: 0; font-weight: 700; }
 .cal-cell.range-start.today::after, .cal-cell.range-end.today::after { background: #ffffff; }
 
-/* 取機時間膠囊 */
+/* 晚間活動／演唱會選期指南（折疊式手風琴） */
+.calendar-guide-box {
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  font-size: 11.5px;
+  line-height: 1.55;
+  transition: all 0.2s ease;
+}
+.calendar-guide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.calendar-guide-title {
+  color: var(--accent-blue);
+  font-weight: 700;
+  font-size: 12px;
+}
+.calendar-guide-toggle-icon {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent-blue);
+  line-height: 1;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.calendar-guide-body {
+  display: none;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border-color);
+  margin-top: 8px;
+}
+.calendar-guide-box.open .calendar-guide-body {
+  display: block;
+}
+.calendar-guide-item {
+  color: var(--text-main);
+  margin-bottom: 6px;
+  line-height: 1.5;
+  font-size: 11.5px;
+}
+.calendar-guide-item strong {
+  color: var(--text-main);
+  font-weight: 700;
+}
+.calendar-guide-note {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+
+/* 取機時間膠囊（3 欄對稱格線佈局，完美相容各型號手機與寬螢幕） */
 .time-pill-section { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-color); }
 .time-pill-label { font-size: 11.5px; color: var(--text-light); font-weight: 700; margin-bottom: 8px; }
-.time-pills { display: flex; flex-wrap: wrap; gap: 6px; }
-.time-pill { width: auto; min-height: unset; padding: 6px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; font-variant-numeric: tabular-nums; }
+.time-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.time-pill { width: 100%; min-height: 38px; padding: 6px 2px; border-radius: 4px; font-size: 12.5px; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; font-variant-numeric: tabular-nums; display: flex; align-items: center; justify-content: center; transition: all 0.15s ease; }
+.time-pill:hover { border-color: var(--accent-blue); }
 .time-pill.active { background: var(--accent-blue); color: #ffffff; border-color: var(--accent-blue); font-weight: 700; }
+[data-theme="dark"] .time-pill.active { color: #0b0f19; }
 
-.cal-summary { margin-top: 12px; padding: 10px 12px; background: var(--accent-blue-bg); border: 1px solid var(--accent-blue-border); border-radius: 6px; color: var(--accent-blue); font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; font-variant-numeric: tabular-nums; }
+.cal-summary { margin-top: 12px; padding: 10px 12px; background: var(--accent-blue-bg); border: 1px solid var(--accent-blue-border); border-radius: 6px; color: var(--accent-blue); font-size: 12px; font-weight: 700; line-height: 1.5; font-variant-numeric: tabular-nums; text-align: center; }
 
 /* 狀態盒與提示 */
 .saved-box { display: none; margin: 0 0 14px; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--panel-bg); color: var(--text-main); font-size: 12px; line-height: 1.6; }
@@ -214,10 +276,11 @@ select:focus, input[type="text"]:focus { border-color: var(--accent-blue); box-s
 .delivery-notice { font-size: 11.5px; color: var(--text-muted); margin-top: 6px; line-height: 1.55; background: var(--panel-bg); padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); }
 
 /* 展開切換區塊 */
-.switch-cta-box { margin-top: 14px; padding: 14px; border-radius: 6px; background: var(--panel-bg); border: 1px solid var(--border-color); text-align: center; }
-.switch-cta-desc { font-size: 11.5px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.4; }
-.link-btn { width: 100%; min-height: 40px; background: var(--card-bg); border: 1px solid var(--accent-blue); color: var(--accent-blue); border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; }
-.link-btn:active { background: var(--accent-blue); color: #ffffff; }
+.switch-cta-box { margin-top: 14px; padding: 12px 14px; border-radius: 6px; background: var(--panel-bg); border: 1px dashed var(--border-color); text-align: center; }
+.switch-cta-desc { font-size: 11px; color: var(--text-light); margin-bottom: 8px; line-height: 1.4; }
+.link-btn { width: 100%; min-height: 40px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 6px; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all 0.15s ease; }
+.link-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+.link-btn:active { background: var(--panel-bg); }
 
 .status { display: none; margin-bottom: 14px; padding: 10px 12px; border: 1px solid var(--danger-border); border-radius: 6px; background: var(--danger-bg); color: var(--danger-text); font-size: 12px; line-height: 1.5; }
 .status.show { display: block; }
@@ -227,7 +290,8 @@ button { width: 100%; min-height: 46px; padding: 11px; border-radius: 6px; font:
 button:disabled { opacity: .45; cursor: not-allowed; }
 .secondary { background: var(--panel-bg); color: var(--text-main); border: 1px solid var(--border-color); }
 .secondary:hover { border-color: var(--accent-blue); }
-.btn-submit { background: var(--accent-blue); color: #ffffff; border: none; font-size: 14.5px; font-weight: 800; }
+.btn-submit { background: var(--accent-blue); color: #ffffff; border: none; font-size: 14.5px; font-weight: 800; border-radius: 6px; cursor: pointer; transition: opacity 0.15s ease; }
+[data-theme="dark"] .btn-submit { color: #0b0f19; }
 .btn-submit:active { opacity: 0.9; }
 
 /* 備用複製抽屜 */
@@ -452,7 +516,27 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
 
     <!-- 整合式區間月曆與時間快捷膠囊 -->
     <div class="field">
-      <label id="calendarTitle">預約租期起訖與交機時間（點選月曆起訖日）</label>
+      <label id="calendarTitle">預約租期（點選月曆起訖日）</label>
+      
+      <!-- 晚間活動／演唱會選期指南（折疊式手風琴） -->
+      <div class="calendar-guide-box" id="calendarGuideBox">
+        <div class="calendar-guide-header" id="calGuideHeader" onclick="toggleCalendarGuide()">
+          <span class="calendar-guide-title" id="calGuideTitle">晚間活動／演唱會選期指南</span>
+          <span class="calendar-guide-toggle-icon" id="calGuideToggleIcon">+</span>
+        </div>
+        <div class="calendar-guide-body" id="calGuideBody">
+          <div class="calendar-guide-item" id="guideItem1">
+            <strong>• 看 1 天活動（例：9 號）</strong>：選 9 號起 ～ 10 號中午 12:00 歸還（計 1 日）
+          </div>
+          <div class="calendar-guide-item" id="guideItem2">
+            <strong>• 看 2 天活動（例：9+10 號）</strong>：選 9 號起 ～ 11 號中午 12:00 歸還（計 2 日）
+          </div>
+          <div class="calendar-guide-note" id="guideNote">
+            租訖日請直接選至【活動隔天】，除熱門時段延長營業至 23:00 外，最終以交機時約定交還時間為準。
+          </div>
+        </div>
+      </div>
+
       <div class="calendar-box">
         <div class="cal-nav">
           <button type="button" class="cal-btn" id="calPrevBtn" aria-label="Previous Month">◀</button>
@@ -493,7 +577,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
     <input type="hidden" id="pickupTime">
     <input type="hidden" id="returnDate">
 
-    <button id="inquiryButton" type="button" class="secondary">送出檔期查詢</button>
+    <button id="inquiryButton" type="button" class="btn-submit">送出檔期查詢</button>
     <div class="notice-box" id="inquiryNotice">
       <strong>排程核對須知：</strong>先行為您核對設備在庫庫存，系統將自動暫存本次選擇。門市客服於 LINE 官方帳號確認檔期無誤後，即可接續完成預訂。
     </div>
@@ -556,7 +640,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
 
   <div style="margin-top:16px;margin-bottom:20px;text-align:center">
     <a href="https://ssystem089.github.io/rental-form/faq.html" target="_blank" rel="noopener noreferrer" id="faqLink" style="display:inline-block;width:100%;padding:11px;border-radius:6px;background:var(--panel-bg);border:1px solid var(--border-color);color:var(--accent-blue);text-decoration:none;font-size:12px;font-weight:700;">
-      常見問題 Q&A➔
+      常見問題 Q&A >
     </a>
   </div>
 </main>
@@ -598,7 +682,11 @@ const zh={
   step2Text:"預約登記",
   step3Text:"報價核對",
   step4Text:"預訂確認",
-  calendarTitle:"預約租期起訖與交機時間（點選月曆起訖日）",
+  calendarTitle:"預約租期（點選月曆起訖日）",
+  calGuideTitle:"晚間活動／演唱會選期指南",
+  guideItem1:"<strong>• 看 1 天活動（例：9 號）</strong>：選 9 號起 ～ 10 號中午 12:00 歸還（計 1 日）",
+  guideItem2:"<strong>• 看 2 天活動（例：9+10 號）</strong>：選 9 號起 ～ 11 號中午 12:00 歸還（計 2 日）",
+  guideNote:"租訖日請直接選至【活動隔天】，除熱門時段延長營業至 23:00 外，最終以交機時約定交還時間為準。",
   timePillLabel:"預計取機時間（營業時間 12:00–20:00）：",
   x300uDesc:"極致長焦收音旗艦・藍圖原色 ｜ 支援 200mm / 400mm 增距鏡配備",
   x300uPrice:"NT$ 1,100（3–5日）｜ NT$ 1,000（6日以上）",
@@ -693,7 +781,11 @@ const en={
   step2Text:"Reservation",
   step3Text:"Quotation",
   step4Text:"Confirmation",
-  calendarTitle:"Rental Period & Pickup Time (Tap start & end dates)",
+  calendarTitle:"Rental Period (Tap start & end dates)",
+  calGuideTitle:"Evening Event & Concert Booking Guide",
+  guideItem1:"<strong>• 1-Day Event (e.g. 9th)</strong>: Select 9th pickup to 10th return by 12:00 (1 day)",
+  guideItem2:"<strong>• 2-Day Event (e.g. 9th+10th)</strong>: Select 9th pickup to 11th return by 12:00 (2 days)",
+  guideNote:"Please select the day after the event as the return date. Peak hours may extend to 23:00; final return time is subject to pickup agreement.",
   timePillLabel:"Scheduled Pickup Time (Business Hours 12:00–20:00):",
   x300uDesc:"Ultimate telephoto & studio audio flagship, Blueprint ｜ 200mm / 400mm extender compatible",
   x300uPrice:"NT$ 1,100 (3–5 days) ｜ NT$ 1,000 (6+ days)",
@@ -736,7 +828,7 @@ const en={
   deliveryNotice:"• Delivery Policy: Deposit must be transferred prior to dispatch; 100% refunded to original account within 24 hr post-inspection.<br>• Equipment arrives 2–3 days early; return parcel within 1–2 days after lease expiration.",
   bookingButton:"Submit Formal Reservation",
   formalPaymentNotice:"After submission, reservation is officially completed once deposit transfer is confirmed.",
-  faqLinkText:"View Rental FAQ & Help Center ➔",
+  faqLinkText:"View Rental FAQ & Help Center >",
   noLens:"No Extender Added",
   lens200:"Add G2 200mm Extender (+NT$ 300/day)",
   lens400:"Add G2 Ultra 400mm Extender (+NT$ 600/day)",
@@ -814,6 +906,7 @@ function setLanguage(lang) {
     subtitle:"subtitle",store:"store",priceTitle:"priceTitle",
     step1Text:"step1Text",step2Text:"step2Text",step3Text:"step3Text",step4Text:"step4Text",
     calendarTitle:"calendarTitle",timePillLabel:"timePillLabel",
+    calGuideTitle:"calGuideTitle",guideItem1:"guideItem1",guideItem2:"guideItem2",guideNote:"guideNote",
     x300uDesc:"x300uDesc",x300uPrice:"x300uPrice",x500pmDesc:"x500pmDesc",x500pmPrice:"x500pmPrice",
     x200uDesc:"x200uDesc",x200uPrice:"x200uPrice",x300pDesc:"x300pDesc",x300pPrice:"x300pPrice",
     oppoDesc:"oppoDesc",oppoPrice:"oppoPrice",iphoneDesc:"iphoneDesc",iphonePrice:"iphonePrice",
@@ -827,7 +920,7 @@ function setLanguage(lang) {
     bookingButton:"bookingButton",formalPaymentNotice:"formalPaymentNotice",
     fallbackTitle:"fallbackTitle",fallbackGuide:"fallbackGuide",backButton:"back",copyButton:"copy"
   };
-  Object.keys(ids).forEach(k=>text(ids[k],x[k],k==="store"||k==="inquiryNotice"||k==="formalPaymentNotice"||k==="depositRuleTip"||k==="faqLink"||k==="deliveryNoticeText"||k==="lensDesc"));
+  Object.keys(ids).forEach(k=>text(ids[k],x[k],k==="store"||k==="inquiryNotice"||k==="formalPaymentNotice"||k==="depositRuleTip"||k==="faqLink"||k==="deliveryNoticeText"||k==="lensDesc"||k==="guideItem1"||k==="guideItem2"));
   ["d12a","d12x","d12b","d12c","d12d","d12e"].forEach(id=>text(id,x.days));
   text("perDayA",x.perDay);text("perDayB",x.perDay);text("perUse",x.perUse);
 
@@ -1050,7 +1143,7 @@ function updateCalendarSummary(){
     const sDate = calStartDate.replace(/-/g, "/");
     const eDate = calEndDate.replace(/-/g, "/");
     sumEl.innerHTML = currentLang === "zh"
-      ? `預約檔期：${sDate} ${sWkZh} ${calPickupTime} 至 ${eDate} ${eWkZh}12:00（約 ${diffDays} 日）`
+      ? `預約檔期：${sDate} ${sWkZh} ${calPickupTime} 至 ${eDate} ${eWkZh} 12:00（約 ${diffDays} 日）`
       : `Rental Period: ${sDate} ${sWkEn} ${calPickupTime} to ${eDate} ${eWkEn} 12:00 (approx ${diffDays} days)`;
   } else if (calStartDate) {
     const [y1, m1, d1] = calStartDate.split("-").map(Number);
@@ -1064,6 +1157,14 @@ function updateCalendarSummary(){
   } else {
     sumEl.textContent = currentLang === "zh" ? "請點選月曆選擇預定租賃起訖日期" : "Please select pickup and return dates";
   }
+}
+
+function toggleCalendarGuide(){
+  const box = document.getElementById("calendarGuideBox");
+  const icon = document.getElementById("calGuideToggleIcon");
+  if (!box) return;
+  const isOpen = box.classList.toggle("open");
+  if (icon) icon.textContent = isOpen ? "−" : "+";
 }
 
 function setupTimePills(){
@@ -1199,7 +1300,7 @@ function dates(){
   const p = `${cleanStartDate} ${calPickupTime}`;
   const r = cleanEndDate;
 
-  const scheduleZh = `${cleanStartDate} ${startWkZh} ${calPickupTime} 至 ${cleanEndDate} ${endWkZh}12:00  (約${totalDays}日)`;
+  const scheduleZh = `${cleanStartDate} ${startWkZh} ${calPickupTime} 至 ${cleanEndDate} ${endWkZh} 12:00 (約 ${totalDays} 日)`;
   const scheduleEn = `${cleanStartDate} ${startWkEn} ${calPickupTime} to ${cleanEndDate} ${endWkEn} 12:00 (approx ${totalDays} days)`;
 
   return { p, r, d: totalDays, scheduleZh, scheduleEn };
