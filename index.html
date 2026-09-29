@@ -48,55 +48,25 @@
   --danger-text: #fca5a5;
 }
 
-* { 
-  -webkit-text-size-adjust: 100%; 
-  text-size-adjust: 100%; 
-  box-sizing: border-box; 
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease; 
-}
+* { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease; }
+body { margin: 0; background: var(--bg-color); color: var(--text-main); -webkit-font-smoothing: antialiased; padding: 16px 12px 36px; display: flex; justify-content: center; }
 
-html, body {
-  overflow-x: hidden;
-  max-width: 100vw;
-  width: 100%;
-}
-
-body { 
-  margin: 0; 
-  background: var(--bg-color); 
-  color: var(--text-main); 
-  -webkit-font-smoothing: antialiased; 
-  padding: 16px 12px 36px; 
-  display: flex; 
-  justify-content: center; 
-}
-
-.wrap { 
-  width: min(100%, 540px); 
-  max-width: 100%;
-}
+.wrap { width: min(100%, 540px); }
 
 /* 頂部極簡控制列（單鍵語系 + 日月變形） */
-.utility-bar { 
-  display: flex; 
-  justify-content: flex-end; 
-  align-items: center; 
-  gap: 8px; 
-  margin-bottom: 14px; 
-}
+.utility-bar { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-bottom: 16px; }
 
 .lang-pill-btn {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 4px 10px;
+  padding: 6px 12px;
   border-radius: 6px;
   font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 0.5px;
   cursor: pointer;
-  min-height: 32px;
+  min-height: 34px;
   transition: all 0.2s ease;
 }
 .lang-pill-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
@@ -106,9 +76,9 @@ body {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  width: 32px;
-  height: 32px;
-  min-height: 32px;
+  width: 34px;
+  height: 34px;
+  min-height: 34px;
   border-radius: 6px;
   display: inline-flex;
   align-items: center;
@@ -130,20 +100,20 @@ body {
 [data-theme="dark"] .sun-rays { transform: rotate(90deg) scale(0.2); opacity: 0; }
 
 /* 頂部商標與門市資訊 */
-.header { padding-bottom: 14px; border-bottom: 2px solid var(--border-dark); margin-bottom: 16px; }
+.header { padding-bottom: 16px; border-bottom: 2px solid var(--border-dark); margin-bottom: 18px; }
 .brand { font-size: 22px; font-weight: 800; letter-spacing: 0.5px; color: var(--text-main); }
 .subtitle { margin-top: 3px; color: var(--text-light); font-size: 11.5px; letter-spacing: 1.5px; font-weight: 600; text-transform: uppercase; }
-.store { margin-top: 8px; color: var(--text-muted); font-size: 12px; line-height: 1.6; }
+.store { margin-top: 10px; color: var(--text-muted); font-size: 12px; line-height: 1.6; }
 
 /* 預約 4 步驟進度引導 */
-.stepper { display: flex; justify-content: space-between; align-items: center; margin: 14px 0 18px; padding: 10px 12px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+.stepper { display: flex; justify-content: space-between; align-items: center; margin: 16px 0 20px; padding: 12px 14px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
 .step { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: var(--text-light); flex: 1; text-align: center; }
 .step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--panel-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--text-light); font-size: 11px; }
 .step.active .step-num { background: var(--accent-blue); border-color: var(--accent-blue); color: #ffffff; }
 .step.active span { color: var(--text-main); font-weight: 700; }
 .step-line { flex: 0.4; height: 1px; background: var(--border-color); margin-top: -14px; }
 
-.section-title { font-size: 11.5px; font-weight: 800; color: var(--text-light); letter-spacing: 1.2px; text-transform: uppercase; margin: 20px 2px 8px; }
+.section-title { font-size: 11.5px; font-weight: 800; color: var(--text-light); letter-spacing: 1.2px; text-transform: uppercase; margin: 22px 2px 8px; }
 .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
 
 /* 費率卡片清單 */
@@ -161,8 +131,8 @@ body {
 .price-row:hover { background: var(--panel-bg); }
 .price-row:active { background: var(--accent-blue-bg); transform: scale(0.995); }
 
-.price-row-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: nowrap; }
-.product-name { font-size: 14px; font-weight: 700; color: var(--text-main); letter-spacing: 0.3px; white-space: nowrap; }
+.price-row-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.product-name { font-size: 14px; font-weight: 700; color: var(--text-main); letter-spacing: 0.3px; }
 .price-main { font-size: 15px; font-weight: 800; color: var(--text-main); white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
 .price-main small { font-size: 11px; font-weight: 500; color: var(--text-light); margin-left: 2px; }
 .product-desc { color: var(--text-muted); font-size: 11.5px; line-height: 1.6; }
@@ -196,13 +166,24 @@ select:focus, input[type="text"]:focus { border-color: var(--accent-blue); box-s
 .cal-cell.range-start.today::after, .cal-cell.range-end.today::after { background: #ffffff; }
 
 /* 取機時間膠囊 */
+/* 取機時間膠囊（3 欄對稱格線佈局，完美相容各型號手機與寬螢幕） */
 .time-pill-section { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-color); }
 .time-pill-label { font-size: 11.5px; color: var(--text-light); font-weight: 700; margin-bottom: 8px; }
-.time-pills { display: flex; flex-wrap: wrap; gap: 6px; }
-.time-pill { width: auto; min-height: unset; padding: 6px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; font-variant-numeric: tabular-nums; }
-.time-pill.active { background: var(--accent-blue); color: #ffffff; border-color: var(--accent-blue); font-weight: 700; }
+.time-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.time-pill { width: 100%; min-height: 38px; padding: 6px 2px; border-radius: 4px; font-size: 12.5px; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; font-variant-numeric: tabular-nums; display: flex; align-items: center; justify-content: center; transition: all 0.15s ease; }
+.time-pill:hover { border-color: var(--accent-blue); }
+.time-pill.active { background: var(--accent-blue); color: #ffffff; border-color: var(--accent-blue); font-weight: 800; }
+[data-theme="dark"] .time-pill.active { color: #0b0f19; }
 
-.cal-summary { margin-top: 12px; padding: 10px 12px; background: var(--accent-blue-bg); border: 1px solid var(--accent-blue-border); border-radius: 6px; color: var(--accent-blue); font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; font-variant-numeric: tabular-nums; }
+/* 檔期即時統計摘要盒（結構化層次設計，徹底避免移動端溢出折行） */
+.cal-summary { margin-top: 12px; padding: 10px 12px; background: var(--accent-blue-bg); border: 1px solid var(--accent-blue-border); border-radius: 6px; color: var(--accent-blue); font-variant-numeric: tabular-nums; display: flex; flex-direction: column; gap: 6px; }
+.cal-summary-head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 6px; border-bottom: 1px dashed var(--accent-blue-border); }
+.cal-summary-title { font-size: 12px; font-weight: 700; color: var(--accent-blue); }
+.cal-badge { background: var(--accent-blue); color: #ffffff; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 800; letter-spacing: 0.3px; white-space: nowrap; }
+[data-theme="dark"] .cal-badge { color: #0b0f19; }
+.cal-summary-range { font-size: 12.5px; line-height: 1.5; color: var(--text-main); font-weight: 700; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.cal-arrow { color: var(--accent-blue); font-weight: 800; }
+.cal-summary-prompt { font-size: 12px; color: var(--accent-blue); font-weight: 600; line-height: 1.4; }
 
 /* 狀態盒與提示 */
 .saved-box { display: none; margin: 0 0 14px; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--panel-bg); color: var(--text-main); font-size: 12px; line-height: 1.6; }
@@ -214,21 +195,102 @@ select:focus, input[type="text"]:focus { border-color: var(--accent-blue); box-s
 .delivery-notice { font-size: 11.5px; color: var(--text-muted); margin-top: 6px; line-height: 1.55; background: var(--panel-bg); padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); }
 
 /* 展開切換區塊 */
-.switch-cta-box { margin-top: 14px; padding: 14px; border-radius: 6px; background: var(--panel-bg); border: 1px solid var(--border-color); text-align: center; }
-.switch-cta-desc { font-size: 11.5px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.4; }
-.link-btn { width: 100%; min-height: 40px; background: var(--card-bg); border: 1px solid var(--accent-blue); color: var(--accent-blue); border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; }
-.link-btn:active { background: var(--accent-blue); color: #ffffff; }
+/* switch-cta-box defined below */
+.switch-cta-box { margin-top: 14px; padding: 12px 14px; border-radius: 6px; background: var(--panel-bg); border: 1px dashed var(--border-color); text-align: center; }
+.switch-cta-desc { font-size: 11px; color: var(--text-light); margin-bottom: 8px; line-height: 1.4; }
+.link-btn { width: 100%; min-height: 38px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s ease; }
+.link-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+.link-btn:active { background: var(--panel-bg); }
 
 .status { display: none; margin-bottom: 14px; padding: 10px 12px; border: 1px solid var(--danger-border); border-radius: 6px; background: var(--danger-bg); color: var(--danger-text); font-size: 12px; line-height: 1.5; }
 .status.show { display: block; }
 
-/* 按鈕風格 */
+/* 按鈕風格（主要 CTA 與次要按鈕視覺權重重構） */
 button { width: 100%; min-height: 46px; padding: 11px; border-radius: 6px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
 button:disabled { opacity: .45; cursor: not-allowed; }
 .secondary { background: var(--panel-bg); color: var(--text-main); border: 1px solid var(--border-color); }
 .secondary:hover { border-color: var(--accent-blue); }
-.btn-submit { background: var(--accent-blue); color: #ffffff; border: none; font-size: 14.5px; font-weight: 800; }
-.btn-submit:active { opacity: 0.9; }
+.btn-submit { 
+  background: var(--accent-blue); 
+  color: #ffffff; 
+  border: none; 
+  font-size: 14.5px; 
+  font-weight: 800; 
+  letter-spacing: 0.5px; 
+  border-radius: 6px; 
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25); 
+  transition: all 0.2s ease; 
+}
+[data-theme="dark"] .btn-submit { 
+  color: #0b0f19; 
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.25); 
+}
+.btn-submit:active { transform: scale(0.99); opacity: 0.92; }
+
+/* 活動／演唱會填期秘訣指南卡片 */
+.calendar-guide-box {
+  background: var(--panel-bg);
+  border: 1px solid var(--accent-blue-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+.calendar-guide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  padding-bottom: 5px;
+  border-bottom: 1px dashed var(--accent-blue-border);
+}
+.calendar-guide-title {
+  color: var(--accent-blue);
+  font-weight: 700;
+  font-size: 11.5px;
+}
+.calendar-guide-badge {
+  font-size: 10.5px;
+  color: var(--text-light);
+  font-weight: 600;
+}
+.calendar-guide-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 4px;
+  color: var(--text-main);
+  font-size: 11.5px;
+}
+.guide-chip {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-light);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.guide-chip.highlight {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+  background: var(--accent-blue-bg);
+}
+.calendar-guide-note {
+  margin-top: 6px;
+  font-size: 10.5px;
+  color: var(--text-light);
+  line-height: 1.45;
+}
+
+/* 注意事項 */
+.terms { margin: 16px 2px 0; color: var(--text-muted); font-size: 11px; line-height: 1.65; }
+.term-item { margin-top: 10px; }
+.term-item:first-child { margin-top: 0; }
+.term-heading { display: block; color: var(--text-main); font-weight: 700; margin-bottom: 2px; }
 
 /* 備用複製抽屜 */
 .fallback { display: none; position: fixed; z-index: 20; left: 0; right: 0; bottom: 0; padding: 18px 14px max(18px, env(safe-area-inset-bottom)); background: var(--card-bg); border-top: 1px solid var(--border-dark); border-radius: 12px 12px 0 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
@@ -269,7 +331,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
 <body>
 <main class="wrap">
 
-  <!-- 0. 頂部極簡控制列（乾淨無雜訊） -->
+  <!-- 0. 頂部極簡控制列（單鍵語系 + 日月變形按鈕） -->
   <div class="utility-bar">
     <button class="lang-pill-btn" id="btn-lang-toggle" onclick="toggleLanguage()">EN</button>
     <button class="theme-morph-btn" id="btn-theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
@@ -395,7 +457,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
       <div class="product-desc" id="djiDesc">旗艦級雙鏡頭手持光學縮放三軸穩定相機套裝</div>
     </div>
 
-    <!-- 增距鏡特仕組 -->
+    <!-- 增距鏡特仕組（三行結構化斷行，去除押金贅字） -->
     <div class="price-row" data-model="僅租借 G2 增距鏡頭特仕組">
       <div class="price-row-top">
         <span class="product-name" id="lensTitle">vivo G2 增距鏡特仕組</span>
@@ -453,6 +515,26 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
     <!-- 整合式區間月曆與時間快捷膠囊 -->
     <div class="field">
       <label id="calendarTitle">預約租期起訖與交機時間（點選月曆起訖日）</label>
+      
+      <!-- 活動／演唱會填期秘訣指南 -->
+      <div class="calendar-guide-box" id="calendarGuideBox">
+        <div class="calendar-guide-header">
+          <span class="calendar-guide-title" id="calGuideTitle">💡 晚間活動／演唱會選期指南</span>
+          <span class="calendar-guide-badge" id="calGuideBadge">退租固定為中午 12:00 前</span>
+        </div>
+        <div class="calendar-guide-row">
+          <span class="guide-chip" id="guideChip1">看 1 天活動（例：9 號）</span>
+          <span id="guideText1">選 <strong>9 號起 ～ 10 號中午 12:00 歸還</strong>（計 1 日）</span>
+        </div>
+        <div class="calendar-guide-row">
+          <span class="guide-chip highlight" id="guideChip2">看 2 天活動（例：9+10 號）</span>
+          <span id="guideText2">選 <strong>9 號起 ～ 11 號中午 12:00 歸還</strong>（計 2 日）</span>
+        </div>
+        <div class="calendar-guide-note" id="guideNote">
+          ※ 因晚間活動散場門市已打烊，租訖日請直接選至【活動隔天】，中午 12:00 前返還即可安心跨夜使用！
+        </div>
+      </div>
+
       <div class="calendar-box">
         <div class="cal-nav">
           <button type="button" class="cal-btn" id="calPrevBtn" aria-label="Previous Month">◀</button>
@@ -482,7 +564,9 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
 
         <!-- 檔期即時統計 -->
         <div class="cal-summary" id="calSummaryText">
-          請點選月曆選擇預定租賃起訖日期
+          <div class="cal-summary-prompt" style="text-align:center;width:100%;">
+            請點選月曆選擇預定租賃起訖日期
+          </div>
         </div>
       </div>
     </div>
@@ -493,9 +577,9 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
     <input type="hidden" id="pickupTime">
     <input type="hidden" id="returnDate">
 
-    <button id="inquiryButton" type="button" class="secondary">送出檔期查詢</button>
+    <button id="inquiryButton" type="button" class="btn-submit">送出檔期查詢</button>
     <div class="notice-box" id="inquiryNotice">
-      <strong>租借流程須知：</strong>系統已先為您暫存所選設備！門市客服會盡快於 LINE 與您核對檔期，確認無誤後就能立即為您保留器材並完成預訂囉。
+      <strong>排程核對須知：</strong>先行為您核對設備在庫庫存，系統將自動暫存本次選擇。門市客服於 LINE 官方帳號確認檔期無誤後，即可接續完成預訂。
     </div>
 
     <div class="switch-cta-box">
@@ -554,10 +638,10 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
     </section>
   </div>
 
-  <div style="margin-top:16px;margin-bottom:20px;text-align:center">
+    <div style="margin-top:16px;margin-bottom:20px;text-align:center">
     <a href="https://ssystem089.github.io/rental-form/faq.html" target="_blank" rel="noopener noreferrer" id="faqLink" style="display:inline-block;width:100%;padding:11px;border-radius:6px;background:var(--panel-bg);border:1px solid var(--border-color);color:var(--accent-blue);text-decoration:none;font-size:12px;font-weight:700;">
-      常見問題 Q&A➔
-    </a>
+        常見問題 Q&A➔
+      </a>
   </div>
 </main>
 
@@ -599,6 +683,13 @@ const zh={
   step3Text:"報價核對",
   step4Text:"預訂確認",
   calendarTitle:"預約租期起訖與交機時間（點選月曆起訖日）",
+  calGuideTitle:"💡 晚間活動／演唱會選期指南",
+  calGuideBadge:"退租固定為中午 12:00 前",
+  guideChip1:"看 1 天活動（例：9 號）",
+  guideText1:"選 <strong>9 號起 ～ 10 號中午 12:00 歸還</strong>（計 1 日）",
+  guideChip2:"看 2 天活動（例：9+10 號）",
+  guideText2:"選 <strong>9 號起 ～ 11 號中午 12:00 歸還</strong>（計 2 日）",
+  guideNote:"※ 因晚間活動散場門市已打烊，租訖日請直接選至【活動隔天】，中午 12:00 前返還即可安心跨夜使用！",
   timePillLabel:"預計取機時間（營業時間 12:00–20:00）：",
   x300uDesc:"極致長焦收音旗艦・藍圖原色 ｜ 支援 200mm / 400mm 增距鏡配備",
   x300uPrice:"NT$ 1,100（3–5日）｜ NT$ 1,000（6日以上）",
@@ -626,7 +717,7 @@ const zh={
   modelLabel:"租借設備機型",
   lensLabel:"增距鏡配件選配",
   inquiryButton:"送出檔期查詢",
-  inquiryNotice:"<strong>預定流程須知：</strong>系統已先為您暫存所選設備！門市客服會盡快於 LINE 與您核對檔期，確認無誤後就能立即為您保留器材並完成預訂囉。",
+  inquiryNotice:"<strong>排程核對須知：</strong>先行為您核對設備在庫庫存，系統將自動暫存本次選擇。門市客服於 LINE 官方帳號確認檔期無誤後，即可接續完成預訂。",
   switchCtaDesc:"專案快速通道：免除二次來回確認，直接建立正式預約單據",
   toggleFormalOpen:"展開填寫正式預訂資料（含交還方式） ▼",
   toggleFormalClose:"▲ 收合完整預訂欄位",
@@ -694,6 +785,13 @@ const en={
   step3Text:"Quotation",
   step4Text:"Confirmation",
   calendarTitle:"Rental Period & Pickup Time (Tap start & end dates)",
+  calGuideTitle:"💡 Evening Event & Concert Booking Guide",
+  calGuideBadge:"Return by 12:00 noon",
+  guideChip1:"1-Day Event (e.g. 9th)",
+  guideText1:"Select <strong>9th pickup to 10th return by 12:00</strong> (1 day)",
+  guideChip2:"2-Day Event (e.g. 9th+10th)",
+  guideText2:"Select <strong>9th pickup to 11th return by 12:00</strong> (2 days)",
+  guideNote:"* Since the store is closed after night events end, please select the day after the event as the return date. Return by 12:00 noon!",
   timePillLabel:"Scheduled Pickup Time (Business Hours 12:00–20:00):",
   x300uDesc:"Ultimate telephoto & studio audio flagship, Blueprint ｜ 200mm / 400mm extender compatible",
   x300uPrice:"NT$ 1,100 (3–5 days) ｜ NT$ 1,000 (6+ days)",
@@ -803,7 +901,7 @@ function updateCalendarWeekdays(lang) {
 
 function setLanguage(lang) {
   currentLang = lang;
-  try { localStorage.setItem("fir-language", lang); } catch(e){}
+  localStorage.setItem("fir-language", lang);
 
   const btn = document.getElementById("btn-lang-toggle");
   if (btn) btn.textContent = (lang === "zh") ? "EN" : "繁中";
@@ -814,6 +912,7 @@ function setLanguage(lang) {
     subtitle:"subtitle",store:"store",priceTitle:"priceTitle",
     step1Text:"step1Text",step2Text:"step2Text",step3Text:"step3Text",step4Text:"step4Text",
     calendarTitle:"calendarTitle",timePillLabel:"timePillLabel",
+    calGuideTitle:"calGuideTitle",calGuideBadge:"calGuideBadge",guideChip1:"guideChip1",guideText1:"guideText1",guideChip2:"guideChip2",guideText2:"guideText2",guideNote:"guideNote",
     x300uDesc:"x300uDesc",x300uPrice:"x300uPrice",x500pmDesc:"x500pmDesc",x500pmPrice:"x500pmPrice",
     x200uDesc:"x200uDesc",x200uPrice:"x200uPrice",x300pDesc:"x300pDesc",x300pPrice:"x300pPrice",
     oppoDesc:"oppoDesc",oppoPrice:"oppoPrice",iphoneDesc:"iphoneDesc",iphonePrice:"iphonePrice",
@@ -827,7 +926,7 @@ function setLanguage(lang) {
     bookingButton:"bookingButton",formalPaymentNotice:"formalPaymentNotice",
     fallbackTitle:"fallbackTitle",fallbackGuide:"fallbackGuide",backButton:"back",copyButton:"copy"
   };
-  Object.keys(ids).forEach(k=>text(ids[k],x[k],k==="store"||k==="inquiryNotice"||k==="formalPaymentNotice"||k==="depositRuleTip"||k==="faqLink"||k==="deliveryNoticeText"||k==="lensDesc"));
+  Object.keys(ids).forEach(k=>text(ids[k],x[k],k==="store"||k==="inquiryNotice"||k==="formalPaymentNotice"||k==="depositRuleTip"||k==="faqLink"||k==="deliveryNoticeText"||k==="lensDesc"||k==="guideText1"||k==="guideText2"));
   ["d12a","d12x","d12b","d12c","d12d","d12e"].forEach(id=>text(id,x.days));
   text("perDayA",x.perDay);text("perDayB",x.perDay);text("perUse",x.perUse);
 
@@ -894,7 +993,7 @@ function applyTheme(theme) {
 }
 
 function setTheme(theme) {
-  try { localStorage.setItem("fir-theme", theme); } catch(e){}
+  localStorage.setItem("fir-theme", theme);
   applyTheme(theme);
 }
 
@@ -1023,11 +1122,12 @@ function onDateCellClick(dateStr){
   save();
 }
 
+// ★ 核心優化：租訖日期（returnDate）絕對維持純日期，絕不帶任何時間
 function syncCalendarToHiddenInputs(){
   const cleanStart = (calStartDate || "").split("T")[0].split(" ")[0].replace(/-/g, "/");
   const cleanEnd = (calEndDate || calStartDate || "").split("T")[0].split(" ")[0].replace(/-/g, "/");
   document.getElementById("pickupDate").value = cleanStart;
-  document.getElementById("returnDate").value = cleanEnd;
+  document.getElementById("returnDate").value = cleanEnd; // 純日期，絕不含時間
   document.getElementById("pickupClock").value = calPickupTime;
   document.getElementById("pickupTime").value = (cleanStart && calPickupTime) ? `${cleanStart} ${calPickupTime}` : "";
 }
@@ -1049,20 +1149,50 @@ function updateCalendarSummary(){
     const sWkEn = enDays[dt1.getDay()], eWkEn = enDays[dt2.getDay()];
     const sDate = calStartDate.replace(/-/g, "/");
     const eDate = calEndDate.replace(/-/g, "/");
-    sumEl.innerHTML = currentLang === "zh"
-      ? `預約檔期：${sDate} ${sWkZh} ${calPickupTime} 至 ${eDate} ${eWkZh}12:00（約 ${diffDays} 日）`
-      : `Rental Period: ${sDate} ${sWkEn} ${calPickupTime} to ${eDate} ${eWkEn} 12:00 (approx ${diffDays} days)`;
+    const isZh = currentLang === "zh";
+    const titleText = isZh ? "預約檔期" : "Rental Period";
+    const badgeText = isZh ? `約 ${diffDays} 日` : `approx ${diffDays} days`;
+    const sWk = isZh ? sWkZh : sWkEn;
+    const eWk = isZh ? eWkZh : eWkEn;
+    const toText = isZh ? "至" : "to";
+    const pickupSuffix = isZh ? " 取機" : " Pickup";
+    const returnSuffix = isZh ? " 前歸還" : " Return";
+
+    sumEl.innerHTML = `
+      <div class="cal-summary-head">
+        <span class="cal-summary-title">${titleText}</span>
+        <span class="cal-badge">${badgeText}</span>
+      </div>
+      <div class="cal-summary-range">
+        <span>${sDate} ${sWk} ${calPickupTime}${pickupSuffix}</span>
+        <span class="cal-arrow">${toText}</span>
+        <span>${eDate} ${eWk} 12:00${returnSuffix}</span>
+      </div>
+    `;
   } else if (calStartDate) {
     const [y1, m1, d1] = calStartDate.split("-").map(Number);
     const dt1 = new Date(y1, m1 - 1, d1);
     const sWkZh = zhDays[dt1.getDay()];
     const sWkEn = enDays[dt1.getDay()];
     const sDate = calStartDate.replace(/-/g, "/");
-    sumEl.innerHTML = currentLang === "zh"
-      ? `取機時間：${sDate} ${sWkZh}（${calPickupTime}），請接續選擇歸還日期`
-      : `Pickup: ${sDate} ${sWkEn} (${calPickupTime}), tap to select return date`;
+    const isZh = currentLang === "zh";
+    const sWk = isZh ? sWkZh : sWkEn;
+    const titleText = isZh ? "取機時間已選定" : "Pickup Selected";
+    const promptText = isZh ? `已選取機：${sDate} ${sWk} ${calPickupTime} ｜ 請接著點選歸還日期（若活動至晚間，請選隔日中午歸還）` : `Pickup: ${sDate} ${sWk} ${calPickupTime} ｜ Please tap return date (for night events, select next day noon)`;
+
+    sumEl.innerHTML = `
+      <div class="cal-summary-head">
+        <span class="cal-summary-title">${titleText}</span>
+        <span class="cal-badge">${calPickupTime}</span>
+      </div>
+      <div class="cal-summary-prompt">${promptText}</div>
+    `;
   } else {
-    sumEl.textContent = currentLang === "zh" ? "請點選月曆選擇預定租賃起訖日期" : "Please select pickup and return dates";
+    sumEl.innerHTML = `
+      <div class="cal-summary-prompt" style="text-align:center;width:100%;">
+        ${currentLang === "zh" ? "請點選月曆選擇預定租賃起訖日期" : "Please select pickup and return dates"}
+      </div>
+    `;
   }
 }
 
@@ -1172,6 +1302,7 @@ function equipment(){
   return m + cleanLens;
 }
 
+// ★ 核心優化：起租包含時分，租訖嚴格保證僅輸出純日期 (YYYY/MM/DD)
 function dates(){
   syncCalendarToHiddenInputs();
   const today=getTodayStr();
@@ -1197,9 +1328,9 @@ function dates(){
   const cleanEndDate = (calEndDate || calStartDate).split("T")[0].split(" ")[0].replace(/-/g, "/").trim();
   
   const p = `${cleanStartDate} ${calPickupTime}`;
-  const r = cleanEndDate;
+  const r = cleanEndDate; // 租訖僅純日期
 
-  const scheduleZh = `${cleanStartDate} ${startWkZh} ${calPickupTime} 至 ${cleanEndDate} ${endWkZh}12:00  (約${totalDays}日)`;
+  const scheduleZh = `${cleanStartDate} ${startWkZh} ${calPickupTime} 至 ${cleanEndDate} ${endWkZh} 12:00  (約${totalDays}日)`;
   const scheduleEn = `${cleanStartDate} ${startWkEn} ${calPickupTime} to ${cleanEndDate} ${endWkEn} 12:00 (approx ${totalDays} days)`;
 
   return { p, r, d: totalDays, scheduleZh, scheduleEn };
@@ -1215,6 +1346,7 @@ function scrollToFormalSection(){
   },200);
 }
 
+// ★ 詢問檔期：租訖純日期（例：2026/12/23 還）
 function inquiry(){
   const d=dates();if(!d)return;save();
   try{localStorage.setItem("fir-stage","formal");}catch(e){}
@@ -1226,6 +1358,7 @@ function inquiry(){
   send(currentMessage,document.getElementById("inquiryButton"),"inquiry");
 }
 
+// ★ 正式預約單：租訖純日期（例：2026/12/23 還）
 function booking(){
   const d=dates();if(!d)return;
   const n=document.getElementById("name").value.trim(),p=document.getElementById("phone").value.trim();
@@ -1345,24 +1478,21 @@ async function copyFallback(){
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
-  try {
-    const savedTheme = localStorage.getItem("fir-theme");
-    if (savedTheme) {
-      applyTheme(savedTheme);
-    } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      applyTheme("dark");
-    } else {
-      applyTheme("light");
-    }
-  } catch(e){}
+  // 1. 主題載入
+  const savedTheme = localStorage.getItem("fir-theme");
+  if (savedTheme) {
+    applyTheme(savedTheme);
+  } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    applyTheme("dark");
+  } else {
+    applyTheme("light");
+  }
 
   if (window.matchMedia) {
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function(e) {
-      try {
-        if (!localStorage.getItem("fir-theme")) {
-          applyTheme(e.matches ? "dark" : "light");
-        }
-      } catch(err){}
+      if (!localStorage.getItem("fir-theme")) {
+        applyTheme(e.matches ? "dark" : "light");
+      }
     });
   }
 
@@ -1379,10 +1509,10 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   restore();
   
+  // 2. 語系載入三層架構（優先 URL 參數 > 記憶 > 預設一律繁中）
   const urlParams = new URLSearchParams(window.location.search);
   const paramLang = urlParams.get("lang");
-  let savedLang = null;
-  try { savedLang = localStorage.getItem("fir-language"); } catch(e){}
+  const savedLang = localStorage.getItem("fir-language");
 
   if (paramLang && (paramLang === "en" || paramLang === "zh")) {
     setLanguage(paramLang);
