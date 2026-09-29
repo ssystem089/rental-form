@@ -177,24 +177,6 @@ select, input[type="text"] { width: 100%; min-height: 44px; padding: 10px 12px; 
 select:focus, input[type="text"]:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 2px var(--accent-blue-bg); }
 .device-note { margin-top: 8px; padding: 10px 12px; border-left: 2px solid var(--accent-blue); border-radius: 0 6px 6px 0; background: var(--panel-bg); color: var(--text-muted); font-size: 11.5px; line-height: 1.6; }
 
-/* 整合式雙擊區間月曆 */
-.calendar-box { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 14px; margin-bottom: 14px; }
-.cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.cal-title { font-size: 13.5px; font-weight: 700; color: var(--text-main); }
-.cal-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 4px; width: 32px; height: 32px; min-height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; }
-.cal-btn:hover { border-color: var(--accent-blue); }
-.cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 11px; color: var(--text-light); font-weight: 700; margin-bottom: 8px; }
-.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; row-gap: 4px; }
-.cal-cell { height: 36px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border-radius: 4px; cursor: pointer; color: var(--text-main); position: relative; user-select: none; font-variant-numeric: tabular-nums; }
-.cal-cell:hover:not(.disabled) { background: var(--accent-blue-bg); }
-.cal-cell.disabled { color: var(--text-light); opacity: 0.35; cursor: not-allowed; }
-.cal-cell.today::after { content: ""; position: absolute; bottom: 3px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent-blue); }
-.cal-cell.range-start { background: var(--accent-blue) !important; color: #ffffff !important; font-weight: 800; border-radius: 4px 0 0 4px; }
-.cal-cell.range-end { background: var(--accent-blue) !important; color: #ffffff !important; font-weight: 800; border-radius: 0 4px 4px 0; }
-.cal-cell.range-start.range-end { border-radius: 4px !important; }
-.cal-cell.range-mid { background: var(--accent-blue-bg) !important; color: var(--accent-blue) !important; border-radius: 0; font-weight: 700; }
-.cal-cell.range-start.today::after, .cal-cell.range-end.today::after { background: #ffffff; }
-
 /* 晚間活動／演唱會選期指南（折疊式手風琴） */
 .calendar-guide-box {
   background: var(--panel-bg);
@@ -255,7 +237,25 @@ select:focus, input[type="text"]:focus { border-color: var(--accent-blue); box-s
   line-height: 1.5;
 }
 
-/* 取機時間膠囊（3 欄對稱格線佈局，完美相容各型號手機與寬螢幕） */
+/* 整合式雙擊區間月曆 */
+.calendar-box { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 14px; margin-bottom: 14px; }
+.cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.cal-title { font-size: 13.5px; font-weight: 700; color: var(--text-main); }
+.cal-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 4px; width: 32px; height: 32px; min-height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; }
+.cal-btn:hover { border-color: var(--accent-blue); }
+.cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 11px; color: var(--text-light); font-weight: 700; margin-bottom: 8px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; row-gap: 4px; }
+.cal-cell { height: 36px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border-radius: 4px; cursor: pointer; color: var(--text-main); position: relative; user-select: none; font-variant-numeric: tabular-nums; }
+.cal-cell:hover:not(.disabled) { background: var(--accent-blue-bg); }
+.cal-cell.disabled { color: var(--text-light); opacity: 0.35; cursor: not-allowed; }
+.cal-cell.today::after { content: ""; position: absolute; bottom: 3px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent-blue); }
+.cal-cell.range-start { background: var(--accent-blue) !important; color: #ffffff !important; font-weight: 800; border-radius: 4px 0 0 4px; }
+.cal-cell.range-end { background: var(--accent-blue) !important; color: #ffffff !important; font-weight: 800; border-radius: 0 4px 4px 0; }
+.cal-cell.range-start.range-end { border-radius: 4px !important; }
+.cal-cell.range-mid { background: var(--accent-blue-bg) !important; color: var(--accent-blue) !important; border-radius: 0; font-weight: 700; }
+.cal-cell.range-start.today::after, .cal-cell.range-end.today::after { background: #ffffff; }
+
+/* 取機時間膠囊（3 欄對稱格線佈局） */
 .time-pill-section { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-color); }
 .time-pill-label { font-size: 11.5px; color: var(--text-light); font-weight: 700; margin-bottom: 8px; }
 .time-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
@@ -578,8 +578,10 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
     <input type="hidden" id="returnDate">
 
     <button id="inquiryButton" type="button" class="btn-submit">送出檔期查詢</button>
+    
+    <!-- ★ 版本 B：清晰指引與可點擊平滑跳轉通道 -->
     <div class="notice-box" id="inquiryNotice">
-      <strong>排程核對須知：</strong>先行為您核對設備在庫庫存，系統將自動暫存本次選擇。門市客服於 LINE 官方帳號確認檔期無誤後，即可接續完成預訂。
+      <strong>租借流程說明：</strong>送出後客服將主動於 LINE 發送報價單連結；<span onclick="scrollToFormalSection()" style="color:var(--accent-blue);cursor:pointer;text-decoration:underline;font-weight:700;">如需加快預訂流程，請直接點此或下滑展開填寫正式預約表單 ▼</span>
     </div>
 
     <div class="switch-cta-box">
@@ -714,7 +716,7 @@ const zh={
   modelLabel:"租借設備機型",
   lensLabel:"增距鏡配件選配",
   inquiryButton:"送出檔期查詢",
-  inquiryNotice:"<strong>排程核對須知：</strong>先行為您核對設備在庫庫存，系統將自動暫存本次選擇。門市客服於 LINE 官方帳號確認檔期無誤後，即可接續完成預訂。",
+  inquiryNotice:"<strong>租借流程說明：</strong>送出後客服將主動於 LINE 發送報價單連結；<span onclick='scrollToFormalSection()' style='color:var(--accent-blue);cursor:pointer;text-decoration:underline;font-weight:700;'>如需加快預訂流程，請直接點此或下滑展開填寫正式預約表單 ▼</span>",
   switchCtaDesc:"專案快速通道：免除二次來回確認，直接建立正式預約單據",
   toggleFormalOpen:"展開填寫正式預訂資料（含交還方式） ▼",
   toggleFormalClose:"▲ 收合完整預訂欄位",
@@ -813,7 +815,7 @@ const en={
   modelLabel:"Rental Device Model",
   lensLabel:"Telephoto Extender Option",
   inquiryButton:"Check Availability",
-  inquiryNotice:"<strong>No Commitment:</strong> Verify fleet schedule before reserving. Details are automatically preserved; customer service will verify availability via LINE.",
+  inquiryNotice:"<strong>Rental Process Note:</strong> An official quotation link will be sent via LINE after submission; <span onclick='scrollToFormalSection()' style='color:var(--accent-blue);cursor:pointer;text-decoration:underline;font-weight:700;'>to expedite your reservation, tap here or scroll down to complete the formal booking form ▼</span>",
   switchCtaDesc:"Express Channel: Proceed directly to formal booking without dual confirmations",
   toggleFormalOpen:"Fill Formal Booking Details (Include Delivery) ▼",
   toggleFormalClose:"▲ Collapse formal booking details",
