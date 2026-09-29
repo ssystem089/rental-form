@@ -264,26 +264,67 @@ select:focus, input[type="text"]:focus { border-color: var(--accent-blue); box-s
 .time-pill.active { background: var(--accent-blue); color: #ffffff; border-color: var(--accent-blue); font-weight: 700; }
 [data-theme="dark"] .time-pill.active { color: #0b0f19; }
 
-/* ★ 預約檔期三行置中呈現 (帶 ~ 符號) */
+/* ★ 預約檔期三行格式化呈現 (淡化背景、2026 垂直精準對齊、中間 ~ 居中、字體高對比清晰) */
 .cal-summary { 
   margin-top: 12px; 
-  padding: 10px 14px; 
-  background: var(--accent-blue-bg); 
-  border: 1px solid var(--accent-blue-border); 
+  padding: 12px 14px; 
+  background: rgba(2, 132, 199, 0.04); 
+  border: 1px solid rgba(2, 132, 199, 0.18); 
   border-radius: 6px; 
-  color: var(--accent-blue); 
-  font-size: 13px; 
-  font-weight: 700; 
   line-height: 1.5; 
-  font-variant-numeric: tabular-nums; 
   text-align: center; 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-.cal-summary-line { white-space: nowrap; }
-.cal-summary-tilde { font-size: 14px; line-height: 1.2; margin: 1px 0; opacity: 0.8; }
+[data-theme="dark"] .cal-summary {
+  background: rgba(56, 189, 248, 0.06); 
+  border: 1px solid rgba(56, 189, 248, 0.18); 
+}
+
+.cal-summary-grid {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0 auto;
+}
+.cal-summary-row {
+  display: flex;
+  align-items: baseline;
+  width: 100%;
+}
+.cal-summary-lbl {
+  width: 60px;
+  text-align: right;
+  margin-right: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-light);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.cal-summary-val {
+  text-align: left;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0369a1; /* 淺色模式：深沉清晰的海軍藍 */
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+[data-theme="dark"] .cal-summary-val {
+  color: #f8fafc; /* 深色模式：高對比極致亮白 */
+}
+
+.tilde-row {
+  margin: -2px 0;
+}
+.tilde-row .cal-summary-val {
+  text-align: center;
+  width: 100%;
+  color: var(--text-light);
+  font-size: 14px;
+}
 
 /* ★ 精簡版暫存提示框 (前綴 ✕ 關閉鈕，第二度訪問才顯示) */
 .saved-box { 
@@ -362,26 +403,27 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .secondary { background: var(--panel-bg); color: var(--text-main); border: 1px solid var(--border-color); }
 .secondary:hover { border-color: var(--accent-blue); }
 
-/* ★ 送出檔期查詢：淡化按鈕色彩 (淡藍柔和背景 + 細框) */
+/* ★ 送出檔期查詢：實體淡藍色調（同預訂按鈕質感，色系清爽淡雅） */
 .btn-inquiry { 
-  background: var(--accent-blue-bg); 
-  color: var(--accent-blue); 
-  border: 1.5px solid var(--accent-blue-border); 
+  background: #0ea5e9; 
+  color: #ffffff; 
+  border: none; 
   font-size: 14.5px; 
-  font-weight: 700; 
+  font-weight: 800; 
   border-radius: 6px; 
   cursor: pointer; 
-  transition: all 0.2s ease; 
+  box-shadow: 0 3px 10px rgba(14, 165, 233, 0.22);
+  transition: opacity 0.15s ease, transform 0.15s ease; 
 }
-.btn-inquiry:hover { 
-  background: rgba(56, 189, 248, 0.2); 
-  border-color: var(--accent-blue); 
+[data-theme="dark"] .btn-inquiry { 
+  background: #0284c7; 
+  color: #ffffff; 
+  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.28);
 }
-.btn-inquiry:active { 
-  transform: scale(0.99); 
-}
+.btn-inquiry:hover { opacity: 0.92; }
+.btn-inquiry:active { opacity: 0.85; transform: scale(0.99); }
 
-/* ★ 送出正式預約：實心高亮主按鈕 (強烈視覺焦點) */
+/* ★ 送出正式預約：實心高飽和度主要按鈕 */
 .btn-submit { 
   background: var(--accent-blue); 
   color: #ffffff; 
@@ -545,7 +587,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
     <!-- iPhone 17 Pro / Max -->
     <div class="price-row" data-model="iPhone 17 Pro Max">
       <div class="price-row-top">
-        <span class="product-name">iPhone 17 Pro / Max</span>
+        <span class="product-name">iPhone 17 Pro Max</span>
         <div class="price-main">NT$ 850<small id="d12e">/ 1–2日</small></div>
       </div>
       <div class="product-desc" id="iphoneDesc">極致運算效能與專業級流暢影片錄製性能</div>
@@ -594,7 +636,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
   <section class="card" id="formSectionStep1">
     <div id="liffStatus" class="status"></div>
     
-    <!-- ★ 已暫存規格 (第二度進入才會顯示，帶 ✕ 關閉按鈕) -->
+    <!-- ★ 已暫存規格 (第二度進入才顯示，帶 ✕ 關閉按鈕) -->
     <div id="savedSelection" class="saved-box"></div>
 
     <div class="field">
@@ -669,7 +711,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
           </div>
         </div>
 
-        <!-- ★ 預約檔期三行格式化呈現 (帶 ~ 居中) -->
+        <!-- ★ 預約檔期三行格式化呈現 (淡化背景、2026 垂直精準對齊、中間 ~ 居中、字體高對比清晰) -->
         <div class="cal-summary" id="calSummaryText">
           請點選月曆選擇預定租賃起訖日期
         </div>
@@ -682,7 +724,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
     <input type="hidden" id="pickupTime">
     <input type="hidden" id="returnDate">
 
-    <!-- ★ 送出檔期查詢（採用淡化按鈕，與正式預約做視覺區隔） -->
+    <!-- ★ 送出檔期查詢（淡藍實體按鈕） -->
     <button id="inquiryButton" type="button" class="btn-inquiry">送出檔期查詢</button>
     
     <!-- ★ 置中說明文字 -->
@@ -1240,7 +1282,7 @@ function syncCalendarToHiddenInputs(){
   document.getElementById("pickupTime").value = (cleanStart && calPickupTime) ? `${cleanStart} ${calPickupTime}` : "";
 }
 
-// ★ 預約檔期三行格式化呈現 (中間置中 ~ 符號，去訖時間)
+// ★ 預約檔期三行格式化呈現 (中間 ~ 居中，日期垂直精準對齊，無還機時間)
 function updateCalendarSummary(){
   const sumEl = document.getElementById("calSummaryText");
   if (!sumEl) return;
@@ -1261,15 +1303,37 @@ function updateCalendarSummary(){
     
     if (currentLang === "zh") {
       sumEl.innerHTML = `
-        <div class="cal-summary-line">預約檔期 ${sDate} ${sWkZh} ${calPickupTime}</div>
-        <div class="cal-summary-tilde">~</div>
-        <div class="cal-summary-line">${eDate} ${eWkZh} 約${diffDays}日</div>
+        <div class="cal-summary-grid">
+          <div class="cal-summary-row">
+            <span class="cal-summary-lbl">預約檔期</span>
+            <span class="cal-summary-val">${sDate} ${sWkZh} ${calPickupTime}</span>
+          </div>
+          <div class="cal-summary-row tilde-row">
+            <span class="cal-summary-lbl"></span>
+            <span class="cal-summary-val">~</span>
+          </div>
+          <div class="cal-summary-row">
+            <span class="cal-summary-lbl"></span>
+            <span class="cal-summary-val">${eDate} ${eWkZh} 約${diffDays}日</span>
+          </div>
+        </div>
       `;
     } else {
       sumEl.innerHTML = `
-        <div class="cal-summary-line">Schedule: ${sDate} ${sWkEn} ${calPickupTime}</div>
-        <div class="cal-summary-tilde">~</div>
-        <div class="cal-summary-line">${eDate} ${eWkEn} (approx ${diffDays} days)</div>
+        <div class="cal-summary-grid">
+          <div class="cal-summary-row">
+            <span class="cal-summary-lbl">Schedule</span>
+            <span class="cal-summary-val">${sDate} ${sWkEn} ${calPickupTime}</span>
+          </div>
+          <div class="cal-summary-row tilde-row">
+            <span class="cal-summary-lbl"></span>
+            <span class="cal-summary-val">~</span>
+          </div>
+          <div class="cal-summary-row">
+            <span class="cal-summary-lbl"></span>
+            <span class="cal-summary-val">${eDate} ${eWkEn} (approx ${diffDays} days)</span>
+          </div>
+        </div>
       `;
     }
   } else if (calStartDate) {
@@ -1279,8 +1343,38 @@ function updateCalendarSummary(){
     const sWkEn = enDays[dt1.getDay()];
     const sDate = calStartDate.replace(/-/g, "/");
     sumEl.innerHTML = currentLang === "zh"
-      ? `<div class="cal-summary-line">取機時間 ${sDate} ${sWkZh} ${calPickupTime}</div><div class="cal-summary-tilde">~</div><div class="cal-summary-line" style="opacity:0.75;">請接續選擇歸還日期</div>`
-      : `<div class="cal-summary-line">Pickup: ${sDate} ${sWkEn} ${calPickupTime}</div><div class="cal-summary-tilde">~</div><div class="cal-summary-line" style="opacity:0.75;">Select return date</div>`;
+      ? `
+        <div class="cal-summary-grid">
+          <div class="cal-summary-row">
+            <span class="cal-summary-lbl">取機時間</span>
+            <span class="cal-summary-val">${sDate} ${sWkZh} ${calPickupTime}</span>
+          </div>
+          <div class="cal-summary-row tilde-row">
+            <span class="cal-summary-lbl"></span>
+            <span class="cal-summary-val">~</span>
+          </div>
+          <div class="cal-summary-row">
+            <span class="cal-summary-lbl"></span>
+            <span class="cal-summary-val" style="opacity:0.75;">請接續選擇歸還日期</span>
+          </div>
+        </div>
+      `
+      : `
+        <div class="cal-summary-grid">
+          <div class="cal-summary-row">
+            <span class="cal-summary-lbl">Pickup</span>
+            <span class="cal-summary-val">${sDate} ${sWkEn} ${calPickupTime}</span>
+          </div>
+          <div class="cal-summary-row tilde-row">
+            <span class="cal-summary-lbl"></span>
+            <span class="cal-summary-val">~</span>
+          </div>
+          <div class="cal-summary-row">
+            <span class="cal-summary-lbl"></span>
+            <span class="cal-summary-val" style="opacity:0.75;">Select return date</span>
+          </div>
+        </div>
+      `;
   } else {
     sumEl.textContent = currentLang === "zh" ? "請點選月曆選擇預定租賃起訖日期" : "Please select pickup and return dates";
   }
@@ -1412,6 +1506,7 @@ function equipment(){
   return m + cleanLens;
 }
 
+// ★ 去除還機時間 (12:00)，僅顯示起租時分與歸還日期
 function dates(){
   syncCalendarToHiddenInputs();
   const today=getTodayStr();
@@ -1440,7 +1535,8 @@ function dates(){
   const p = `${cleanStartDate} ${calPickupTime}`;
   const r = cleanEndDate;
 
-  const scheduleZh = `${cleanStartDate} ${startWkZh} ${calPickupTime} 至 ${cleanEndDate} ${endWkZh} (約${totalDays}日)`;
+  // ★ 移除 12:00，去除還機時間
+  const scheduleZh = `${cleanStartDate} ${startWkZh} ${calPickupTime} 至 ${cleanEndDate} ${endWkZh} (約 ${totalDays} 日)`;
   const scheduleEn = `${cleanStartDate} ${startWkEn} ${calPickupTime} to ${cleanEndDate} ${endWkEn} (approx ${totalDays} days)`;
 
   return { p, r, d: totalDays, scheduleZh, scheduleEn };
