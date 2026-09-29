@@ -227,63 +227,63 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 }
 .btn-submit:active { transform: scale(0.99); opacity: 0.92; }
 
-/* 活動／演唱會填期秘訣指南卡片 */
+/* 晚間活動／演唱會選期指南（手風琴折疊卡片） */
 .calendar-guide-box {
   background: var(--panel-bg);
   border: 1px solid var(--accent-blue-border);
-  border-radius: 8px;
-  padding: 10px 12px;
+  border-radius: 6px;
+  padding: 8px 12px;
   margin-bottom: 10px;
   font-size: 11.5px;
-  line-height: 1.5;
+  line-height: 1.55;
+  transition: all 0.2s ease;
 }
 .calendar-guide-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 6px;
-  padding-bottom: 5px;
-  border-bottom: 1px dashed var(--accent-blue-border);
+  cursor: pointer;
+  user-select: none;
 }
 .calendar-guide-title {
   color: var(--accent-blue);
   font-weight: 700;
-  font-size: 11.5px;
+  font-size: 12px;
 }
-.calendar-guide-badge {
-  font-size: 10.5px;
-  color: var(--text-light);
-  font-weight: 600;
-}
-.calendar-guide-row {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  margin-bottom: 4px;
-  color: var(--text-main);
-  font-size: 11.5px;
-}
-.guide-chip {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  color: var(--text-light);
-  font-size: 10px;
+.calendar-guide-toggle-icon {
+  font-size: 16px;
   font-weight: 700;
-  padding: 1px 6px;
-  border-radius: 4px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.guide-chip.highlight {
-  border-color: var(--accent-blue);
   color: var(--accent-blue);
-  background: var(--accent-blue-bg);
+  line-height: 1;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.calendar-guide-body {
+  display: none;
+  padding-top: 8px;
+  border-top: 1px dashed var(--accent-blue-border);
+  margin-top: 6px;
+}
+.calendar-guide-box.open .calendar-guide-body {
+  display: block;
+}
+.calendar-guide-item {
+  color: var(--text-main);
+  margin-bottom: 5px;
+  line-height: 1.5;
+}
+.calendar-guide-item strong {
+  color: var(--text-main);
+  font-weight: 700;
 }
 .calendar-guide-note {
   margin-top: 6px;
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--text-light);
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 /* 注意事項 */
@@ -514,24 +514,24 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
 
     <!-- 整合式區間月曆與時間快捷膠囊 -->
     <div class="field">
-      <label id="calendarTitle">預約租期起訖與交機時間（點選月曆起訖日）</label>
+      <label id="calendarTitle">預約租期（點選月曆起訖日）</label>
       
-      <!-- 活動／演唱會填期秘訣指南 -->
+      <!-- 晚間活動／演唱會選期指南（折疊式手風琴） -->
       <div class="calendar-guide-box" id="calendarGuideBox">
-        <div class="calendar-guide-header">
+        <div class="calendar-guide-header" id="calGuideHeader" onclick="toggleCalendarGuide()">
           <span class="calendar-guide-title" id="calGuideTitle">💡 晚間活動／演唱會選期指南</span>
-          <span class="calendar-guide-badge" id="calGuideBadge">退租固定為中午 12:00 前</span>
+          <span class="calendar-guide-toggle-icon" id="calGuideToggleIcon">+</span>
         </div>
-        <div class="calendar-guide-row">
-          <span class="guide-chip" id="guideChip1">看 1 天活動（例：9 號）</span>
-          <span id="guideText1">選 <strong>9 號起 ～ 10 號中午 12:00 歸還</strong>（計 1 日）</span>
-        </div>
-        <div class="calendar-guide-row">
-          <span class="guide-chip highlight" id="guideChip2">看 2 天活動（例：9+10 號）</span>
-          <span id="guideText2">選 <strong>9 號起 ～ 11 號中午 12:00 歸還</strong>（計 2 日）</span>
-        </div>
-        <div class="calendar-guide-note" id="guideNote">
-          ※ 因晚間活動散場門市已打烊，租訖日請直接選至【活動隔天】，中午 12:00 前返還即可安心跨夜使用！
+        <div class="calendar-guide-body" id="calGuideBody">
+          <div class="calendar-guide-item" id="guideItem1">
+            <strong>• 看 1 天活動（例：9 號）</strong>：選 9 號起 ～ 10 號中午 12:00 歸還（計 1 日）
+          </div>
+          <div class="calendar-guide-item" id="guideItem2">
+            <strong>• 看 2 天活動（例：9+10 號）</strong>：選 9 號起 ～ 11 號中午 12:00 歸還（計 2 日）
+          </div>
+          <div class="calendar-guide-note" id="guideNote">
+            租訖日請直接選至【活動隔天】，除熱門時段延長營業至 23:00 外，最終以交機時約定交還時間為準。
+          </div>
         </div>
       </div>
 
@@ -682,14 +682,11 @@ const zh={
   step2Text:"預約登記",
   step3Text:"報價核對",
   step4Text:"預訂確認",
-  calendarTitle:"預約租期起訖與交機時間（點選月曆起訖日）",
+  calendarTitle:"預約租期（點選月曆起訖日）",
   calGuideTitle:"💡 晚間活動／演唱會選期指南",
-  calGuideBadge:"退租固定為中午 12:00 前",
-  guideChip1:"看 1 天活動（例：9 號）",
-  guideText1:"選 <strong>9 號起 ～ 10 號中午 12:00 歸還</strong>（計 1 日）",
-  guideChip2:"看 2 天活動（例：9+10 號）",
-  guideText2:"選 <strong>9 號起 ～ 11 號中午 12:00 歸還</strong>（計 2 日）",
-  guideNote:"※ 因晚間活動散場門市已打烊，租訖日請直接選至【活動隔天】，中午 12:00 前返還即可安心跨夜使用！",
+  guideItem1:"<strong>• 看 1 天活動（例：9 號）</strong>：選 9 號起 ～ 10 號中午 12:00 歸還（計 1 日）",
+  guideItem2:"<strong>• 看 2 天活動（例：9+10 號）</strong>：選 9 號起 ～ 11 號中午 12:00 歸還（計 2 日）",
+  guideNote:"租訖日請直接選至【活動隔天】，除熱門時段延長營業至 23:00 外，最終以交機時約定交還時間為準。",
   timePillLabel:"預計取機時間（營業時間 12:00–20:00）：",
   x300uDesc:"極致長焦收音旗艦・藍圖原色 ｜ 支援 200mm / 400mm 增距鏡配備",
   x300uPrice:"NT$ 1,100（3–5日）｜ NT$ 1,000（6日以上）",
@@ -784,14 +781,11 @@ const en={
   step2Text:"Reservation",
   step3Text:"Quotation",
   step4Text:"Confirmation",
-  calendarTitle:"Rental Period & Pickup Time (Tap start & end dates)",
+  calendarTitle:"Rental Period (Tap start & end dates)",
   calGuideTitle:"💡 Evening Event & Concert Booking Guide",
-  calGuideBadge:"Return by 12:00 noon",
-  guideChip1:"1-Day Event (e.g. 9th)",
-  guideText1:"Select <strong>9th pickup to 10th return by 12:00</strong> (1 day)",
-  guideChip2:"2-Day Event (e.g. 9th+10th)",
-  guideText2:"Select <strong>9th pickup to 11th return by 12:00</strong> (2 days)",
-  guideNote:"* Since the store is closed after night events end, please select the day after the event as the return date. Return by 12:00 noon!",
+  guideItem1:"<strong>• 1-Day Event (e.g. 9th)</strong>: Select 9th pickup to 10th return by 12:00 (1 day)",
+  guideItem2:"<strong>• 2-Day Event (e.g. 9th+10th)</strong>: Select 9th pickup to 11th return by 12:00 (2 days)",
+  guideNote:"Please select the day after the event as the return date. Peak hours may extend to 23:00; final return time is subject to pickup agreement.", please select the day after the event as the return date. Return by 12:00 noon!",
   timePillLabel:"Scheduled Pickup Time (Business Hours 12:00–20:00):",
   x300uDesc:"Ultimate telephoto & studio audio flagship, Blueprint ｜ 200mm / 400mm extender compatible",
   x300uPrice:"NT$ 1,100 (3–5 days) ｜ NT$ 1,000 (6+ days)",
@@ -912,7 +906,7 @@ function setLanguage(lang) {
     subtitle:"subtitle",store:"store",priceTitle:"priceTitle",
     step1Text:"step1Text",step2Text:"step2Text",step3Text:"step3Text",step4Text:"step4Text",
     calendarTitle:"calendarTitle",timePillLabel:"timePillLabel",
-    calGuideTitle:"calGuideTitle",calGuideBadge:"calGuideBadge",guideChip1:"guideChip1",guideText1:"guideText1",guideChip2:"guideChip2",guideText2:"guideText2",guideNote:"guideNote",
+    calGuideTitle:"calGuideTitle",guideItem1:"guideItem1",guideItem2:"guideItem2",guideNote:"guideNote",
     x300uDesc:"x300uDesc",x300uPrice:"x300uPrice",x500pmDesc:"x500pmDesc",x500pmPrice:"x500pmPrice",
     x200uDesc:"x200uDesc",x200uPrice:"x200uPrice",x300pDesc:"x300pDesc",x300pPrice:"x300pPrice",
     oppoDesc:"oppoDesc",oppoPrice:"oppoPrice",iphoneDesc:"iphoneDesc",iphonePrice:"iphonePrice",
@@ -926,7 +920,7 @@ function setLanguage(lang) {
     bookingButton:"bookingButton",formalPaymentNotice:"formalPaymentNotice",
     fallbackTitle:"fallbackTitle",fallbackGuide:"fallbackGuide",backButton:"back",copyButton:"copy"
   };
-  Object.keys(ids).forEach(k=>text(ids[k],x[k],k==="store"||k==="inquiryNotice"||k==="formalPaymentNotice"||k==="depositRuleTip"||k==="faqLink"||k==="deliveryNoticeText"||k==="lensDesc"||k==="guideText1"||k==="guideText2"));
+  Object.keys(ids).forEach(k=>text(ids[k],x[k],k==="store"||k==="inquiryNotice"||k==="formalPaymentNotice"||k==="depositRuleTip"||k==="faqLink"||k==="deliveryNoticeText"||k==="lensDesc"||k==="guideItem1"||k==="guideItem2"));
   ["d12a","d12x","d12b","d12c","d12d","d12e"].forEach(id=>text(id,x.days));
   text("perDayA",x.perDay);text("perDayB",x.perDay);text("perUse",x.perUse);
 
@@ -1194,6 +1188,14 @@ function updateCalendarSummary(){
       </div>
     `;
   }
+}
+
+function toggleCalendarGuide(){
+  const box = document.getElementById("calendarGuideBox");
+  const icon = document.getElementById("calGuideToggleIcon");
+  if (!box) return;
+  const isOpen = box.classList.toggle("open");
+  if (icon) icon.textContent = isOpen ? "−" : "+";
 }
 
 function setupTimePills(){
