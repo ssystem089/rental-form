@@ -77,7 +77,7 @@ body {
   max-width: 100%;
 }
 
-/* 頂部極簡控制列（單鍵語系 + 日月變形） */
+/* 頂部極簡控制列 */
 .utility-bar { 
   display: flex; 
   justify-content: flex-end; 
@@ -264,15 +264,65 @@ select:focus, input[type="text"]:focus { border-color: var(--accent-blue); box-s
 .time-pill.active { background: var(--accent-blue); color: #ffffff; border-color: var(--accent-blue); font-weight: 700; }
 [data-theme="dark"] .time-pill.active { color: #0b0f19; }
 
-.cal-summary { margin-top: 12px; padding: 10px 12px; background: var(--accent-blue-bg); border: 1px solid var(--accent-blue-border); border-radius: 6px; color: var(--accent-blue); font-size: 12px; font-weight: 700; line-height: 1.5; font-variant-numeric: tabular-nums; text-align: center; }
+/* ★ 預約檔期三行置中呈現 (帶 ~ 符號) */
+.cal-summary { 
+  margin-top: 12px; 
+  padding: 10px 14px; 
+  background: var(--accent-blue-bg); 
+  border: 1px solid var(--accent-blue-border); 
+  border-radius: 6px; 
+  color: var(--accent-blue); 
+  font-size: 13px; 
+  font-weight: 700; 
+  line-height: 1.5; 
+  font-variant-numeric: tabular-nums; 
+  text-align: center; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.cal-summary-line { white-space: nowrap; }
+.cal-summary-tilde { font-size: 14px; line-height: 1.2; margin: 1px 0; opacity: 0.8; }
 
-/* 狀態盒與提示 */
-.saved-box { display: none; margin: 0 0 14px; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--panel-bg); color: var(--text-main); font-size: 12px; line-height: 1.6; }
-.saved-box.show { display: block; }
-.saved-actions { margin-top: 8px; }
-.small-button { width: auto; min-height: 28px; padding: 4px 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--card-bg); color: var(--text-light); font-size: 11px; font-weight: 700; cursor: pointer; }
+/* ★ 精簡版暫存提示框 (前綴 ✕ 關閉鈕，第二度訪問才顯示) */
+.saved-box { 
+  display: none; 
+  margin: 0 0 12px; 
+  padding: 8px 12px; 
+  border: 1px solid var(--border-color); 
+  border-radius: 6px; 
+  background: var(--panel-bg); 
+  color: var(--text-muted); 
+  font-size: 12px; 
+  line-height: 1.4;
+  align-items: center;
+  gap: 8px;
+}
+.saved-box.show { display: flex; }
+.saved-close-x {
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-light);
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+.saved-close-x:hover {
+  color: var(--danger-text);
+  border-color: var(--danger-border);
+  background: var(--danger-bg);
+}
 
-/* ★ 說明文字樣式（置中優雅對齊） */
+/* ★ 說明文字樣式（全置中對齊） */
 .notice-box { 
   margin-top: 10px; 
   padding: 10px 12px; 
@@ -295,7 +345,6 @@ select:focus, input[type="text"]:focus { border-color: var(--accent-blue); box-s
 .link-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
 .link-btn:active { background: var(--panel-bg); }
 
-/* ★ 自動展開平滑淡入動畫 */
 #formalSection {
   animation: fadeInFormal 0.35s ease-out;
 }
@@ -312,9 +361,40 @@ button { width: 100%; min-height: 46px; padding: 11px; border-radius: 6px; font:
 button:disabled { opacity: .45; cursor: not-allowed; }
 .secondary { background: var(--panel-bg); color: var(--text-main); border: 1px solid var(--border-color); }
 .secondary:hover { border-color: var(--accent-blue); }
-.btn-submit { background: var(--accent-blue); color: #ffffff; border: none; font-size: 14.5px; font-weight: 800; border-radius: 6px; cursor: pointer; transition: opacity 0.15s ease; }
+
+/* ★ 送出檔期查詢：淡化按鈕色彩 (淡藍柔和背景 + 細框) */
+.btn-inquiry { 
+  background: var(--accent-blue-bg); 
+  color: var(--accent-blue); 
+  border: 1.5px solid var(--accent-blue-border); 
+  font-size: 14.5px; 
+  font-weight: 700; 
+  border-radius: 6px; 
+  cursor: pointer; 
+  transition: all 0.2s ease; 
+}
+.btn-inquiry:hover { 
+  background: rgba(56, 189, 248, 0.2); 
+  border-color: var(--accent-blue); 
+}
+.btn-inquiry:active { 
+  transform: scale(0.99); 
+}
+
+/* ★ 送出正式預約：實心高亮主按鈕 (強烈視覺焦點) */
+.btn-submit { 
+  background: var(--accent-blue); 
+  color: #ffffff; 
+  border: none; 
+  font-size: 14.5px; 
+  font-weight: 800; 
+  border-radius: 6px; 
+  cursor: pointer; 
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+  transition: opacity 0.15s ease, transform 0.15s ease; 
+}
 [data-theme="dark"] .btn-submit { color: #0b0f19; }
-.btn-submit:active { opacity: 0.9; }
+.btn-submit:active { opacity: 0.9; transform: scale(0.99); }
 
 /* 備用複製抽屜 */
 .fallback { display: none; position: fixed; z-index: 20; left: 0; right: 0; bottom: 0; padding: 18px 14px max(18px, env(safe-area-inset-bottom)); background: var(--card-bg); border-top: 1px solid var(--border-dark); border-radius: 12px 12px 0 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
@@ -513,6 +593,8 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
   <div class="section-title" id="formTitle">STEP 1. 租借設備規格與檔期選擇</div>
   <section class="card" id="formSectionStep1">
     <div id="liffStatus" class="status"></div>
+    
+    <!-- ★ 已暫存規格 (第二度進入才會顯示，帶 ✕ 關閉按鈕) -->
     <div id="savedSelection" class="saved-box"></div>
 
     <div class="field">
@@ -530,7 +612,8 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
       <div id="deviceNote" class="device-note"></div>
     </div>
 
-    <div class="field">
+    <!-- ★ 增距鏡配件欄位 (iPhone 17 等無配件機型自動隱藏) -->
+    <div class="field" id="lensField">
       <label for="lens" id="lensLabel">增距鏡配件選配</label>
       <select id="lens"></select>
       <div id="lensDetailTip" class="lens-tip-box"></div>
@@ -586,7 +669,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
           </div>
         </div>
 
-        <!-- 檔期即時統計 -->
+        <!-- ★ 預約檔期三行格式化呈現 (帶 ~ 居中) -->
         <div class="cal-summary" id="calSummaryText">
           請點選月曆選擇預定租賃起訖日期
         </div>
@@ -599,11 +682,12 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
     <input type="hidden" id="pickupTime">
     <input type="hidden" id="returnDate">
 
-    <button id="inquiryButton" type="button" class="btn-submit">送出檔期查詢</button>
+    <!-- ★ 送出檔期查詢（採用淡化按鈕，與正式預約做視覺區隔） -->
+    <button id="inquiryButton" type="button" class="btn-inquiry">送出檔期查詢</button>
     
-    <!-- ★ 置中說法與直接跳轉指引 -->
+    <!-- ★ 置中說明文字 -->
     <div class="notice-box" id="inquiryNotice">
-      <strong>租借流程說明：</strong>收到資料後客服將回覆確認，發送報價單連結；<span onclick="scrollToFormalSection()" style="color:var(--accent-blue);cursor:pointer;text-decoration:underline;font-weight:700;">如需加快預定流程，請直接下滑填寫正式預約單細項送出。</span>
+      <strong>租借流程說明：</strong>收到資料後客服將回覆確認，發送報價單連結
     </div>
 
     <div class="switch-cta-box" id="switchCtaBox">
@@ -653,6 +737,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
       </div>
 
       <div style="margin-top:14px">
+        <!-- ★ 送出正式預約：實心高飽和度主要按鈕 -->
         <button id="bookingButton" type="button" class="btn-submit">送出正式預約</button>
       </div>
 
@@ -691,7 +776,7 @@ let calCurrentMonth = new Date();
 let calStartDate = "";
 let calEndDate = "";
 let calPickupTime = "12:00";
-let hasAutoExpandedOnScroll = false; // ★ 避免滾動重複自動觸發
+let hasAutoExpandedOnScroll = false;
 
 function getTodayStr(){
   const n=new Date();
@@ -739,7 +824,7 @@ const zh={
   modelLabel:"租借設備機型",
   lensLabel:"增距鏡配件選配",
   inquiryButton:"送出檔期查詢",
-  inquiryNotice:"<strong>租借流程說明：</strong>收到資料後客服將回覆確認，發送報價單連結；<span onclick='scrollToFormalSection()' style='color:var(--accent-blue);cursor:pointer;text-decoration:underline;font-weight:700;'>如需加快預定流程，請直接下滑填寫正式預約單細項送出。</span>",
+  inquiryNotice:"<strong>租借流程說明：</strong>收到資料後客服將回覆確認，發送報價單連結",
   switchCtaDesc:"專案快速通道：免除二次來回確認，直接建立正式預約單據",
   toggleFormalOpen:"展開填寫正式預訂資料（含交還方式） ▼",
   toggleFormalClose:"▲ 收合完整預訂欄位",
@@ -777,8 +862,7 @@ const zh={
   noteIphone:"<strong>規格摘要：</strong>適合 iOS 專業影音生態與流暢錄影。",
   noteDji:"<strong>規格摘要：</strong>適合高動態穩定運鏡與手持影像創作。",
   noteLens:"<strong>規格摘要：</strong>僅單租增距鏡特仕組（含對應手機外殼與保護配件）。",
-  savedTitle:"已暫存預約選擇",
-  savedText:"機型規格與預訂日期已自動帶入；確認排程後補填承租人姓名與電話即可送出正式預約。",
+  savedText:"已暫存規格 ｜ 預訂日期或資料。",
   clear:"清除暫存",
   dates:"請點選月曆選擇預計租賃起訖日期",
   pastDate:"取機日期不可選擇過去日期",
@@ -838,7 +922,7 @@ const en={
   modelLabel:"Rental Device Model",
   lensLabel:"Telephoto Extender Option",
   inquiryButton:"Check Availability",
-  inquiryNotice:"<strong>Rental Process Note:</strong> Customer service will confirm and send quotation link upon receipt; <span onclick='scrollToFormalSection()' style='color:var(--accent-blue);cursor:pointer;text-decoration:underline;font-weight:700;'>to expedite, scroll down to complete formal reservation.</span>",
+  inquiryNotice:"<strong>Rental Process:</strong> Customer service will confirm and send quotation link upon request.",
   switchCtaDesc:"Express Channel: Proceed directly to formal booking without dual confirmations",
   toggleFormalOpen:"Fill Formal Booking Details (Include Delivery) ▼",
   toggleFormalClose:"▲ Collapse formal booking details",
@@ -876,8 +960,7 @@ const en={
   noteIphone:"<strong>Summary:</strong> Suitable for iOS ecosystem and video production.",
   noteDji:"<strong>Summary:</strong> Suitable for active dynamic gimbals and mobile filmmaking.",
   noteLens:"<strong>Summary:</strong> Extender set only (includes custom phone case & accessories).",
-  savedTitle:"Saved Selection Restored",
-  savedText:"Device and date choices restored. Complete name and phone number to submit formal reservation.",
+  savedText:"Saved specs & schedule preserved.",
   clear:"Clear Draft",
   dates:"Please select pickup and return dates on the calendar",
   pastDate:"Pickup date cannot be in the past",
@@ -1044,6 +1127,13 @@ function updateLens(keep=false){
     o=[["none",x.noLens]];
   }
 
+  // ★ iPhone 17 等無鏡頭配件機型直接隱藏整個欄位，有配件才顯示
+  const lensField = document.getElementById("lensField");
+  const hasExtenderOptions = o.length > 1 || (o.length === 1 && o[0][0] !== "none");
+  if (lensField) {
+    lensField.style.display = hasExtenderOptions ? "block" : "none";
+  }
+
   l.innerHTML=o.map(a=>`<option value="${a[0]}">${a[1]}</option>`).join("");
   if(keep && o.some(a=>a[0]===old)){
     l.value=old;
@@ -1150,6 +1240,7 @@ function syncCalendarToHiddenInputs(){
   document.getElementById("pickupTime").value = (cleanStart && calPickupTime) ? `${cleanStart} ${calPickupTime}` : "";
 }
 
+// ★ 預約檔期三行格式化呈現 (中間置中 ~ 符號，去訖時間)
 function updateCalendarSummary(){
   const sumEl = document.getElementById("calSummaryText");
   if (!sumEl) return;
@@ -1167,9 +1258,20 @@ function updateCalendarSummary(){
     const sWkEn = enDays[dt1.getDay()], eWkEn = enDays[dt2.getDay()];
     const sDate = calStartDate.replace(/-/g, "/");
     const eDate = calEndDate.replace(/-/g, "/");
-    sumEl.innerHTML = currentLang === "zh"
-      ? `預約檔期：${sDate} ${sWkZh} ${calPickupTime} 至 ${eDate} ${eWkZh} 12:00（約 ${diffDays} 日）`
-      : `Rental Period: ${sDate} ${sWkEn} ${calPickupTime} to ${eDate} ${eWkEn} 12:00 (approx ${diffDays} days)`;
+    
+    if (currentLang === "zh") {
+      sumEl.innerHTML = `
+        <div class="cal-summary-line">預約檔期 ${sDate} ${sWkZh} ${calPickupTime}</div>
+        <div class="cal-summary-tilde">~</div>
+        <div class="cal-summary-line">${eDate} ${eWkZh} 約${diffDays}日</div>
+      `;
+    } else {
+      sumEl.innerHTML = `
+        <div class="cal-summary-line">Schedule: ${sDate} ${sWkEn} ${calPickupTime}</div>
+        <div class="cal-summary-tilde">~</div>
+        <div class="cal-summary-line">${eDate} ${eWkEn} (approx ${diffDays} days)</div>
+      `;
+    }
   } else if (calStartDate) {
     const [y1, m1, d1] = calStartDate.split("-").map(Number);
     const dt1 = new Date(y1, m1 - 1, d1);
@@ -1177,8 +1279,8 @@ function updateCalendarSummary(){
     const sWkEn = enDays[dt1.getDay()];
     const sDate = calStartDate.replace(/-/g, "/");
     sumEl.innerHTML = currentLang === "zh"
-      ? `取機時間：${sDate} ${sWkZh}（${calPickupTime}），請接續選擇歸還日期`
-      : `Pickup: ${sDate} ${sWkEn} (${calPickupTime}), tap to select return date`;
+      ? `<div class="cal-summary-line">取機時間 ${sDate} ${sWkZh} ${calPickupTime}</div><div class="cal-summary-tilde">~</div><div class="cal-summary-line" style="opacity:0.75;">請接續選擇歸還日期</div>`
+      : `<div class="cal-summary-line">Pickup: ${sDate} ${sWkEn} ${calPickupTime}</div><div class="cal-summary-tilde">~</div><div class="cal-summary-line" style="opacity:0.75;">Select return date</div>`;
   } else {
     sumEl.textContent = currentLang === "zh" ? "請點選月曆選擇預定租賃起訖日期" : "Please select pickup and return dates";
   }
@@ -1261,21 +1363,33 @@ function restore(){
   checkLensTip();
 }
 
+// ★ 精簡版暫存提示：前綴 ✕ 實現清除暫存；初次進入隱藏，第二度訪問才顯示
 function renderSaved(){
-  const d=getDraft(),box=document.getElementById("savedSelection");
-  if(!d||!d.model){box.classList.remove("show");return}
-  const x=S();
-  box.innerHTML=`<strong>${x.savedTitle}</strong><br>${d.model}<br>${x.savedText}<div class="saved-actions"><button type="button" class="small-button" id="clearDraft">${x.clear}</button></div>`;
+  const d = getDraft();
+  const box = document.getElementById("savedSelection");
+  if (!box) return;
+
+  let visitCount = 0;
+  try {
+    visitCount = parseInt(localStorage.getItem("fir-visit-count") || "0", 10);
+  } catch(e){}
+
+  if (!d || !d.model || visitCount <= 1) {
+    box.classList.remove("show");
+    return;
+  }
+
+  const x = S();
+  box.innerHTML = `<span class="saved-close-x" id="clearDraftBtn" title="清除暫存">✕</span><span>${x.savedText}</span>`;
   box.classList.add("show");
-  document.getElementById("clearDraft").onclick=()=>{
-    try{
+
+  document.getElementById("clearDraftBtn").onclick = () => {
+    try {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem("fir-stage");
-    }catch(e){}
+    } catch(e){}
     box.classList.remove("show");
-    document.getElementById("formalSection").style.display="none";
-    updateStepper(1);
-    document.getElementById("toggleFormalBtn").textContent=S().toggleFormalOpen;
+    showToast(currentLang === "zh" ? "已清除暫存資料" : "Draft cleared");
   };
 }
 
@@ -1290,7 +1404,7 @@ function updateStepper(step){
 function equipment(){
   const m=document.getElementById("model").value,l=document.getElementById("lens");
   let cleanLens = "";
-  if(l.value !== "none") {
+  if(l && l.value !== "none") {
     if(l.value === "200") cleanLens = " + 200mm 增距鏡";
     else if(l.value === "400") cleanLens = " + 400mm 增距鏡";
     else return l.options[l.selectedIndex].text;
@@ -1313,9 +1427,10 @@ function dates(){
   const totalDays = Math.max(1, Math.round((dt2 - dt1) / (1000 * 3600 * 24)));
 
   const zhDays = ["(日)", "(一)", "(二)", "(三)", "(四)", "(五)", "(六)"];
+  const endWkZhNoParen = ["日", "一", "二", "三", "四", "五", "六"][dt2.getDay()];
   const enDays = ["(Sun)", "(Mon)", "(Tue)", "(Wed)", "(Thu)", "(Fri)", "(Sat)"];
   const startWkZh = zhDays[dt1.getDay()];
-  const endWkZh = zhDays[dt2.getDay()];
+  const endWkZh = `(${endWkZhNoParen})`;
   const startWkEn = enDays[dt1.getDay()];
   const endWkEn = enDays[dt2.getDay()];
 
@@ -1325,8 +1440,8 @@ function dates(){
   const p = `${cleanStartDate} ${calPickupTime}`;
   const r = cleanEndDate;
 
-  const scheduleZh = `${cleanStartDate} ${startWkZh} ${calPickupTime} 至 ${cleanEndDate} ${endWkZh} 12:00 (約 ${totalDays} 日)`;
-  const scheduleEn = `${cleanStartDate} ${startWkEn} ${calPickupTime} to ${cleanEndDate} ${endWkEn} 12:00 (approx ${totalDays} days)`;
+  const scheduleZh = `${cleanStartDate} ${startWkZh} ${calPickupTime} 至 ${cleanEndDate} ${endWkZh} (約${totalDays}日)`;
+  const scheduleEn = `${cleanStartDate} ${startWkEn} ${calPickupTime} to ${cleanEndDate} ${endWkEn} (approx ${totalDays} days)`;
 
   return { p, r, d: totalDays, scheduleZh, scheduleEn };
 }
@@ -1493,6 +1608,13 @@ async function copyFallback(){
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
+  // 訪問計數器：判斷是否為初次訪問
+  try {
+    let vc = parseInt(localStorage.getItem("fir-visit-count") || "0", 10);
+    vc++;
+    localStorage.setItem("fir-visit-count", vc.toString());
+  } catch(e){}
+
   try {
     const savedTheme = localStorage.getItem("fir-theme");
     if (savedTheme) {
