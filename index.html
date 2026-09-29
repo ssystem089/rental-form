@@ -668,18 +668,18 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
       <!-- 晚間活動／演唱會選期指南（折疊式手風琴） -->
       <div class="calendar-guide-box" id="calendarGuideBox">
         <div class="calendar-guide-header" id="calGuideHeader" onclick="toggleCalendarGuide()">
-          <span class="calendar-guide-title" id="calGuideTitle">晚間活動／演唱會選期指南</span>
+          <span class="calendar-guide-title" id="calGuideTitle">晚間活動/演唱會選期指南</span>
           <span class="calendar-guide-toggle-icon" id="calGuideToggleIcon">+</span>
         </div>
         <div class="calendar-guide-body" id="calGuideBody">
           <div class="calendar-guide-item" id="guideItem1">
-            <strong>• 看 1 天活動（例：9 號）</strong>：選 9 號起 ～ 10 號中午 12:00 歸還（計 1 日）
+            <strong>• 看1天活動（例：9號）</strong>：選9號 預計取機時間 - 10號交還（計1日）
           </div>
           <div class="calendar-guide-item" id="guideItem2">
-            <strong>• 看 2 天活動（例：9+10 號）</strong>：選 9 號起 ～ 11 號中午 12:00 歸還（計 2 日）
+            <strong>• 看2天活動（例：9+10號）</strong>：選9號 預計取機時間 - 11號交還（計2日）
           </div>
           <div class="calendar-guide-note" id="guideNote">
-            租訖日請直接選至【活動隔天】，除熱門時段延長營業至 23:00 外，最終以交機時約定交還時間為準。
+            租訖日請直接選至【活動隔天】-<br>除熱門時段延長營業至23:00外，最終交還檔期於現場/客服確認為準。
           </div>
         </div>
       </div>
@@ -835,10 +835,10 @@ const zh={
   step3Text:"報價核對",
   step4Text:"預訂確認",
   calendarTitle:"預約租期（點選月曆起訖日）",
-  calGuideTitle:"晚間活動／演唱會選期指南",
-  guideItem1:"<strong>• 看 1 天活動（例：9 號）</strong>：選 9 號起 ～ 10 號中午 12:00 歸還（計 1 日）",
-  guideItem2:"<strong>• 看 2 天活動（例：9+10 號）</strong>：選 9 號起 ～ 11 號中午 12:00 歸還（計 2 日）",
-  guideNote:"租訖日請直接選至【活動隔天】，除熱門時段延長營業至 23:00 外，最終以交機時約定交還時間為準。",
+  calGuideTitle:"晚間活動/演唱會選期指南",
+  guideItem1:"<strong>• 看1天活動（例：9號）</strong>：選9號 預計取機時間 - 10號交還（計1日）",
+  guideItem2:"<strong>• 看2天活動（例：9+10號）</strong>：選9號 預計取機時間 - 11號交還（計2日）",
+  guideNote:"租訖日請直接選至【活動隔天】-<br>除熱門時段延長營業至23:00外，最終交還檔期於現場/客服確認為準。", 
   timePillLabel:"預計取機時間（營業時間 12:00–20:00）：",
   x300uDesc:"極致長焦收音旗艦・藍圖原色 ｜ 支援 200mm / 400mm 增距鏡配備",
   x300uPrice:"NT$ 1,100（3–5日）｜ NT$ 1,000（6日以上）",
@@ -934,9 +934,9 @@ const en={
   step4Text:"Confirmation",
   calendarTitle:"Rental Period (Tap start & end dates)",
   calGuideTitle:"Evening Event & Concert Booking Guide",
-  guideItem1:"<strong>• 1-Day Event (e.g. 9th)</strong>: Select 9th pickup to 10th return by 12:00 (1 day)",
-  guideItem2:"<strong>• 2-Day Event (e.g. 9th+10th)</strong>: Select 9th pickup to 11th return by 12:00 (2 days)",
-  guideNote:"Please select the day after the event as the return date. Peak hours may extend to 23:00; final return time is subject to pickup agreement.",
+  guideItem1:"<strong>• 1-Day Event (e.g. 9th)</strong>: Select 9th pickup time - 10th return (1 day)",
+  guideItem2:"<strong>• 2-Day Event (e.g. 9th+10th)</strong>: Select 9th pickup time - 11th return (2 days)",
+  guideNote:"Please select the day after the event as the return date -<br>Except peak hours extending to 23:00, the final return schedule is confirmed on site or by customer service.",
   timePillLabel:"Scheduled Pickup Time (Business Hours 12:00–20:00):",
   x300uDesc:"Ultimate telephoto & studio audio flagship, Blueprint ｜ 200mm / 400mm extender compatible",
   x300uPrice:"NT$ 1,100 (3–5 days) ｜ NT$ 1,000 (6+ days)",
@@ -1070,7 +1070,7 @@ function setLanguage(lang) {
     bookingButton:"bookingButton",formalPaymentNotice:"formalPaymentNotice",
     fallbackTitle:"fallbackTitle",fallbackGuide:"fallbackGuide",backButton:"back",copyButton:"copy"
   };
-  Object.keys(ids).forEach(k=>text(ids[k],x[k],k==="store"||k==="inquiryNotice"||k==="formalPaymentNotice"||k==="depositRuleTip"||k==="faqLink"||k==="deliveryNoticeText"||k==="lensDesc"||k==="guideItem1"||k==="guideItem2"));
+  Object.keys(ids).forEach(k=>text(ids[k],x[k],k==="store"||k==="inquiryNotice"||k==="formalPaymentNotice"||k==="depositRuleTip"||k==="faqLink"||k==="deliveryNoticeText"||k==="lensDesc"||k==="guideItem1"||k==="guideItem2"||k==="guideNote"));
   ["d12a","d12x","d12b","d12c","d12d","d12e"].forEach(id=>text(id,x.days));
   text("perDayA",x.perDay);text("perDayB",x.perDay);text("perUse",x.perUse);
 
