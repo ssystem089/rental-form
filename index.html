@@ -271,7 +271,20 @@ select:focus, input[type="text"]:focus { border-color: var(--accent-blue); box-s
 .saved-box.show { display: block; }
 .saved-actions { margin-top: 8px; }
 .small-button { width: auto; min-height: 28px; padding: 4px 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--card-bg); color: var(--text-light); font-size: 11px; font-weight: 700; cursor: pointer; }
-.notice-box { margin-top: 10px; padding: 10px 12px; border-radius: 6px; background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 11.5px; line-height: 1.6; }
+
+/* ★ 說明文字樣式（置中優雅對齊） */
+.notice-box { 
+  margin-top: 10px; 
+  padding: 10px 12px; 
+  border-radius: 6px; 
+  background: var(--panel-bg); 
+  border: 1px solid var(--border-color); 
+  color: var(--text-muted); 
+  font-size: 11.5px; 
+  line-height: 1.6; 
+  text-align: center;
+}
+
 .lens-tip-box { display: none; margin-top: 8px; padding: 10px 12px; background: var(--accent-blue-bg); border: 1px solid var(--accent-blue-border); border-radius: 6px; color: var(--accent-blue); font-size: 11.5px; line-height: 1.55; }
 .delivery-notice { font-size: 11.5px; color: var(--text-muted); margin-top: 6px; line-height: 1.55; background: var(--panel-bg); padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); }
 
@@ -281,6 +294,15 @@ select:focus, input[type="text"]:focus { border-color: var(--accent-blue); box-s
 .link-btn { width: 100%; min-height: 40px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 6px; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all 0.15s ease; }
 .link-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
 .link-btn:active { background: var(--panel-bg); }
+
+/* ★ 自動展開平滑淡入動畫 */
+#formalSection {
+  animation: fadeInFormal 0.35s ease-out;
+}
+@keyframes fadeInFormal {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 .status { display: none; margin-bottom: 14px; padding: 10px 12px; border: 1px solid var(--danger-border); border-radius: 6px; background: var(--danger-bg); color: var(--danger-text); font-size: 12px; line-height: 1.5; }
 .status.show { display: block; }
@@ -333,7 +355,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
 <body>
 <main class="wrap">
 
-  <!-- 0. 頂部極簡控制列（乾淨無雜訊） -->
+  <!-- 0. 頂部極簡控制列 -->
   <div class="utility-bar">
     <button class="lang-pill-btn" id="btn-lang-toggle" onclick="toggleLanguage()">EN</button>
     <button class="theme-morph-btn" id="btn-theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
@@ -579,12 +601,12 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
 
     <button id="inquiryButton" type="button" class="btn-submit">送出檔期查詢</button>
     
-    <!-- ★ 版本 B：清晰指引與可點擊平滑跳轉通道 -->
+    <!-- ★ 置中說法與直接跳轉指引 -->
     <div class="notice-box" id="inquiryNotice">
-      <strong>租借流程說明：</strong>送出後客服將主動於 LINE 發送報價單連結；<span onclick="scrollToFormalSection()" style="color:var(--accent-blue);cursor:pointer;text-decoration:underline;font-weight:700;">如需加快預訂流程，請直接點此或下滑展開填寫正式預約表單 ▼</span>
+      <strong>租借流程說明：</strong>收到資料後客服將回覆確認，發送報價單連結；<span onclick="scrollToFormalSection()" style="color:var(--accent-blue);cursor:pointer;text-decoration:underline;font-weight:700;">如需加快預定流程，請直接下滑填寫正式預約單細項送出。</span>
     </div>
 
-    <div class="switch-cta-box">
+    <div class="switch-cta-box" id="switchCtaBox">
       <div class="switch-cta-desc" id="switchCtaDesc">專案快速通道：免除二次來回確認，直接建立正式預約單據</div>
       <button type="button" class="link-btn" id="toggleFormalBtn">展開填寫正式預訂資料（含交還方式） ▼</button>
     </div>
@@ -669,6 +691,7 @@ let calCurrentMonth = new Date();
 let calStartDate = "";
 let calEndDate = "";
 let calPickupTime = "12:00";
+let hasAutoExpandedOnScroll = false; // ★ 避免滾動重複自動觸發
 
 function getTodayStr(){
   const n=new Date();
@@ -716,7 +739,7 @@ const zh={
   modelLabel:"租借設備機型",
   lensLabel:"增距鏡配件選配",
   inquiryButton:"送出檔期查詢",
-  inquiryNotice:"<strong>租借流程說明：</strong>送出後客服將主動於 LINE 發送報價單連結；<span onclick='scrollToFormalSection()' style='color:var(--accent-blue);cursor:pointer;text-decoration:underline;font-weight:700;'>如需加快預訂流程，請直接點此或下滑展開填寫正式預約表單 ▼</span>",
+  inquiryNotice:"<strong>租借流程說明：</strong>收到資料後客服將回覆確認，發送報價單連結；<span onclick='scrollToFormalSection()' style='color:var(--accent-blue);cursor:pointer;text-decoration:underline;font-weight:700;'>如需加快預定流程，請直接下滑填寫正式預約單細項送出。</span>",
   switchCtaDesc:"專案快速通道：免除二次來回確認，直接建立正式預約單據",
   toggleFormalOpen:"展開填寫正式預訂資料（含交還方式） ▼",
   toggleFormalClose:"▲ 收合完整預訂欄位",
@@ -815,7 +838,7 @@ const en={
   modelLabel:"Rental Device Model",
   lensLabel:"Telephoto Extender Option",
   inquiryButton:"Check Availability",
-  inquiryNotice:"<strong>Rental Process Note:</strong> An official quotation link will be sent via LINE after submission; <span onclick='scrollToFormalSection()' style='color:var(--accent-blue);cursor:pointer;text-decoration:underline;font-weight:700;'>to expedite your reservation, tap here or scroll down to complete the formal booking form ▼</span>",
+  inquiryNotice:"<strong>Rental Process Note:</strong> Customer service will confirm and send quotation link upon receipt; <span onclick='scrollToFormalSection()' style='color:var(--accent-blue);cursor:pointer;text-decoration:underline;font-weight:700;'>to expedite, scroll down to complete formal reservation.</span>",
   switchCtaDesc:"Express Channel: Proceed directly to formal booking without dual confirmations",
   toggleFormalOpen:"Fill Formal Booking Details (Include Delivery) ▼",
   toggleFormalClose:"▲ Collapse formal booking details",
@@ -1315,7 +1338,29 @@ function scrollToFormalSection(){
   document.getElementById("toggleFormalBtn").textContent=S().toggleFormalClose;
   setTimeout(()=>{
     sec.scrollIntoView({behavior:"smooth",block:"start"});
-  },200);
+  },150);
+}
+
+// ★ 滑動自動展開監聽器
+function setupScrollAutoExpand(){
+  const target = document.getElementById("inquiryNotice");
+  if (!target || !("IntersectionObserver" in window)) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !hasAutoExpandedOnScroll) {
+        const sec = document.getElementById("formalSection");
+        if (sec && (sec.style.display === "none" || sec.style.display === "")) {
+          hasAutoExpandedOnScroll = true;
+          sec.style.display = "block";
+          updateStepper(2);
+          document.getElementById("toggleFormalBtn").textContent = S().toggleFormalClose;
+        }
+      }
+    });
+  }, { threshold: 0.25 });
+
+  observer.observe(target);
 }
 
 function inquiry(){
@@ -1497,6 +1542,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   handleDeliveryToggle();
   setupPriceRowInteractions();
+  setupScrollAutoExpand();
 
   let savedStage=null;
   try{savedStage=localStorage.getItem("fir-stage");}catch(e){}
