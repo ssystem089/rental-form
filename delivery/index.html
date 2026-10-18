@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<title>寄送合約簽署</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #f5f5f7; color: #1d1d1f;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", sans-serif; }
+  .wrap { min-height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 24px; box-sizing: border-box; text-align: center; }
+  .spin { width: 28px; height: 28px; border-radius: 50%; border: 3px solid rgba(0,0,0,.1); border-top-color: #1d1d1f; animation: r .9s linear infinite; }
+  @keyframes r { to { transform: rotate(360deg); } }
+  .msg { font-size: 16px; line-height: 1.6; max-width: 320px; }
+  .brand { font-size: 13px; color: #86868b; letter-spacing: .06em; }
+  button { background: #1d1d1f; color: #fff; border: 0; border-radius: 999px; padding: 10px 22px; font-size: 15px; font-weight: 600; }
+</style>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+<div class="wrap" id="state">
+  <div class="spin" id="spin"></div>
+  <div class="msg" id="msg">正在開啟合約…</div>
+  <div class="brand">FiX iT RiGHT 修成正果</div>
+</div>
+<script>
+(function () {
+  "use strict";
+  var LIFF_ID = "2011411630-w8EavK6i";
+  var GAS = "https://script.google.com/macros/s/AKfycbwxba9UJgmHSl-OZBHeYiLbXnFEH1a8vm-HIr1eNpXpLadmqKlujecgQSmgUAZMNd8/exec";
+  var ready = false, sending = false;
+
+  function showError(text) {
+    document.getElementById("spin").style.display = "none";
+    document.getElementById("msg").textContent = text;
+    var b = document.createElement("button");
+    b.textContent = "重新載入";
+    b.onclick = function () { location.reload(); };
+    document.getElementById("state").insertBefore(b, document.querySelector(".brand"));
+  }
+  function setResult(text) { var el = document.getElementById("result"); if (el) el.textContent = text; }
+  function readFlag(k) { try { return sessionStorage.getItem(k) === "sent"; } catch (e) { return false; } }
+  function saveFlag(k) { try { sessionStorage.setItem(k, "sent"); } catch (e) {} }
+
+  // 取代合約頁裡的 google.script.run：改成送到 GAS 的白名單接口
+  function makeRunner(onOk, onFail, userObj) {
+    return new Proxy({}, {
+      get: function (_, prop) {
+        if (prop === "withSuccessHandler") return function (f) { return makeRunner(f, onFail, userObj); };
+        if (prop === "withFailureHandler") return function (f) { return makeRunner(onOk, f, userObj); };
+        if (prop === "withUserObject") return function (o) { return makeRunner(onOk, onFail, o); };
+        if (typeof prop !== "string" || prop === "then") return undefined;
+        return function () {
+          var args = Array.prototype.slice.call(arguments);
+          fetch(GAS, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "webBridgeRpc", fn: prop, args: args }) })
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+              if (d && d.ok) { if (onOk) onOk(d.result, userObj); }
+              else if (onFail) onFail((d && d.error) || "保存失敗，請稍後重試", userObj);
+            })
+            .catch(function () { if (onFail) onFail("網路連線不穩，請確認網路後重試", userObj); });
+        };
+      }
+    });
+  }
+  window.google = { script: { run: makeRunner(null, null, null), host: { close: function () {} } } };
+
+  // 合約頁簽署成功後呼叫：用 LINE 把完成訊息回傳到開啟合約的聊天室
+  window.__deliveryLiffSend = function (d) {
+    if (!d || typeof d.receipt !== "string" || d.receipt.length > 1500 || d.receipt.indexOf("【寄送合約簽署完成】\n") !== 0) return;
+    var key = "delivery-liff:" + d.token + ":" + d.version;
+    if (readFlag(key)) { setResult("此版本已回傳 LINE。"); return; }
+    if (sending) return;
+    if (!ready || !liff.isInClient() || !liff.isApiAvailable("sendMessages")) {
+      setResult("合約已保存。此開啟方式無法自動回傳，請複製下方訊息，貼回原官方 LINE 聊天室。");
+      return;
+    }
+    sending = true;
+    setResult("合約已保存，正在回傳 LINE…");
+    liff.sendMessages([{ type: "text", text: d.receipt }])
+      .then(function () { saveFlag(key); setResult("簽署完成，已回傳至 LINE 聊天室，可以關閉此頁。"); })
+      .catch(function () { setResult("合約已保存，但 LINE 回傳未確認成功。請先查看聊天室，若沒收到再按重試或複製訊息。"); })
+      .then(function () { sending = false; });
+  };
+
+  function load(token) {
+    var bytes = new Uint8Array(16); crypto.getRandomValues(bytes);
+    var nonce = Array.prototype.map.call(bytes, function (x) { return ("0" + x.toString(16)).slice(-2); }).join("");
+    fetch(GAS + "?api=html&delivery=" + encodeURIComponent(token) + "&bridge=" + nonce)
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.ok || !d.html) { showError((d && d.error) || "合約載入失敗，請稍後重試。"); return; }
+        var html = d.html;
+        if (!/name=["']viewport["']/i.test(html)) {
+          var vp = '<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">';
+          html = /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, function (m) { return m + vp; }) : vp + html;
+        }
+        document.open("text/html", "replace");
+        document.write(html);
+        document.close();
+        if (d.title && !/<title>/i.test(html)) document.title = d.title;
+      })
+      .catch(function () { showError("網路連線不穩，請確認網路後重新載入。"); });
+  }
+
+  liff.init({ liffId: LIFF_ID })
+    .then(function () { ready = true; })
+    .catch(function () { ready = false; })
+    .then(function () {
+      // LIFF 初始化後才讀取還原的參數
+      var token = new URL(location.href).searchParams.get("delivery") || "";
+      if (!/^[a-f0-9]{64}$/.test(token)) { showError("請從官方 LINE 提供的完整合約連結開啟。"); return; }
+      load(token);
+    });
+})();
+</script>
+</body>
+</html>
