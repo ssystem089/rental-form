@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<title>器材租賃價目與檔期詢問</title>
+<script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<style>
+:root {
+  /* 淺色模式變數 */
+  --bg-color: #f4f5f7;
+  --card-bg: #ffffff;
+  --panel-bg: #f8fafc;
+  --sub-card-bg: #fdfdfd;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-light: #64748b;
+  --border-color: #e2e8f0;
+  --border-dark: #0f172a;
+  --accent-blue: #0284c7;
+  --accent-blue-bg: #f0f9ff;
+  --accent-blue-border: #bae6fd;
+  --toast-bg: #0f172a;
+  --toast-text: #ffffff;
+  --danger-bg: #fef2f2;
+  --danger-border: #fecaca;
+  --danger-text: #b91c1c;
+}
+
+/* 深色模式變數 (黑曜石科技黑) */
+[data-theme="dark"] {
+  --bg-color: #0b0f19;
+  --card-bg: #141c2e;
+  --panel-bg: #1a243b;
+  --sub-card-bg: #1e2945;
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+  --text-light: #94a3b8;
+  --border-color: #263352;
+  --border-dark: #64748b;
+  --accent-blue: #38bdf8;
+  --accent-blue-bg: rgba(56, 189, 248, 0.12);
+  --accent-blue-border: rgba(56, 189, 248, 0.35);
+  --toast-bg: #38bdf8;
+  --toast-text: #0b0f19;
+  --danger-bg: #2d1515;
+  --danger-border: #5c2424;
+  --danger-text: #fca5a5;
+}
+
+* { 
+  -webkit-text-size-adjust: 100%; 
+  text-size-adjust: 100%; 
+  box-sizing: border-box; 
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease; 
+}
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+}
+
+body { 
+  margin: 0; 
+  background: var(--bg-color); 
+  color: var(--text-main); 
+  -webkit-font-smoothing: antialiased; 
+  padding: 16px 12px max(36px, env(safe-area-inset-bottom) + 16px); 
+  display: flex; 
+  justify-content: center; 
+}
+
+.wrap { 
+  width: min(100%, 540px); 
+  max-width: 100%;
+}
+
+/* 頂部極簡控制列 */
+.utility-bar { 
+  display: flex; 
+  justify-content: flex-end; 
+  align-items: center; 
+  gap: 8px; 
+  margin-bottom: 14px; 
+}
+
+.lang-pill-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  min-height: 32px;
+  transition: all 0.2s ease;
+}
+.lang-pill-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+.lang-pill-btn:active { transform: scale(0.94); }
+
+.theme-morph-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.2s ease, transform 0.15s ease;
+}
+.theme-morph-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+.theme-morph-btn:active { transform: scale(0.92); }
+
+.sun-moon-svg { overflow: visible; }
+.sun-core { transform-origin: center; transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1); }
+.mask-cutout { transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1); transform: translate(12px, -12px); }
+.sun-rays { transform-origin: center; transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease; opacity: 1; }
+
+[data-theme="dark"] .sun-core { transform: scale(1.6); }
+[data-theme="dark"] .mask-cutout { transform: translate(0, 0); }
+[data-theme="dark"] .sun-rays { transform: rotate(90deg) scale(0.2); opacity: 0; }
+
+/* 頂部商標與門市資訊 */
+.header { padding-bottom: 14px; border-bottom: 2px solid var(--border-dark); margin-bottom: 16px; }
+.brand { font-size: 22px; font-weight: 800; letter-spacing: 0.5px; color: var(--text-main); }
+.subtitle { margin-top: 3px; color: var(--text-light); font-size: 11.5px; letter-spacing: 1.5px; font-weight: 600; text-transform: uppercase; }
+.store { margin-top: 8px; color: var(--text-muted); font-size: 12px; line-height: 1.6; }
+
+/* 預約 4 步驟進度引導 */
+.stepper { display: flex; justify-content: space-between; align-items: center; margin: 14px 0 18px; padding: 10px 12px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+.step { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: var(--text-light); flex: 1; text-align: center; }
+.step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--panel-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--text-light); font-size: 11px; }
+.step.active .step-num { background: var(--accent-blue); border-color: var(--accent-blue); color: #ffffff; }
+.step.active span { color: var(--text-main); font-weight: 700; }
+.step-line { flex: 0.4; height: 1px; background: var(--border-color); margin-top: -14px; }
+
+.section-title { font-size: 11.5px; font-weight: 800; color: var(--text-light); letter-spacing: 1.2px; text-transform: uppercase; margin: 20px 2px 8px; }
+.card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+
+/* 費率卡片清單 */
+.price-row { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 4px; 
+  padding: 12px 10px; 
+  border-bottom: 1px solid var(--border-color); 
+  border-radius: 6px; 
+  cursor: pointer; 
+  transition: background-color 0.15s ease, transform 0.15s ease; 
+}
+.price-row:last-child { border-bottom: none; }
+.price-row:hover { background: var(--panel-bg); }
+.price-row:active { background: var(--accent-blue-bg); transform: scale(0.995); }
+
+.price-row-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: nowrap; }
+.product-name { font-size: 14px; font-weight: 700; color: var(--text-main); letter-spacing: 0.3px; white-space: nowrap; }
+.price-main { font-size: 15px; font-weight: 800; color: var(--text-main); white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
+.price-main small { font-size: 11px; font-weight: 500; color: var(--text-light); margin-left: 2px; }
+.product-desc { color: var(--text-muted); font-size: 11.5px; line-height: 1.6; }
+.price-tier { text-align: right; color: var(--accent-blue); font-size: 11px; line-height: 1.4; margin-top: 1px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.product-deposit { margin-top: 3px; color: var(--text-light); font-size: 10.5px; line-height: 1.4; }
+
+/* 表單欄位 */
+.field { margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
+label { display: block; margin-bottom: 6px; color: var(--text-light); font-size: 11.5px; font-weight: 700; }
+select, input[type="text"] { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--panel-bg); color: var(--text-main); font: inherit; font-size: 13.5px; outline: 0; }
+select:focus, input[type="text"]:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 2px var(--accent-blue-bg); }
+.device-note { margin-top: 8px; padding: 10px 12px; border-left: 2px solid var(--accent-blue); border-radius: 0 6px 6px 0; background: var(--panel-bg); color: var(--text-muted); font-size: 11.5px; line-height: 1.6; }
+
+/* 晚間活動／演唱會選期指南（折疊式手風琴） */
+.calendar-guide-box {
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  font-size: 11.5px;
+  line-height: 1.55;
+  transition: all 0.2s ease;
+}
+.calendar-guide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.calendar-guide-title {
+  color: var(--accent-blue);
+  font-weight: 700;
+  font-size: 12px;
+}
+.calendar-guide-toggle-icon {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent-blue);
+  line-height: 1;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.calendar-guide-body {
+  display: none;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border-color);
+  margin-top: 8px;
+}
+.calendar-guide-box.open .calendar-guide-body {
+  display: block;
+}
+.calendar-guide-item {
+  color: var(--text-main);
+  margin-bottom: 6px;
+  line-height: 1.5;
+  font-size: 11.5px;
+}
+.calendar-guide-item strong {
+  color: var(--text-main);
+  font-weight: 700;
+}
+.calendar-guide-note {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+
+/* 整合式雙擊區間月曆 */
+.calendar-box { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 14px; margin-bottom: 14px; }
+
+.cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.cal-title { font-size: 13.5px; font-weight: 700; color: var(--text-main); }
+.cal-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 4px; width: 32px; height: 32px; min-height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; }
+.cal-btn:hover { border-color: var(--accent-blue); }
+.cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 11px; color: var(--text-light); font-weight: 700; margin-bottom: 8px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; row-gap: 4px; }
+
+/* 月曆格子與燈號小點 */
+.cal-cell {
+  height: 38px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text-main);
+  position: relative;
+  user-select: none;
+  font-variant-numeric: tabular-nums;
+  border: 1px solid transparent;
+}
+.cal-cell:hover:not(.disabled) { background: var(--accent-blue-bg); }
+.cal-cell.disabled { color: var(--text-light); opacity: 0.35; cursor: not-allowed; }
+.cal-cell.disabled .cell-dot { display: none; }
+
+/* 日期下方僅呈現黃、紅提示；一般日期不標示充足。 */
+.cell-dot {
+  width: 4.5px;
+  height: 4.5px;
+  border-radius: 50%;
+  margin-top: 1.5px;
+}
+.cal-cell.p-yellow { background: rgba(245, 158, 11, 0.08); }
+.cal-cell.p-yellow .cell-dot { background-color: #f59e0b; }
+.cal-cell.p-red { background: rgba(239, 68, 68, 0.09); color: #f87171; }
+.cal-cell.p-red .cell-dot { background-color: #ef4444; }
+
+/* ★ 選取範圍與今日標記樣式 (完全去除藍點，今日以細緻邊框識別) */
+.cal-cell.today { 
+  border: 1px solid var(--accent-blue) !important; 
+  border-radius: 4px; 
+}
+.cal-cell.range-start { 
+  background: var(--accent-blue) !important; 
+  color: #ffffff !important; 
+  font-weight: 800; 
+  border-radius: 4px 0 0 4px; 
+}
+.cal-cell.range-end { 
+  background: var(--accent-blue) !important; 
+  color: #ffffff !important; 
+  font-weight: 800; 
+  border-radius: 0 4px 4px 0; 
+}
+.cal-cell.range-start.range-end { border-radius: 4px !important; }
+.cal-cell.range-mid { 
+  background: var(--accent-blue-bg) !important; 
+  color: var(--accent-blue) !important; 
+  border-radius: 0; 
+  font-weight: 700; 
+}
+.cal-cell.range-start .cell-dot, 
+.cal-cell.range-end .cell-dot { 
+  background-color: #ffffff !important; 
+}
+
+/* 取機時間膠囊（3 欄對稱格線佈局） */
+.time-pill-section { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-color); }
+.time-pill-label { font-size: 11.5px; color: var(--text-light); font-weight: 700; margin-bottom: 8px; }
+.time-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.time-pill { width: 100%; min-height: 38px; padding: 6px 2px; border-radius: 4px; font-size: 12.5px; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; font-variant-numeric: tabular-nums; display: flex; align-items: center; justify-content: center; transition: all 0.15s ease; }
+.time-pill:hover { border-color: var(--accent-blue); }
+.time-pill.active { background: var(--accent-blue); color: #ffffff; border-color: var(--accent-blue); font-weight: 700; }
+[data-theme="dark"] .time-pill.active { color: #0b0f19; }
+
+/* 預約檔期格式化呈現 */
+.cal-summary { 
+  margin-top: 12px; 
+  padding: 12px 14px; 
+  background: rgba(2, 132, 199, 0.04); 
+  border: 1px solid rgba(2, 132, 199, 0.18); 
+  border-radius: 6px; 
+  line-height: 1.5; 
+  text-align: center; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+[data-theme="dark"] .cal-summary {
+  background: rgba(56, 189, 248, 0.06); 
+  border: 1px solid rgba(56, 189, 248, 0.18); 
+}
+
+.cal-summary-grid {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0 auto;
+}
+.cal-summary-row {
+  display: flex;
+  align-items: baseline;
+  width: 100%;
+}
+.cal-summary-lbl {
+  width: 60px;
+  text-align: right;
+  margin-right: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-light);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.cal-summary-val {
+  text-align: left;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0369a1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+[data-theme="dark"] .cal-summary-val {
+  color: #f8fafc;
+}
+
+.tilde-row { margin: -2px 0; }
+.tilde-row .cal-summary-val {
+  text-align: center;
+  width: 100%;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+/* 友善庫存壓力即時提示卡 */
+.pressure-alert {
+  display: none;
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  line-height: 1.55;
+  text-align: center;
+}
+.alert-yellow {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #d97706;
+}
+[data-theme="dark"] .alert-yellow {
+  color: #fbbf24;
+}
+.alert-red {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #dc2626;
+}
+[data-theme="dark"] .alert-red {
+  color: #f87171;
+}
+
+/* 精簡版暫存提示框 */
+.saved-box { 
+  display: none; 
+  margin: 0 0 12px; 
+  padding: 8px 12px; 
+  border: 1px solid var(--border-color); 
+  border-radius: 6px; 
+  background: var(--panel-bg); 
+  color: var(--text-muted); 
+  font-size: 12px; 
+  line-height: 1.4;
+  align-items: center;
+  gap: 8px;
+}
+.saved-box.show { display: flex; }
+.saved-close-x {
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-light);
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+.saved-close-x:hover {
+  color: var(--danger-text);
+  border-color: var(--danger-border);
+  background: var(--danger-bg);
+}
+
+/* 說明文字樣式 */
+.notice-box { 
+  margin-top: 10px; 
+  padding: 10px 12px; 
+  border-radius: 6px; 
+  background: var(--panel-bg); 
+  border: 1px solid var(--border-color); 
+  color: var(--text-muted); 
+  font-size: 11.5px; 
+  line-height: 1.6; 
+  text-align: center;
+}
+
+.lens-tip-box { display: none; margin-top: 8px; padding: 10px 12px; background: var(--accent-blue-bg); border: 1px solid var(--accent-blue-border); border-radius: 6px; color: var(--accent-blue); font-size: 11.5px; line-height: 1.55; }
+.delivery-notice { font-size: 11.5px; color: var(--text-muted); margin-top: 6px; line-height: 1.55; background: var(--panel-bg); padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); }
+
+/* 展開切換區塊 */
+.switch-cta-box { margin-top: 14px; padding: 12px 14px; border-radius: 6px; background: var(--panel-bg); border: 1px dashed var(--border-color); text-align: center; }
+.switch-cta-desc { font-size: 11px; color: var(--text-light); margin-bottom: 8px; line-height: 1.4; }
+.link-btn { width: 100%; min-height: 40px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 6px; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all 0.15s ease; }
+.link-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+.link-btn:active { background: var(--panel-bg); }
+
+@keyframes fadeInFormal {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.status { display: none; margin-bottom: 14px; padding: 10px 12px; border: 1px solid var(--danger-border); border-radius: 6px; background: var(--danger-bg); color: var(--danger-text); font-size: 12px; line-height: 1.5; }
+.status.show { display: block; }
+
+/* 按鈕風格 */
+button { width: 100%; min-height: 46px; padding: 11px; border-radius: 6px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+.secondary { background: var(--panel-bg); color: var(--text-main); border: 1px solid var(--border-color); }
+.secondary:hover { border-color: var(--accent-blue); }
+
+.btn-inquiry { 
+  background: #0ea5e9; 
+  color: #ffffff; 
+  border: none; 
+  font-size: 14.5px; 
+  font-weight: 800; 
+  border-radius: 6px; 
+  cursor: pointer; 
+  box-shadow: 0 3px 10px rgba(14, 165, 233, 0.22);
+  transition: opacity 0.15s ease, transform 0.15s ease; 
+}
+[data-theme="dark"] .btn-inquiry { 
+  background: #0284c7; 
+  color: #ffffff; 
+  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.28);
+}
+.btn-inquiry:hover { opacity: 0.92; }
+.btn-inquiry:active { opacity: 0.85; transform: scale(0.99); }
+
+.btn-submit { 
+  background: var(--accent-blue); 
+  color: #ffffff; 
+  border: none; 
+  font-size: 14.5px; 
+  font-weight: 800; 
+  border-radius: 6px; 
+  cursor: pointer; 
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+  transition: opacity 0.15s ease, transform 0.15s ease; 
+}
+[data-theme="dark"] .btn-submit { color: #0b0f19; }
+.btn-submit:active { opacity: 0.9; transform: scale(0.99); }
+
+/* 備用複製抽屜 */
+.fallback { display: none; position: fixed; z-index: 20; left: 0; right: 0; bottom: 0; padding: 18px 14px max(18px, env(safe-area-inset-bottom)); background: var(--card-bg); border-top: 1px solid var(--border-dark); border-radius: 12px 12px 0 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
+.fallback.show { display: block; }
+.fallback h2 { margin: 0 0 6px; font-size: 16px; color: var(--text-main); }
+.fallback p { color: var(--text-muted); font-size: 12.5px; line-height: 1.5; }
+textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 6px; resize: none; font-size: 13px; }
+.sheet-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+
+/* 浮動提示膠囊 Toast */
+.toast-capsule {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background-color: var(--toast-bg);
+  color: var(--toast-text);
+  padding: 10px 22px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+  z-index: 99999;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast-capsule.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <!-- 0. 頂部極簡控制列 -->
+  <div class="utility-bar">
+    <button class="lang-pill-btn" id="btn-lang-toggle" onclick="toggleLanguage()">EN</button>
+    <button class="theme-morph-btn" id="btn-theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
+      <svg class="sun-moon-svg" viewBox="0 0 24 24" width="18" height="18">
+        <defs>
+          <mask id="moon-morph-mask">
+            <rect x="0" y="0" width="100%" height="100%" fill="white" />
+            <circle class="mask-cutout" cx="17" cy="7" r="7" fill="black" />
+          </mask>
+        </defs>
+        <circle class="sun-core" cx="12" cy="12" r="5" fill="currentColor" mask="url(#moon-morph-mask)" />
+        <g class="sun-rays" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="12" y1="2" x2="12" y2="4" />
+          <line x1="12" y1="20" x2="12" y2="22" />
+          <line x1="4.93" y1="4.93" x2="6.34" y2="6.34" />
+          <line x1="17.66" y1="17.66" x2="19.07" y2="19.07" />
+          <line x1="2" y1="12" x2="4" y2="12" />
+          <line x1="20" y1="12" x2="22" y2="12" />
+          <line x1="4.93" y1="19.07" x2="6.34" y2="17.66" />
+          <line x1="17.66" y1="6.34" x2="19.07" y2="4.93" />
+        </g>
+      </svg>
+    </button>
+  </div>
+
+  <header class="header">
+    <div class="brand">SSystem</div>
+    <div class="subtitle" id="subtitle">器材租賃價目與檔期詢問 ｜ EQUIPMENT RENTAL</div>
+    <div class="store" id="store">交機門市｜FiX iT RiGHT 台北市大安區光復南路88號1樓<br>時間 12:00–20:00｜熱門檔期依現場狀況彈性延長</div>
+  </header>
+
+  <!-- 預約 4 步驟進度引導 -->
+  <div class="stepper">
+    <div class="step active" id="st1">
+      <div class="step-num">1</div>
+      <span id="step1Text">價目與選機</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step" id="st2">
+      <div class="step-num">2</div>
+      <span id="step2Text">送出詢問</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step" id="st3">
+      <div class="step-num">3</div>
+      <span id="step3Text">LINE 確認</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step" id="st4">
+      <div class="step-num">4</div>
+      <span id="step4Text">付款預訂</span>
+    </div>
+  </div>
+
+  <div class="section-title" id="priceTitle">租借價目表 ｜ 24H 彈性制（點選器材快速帶入）</div>
+  <section class="card">
+    <!-- vivo x300 Ultra -->
+    <div class="price-row" data-model="vivo x300 Ultra">
+      <div class="price-row-top">
+        <span class="product-name">vivo x300 Ultra</span>
+        <div class="price-main">NT$ 1,200<small id="d12a">/ 1–2日</small></div>
+      </div>
+      <div class="product-desc" id="x300uDesc">極致長焦收音旗艦・藍圖原色 ｜ 支援 200mm / 400mm 增距鏡配備</div>
+      <div class="price-tier" id="x300uPrice">NT$ 1,100（3–5日）｜ NT$ 1,000（6日以上）</div>
+    </div>
+
+    <!-- vivo x500 Pro Max -->
+    <div class="price-row" data-model="vivo x500 Pro Max">
+      <div class="price-row-top">
+        <span class="product-name">vivo x500 Pro Max</span>
+        <div class="price-main">NT$ 1,100<small id="d12x">/ 1–2日</small></div>
+      </div>
+      <div class="product-desc" id="x500pmDesc">長焦電影級專業旗艦規格 ｜ 可搭配 200mm / 400mm 增距鏡配件</div>
+      <div class="price-tier" id="x500pmPrice">NT$ 1,000（3–5日）｜ NT$ 900（6日以上）</div>
+    </div>
+
+    <!-- vivo x200 Ultra -->
+    <div class="price-row" data-model="vivo x200 Ultra">
+      <div class="price-row-top">
+        <span class="product-name">vivo x200 Ultra</span>
+        <div class="price-main">NT$ 1,000<small id="d12b">/ 1–2日</small></div>
+      </div>
+      <div class="product-desc" id="x200uDesc">大光圈與細膩成像細節首選 ｜ 支援 200mm 增距鏡配件</div>
+      <div class="price-tier" id="x200uPrice">NT$ 900（3–5日）｜ NT$ 800（6日以上）</div>
+    </div>
+
+    <!-- OPPO Find X9 Ultra -->
+    <div class="price-row" data-model="OPPO Find X9 Ultra">
+      <div class="price-row-top">
+        <span class="product-name">OPPO Find X9 Ultra</span>
+        <div class="price-main">NT$ 1,000<small id="d12d">/ 1–2日</small></div>
+      </div>
+      <div class="product-desc" id="oppoDesc">哈蘇影像認證，10倍原生光學變焦 ｜ 支援 400mm 增距鏡配件</div>
+      <div class="price-tier" id="oppoPrice">NT$ 900（3–5日）｜ NT$ 800（6日以上）</div>
+    </div>
+
+    <!-- vivo x300 Pro -->
+    <div class="price-row" data-model="vivo x300 Pro">
+      <div class="price-row-top">
+        <span class="product-name">vivo x300 Pro</span>
+        <div class="price-main">NT$ 900<small id="d12c">/ 1–2日</small></div>
+      </div>
+      <div class="product-desc" id="x300pDesc">旅行輕便長焦攝影推薦首選 ｜ 支援 200mm 增距鏡配件</div>
+      <div class="price-tier" id="x300pPrice">NT$ 800（3–5日）｜ NT$ 700（6日以上）</div>
+    </div>
+
+    <!-- iPhone 17 Pro / Max -->
+    <div class="price-row" data-model="iPhone 17 Pro Max">
+      <div class="price-row-top">
+        <span class="product-name">iPhone 17 Pro Max</span>
+        <div class="price-main">NT$ 850<small id="d12e">/ 1–2日</small></div>
+      </div>
+      <div class="product-desc" id="iphoneDesc">極致運算效能與專業級流暢影片錄製性能</div>
+      <div class="price-tier" id="iphonePrice">NT$ 750（3–5日）｜ NT$ 600（6日以上）</div>
+    </div>
+
+    <!-- DJI Pocket 4 Pro -->
+    <div class="price-row" data-model="DJI Pocket 4 Pro 全能套裝">
+      <div class="price-row-top">
+        <span class="product-name">DJI Pocket 4 Pro 全能套裝</span>
+        <div class="price-main">NT$ 700<small id="perDayA">/ 日</small></div>
+      </div>
+      <div class="product-desc" id="djiDesc">旗艦級雙鏡頭手持光學縮放三軸穩定相機套裝</div>
+    </div>
+
+    <!-- 增距鏡特仕組 -->
+    <div class="price-row" data-model="僅租借 G2 增距鏡頭特仕組">
+      <div class="price-row-top">
+        <span class="product-name" id="lensTitle">vivo G2 增距鏡特仕組</span>
+        <div class="price-main">NT$ 300–600<small id="perDayB">/ 日</small></div>
+      </div>
+      <div class="product-desc" id="lensDesc">
+        含專用手機外殼及配件組 ｜<br>
+        200mm（NT$ 300／日）：清晰寫實；<br>
+        400mm（NT$ 600／日）：旗艦級超長焦，穿透防護網效果顯著。
+      </div>
+    </div>
+
+    <!-- 雲端上傳 -->
+    <div class="price-row" data-model="cloud">
+      <div class="price-row-top">
+        <span class="product-name" id="cloudTitle">雲端原畫質備份服務</span>
+        <div class="price-main">NT$ 200<small id="perUse">/ 次</small></div>
+      </div>
+      <div class="product-desc" id="cloudDesc">拍畢免自行導出傳檔，原畫質雲端載點 ｜ 檔案安全保留 14 天</div>
+      <div class="product-deposit" id="depCloud">門市代為原畫質雲端上傳備份</div>
+    </div>
+
+    <div class="notice-box" style="margin-top:12px;" id="depositRuleTip">
+      <strong>押金規範：</strong>主機設備與增距鏡配件合租時，以手機押金規範為主（超商寄送 NT$ 30,000 / 門市點交 NT$ 3,000 + 證件正本），不重複累計增距鏡押金。
+    </div>
+  </section>
+
+  <!-- STEP 1：快速查檔期表單 -->
+  <div class="section-title" id="formTitle">選擇設備與租借日期</div>
+  <section class="card" id="formSectionStep1">
+    <div id="liffStatus" class="status"></div>
+    
+    <!-- 已暫存規格 -->
+    <div id="savedSelection" class="saved-box"></div>
+
+    <div class="field">
+      <label for="model" id="modelLabel">租借設備機型</label>
+      <select id="model">
+        <option value="vivo x300 Ultra">vivo x300 Ultra ｜ 旗艦長焦收音</option>
+        <option value="vivo x500 Pro Max">vivo x500 Pro Max ｜ 電影級長焦旗艦</option>
+        <option value="vivo x200 Ultra">vivo x200 Ultra ｜ 高解析細節旗艦</option>
+        <option value="vivo x300 Pro">vivo x300 Pro ｜ 旅行輕便長焦</option>
+        <option value="OPPO Find X9 Ultra">OPPO Find X9 Ultra ｜ 哈蘇十倍光學</option>
+        <option value="iPhone 17 Pro Max">iPhone 17 Pro / Max ｜ Apple 旗艦系列</option>
+        <option value="DJI Pocket 4 Pro 全能套裝">DJI Pocket 4 Pro 全能套裝 ｜ 雙鏡手持微型雲台</option>
+        <option value="僅租借 G2 增距鏡頭特仕組">僅租借 G2 增距鏡頭特仕組 ｜ 獨立鏡頭配件</option>
+      </select>
+      <div id="deviceNote" class="device-note"></div>
+    </div>
+
+    <!-- 增距鏡配件欄位 -->
+    <div class="field" id="lensField">
+      <label for="lens" id="lensLabel">增距鏡配件選配</label>
+      <select id="lens"></select>
+      <div id="lensDetailTip" class="lens-tip-box"></div>
+    </div>
+
+    <!-- 整合式區間月曆與時間快捷膠囊 -->
+    <div class="field">
+      <label id="calendarTitle">預計租期（點選月曆起訖日）</label>
+      
+      <!-- 晚間活動／演唱會選期指南（折疊式手風琴） -->
+      <div class="calendar-guide-box" id="calendarGuideBox">
+        <div class="calendar-guide-header" id="calGuideHeader" onclick="toggleCalendarGuide()">
+          <span class="calendar-guide-title" id="calGuideTitle">晚間活動/演唱會選期指南</span>
+          <span class="calendar-guide-toggle-icon" id="calGuideToggleIcon">+</span>
+        </div>
+        <div class="calendar-guide-body" id="calGuideBody">
+          <div class="calendar-guide-item" id="guideItem1">
+            <strong>• 看1天活動（例：9號）</strong>：選9號 預計取機時間 - 10號交還（計1日）
+          </div>
+          <div class="calendar-guide-item" id="guideItem2">
+            <strong>• 看2天活動（例：9+10號）</strong>：選9號 預計取機時間 - 11號交還（計2日）
+          </div>
+          <div class="calendar-guide-note" id="guideNote">
+            租訖日請直接選至【活動隔天】-<br>除熱門時段延長營業至23:00外，最終交還檔期於現場/客服確認為準。
+          </div>
+        </div>
+      </div>
+
+      <div class="calendar-box">
+        <div class="cal-nav">
+          <button type="button" class="cal-btn" id="calPrevBtn" aria-label="Previous Month">◀</button>
+          <span class="cal-title" id="calMonthTitle">2026 年 10 月</span>
+          <button type="button" class="cal-btn" id="calNextBtn" aria-label="Next Month">▶</button>
+        </div>
+        <div class="cal-weekdays" id="calWeekdaysContainer">
+          <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+        </div>
+        <div class="cal-grid" id="calDaysGrid"></div>
+
+        <!-- 取機時間膠囊選單 -->
+        <div class="time-pill-section">
+          <div class="time-pill-label" id="timePillLabel">預計取機時間（營業時間 12:00–20:00）：</div>
+          <div class="time-pills" id="timePillContainer">
+            <button type="button" class="time-pill active" data-time="12:00">12:00</button>
+            <button type="button" class="time-pill" data-time="13:00">13:00</button>
+            <button type="button" class="time-pill" data-time="14:00">14:00</button>
+            <button type="button" class="time-pill" data-time="15:00">15:00</button>
+            <button type="button" class="time-pill" data-time="16:00">16:00</button>
+            <button type="button" class="time-pill" data-time="17:00">17:00</button>
+            <button type="button" class="time-pill" data-time="18:00">18:00</button>
+            <button type="button" class="time-pill" data-time="19:00">19:00</button>
+            <button type="button" class="time-pill" data-time="20:00">20:00</button>
+          </div>
+        </div>
+
+        <!-- 預約檔期三行格式化呈現 -->
+        <div class="cal-summary" id="calSummaryText">
+          請點選月曆選擇預定租賃起訖日期
+        </div>
+
+        <!-- 友善庫存壓力提示卡 -->
+        <div class="pressure-alert" id="pressureAlert"></div>
+      </div>
+    </div>
+
+    <!-- 隱藏原生欄位 -->
+    <input type="hidden" id="pickupDate">
+    <input type="hidden" id="pickupClock" value="12:00">
+    <input type="hidden" id="pickupTime">
+    <input type="hidden" id="returnDate">
+
+    <!-- 送出設備與檔期詢問 -->
+    <button id="inquiryButton" type="button" class="btn-inquiry">送出設備與檔期詢問</button>
+    
+    <!-- 說明文字 -->
+    <div class="notice-box" id="inquiryNotice">
+      送出後請在 LINE 接續與客服確認；姓名、電話與交還方式於聊天室補充即可，無須返回填表。檔期及租金以專員確認為準。
+    </div>
+
+  </section>
+
+  <div style="margin-top:16px;margin-bottom:20px;text-align:center">
+    <a href="https://ssystem089.github.io/rental-form/faq.html" target="_blank" rel="noopener noreferrer" id="faqLink" style="display:inline-block;width:100%;padding:11px;border-radius:6px;background:var(--panel-bg);border:1px solid var(--border-color);color:var(--accent-blue);text-decoration:none;font-size:12px;font-weight:700;">
+      常見問題 Q&A >
+    </a>
+  </div>
+</main>
+
+<section id="fallbackSheet" class="fallback">
+  <h2 id="fallbackTitle">設備詢問內容</h2>
+  <p id="fallbackGuide">請複製設備與日期，貼至官方 LINE 聊天室送出；姓名電話直接在聊天室補充即可。</p>
+  <textarea id="fallbackText" readonly></textarea>
+  <div class="sheet-buttons">
+    <button class="secondary" type="button" id="backButton">返回修改表單</button>
+    <button class="btn-submit" type="button" id="copyButton">一鍵複製內容</button>
+  </div>
+</section>
+
+<!-- 浮動提示膠囊 Toast -->
+<div class="toast-capsule" id="app-toast"></div>
+
+<script>
+const LINE_OA_ID = "@fixitright";
+const LIFF_ID = "2011411630-pdbfMEEs";
+const STORAGE_KEY = "fir-rental-draft-v5";
+let liffReady = false, currentLang = "zh", currentMessage = "";
+
+let calCurrentMonth = new Date();
+let calStartDate = "";
+let calEndDate = "";
+let calPickupTime = "12:00";
+
+// 公開檔期快照由 GitHub 提供；詢問與預約仍待門市確認。
+let activeHotDates = "2026/10/22 (黃)、2026/10/23 (黃)、2026/10/24 (黃)、2026/10/25 (黃)、2026/11/18 (黃)、2026/11/19 (黃)、2026/11/20 (黃)、2026/11/21 (黃)、2026/11/22 (黃)、2026/12/04 (黃)、2026/12/05 (黃)、2026/12/06 (黃)、2026/12/07 (黃)、2026/12/12 (黃)、2027/02/26 (黃)、2027/02/27 (黃)、2027/02/28 (黃)、2027/03/01 (黃)";
+let datePressures = {};
+
+function getTodayStr(){
+  const n = new Date();
+  return new Date(n.getTime() - n.getTimezoneOffset() * 60000).toISOString().split("T")[0];
+}
+
+const zh = {
+  subtitle: "器材租賃價目與檔期詢問 ｜ EQUIPMENT RENTAL",
+  store: "交機門市｜FiX iT RiGHT 台北市大安區光復南路88號1樓<br>時間 12:00–20:00｜熱門檔期依現場狀況彈性延長",
+  priceTitle: "租借價目表 ｜ 24H 彈性制（點選器材快速帶入）",
+  days: "/ 1–2日",
+  step1Text: "價目與選機",
+  step2Text: "送出詢問",
+  step3Text: "LINE 確認",
+  step4Text: "付款預訂",
+  calendarTitle: "預計租期（點選月曆起訖日）",
+  calGuideTitle: "晚間活動/演唱會選期指南",
+  guideItem1: "<strong>• 看1天活動（例：9號）</strong>：選9號 預計取機時間 - 10號交還（計1日）",
+  guideItem2: "<strong>• 看2天活動（例：9+10號）</strong>：選9號 預計取機時間 - 11號交還（計2日）",
+  guideNote: "租訖日請直接選至【活動隔天】-<br>除熱門時段延長營業至23:00外，最終交還檔期於現場/客服確認為準。", 
+  timePillLabel: "預計取機時間（營業時間 12:00–20:00）：",
+  x300uDesc: "極致長焦收音旗艦・藍圖原色 ｜ 支援 200mm / 400mm 增距鏡配備",
+  x300uPrice: "NT$ 1,100（3–5日）｜ NT$ 1,000（6日以上）",
+  x500pmDesc: "長焦電影級專業旗艦規格 ｜ 可搭配 200mm / 400mm 增距鏡配件",
+  x500pmPrice: "NT$ 1,000（3–5日）｜ NT$ 900（6日以上）",
+  x200uDesc: "大光圈與細膩成像細節首選 ｜ 支援 200mm 增距鏡配件",
+  x200uPrice: "NT$ 900（3–5日）｜ NT$ 800（6日以上）",
+  x300pDesc: "旅行輕便長焦攝影推薦首選 ｜ 支援 200mm 增距鏡配件",
+  x300pPrice: "NT$ 800（3–5日）｜ NT$ 700（6日以上）",
+  oppoDesc: "哈蘇影像認證，10倍原生光學變焦 ｜ 支援 400mm 增距鏡配件",
+  oppoPrice: "NT$ 900（3–5日）｜ NT$ 800（6日以上）",
+  iphoneDesc: "極致運算效能與專業級流暢影片錄製性能",
+  iphonePrice: "NT$ 750（3–5日）｜ NT$ 600（6日以上）",
+  djiDesc: "旗艦級雙鏡頭手持光學縮放三軸穩定相機套裝",
+  perDay: "/ 日",
+  lensTitle: "vivo G2 增距鏡特仕組",
+  lensDesc: `含專用手機外殼及配件組 ｜<br>200mm（NT$ 300／日）：清晰寫實；<br>400mm（NT$ 600／日）：旗艦級超長焦，穿透防護網效果顯著。`,
+  cloudTitle: "雲端原畫質備份服務",
+  cloudDesc: "拍畢免自行導出傳檔，原畫質雲端載點 ｜ 檔案安全保留 14 天",
+  depCloudText: "門市代為原畫質雲端上傳備份",
+  perUse: "/ 次",
+  depositRuleTip: "<strong>押金規範：</strong>主機設備與增距鏡配件合租時，以手機押金規範為主（超商寄送 NT$ 30,000 / 門市點交 NT$ 3,000 + 證件正本），不重複累計增距鏡押金。",
+
+  formTitle: "選擇設備與租借日期",
+  modelLabel: "租借設備機型",
+  lensLabel: "增距鏡配件選配",
+  inquiryButton: "送出設備與檔期詢問",
+  inquiryNotice: "送出後請在 LINE 接續與客服確認；姓名、電話與交還方式於聊天室補充即可，無須返回填表。檔期及租金以專員確認為準。",
+  faqLinkText: "常見問題 Q&A >",
+  noLens: "無加選鏡頭配件",
+  lens200: "加租 G2 200mm 增距鏡（+NT$ 300／日）",
+  lens400: "加租 G2 Ultra 400mm 增距鏡（+NT$ 600／日）",
+  
+  rent200_x300u: "G2 200mm + x300 Ultra 專用殼組",
+  rent200_x500pm: "G2 200mm + x500 Pro Max 專用殼組",
+  rent200_x200u: "G2 200mm + x200 Ultra 專用殼組",
+  rent200_x300p: "G2 200mm + x300 Pro 專用殼組",
+  rent400_x300u: "G2 Ultra 400mm + x300 Ultra 專用殼組",
+  rent400_x500pm: "G2 Ultra 400mm + x500 Pro Max 專用殼組",
+  rent400_oppo: "G2 Ultra 400mm + Find X9 Ultra 專用殼組",
+
+  lensTipClarification: "<strong>增距鏡光學校驗：</strong>手機原生倍率相同，裝載增距鏡後能顯著提升遠距解像力與光學細節，並藉由長焦淺景深效能有效淡化前方防護網（穿網效果），使舞台畫面更純淨通透。",
+
+  noteX300U: "<strong>規格摘要：</strong>極致長焦收音旗艦，藍圖原色。",
+  noteX500PM: "<strong>規格摘要：</strong>長焦電影級專業旗艦，支援 200mm／400mm 增距鏡。",
+  noteX200U: "<strong>規格摘要：</strong>細節解像力首選，適合舞台焦點裁切。",
+  noteX300P: "<strong>規格摘要：</strong>輕量化長焦首選，防手震與光學平衡出色。",
+  noteOppo: "<strong>規格摘要：</strong>哈蘇影像旗艦，支援 400mm 增距鏡。",
+  noteIphone: "<strong>規格摘要：</strong>適合 iOS 專業影音生態與流暢錄影。",
+  noteDji: "<strong>規格摘要：</strong>適合高動態穩定運鏡與手持影像創作。",
+  noteLens: "<strong>規格摘要：</strong>僅單租增距鏡特仕組（含對應手機外殼與保護配件）。",
+  savedText: "已保留上次選擇的設備與日期。",
+  clear: "清除暫存",
+  dates: "請點選月曆選擇預計租賃起訖日期",
+  pastDate: "取機日期不可選擇過去日期",
+  badDate: "歸還日期不可早於取機日期",
+  contact: "正式預約請填寫承租人法定姓名",
+  badPhone: "請填寫有效聯絡電話號碼",
+  wait: "LINE 尚未初始化完成，請稍候重試",
+  init: "LINE 連線初始化失敗，請從官方帳號重新開啟",
+  sending: "處理中…",
+  sent: "已送出",
+  fallbackTitle: "設備詢問內容",
+  fallbackGuide: "請複製設備與日期，貼至官方 LINE 聊天室送出；姓名電話直接在聊天室補充即可。",
+  back: "返回修改表單",
+  copy: "一鍵複製內容",
+  copied: "設備與檔期詢問已複製至剪貼簿",
+  alertYellow: "🟡 <b>熱門檔期提醒</b>：建議儘早送出詢問，設備與檔期由專員確認。",
+  alertRed: "🔴 <b>檔期席次熱門</b>：可先送出詢問，由客服協助確認候補方式。"
+};
+
+const en = {
+  ...zh,
+  subtitle: "Equipment Rental & Reservation System ｜ COMMERCIAL",
+  store: "Pickup Store｜FiX iT RiGHT No. 88, Guangfu S. Rd., Da'an Dist., Taipei<br>Hours: 12:00–20:00｜Extended hours may apply on peak days",
+  priceTitle: "RENTAL RATES & SPECIFICATIONS ｜ 24H FLEXIBLE PLAN",
+  days: "/ 1–2 days",
+  step1Text: "Prices & Equipment",
+  step2Text: "Send Inquiry",
+  step3Text: "LINE Follow-up",
+  step4Text: "Payment & Booking",
+  calendarTitle: "Rental Period (Tap start & end dates)",
+  calGuideTitle: "Evening Event & Concert Booking Guide",
+  guideItem1: "<strong>• 1-Day Event (e.g. 9th)</strong>: Select 9th pickup time - 10th return (1 day)",
+  guideItem2: "<strong>• 2-Day Event (e.g. 9th+10th)</strong>: Select 9th pickup time - 11th return (2 days)",
+  guideNote: "Please select the day after the event as the return date -<br>Except peak hours extending to 23:00, the final return schedule is confirmed on site or by customer service.",
+  timePillLabel: "Scheduled Pickup Time (Business Hours 12:00–20:00):",
+  x300uDesc: "Ultimate telephoto & studio audio flagship, Blueprint ｜ 200mm / 400mm extender compatible",
+  x300uPrice: "NT$ 1,100 (3–5 days) ｜ NT$ 1,000 (6+ days)",
+  x500pmDesc: "Cinema-grade telephoto professional flagship ｜ 200mm / 400mm extender compatible",
+  x500pmPrice: "NT$ 1,000 (3–5 days) ｜ NT$ 900 (6+ days)",
+  x200uDesc: "Large aperture & fine optical detail resolution ｜ 200mm extender compatible",
+  x200uPrice: "NT$ 900 (3–5 days) ｜ NT$ 800 (6+ days)",
+  x300pDesc: "High cost-performance lightweight travel telephoto ｜ 200mm extender compatible",
+  x300pPrice: "NT$ 800 (3–5 days) ｜ NT$ 700 (6+ days)",
+  oppoDesc: "Hasselblad certified imaging, 10x native optical zoom ｜ 400mm extender compatible",
+  oppoPrice: "NT$ 900 (3–5 days) ｜ NT$ 800 (6+ days)",
+  iphoneDesc: "Apple flagship computation & cinema-grade video performance",
+  iphonePrice: "NT$ 750 (3–5 days) ｜ NT$ 600 (6+ days)",
+  djiDesc: "Flagship dual-lens 3-axis optical zoom handheld camera system",
+  perDay: "/ day",
+  lensTitle: "vivo G2 Telephoto Extender Set",
+  lensDesc: `Includes custom phone case & accessories ｜<br>200mm (NT$ 300/day): Clear and natural;<br>400mm (NT$ 600/day): Flagship super-telephoto, net-masking penetration.`,
+  cloudTitle: "Original Quality Cloud Backup Service",
+  cloudDesc: "Direct high-speed download without file export ｜ Files retained 14 days",
+  depCloudText: "In-store original quality cloud upload service",
+  perUse: "/ event",
+  depositRuleTip: "<strong>Deposit Notice:</strong> When renting a phone and an extender together, the phone deposit policy applies (Delivery: NT$ 30,000 / In-store: NT$ 3,000 + ID). Extender deposit is not stacked.",
+
+  formTitle: "STEP 1. Equipment Specifications & Rental Schedule",
+  modelLabel: "Rental Device Model",
+  lensLabel: "Telephoto Extender Option",
+  inquiryButton: "Send Equipment & Date Inquiry",
+  inquiryNotice: "Continue in LINE after sending. Provide your name, phone and pickup or delivery details in chat; no second form is needed. Availability and pricing require staff confirmation.",
+  faqLinkText: "View Rental FAQ & Help Center >",
+  fallbackTitle: "Reservation Draft Generated",
+  fallbackGuide: "Message could not be dispatched automatically. Details are preserved; tap copy and paste into the LINE chat.",
+  back: "Back to Form",
+  copy: "Copy Message",
+  copied: "Reservation details copied to clipboard",
+  alertYellow: "🟡 <b>Limited Availability</b>: Inventory is tight for this period. Booking early is recommended.",
+  alertRed: "🔴 <b>High Demand</b>: Slot is near capacity. Submission will be queued for waitlist confirmation."
+};
+
+function S(){ return currentLang === "zh" ? zh : en; }
+function text(id, value, html = false){ const e = document.getElementById(id); if(e) e[html ? "innerHTML" : "textContent"] = value; }
+
+function showToast(message) {
+  const toast = document.getElementById("app-toast");
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2200);
+}
+
+function updateCalendarWeekdays(lang) {
+  const container = document.getElementById("calWeekdaysContainer");
+  if (!container) return;
+  const daysZh = ["日", "一", "二", "三", "四", "五", "六"];
+  const daysEn = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const list = lang === "zh" ? daysZh : daysEn;
+  container.innerHTML = list.map(d => `<span>${d}</span>`).join("");
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  try { localStorage.setItem("fir-language", lang); } catch(e){}
+
+  const btn = document.getElementById("btn-lang-toggle");
+  if (btn) btn.textContent = (lang === "zh") ? "EN" : "繁中";
+  document.documentElement.lang = lang === "zh" ? "zh-TW" : "en";
+
+  const x = S();
+  const ids = {
+    subtitle:"subtitle",store:"store",priceTitle:"priceTitle",
+    step1Text:"step1Text",step2Text:"step2Text",step3Text:"step3Text",step4Text:"step4Text",
+    calendarTitle:"calendarTitle",timePillLabel:"timePillLabel",
+    calGuideTitle:"calGuideTitle",guideItem1:"guideItem1",guideItem2:"guideItem2",guideNote:"guideNote",
+    x300uDesc:"x300uDesc",x300uPrice:"x300uPrice",x500pmDesc:"x500pmDesc",x500pmPrice:"x500pmPrice",
+    x200uDesc:"x200uDesc",x200uPrice:"x200uPrice",x300pDesc:"x300pDesc",x300pPrice:"x300pPrice",
+    oppoDesc:"oppoDesc",oppoPrice:"oppoPrice",iphoneDesc:"iphoneDesc",iphonePrice:"iphonePrice",
+    djiDesc:"djiDesc",lensTitle:"lensTitle",lensDesc:"lensDesc",cloudTitle:"cloudTitle",cloudDesc:"cloudDesc",
+    depCloud:"depCloudText",depositRuleTip:"depositRuleTip",faqLink:"faqLinkText",
+    formTitle:"formTitle",modelLabel:"modelLabel",lensLabel:"lensLabel",
+    inquiryButton:"inquiryButton",inquiryNotice:"inquiryNotice",
+    fallbackTitle:"fallbackTitle",fallbackGuide:"fallbackGuide",backButton:"back",copyButton:"copy"
+  };
+  Object.keys(ids).forEach(k => text(ids[k], x[k], k==="store"||k==="inquiryNotice"||k==="depositRuleTip"||k==="faqLink"||k==="lensDesc"||k==="guideItem1"||k==="guideItem2"||k==="guideNote"));
+  ["d12a","d12x","d12b","d12c","d12d","d12e"].forEach(id => text(id, x.days));
+  text("perDayA", x.perDay); text("perDayB", x.perDay); text("perUse", x.perUse);
+
+  updateCalendarWeekdays(lang);
+  updateModelLabels();
+  updateNote();
+  renderSaved();
+  renderCalendar();
+  checkLensTip();
+}
+
+function toggleLanguage() {
+  setLanguage(currentLang === "zh" ? "en" : "zh");
+}
+
+function updateModelLabels(){
+  const labelsZh = [
+    "vivo x300 Ultra ｜ 旗艦長焦收音",
+    "vivo x500 Pro Max ｜ 電影級長焦旗艦",
+    "vivo x200 Ultra ｜ 高解析細節旗艦",
+    "vivo x300 Pro ｜ 旅行輕便長焦",
+    "OPPO Find X9 Ultra ｜ 哈蘇十倍光學",
+    "iPhone 17 Pro / Max ｜ Apple 旗艦系列",
+    "DJI Pocket 4 Pro 全能套裝 ｜ 雙鏡手持微型雲台",
+    "僅租借 G2 增距鏡頭特仕組 ｜ 獨立鏡頭配件"
+  ];
+  const labelsEn = [
+    "vivo x300 Ultra ｜ Flagship Telephoto",
+    "vivo x500 Pro Max ｜ Cinema Telephoto",
+    "vivo x200 Ultra ｜ Best Image Detail",
+    "vivo x300 Pro ｜ Travel Long Zoom",
+    "OPPO Find X9 Ultra ｜ Hasselblad 10x",
+    "iPhone 17 Pro / Max ｜ Apple Flagship",
+    "DJI Pocket 4 Pro Combo ｜ 3-Axis Gimbal",
+    "G2 Extender Set Only ｜ Accessories"
+  ];
+  const labels = currentLang === "zh" ? labelsZh : labelsEn;
+  [...document.getElementById("model").options].forEach((o, i) => { if(labels[i]) o.text = labels[i]; });
+  
+  const x = S();
+}
+
+function applyTheme(theme) {
+  if (theme === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
+  } else {
+    document.documentElement.removeAttribute("data-theme");
+  }
+}
+
+function setTheme(theme) {
+  try { localStorage.setItem("fir-theme", theme); } catch(e){}
+  applyTheme(theme);
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  setTheme(isDark ? "light" : "dark");
+}
+
+function updateLens(keep = false){
+  const m = document.getElementById("model").value, l = document.getElementById("lens"), old = l.value, x = S();
+  let o;
+  if(m === "vivo x300 Ultra" || m === "vivo x500 Pro Max"){
+    o = [["none", x.noLens], ["200", x.lens200], ["400", x.lens400]];
+  } else if(m === "vivo x200 Ultra" || m === "vivo x300 Pro"){
+    o = [["none", x.noLens], ["200", x.lens200]];
+  } else if(m === "OPPO Find X9 Ultra"){
+    o = [["none", x.noLens], ["400", x.lens400]];
+  } else if(m === "僅租借 G2 增距鏡頭特仕組"){
+    o = [
+      ["rent400_x300u", x.rent400_x300u],
+      ["rent400_x500pm", x.rent400_x500pm],
+      ["rent400_oppo", x.rent400_oppo],
+      ["rent200_x300u", x.rent200_x300u],
+      ["rent200_x500pm", x.rent200_x500pm],
+      ["rent200_x200u", x.rent200_x200u],
+      ["rent200_x300p", x.rent200_x300p]
+    ];
+  } else {
+    o = [["none", x.noLens]];
+  }
+
+  const lensField = document.getElementById("lensField");
+  const hasExtenderOptions = o.length > 1 || (o.length === 1 && o[0][0] !== "none");
+  if (lensField) {
+    lensField.style.display = hasExtenderOptions ? "block" : "none";
+  }
+
+  l.innerHTML = o.map(a => `<option value="${a[0]}">${a[1]}</option>`).join("");
+  if(keep && o.some(a => a[0] === old)){
+    l.value = old;
+  } else {
+    l.value = o.some(a => a[0] === "400") ? "400" : (o.some(a => a[0] === "200") ? "200" : o[0][0]);
+  }
+  checkLensTip();
+}
+
+function checkLensTip(){
+  const val = document.getElementById("lens").value;
+  const tipEl = document.getElementById("lensDetailTip");
+  if(val && val !== "none"){
+    tipEl.innerHTML = S().lensTipClarification;
+    tipEl.style.display = "block";
+  } else {
+    tipEl.style.display = "none";
+  }
+}
+
+function updateNote(){
+  const m = document.getElementById("model").value, x = S();
+  const map = {
+    "vivo x300 Ultra": x.noteX300U, "vivo x500 Pro Max": x.noteX500PM,
+    "vivo x200 Ultra": x.noteX200U, "vivo x300 Pro": x.noteX300P,
+    "OPPO Find X9 Ultra": x.noteOppo, "iPhone 17 Pro Max": x.noteIphone,
+    "DJI Pocket 4 Pro 全能套裝": x.noteDji, "僅租借 G2 增距鏡頭特仕組": x.noteLens
+  };
+  document.getElementById("deviceNote").innerHTML = map[m] || "";
+}
+
+function getDatePressure(dateStr) {
+  const taipeiToday = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+  if (dateStr < taipeiToday) return "green";
+  if (datePressures && datePressures[dateStr]) {
+    return datePressures[dateStr];
+  }
+
+  if (activeHotDates && !activeHotDates.includes("{" + "{")) {
+    const today = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+    if (dateStr < today) return "green";
+    const segments = activeHotDates.split(/[、,;\n\r]/);
+    for (let seg of segments) {
+      const match = seg.trim().match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})(?:\s*至\s*(\d{4})\/(\d{1,2})\/(\d{1,2}))?/);
+      if (!match) continue;
+      const iso = (y,m,d) => `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
+      const start = iso(match[1],match[2],match[3]);
+      const end = match[4] ? iso(match[4],match[5],match[6]) : start;
+      if (dateStr >= start && dateStr <= end) {
+        return /黃|yellow|緊張/.test(seg) ? "yellow" : "red";
+      }
+    }
+  }
+
+  return "green";
+}
+
+function renderCalendar(){
+  const grid = document.getElementById("calDaysGrid");
+  const monthTitle = document.getElementById("calMonthTitle");
+  if (!grid || !monthTitle) return;
+
+  const y = calCurrentMonth.getFullYear();
+  const m = calCurrentMonth.getMonth();
+  monthTitle.textContent = currentLang === "zh" ? `${y} 年 ${m + 1} 月` : `${calCurrentMonth.toLocaleString('en', { month: 'long' })} ${y}`;
+
+  grid.innerHTML = "";
+  const firstDay = new Date(y, m, 1).getDay();
+  const totalDays = new Date(y, m + 1, 0).getDate();
+  const todayStr = getTodayStr();
+
+  for (let i = 0; i < firstDay; i++) {
+    const blank = document.createElement("div");
+    blank.className = "cal-cell disabled";
+    grid.appendChild(blank);
+  }
+
+  for (let d = 1; d <= totalDays; d++) {
+    const cell = document.createElement("div");
+    cell.className = "cal-cell";
+    const mm = String(m + 1).padStart(2, '0');
+    const dd = String(d).padStart(2, '0');
+    const dateStr = `${y}-${mm}-${dd}`;
+
+    const pressure = getDatePressure(dateStr);
+    const showPressure = pressure === "yellow" || pressure === "red";
+    if (showPressure) {
+      cell.classList.add("p-" + pressure);
+    }
+
+    cell.innerHTML = `<span>${d}</span>${showPressure ? '<span class="cell-dot"></span>' : ''}`;
+
+    if (dateStr < todayStr) {
+      cell.classList.add("disabled");
+    } else {
+      if (dateStr === todayStr) cell.classList.add("today");
+      if (calStartDate && dateStr === calStartDate) cell.classList.add("range-start");
+      if (calEndDate && dateStr === calEndDate) cell.classList.add("range-end");
+      if (calStartDate && calEndDate && dateStr > calStartDate && dateStr < calEndDate) cell.classList.add("range-mid");
+      cell.onclick = () => onDateCellClick(dateStr);
+    }
+    grid.appendChild(cell);
+  }
+  updateCalendarSummary();
+}
+
+function onDateCellClick(dateStr){
+  if (!calStartDate || (calStartDate && calEndDate)) {
+    calStartDate = dateStr;
+    calEndDate = "";
+  } else if (calStartDate && !calEndDate) {
+    if (dateStr < calStartDate) {
+      calStartDate = dateStr;
+      calEndDate = "";
+    } else {
+      calEndDate = dateStr;
+    }
+  }
+  syncCalendarToHiddenInputs();
+  renderCalendar();
+  save();
+}
+
+function syncCalendarToHiddenInputs(){
+  const cleanStart = (calStartDate || "").split("T")[0].split(" ")[0].replace(/-/g, "/");
+  const cleanEnd = (calEndDate || calStartDate || "").split("T")[0].split(" ")[0].replace(/-/g, "/");
+  document.getElementById("pickupDate").value = cleanStart;
+  document.getElementById("returnDate").value = cleanEnd;
+  document.getElementById("pickupClock").value = calPickupTime;
+  document.getElementById("pickupTime").value = (cleanStart && calPickupTime) ? `${cleanStart} ${calPickupTime}` : "";
+}
+
+function updateCalendarSummary(){
+  const sumEl = document.getElementById("calSummaryText");
+  const alertBox = document.getElementById("pressureAlert");
+  if (!sumEl) return;
+
+  const zhDays = ["(日)", "(一)", "(二)", "(三)", "(四)", "(五)", "(六)"];
+  const enDays = ["(Sun)", "(Mon)", "(Tue)", "(Wed)", "(Thu)", "(Fri)", "(Sat)"];
+  let highestPressure = "green";
+
+  if (calStartDate && calEndDate) {
+    const [y1, m1, d1] = calStartDate.split("-").map(Number);
+    const dt1 = new Date(y1, m1 - 1, d1);
+    const [y2, m2, d2] = calEndDate.split("-").map(Number);
+    const dt2 = new Date(y2, m2 - 1, d2);
+    const diffDays = Math.max(1, Math.round((dt2 - dt1) / (1000 * 3600 * 24)));
+    const sWkZh = zhDays[dt1.getDay()], eWkZh = zhDays[dt2.getDay()];
+    const sWkEn = enDays[dt1.getDay()], eWkEn = enDays[dt2.getDay()];
+    const sDate = calStartDate.replace(/-/g, "/");
+    const eDate = calEndDate.replace(/-/g, "/");
+    
+    if (currentLang === "zh") {
+      sumEl.innerHTML = `
+        <div class="cal-summary-grid">
+          <div class="cal-summary-row">
+            <span class="cal-summary-lbl">預約檔期</span>
+            <span class="cal-summary-val">${sDate} ${sWkZh} ${calPickupTime}</span>
+          </div>
+          <div class="cal-summary-row tilde-row">
+            <span class="cal-summary-lbl"></span>
+            <span class="cal-summary-val">~</span>
+          </div>
+          <div class="cal-summary-row">
+            <span class="cal-summary-lbl"></span>
+            <span class="cal-summary-val">${eDate} ${eWkZh} 約${diffDays}日</span>
+          </div>
+        </div>
+      `;
+    } else {
+      sumEl.innerHTML = `
+        <div class="cal-summary-grid">
+          <div class="cal-summary-row">
+            <span class="cal-summary-lbl">Schedule</span>
+            <span class="cal-summary-val">${sDate} ${sWkEn} ${calPickupTime}</span>
+          </div>
+          <div class="cal-summary-row tilde-row">
+            <span class="cal-summary-lbl"></span>
+            <span class="cal-summary-val">~</span>
+          </div>
+          <div class="cal-summary-row">
+            <span class="cal-summary-lbl"></span>
+            <span class="cal-summary-val">${eDate} ${eWkEn} (approx ${diffDays} days)</span>
+          </div>
+        </div>
+      `;
+    }
+
+    let cur = new Date(dt1);
+    while (cur <= dt2) {
+      const curStr = cur.toISOString().split("T")[0];
+      const p = getDatePressure(curStr);
+      if (p === "red") { highestPressure = "red"; break; }
+      if (p === "yellow") highestPressure = "yellow";
+      cur.setDate(cur.getDate() + 1);
+    }
+  } else if (calStartDate) {
+    const [y1, m1, d1] = calStartDate.split("-").map(Number);
+    const dt1 = new Date(y1, m1 - 1, d1);
+    const sWkZh = zhDays[dt1.getDay()];
+    const sWkEn = enDays[dt1.getDay()];
+    const sDate = calStartDate.replace(/-/g, "/");
+    sumEl.innerHTML = currentLang === "zh"
+      ? `
+        <div class="cal-summary-grid">
+          <div class="cal-summary-row">
+            <span class="cal-summary-lbl">取機時間</span>
+            <span class="cal-summary-val">${sDate} ${sWkZh} ${calPickupTime}</span>
+          </div>
+          <div class="cal-summary-row tilde-row">
+            <span class="cal-summary-lbl"></span>
+            <span class="cal-summary-val">~</span>
+          </div>
+          <div class="cal-summary-row">
+            <span class="cal-summary-lbl"></span>
+            <span class="cal-summary-val" style="opacity:0.75;">請接續選擇歸還日期</span>
+          </div>
+        </div>
+      `
+      : `
+        <div class="cal-summary-grid">
+          <div class="cal-summary-row">
+            <span class="cal-summary-lbl">Pickup</span>
+            <span class="cal-summary-val">${sDate} ${sWkEn} ${calPickupTime}</span>
+          </div>
+          <div class="cal-summary-row tilde-row">
+            <span class="cal-summary-lbl"></span>
+            <span class="cal-summary-val">~</span>
+          </div>
+          <div class="cal-summary-row">
+            <span class="cal-summary-lbl"></span>
+            <span class="cal-summary-val" style="opacity:0.75;">Select return date</span>
+          </div>
+        </div>
+      `;
+    highestPressure = getDatePressure(calStartDate);
+  } else {
+    sumEl.textContent = currentLang === "zh" ? "請點選月曆選擇預定租賃起訖日期" : "Please select pickup and return dates";
+  }
+
+  if (alertBox) {
+    if (highestPressure === "red") {
+      alertBox.className = "pressure-alert alert-red";
+      alertBox.innerHTML = S().alertRed;
+      alertBox.style.display = "block";
+    } else if (highestPressure === "yellow") {
+      alertBox.className = "pressure-alert alert-yellow";
+      alertBox.innerHTML = S().alertYellow;
+      alertBox.style.display = "block";
+    } else {
+      alertBox.style.display = "none";
+    }
+  }
+}
+
+function toggleCalendarGuide(){
+  const box = document.getElementById("calendarGuideBox");
+  const icon = document.getElementById("calGuideToggleIcon");
+  if (!box) return;
+  const isOpen = box.classList.toggle("open");
+  if (icon) icon.textContent = isOpen ? "−" : "+";
+}
+
+function setupTimePills(){
+  const pills = document.querySelectorAll(".time-pill");
+  pills.forEach(pill => {
+    pill.addEventListener("click", () => {
+      pills.forEach(p => p.classList.remove("active"));
+      pill.classList.add("active");
+      calPickupTime = pill.getAttribute("data-time") || "12:00";
+      syncCalendarToHiddenInputs();
+      updateCalendarSummary();
+      save();
+    });
+  });
+}
+
+function getDraft(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); } catch(e){ return null; } }
+
+function save(){
+  try{
+    const cleanStart = (calStartDate || "").split("T")[0].split(" ")[0].replace(/-/g, "/");
+    const cleanEnd = (calEndDate || calStartDate || "").split("T")[0].split(" ")[0].replace(/-/g, "/");
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      model: document.getElementById("model").value,
+      lens: document.getElementById("lens").value,
+      pickupDate: cleanStart,
+      pickupClock: calPickupTime,
+      returnDate: cleanEnd
+    }));
+    renderSaved();
+  } catch(e){}
+}
+
+function restore(){
+  const d = getDraft(); if(!d) return;
+  const m = document.getElementById("model");
+  if(d.model) m.value = d.model;
+  updateLens(true);
+  if(d.lens) document.getElementById("lens").value = d.lens;
+  
+  const today = getTodayStr();
+  if(d.pickupDate && d.pickupDate.replace(/\//g, "-") >= today){
+    calStartDate = d.pickupDate.split("T")[0].split(" ")[0].replace(/\//g, "-");
+    calEndDate = (d.returnDate || d.pickupDate).split("T")[0].split(" ")[0].replace(/\//g, "-");
+  }
+  if(d.pickupClock){
+    calPickupTime = d.pickupClock;
+    document.querySelectorAll(".time-pill").forEach(p => {
+      p.classList.toggle("active", p.getAttribute("data-time") === calPickupTime);
+    });
+  }
+  syncCalendarToHiddenInputs();
+
+  updateNote();
+  renderSaved();
+  renderCalendar();
+  checkLensTip();
+}
+
+function renderSaved(){
+  const d = getDraft();
+  const box = document.getElementById("savedSelection");
+  if (!box) return;
+
+  let visitCount = 0;
+  try {
+    visitCount = parseInt(localStorage.getItem("fir-visit-count") || "0", 10);
+  } catch(e){}
+
+  if (!d || !d.model || visitCount <= 1) {
+    box.classList.remove("show");
+    return;
+  }
+
+  const x = S();
+  box.innerHTML = `<span class="saved-close-x" id="clearDraftBtn" title="清除暫存">✕</span><span>${x.savedText}</span>`;
+  box.classList.add("show");
+
+  document.getElementById("clearDraftBtn").onclick = () => {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem("fir-stage");
+    } catch(e){}
+    box.classList.remove("show");
+    showToast(currentLang === "zh" ? "已清除暫存資料" : "Draft cleared");
+  };
+}
+
+function equipment(){
+  const m = document.getElementById("model").value, l = document.getElementById("lens");
+  let cleanLens = "";
+  if(l && l.value !== "none") {
+    if(l.value === "200") cleanLens = " + 200mm 增距鏡";
+    else if(l.value === "400") cleanLens = " + 400mm 增距鏡";
+    else return l.options[l.selectedIndex].text;
+  }
+  return m + cleanLens;
+}
+
+function dates(){
+  syncCalendarToHiddenInputs();
+  const today = getTodayStr();
+
+  if(!calStartDate || !calEndDate){ showToast(S().dates); return null; }
+  if(calStartDate < today){ showToast(S().pastDate); return null; }
+  if(calEndDate < calStartDate){ showToast(S().badDate); return null; }
+
+  const [y1, m1, day1] = calStartDate.split("-").map(Number);
+  const dt1 = new Date(y1, m1 - 1, day1);
+  const [y2, m2, day2] = (calEndDate || calStartDate).split("-").map(Number);
+  const dt2 = new Date(y2, m2 - 1, day2);
+  const totalDays = Math.max(1, Math.round((dt2 - dt1) / (1000 * 3600 * 24)));
+
+  const zhDays = ["(日)", "(一)", "(二)", "(三)", "(四)", "(五)", "(六)"];
+  const endWkZhNoParen = ["日", "一", "二", "三", "四", "五", "六"][dt2.getDay()];
+  const enDays = ["(Sun)", "(Mon)", "(Tue)", "(Wed)", "(Thu)", "(Fri)", "(Sat)"];
+  const startWkZh = zhDays[dt1.getDay()];
+  const endWkZh = `(${endWkZhNoParen})`;
+  const startWkEn = enDays[dt1.getDay()];
+  const endWkEn = enDays[dt2.getDay()];
+
+  const cleanStartDate = calStartDate.replace(/-/g, "/");
+  const cleanEndDate = (calEndDate || calStartDate).split("T")[0].split(" ")[0].replace(/-/g, "/").trim();
+  
+  const p = `${cleanStartDate} ${calPickupTime}`;
+  const r = cleanEndDate;
+
+  const scheduleZh = `${cleanStartDate} ${startWkZh} ${calPickupTime} 至 ${cleanEndDate} ${endWkZh} (約 ${totalDays} 日)`;
+  const scheduleEn = `${cleanStartDate} ${startWkEn} ${calPickupTime} to ${cleanEndDate} ${endWkEn} (approx ${totalDays} days)`;
+
+  return { p, r, d: totalDays, scheduleZh, scheduleEn };
+}
+
+function inquiry(){
+  const d = dates(); if(!d) return; save();
+  // 固定欄位供客服辨識；設備與完整日期只需送出一次。
+  currentMessage = `【詢問設備檔期】\n設備：${equipment()}\n檔期：${d.scheduleZh}`;
+  send(currentMessage, document.getElementById("inquiryButton"), "inquiry");
+}
+
+function status(m){ const e = document.getElementById("liffStatus"); e.textContent = m; e.classList.add("show"); }
+
+function setupPriceRowInteractions(){
+  document.querySelectorAll(".price-row").forEach(row => {
+    row.addEventListener("click", () => {
+      const modelVal = row.getAttribute("data-model");
+      if (!modelVal) return;
+
+      if (modelVal === "cloud") {
+        showToast(currentLang === "zh" ? "雲端備份可在 LINE 詢問時告知客服加選。" : "Ask our LINE team to add cloud backup.");
+        return;
+      }
+
+      const mSelect = document.getElementById("model");
+      mSelect.value = modelVal;
+      updateLens(false);
+      updateNote();
+          save();
+
+      const target = document.getElementById("calendarTitle");
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  });
+}
+
+async function init(){
+  try{
+    await liff.init({ liffId: LIFF_ID });
+    liffReady = true;
+    document.getElementById("liffStatus").classList.remove("show");
+  } catch(e){
+    console.warn("外部瀏覽器連線 LIFF:", e);
+  }
+
+  // 前台由 GitHub 提供；Mini 可用時更新公告，失聯時沿用靜態公告。
+  try {
+    const r = await fetch("https://admin.24932067.xyz/api/public_configs", {
+      cache: "no-store", credentials: "omit", signal: AbortSignal.timeout(4000)
+    });
+    if (!r.ok) throw new Error("config unavailable");
+    const data = await r.json();
+    if (typeof data.hot_dates === "string") activeHotDates = data.hot_dates;
+    renderCalendar();
+  } catch (_) {
+    // 公告不代表即時庫存，設備與日期仍由專員確認。
+  }
+}
+
+// 智慧多通道發送機制
+async function send(m, b, k){
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  if(liffReady && liff.isInClient()){
+    b.disabled = true;
+    b.textContent = S().sending;
+    try{
+      await liff.sendMessages([{ type: "text", text: m }]);
+      b.textContent = S().sent;
+      setTimeout(() => liff.closeWindow(), 450);
+      return;
+    } catch(e){
+      console.error(e);
+      fallback(m);
+    } finally {
+      setTimeout(() => {
+        b.disabled = false;
+        b.textContent = S().inquiryButton;
+      }, 1000);
+    }
+    return;
+  }
+
+  if (isMobile) {
+    try { await navigator.clipboard.writeText(m); } catch(err){}
+    const cleanOaId = LINE_OA_ID.replace("@", "%40");
+    const lineDeepLink = `https://line.me/R/oaMessage/${cleanOaId}/?${encodeURIComponent(m)}`;
+    showToast(currentLang === "zh" ? "正在為您開啟 LINE 聊天室..." : "Opening LINE chat...");
+    setTimeout(() => {
+      window.location.href = lineDeepLink;
+    }, 300);
+    return;
+  }
+
+  fallback(m);
+}
+
+function fallback(m){
+  document.getElementById("fallbackTitle").textContent = S().fallbackTitle;
+  document.getElementById("fallbackGuide").textContent = S().fallbackGuide;
+  document.getElementById("backButton").textContent = S().back;
+  document.getElementById("copyButton").textContent = S().copy;
+  document.getElementById("fallbackText").value = m;
+  document.getElementById("fallbackSheet").classList.add("show");
+  copyFallback();
+}
+
+function closeFallback(){ document.getElementById("fallbackSheet").classList.remove("show"); }
+
+async function copyFallback(){
+  const a = document.getElementById("fallbackText");
+  try{
+    await navigator.clipboard.writeText(a.value);
+  } catch(e){
+    a.select();
+    document.execCommand("copy");
+  }
+  showToast(S().copied);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  try {
+    let vc = parseInt(localStorage.getItem("fir-visit-count") || "0", 10);
+    vc++;
+    localStorage.setItem("fir-visit-count", vc.toString());
+  } catch(e){}
+
+  try {
+    const savedTheme = localStorage.getItem("fir-theme");
+    if (savedTheme) {
+      applyTheme(savedTheme);
+    } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      applyTheme("dark");
+    } else {
+      applyTheme("light");
+    }
+  } catch(e){}
+
+  if (window.matchMedia) {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function(e) {
+      try {
+        if (!localStorage.getItem("fir-theme")) {
+          applyTheme(e.matches ? "dark" : "light");
+        }
+      } catch(err){}
+    });
+  }
+
+  setupTimePills();
+
+  document.getElementById("calPrevBtn").onclick = () => {
+    calCurrentMonth.setMonth(calCurrentMonth.getMonth() - 1);
+    renderCalendar();
+  };
+  document.getElementById("calNextBtn").onclick = () => {
+    calCurrentMonth.setMonth(calCurrentMonth.getMonth() + 1);
+    renderCalendar();
+  };
+
+  restore();
+  
+  const urlParams = new URLSearchParams(window.location.search);
+  const paramLang = urlParams.get("lang");
+  let savedLang = null;
+  try { savedLang = localStorage.getItem("fir-language"); } catch(e){}
+
+  if (paramLang && (paramLang === "en" || paramLang === "zh")) {
+    setLanguage(paramLang);
+  } else if (savedLang && (savedLang === "en" || savedLang === "zh")) {
+    setLanguage(savedLang);
+  } else {
+    setLanguage("zh");
+  }
+
+  setupPriceRowInteractions();
+
+  // 舊版草稿的正式預約階段不再展開第二份表單。
+  try { localStorage.removeItem("fir-stage"); } catch(e){}
+
+  document.getElementById("model").onchange = () => {
+    updateLens(false);
+    updateNote();
+      save();
+  };
+  document.getElementById("lens").onchange = () => { checkLensTip(); save(); };
+  
+  document.getElementById("inquiryButton").onclick = inquiry;
+  document.getElementById("backButton").onclick = closeFallback;
+  document.getElementById("copyButton").onclick = copyFallback;
+
+
+
+  init();
+});
+</script>
+</body>
+</html>
