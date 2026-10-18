@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>FiX iT RiGHT 修成正果</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #0b0b0d; color: #f5f5f7;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", sans-serif; }
+  .wrap { min-height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 24px; box-sizing: border-box; text-align: center; }
+  .spin { width: 28px; height: 28px; border-radius: 50%; border: 3px solid rgba(255,255,255,.15); border-top-color: #f5f5f7; animation: r .9s linear infinite; }
+  @keyframes r { to { transform: rotate(360deg); } }
+  .brand { font-size: 13px; letter-spacing: .08em; color: #8e8e93; }
+  .msg { font-size: 16px; line-height: 1.6; max-width: 320px; }
+  button { margin-top: 6px; background: #f5f5f7; color: #0b0b0d; border: 0; border-radius: 999px; padding: 10px 22px; font-size: 15px; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="wrap" id="state">
+  <div class="spin" id="spin"></div>
+  <div class="msg" id="msg">文件載入中…</div>
+  <div class="brand">FiX iT RiGHT 修成正果</div>
+</div>
+<script>
+(function () {
+  // GAS 網頁應用程式（只在背後收送資料，客人不會看到 Google 提示）
+  var GAS = "https://script.google.com/macros/s/AKfycbwxba9UJgmHSl-OZBHeYiLbXnFEH1a8vm-HIr1eNpXpLadmqKlujecgQSmgUAZMNd8/exec";
+  var VIEWPORT = '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">';
+
+  function showError(text) {
+    document.getElementById("spin").style.display = "none";
+    document.getElementById("msg").innerHTML = "";
+    document.getElementById("msg").appendChild(document.createTextNode(text));
+    var b = document.createElement("button");
+    b.textContent = "重新載入";
+    b.onclick = function () { location.reload(); };
+    document.getElementById("state").insertBefore(b, document.querySelector(".brand"));
+  }
+
+  // 取代原本頁面裡的 google.script.run：改成送到 GAS 的白名單接口
+  function makeRunner(onOk, onFail, userObj) {
+    return new Proxy({}, {
+      get: function (_, prop) {
+        if (prop === "withSuccessHandler") return function (f) { return makeRunner(f, onFail, userObj); };
+        if (prop === "withFailureHandler") return function (f) { return makeRunner(onOk, f, userObj); };
+        if (prop === "withUserObject") return function (o) { return makeRunner(onOk, onFail, o); };
+        if (typeof prop !== "string" || prop === "then") return undefined;
+        return function () {
+          var args = Array.prototype.slice.call(arguments);
+          fetch(GAS, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "webBridgeRpc", fn: prop, args: args })
+          })
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+              if (d && d.ok) { if (onOk) onOk(d.result, userObj); }
+              else if (onFail) onFail((d && d.error) || "保存失敗，請稍後重試", userObj);
+            })
+            .catch(function () { if (onFail) onFail("網路連線不穩，請確認網路後重試", userObj); });
+        };
+      }
+    });
+  }
+  window.google = { script: { run: makeRunner(null, null, null), host: { close: function () {} } } };
+
+  var qs = location.search.replace(/^\?/, "");
+  if (!/(^|&)(cid|qid|contractId|orderId|quoteId|delivery)=/.test(qs)) {
+    showError("連結不完整，請向門市重新索取。");
+    return;
+  }
+
+  fetch(GAS + "?api=html&" + qs, { method: "GET" })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (!d || !d.ok || !d.html) { showError((d && d.error) || "文件載入失敗，請稍後重試。"); return; }
+      var html = d.html;
+      // 已簽署的合約：原本頁面會自動跳轉到 PDF
+      var refresh = html.match(/http-equiv=["']refresh["'][^>]*url=([^"'>]+)/i);
+      if (refresh) {
+        var t = document.createElement("textarea"); t.innerHTML = refresh[1];
+        location.replace(t.value);
+        return;
+      }
+      if (!/name=["']viewport["']/i.test(html)) {
+        html = /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, function (m) { return m + VIEWPORT; }) : VIEWPORT + html;
+      }
+      if (!/<meta[^>]+charset/i.test(html)) {
+        html = /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, function (m) { return m + '<meta charset="utf-8">'; }) : '<meta charset="utf-8">' + html;
+      }
+      document.open("text/html", "replace");
+      document.write(html);
+      document.close();
+      if (d.title && !/<title>/i.test(html)) document.title = d.title;
+    })
+    .catch(function () { showError("網路連線不穩，請確認網路後重新載入。"); });
+})();
+</script>
+</body>
+</html>
