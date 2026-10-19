@@ -1581,7 +1581,7 @@ async function init(){
 async function send(m, b, k){
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  if(!IS_FIR && liffReady && liff.isInClient()){
+  if(liffReady && liff.isInClient()){
     b.disabled = true;
     b.textContent = S().sending;
     try{
