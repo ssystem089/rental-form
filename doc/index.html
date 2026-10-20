@@ -27,6 +27,8 @@
 (function () {
   // GAS 網頁應用程式（只在背後收送資料，客人不會看到 Google 提示）
   var GAS = "https://script.google.com/macros/s/AKfycbwxba9UJgmHSl-OZBHeYiLbXnFEH1a8vm-HIr1eNpXpLadmqKlujecgQSmgUAZMNd8/exec";
+  // Cloudflare 快取（doc-edge）：有存好的頁面立刻顯示；連不上或沒設定就直接找 GAS（2026-10-20）
+  var EDGE = "";
   var VIEWPORT = '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">';
 
   function showError(text) {
@@ -56,6 +58,10 @@
           })
             .then(function (r) { return r.json(); })
             .then(function (d) {
+              if (d && d.ok && EDGE && /^(saveSignedContract|submitDeliveryContract)$/.test(prop)) {
+                // 簽完清掉快取，之後再開就是已簽署的 PDF
+                fetch(EDGE + "/purge?" + qs).catch(function () {});
+              }
               if (d && d.ok) { if (onOk) onOk(d.result, userObj); }
               else if (onFail) onFail((d && d.error) || "保存失敗，請稍後重試", userObj);
             })
@@ -72,8 +78,20 @@
     return;
   }
 
-  fetch(GAS + "?api=html&" + qs, { method: "GET" })
-    .then(function (r) { return r.json(); })
+  function fromGas() {
+    return fetch(GAS + "?api=html&" + qs, { method: "GET" }).then(function (r) { return r.json(); });
+  }
+  function fromEdge() {
+    if (!EDGE || typeof AbortController === "undefined") return fromGas();
+    var ctrl = new AbortController();
+    var timer = setTimeout(function () { ctrl.abort(); }, 12000);
+    return fetch(EDGE + "/doc?" + qs, { method: "GET", signal: ctrl.signal })
+      .then(function (r) { clearTimeout(timer); return r.json(); })
+      .then(function (d) { return (d && d.ok && d.html) ? d : fromGas(); })
+      .catch(function () { clearTimeout(timer); return fromGas(); });
+  }
+
+  fromEdge()
     .then(function (d) {
       if (!d || !d.ok || !d.html) { showError((d && d.error) || "文件載入失敗，請稍後重試。"); return; }
       var html = d.html;
