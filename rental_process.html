@@ -1,168 +1,97 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0b0b0d">
-  <title>SSystem｜租借流程</title>
-  <style>
-    :root { --bg:#0b0b0d; --card:#17171a; --card2:#202024; --line:#2d2d32; --text:#f4f4f5; --muted:#a1a1aa; --sub:#71717a; }
-    * { box-sizing:border-box; }
-    body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang TC","Noto Sans TC","Helvetica Neue",Arial,sans-serif; -webkit-font-smoothing:antialiased; }
-    .wrap { width:min(100%,500px); margin:0 auto; padding:14px 14px 34px; }
-    .topbar { display:flex; justify-content:flex-end; min-height:38px; margin-bottom:4px; }
-    .lang-toggle { width:auto; min-height:34px; padding:6px 11px; border:1px solid #595961; border-radius:8px; background:#202024; color:#fff; font:inherit; font-size:12px; font-weight:750; cursor:pointer; }
-    .header { padding:7px 4px 18px; border-bottom:1px solid var(--line); margin-bottom:18px; }
-    .brand { font-size:22px; font-weight:800; letter-spacing:.3px; }
-    .subtitle { margin-top:4px; color:var(--muted); font-size:13px; }
-    .intro { margin-top:10px; color:var(--sub); font-size:12px; line-height:1.6; }
-    .section-title { margin:20px 4px 8px; color:var(--muted); font-size:12px; font-weight:700; letter-spacing:.5px; }
-    .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px; }
-    .step { display:grid; grid-template-columns:28px 1fr; gap:10px; padding:3px 0 14px; }
-    .step:last-child { padding-bottom:0; }
-    .step-number { width:28px; height:28px; display:flex; align-items:center; justify-content:center; border:1px solid #4a4a52; border-radius:50%; color:#fff; font-size:12px; font-weight:750; }
-    .step-title { color:var(--text); font-size:14px; font-weight:750; line-height:1.5; }
-    .step-body { margin-top:4px; color:var(--muted); font-size:13px; line-height:1.7; }
-    .step-body ol { margin:7px 0 0; padding-left:20px; }.step-body li { margin:4px 0; }
-    .link-button { display:block; margin-top:10px; padding:11px 12px; border:1px solid #fff; border-radius:8px; background:#fff; color:#111; font-size:13px; font-weight:750; text-align:center; text-decoration:none; }
-    .notice { margin-top:14px; padding:13px; border:1px solid var(--line); border-radius:12px; background:var(--card); color:var(--sub); font-size:12px; line-height:1.7; }
-    .notice-title { display:block; margin-bottom:5px; color:var(--text); font-size:13px; font-weight:750; }
-    .notice ol { margin:7px 0 0; padding-left:20px; }.notice li { margin:5px 0; }
-    .footer { margin:18px 4px 0; color:var(--sub); font-size:11px; line-height:1.65; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#f4f5f7">
+<title>租借流程｜SSystem</title>
+<style>
+:root{--bg-color:#f4f5f7;--card-bg:#ffffff;--panel-bg:#f8fafc;--text-main:#0f172a;--text-muted:#475569;--text-light:#64748b;--border-color:#e2e8f0;--border-dark:#0f172a;--accent-blue:#0284c7;--accent-blue-bg:#f0f9ff;--accent-blue-border:#bae6fd;--warn-bg:rgba(245,158,11,.10);--warn-border:rgba(245,158,11,.35);--warn-text:#b45309}
+[data-theme="dark"]{--bg-color:#0b0f19;--card-bg:#141c2e;--panel-bg:#1a243b;--text-main:#f8fafc;--text-muted:#cbd5e1;--text-light:#94a3b8;--border-color:#263352;--border-dark:#64748b;--accent-blue:#38bdf8;--accent-blue-bg:rgba(56,189,248,.12);--accent-blue-border:rgba(56,189,248,.35);--warn-bg:rgba(245,158,11,.12);--warn-border:rgba(245,158,11,.35);--warn-text:#fbbf24}
+*{-webkit-text-size-adjust:100%;text-size-adjust:100%;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang TC","Noto Sans TC","Segoe UI",Roboto,Helvetica,Arial,sans-serif;transition:background-color .25s ease,color .25s ease,border-color .25s ease}
+html,body{overflow-x:hidden;max-width:100vw;width:100%}
+body{margin:0;background:var(--bg-color);color:var(--text-main);-webkit-font-smoothing:antialiased;padding:16px 12px max(36px,env(safe-area-inset-bottom) + 16px);display:flex;justify-content:center}
+.wrap{width:min(100%,540px);max-width:100%}
+.utility-bar{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-bottom:14px}
+.lang-pill-btn{background:var(--card-bg);border:1px solid var(--border-color);color:var(--text-main);padding:4px 10px;border-radius:6px;font-size:11.5px;font-weight:700;letter-spacing:.5px;cursor:pointer;min-height:32px}
+.lang-pill-btn:hover,.theme-morph-btn:hover{border-color:var(--accent-blue);color:var(--accent-blue)}
+.theme-morph-btn{background:var(--card-bg);border:1px solid var(--border-color);color:var(--text-main);width:32px;height:32px;min-height:32px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.sun-moon-svg{overflow:visible}.sun-core{transform-origin:center;transition:transform .45s cubic-bezier(.4,0,.2,1)}.mask-cutout{transition:transform .45s cubic-bezier(.4,0,.2,1);transform:translate(12px,-12px)}.sun-rays{transform-origin:center;transition:transform .45s cubic-bezier(.4,0,.2,1),opacity .3s ease;opacity:1}
+[data-theme="dark"] .sun-core{transform:scale(1.6)}[data-theme="dark"] .mask-cutout{transform:translate(0,0)}[data-theme="dark"] .sun-rays{transform:rotate(90deg) scale(.2);opacity:0}
+.header{padding-bottom:14px;border-bottom:2px solid var(--border-dark);margin-bottom:16px}
+.header .subtitle{margin-top:0;font-size:20px;font-weight:800;color:var(--text-main);letter-spacing:.3px}
+.store{margin-top:8px;color:var(--text-muted);font-size:12px;line-height:1.6}
+.intro{margin-top:8px;color:var(--text-light);font-size:12px;line-height:1.65}
+.tabs{display:flex;gap:6px;margin:0 0 4px}
+.tab{flex:1;text-align:center;padding:8px 6px;border:1px solid var(--border-color);border-radius:6px;background:var(--card-bg);color:var(--text-muted);font-size:12.5px;font-weight:700;text-decoration:none}
+.tab.active{background:var(--accent-blue);border-color:var(--accent-blue);color:#fff}
+[data-theme="dark"] .tab.active{color:#0b0f19}
+.section-title{font-size:11.5px;font-weight:800;color:var(--text-light);letter-spacing:1.2px;text-transform:uppercase;margin:20px 2px 8px}
+.card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:8px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.02)}
+.step{display:grid;grid-template-columns:24px 1fr;gap:10px;padding:2px 0 14px}.step:last-child{padding-bottom:0}
+.step-number{width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--accent-blue);color:#fff;font-size:11.5px;font-weight:800}
+[data-theme="dark"] .step-number{color:#0b0f19}
+.step-title{font-size:14px;font-weight:800;line-height:1.5}
+.step-body{margin-top:3px;color:var(--text-muted);font-size:13px;line-height:1.7}
+.step-body strong,.answer strong,.notice strong{color:var(--text-main)}
+.step-body ol,.answer ol,.notice ol,.notice ul{margin:6px 0 0;padding-left:20px}.step-body li,.answer li,.notice li{margin:4px 0}
+.chip{display:inline-block;margin:2px 2px 0 0;padding:1px 7px;border-radius:5px;background:var(--accent-blue-bg);border:1px solid var(--accent-blue-border);color:var(--accent-blue);font-size:11.5px;font-weight:700;white-space:nowrap}
+.example{margin-top:8px;padding:9px 11px;border-radius:6px;background:var(--panel-bg);border:1px solid var(--border-color);color:var(--text-main);font-size:13px}
+.faq-list{overflow:hidden;border:1px solid var(--border-color);border-radius:8px;background:var(--card-bg);box-shadow:0 2px 8px rgba(0,0,0,.02)}
+details{border-bottom:1px solid var(--border-color)}details:last-child{border-bottom:0}
+summary{position:relative;padding:14px 40px 14px 14px;color:var(--text-main);font-size:14px;font-weight:700;line-height:1.45;list-style:none;cursor:pointer}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--text-light);font-size:20px;font-weight:400}
+details[open] summary::after{content:"−"}
+details[open] summary{color:var(--accent-blue)}
+.answer{padding:0 14px 14px;color:var(--text-muted);font-size:13px;line-height:1.7}
+.call-notice{margin-top:14px;padding:12px;border:1px solid var(--warn-border);border-radius:8px;background:var(--warn-bg);color:var(--warn-text);font-size:12px;line-height:1.7}
+.call-notice strong{color:var(--warn-text)}.call-notice a{color:var(--warn-text);font-weight:800}
+.notice{margin-top:14px;padding:12px 14px;border:1px solid var(--border-color);border-radius:8px;background:var(--card-bg);color:var(--text-muted);font-size:12.5px;line-height:1.7}
+.notice-title{display:block;margin-bottom:4px;color:var(--text-main);font-size:13px;font-weight:800}
+.action-button,.link-button{display:block;width:100%;min-height:46px;margin-top:14px;padding:13px 12px;border:none;border-radius:6px;background:var(--accent-blue);color:#fff;font-size:14.5px;font-weight:800;text-align:center;text-decoration:none;box-shadow:0 4px 14px rgba(2,132,199,.25)}
+[data-theme="dark"] .action-button,[data-theme="dark"] .link-button{color:#0b0f19}
+.link-button.secondary{background:var(--card-bg);color:var(--accent-blue);border:1px solid var(--accent-blue-border);box-shadow:none;margin-top:8px}
+.footer{margin:18px 2px 0;color:var(--text-light);font-size:11px;line-height:1.65;text-align:center}
+</style>
 </head>
 <body>
-  <main class="wrap">
-    <div class="topbar"><button type="button" class="lang-toggle" id="languageButton" onclick="toggleLanguage()">English</button></div>
-    <header class="header">
-      <div class="brand">SSystem</div>
-      <div class="subtitle" data-i18n="subtitle">器材租借流程</div>
-      <div class="intro" data-i18n="intro">從查詢檔期、確認預約、門市交機到歸還設備的完整流程。實際設備庫存、金額與交還時間，以 LINE 客服最後確認內容為準。</div>
-    </header>
-
-    <div class="section-title" data-i18n="preTitle">預約前期｜查詢與完成預約</div>
-    <section class="card">
-      <div class="step"><div class="step-number">A</div><div><div class="step-title" data-i18n="preStep1Title">進入器材租借頁面</div><div class="step-body" data-i18n="preStep1Body">點擊下方圖文選單的「器材租借」，或透過連結進入表單；選擇設備及預計取還時間後，可先查詢檔期。熱門檔期可先詢問，不必先填姓名與電話。</div><a class="link-button" href="https://reurl.cc/3yKydR" data-i18n="bookingLink">前往器材租借／查詢檔期</a></div></div>
-      <div class="step"><div class="step-number">B</div><div><div class="step-title" data-i18n="preStep2Title">確認檔期與報價</div><div class="step-body" data-i18n="preStep2Body">客服確認預約日期、設備庫存與交還安排後，將開立報價單。請依客服指示，以屬名本人帳戶匯款支付定金。</div></div></div>
-      <div class="step"><div class="step-number">C</div><div><div class="step-title" data-i18n="preStep3Title">完成預約</div><div class="step-body" data-i18n="preStep3Body">客服完成對帳後，將回傳租賃憑證；收到憑證即代表預約完成。熱門檔期以客服確認及款項完成時間為準。</div></div></div>
-    </section>
-
-    <div class="section-title" data-i18n="duringTitle">預約中期｜門市交機</div>
-    <section class="card">
-      <div class="step"><div class="step-number">A</div><div><div class="step-title" data-i18n="duringStep1Title">依約抵達門市</div><div class="step-body" data-i18n="duringStep1Body">請於約定交機時間抵達門市，並預留約 5–10 分鐘完成點交。現場將簽署手機租賃合約一式兩份、交付餘款並簽收租賃憑證。</div></div></div>
-      <div class="step"><div class="step-number">B</div><div><div class="step-title" data-i18n="duringStep2Title">辦理證件與押金</div><div class="step-body" data-i18n="duringStep2Body">請備妥器材現金押金及本人有效證件正本。確認門號與本人身分後，證件將裝入信封袋，由租借人簽名並裝釘封口。</div></div></div>
-      <div class="step"><div class="step-number">C</div><div><div class="step-title" data-i18n="duringStep3Title">檢查器材並完成交機</div><div class="step-body" data-i18n="duringStep3Body">請與現場人員確認主機功能、外觀及所有配件。確認無誤後完成交機與租賃程序。</div></div></div>
-    </section>
-
-    <div class="section-title" data-i18n="postTitle">預約後期｜歸還與退還押金</div>
-    <section class="card">
-      <div class="step"><div class="step-number">A</div><div><div class="step-title" data-i18n="postStep1Title">依約歸還設備</div><div class="step-body" data-i18n="postStep1Body">請於約定歸還日與時間保持聯繫並抵達門市交還設備。現場將檢查主機功能、外觀及配件是否完整。</div></div></div>
-      <div class="step"><div class="step-number">B</div><div><div class="step-title" data-i18n="postStep2Title">確認設備歸還</div><div class="step-body" data-i18n="postStep2Body">設備檢查無問題後，雙方簽署確認歸還的手機租賃合約，完成歸還程序。</div></div></div>
-      <div class="step"><div class="step-number">C</div><div><div class="step-title" data-i18n="postStep3Title">現場確認押金與證件</div><div class="step-body" data-i18n="postStep3Body">客服歸還屬名裝釘信封袋；租借人現場拆封確認現金押金與證件無誤後，即完成本次租賃流程。</div></div></div>
-    </section>
-
-    <section class="notice">
-      <span class="notice-title" data-i18n="noticeTitle">注意事項</span>
-      <ol>
-        <li data-i18n="notice1">請務必依約定時間交還設備，以避免產生逾時費用。</li>
-        <li data-i18n="notice2">非門市交還機之租借，須依價目表／客服確認的免證件押金金額支付後，才會安排寄送。</li>
-        <li data-i18n="notice3">租借期間請保持電話及 LINE 暢通；如有任何問題請即時與客服聯繫，以確保流程順利進行。</li>
-      </ol>
-    </section>
-
-    <div class="footer" data-i18n="footer">最終設備庫存、租金、定金、押金、取還時間與寄送安排，均以 LINE 客服確認內容為準。</div>
-  </main>
-
-  <script>
-    let currentLang = "zh";
-    const copy = {
-      zh: {
-        subtitle:"器材租借流程",
-        intro:"從查詢檔期、確認預約、門市交機到歸還設備的完整流程。實際設備庫存、金額與交還時間，以 LINE 客服最後確認內容為準。",
-        preTitle:"預約前期｜查詢與完成預約",
-        preStep1Title:"進入器材租借頁面",
-        preStep1Body:"點擊下方圖文選單的「器材租借」，或透過連結進入表單；選擇設備及預計取還時間後，可先查詢檔期。熱門檔期可先詢問，不必先填姓名與電話。",
-        bookingLink:"前往器材租借／查詢檔期",
-        preStep2Title:"確認檔期與報價",
-        preStep2Body:"客服確認預約日期、設備庫存與交還安排後，將開立報價單。請依客服指示，以屬名本人帳戶匯款支付定金。",
-        preStep3Title:"完成預約",
-        preStep3Body:"客服完成對帳後，將回傳租賃憑證；收到憑證即代表預約完成。熱門檔期以客服確認及款項完成時間為準。",
-        duringTitle:"預約中期｜門市交機",
-        duringStep1Title:"依約抵達門市",
-        duringStep1Body:"請於約定交機時間抵達門市，並預留約 5–10 分鐘完成點交。現場將簽署手機租賃合約一式兩份、交付餘款並簽收租賃憑證。",
-        duringStep2Title:"辦理證件與押金",
-        duringStep2Body:"請備妥器材現金押金及本人有效證件正本。確認門號與本人身分後，證件將裝入信封袋，由租借人簽名並裝釘封口。",
-        duringStep3Title:"檢查器材並完成交機",
-        duringStep3Body:"請與現場人員確認主機功能、外觀及所有配件。確認無誤後完成交機與租賃程序。",
-        postTitle:"預約後期｜歸還與退還押金",
-        postStep1Title:"依約歸還設備",
-        postStep1Body:"請於約定歸還日與時間保持聯繫並抵達門市交還設備。現場將檢查主機功能、外觀及配件是否完整。",
-        postStep2Title:"確認設備歸還",
-        postStep2Body:"設備檢查無問題後，雙方簽署確認歸還的手機租賃合約，完成歸還程序。",
-        postStep3Title:"現場確認押金與證件",
-        postStep3Body:"客服歸還屬名裝釘信封袋；租借人現場拆封確認現金押金與證件無誤後，即完成本次租賃流程。",
-        noticeTitle:"注意事項",
-        notice1:"請務必依約定時間交還設備，以避免產生逾時費用。",
-        notice2:"非門市交還機之租借，須依價目表／客服確認的免證件押金金額支付後，才會安排寄送。",
-        notice3:"租借期間請保持電話及 LINE 暢通；如有任何問題請即時與客服聯繫，以確保流程順利進行。",
-        footer:"最終設備庫存、租金、定金、押金、取還時間與寄送安排，均以 LINE 客服確認內容為準。"
-      },
-      en: {
-        subtitle:"Equipment Rental Process",
-        intro:"A complete guide from checking availability and confirming your booking to in-store handover and return. Final device availability, pricing, and pickup/return times are subject to LINE customer-service confirmation.",
-        preTitle:"BEFORE BOOKING｜INQUIRY & CONFIRMATION",
-        preStep1Title:"Open the rental booking page",
-        preStep1Body:"Tap Rental Booking in the rich menu below, or open the booking link. Select the device and estimated pickup/return times to check availability. For high-demand dates, you can inquire first without entering your name or phone number.",
-        bookingLink:"Rental booking / Check availability",
-        preStep2Title:"Confirm availability and quotation",
-        preStep2Body:"After customer service confirms the date, device availability, and handover arrangement, a quotation will be issued. Please pay the booking deposit from an account under the renter's name as instructed.",
-        preStep3Title:"Complete the reservation",
-        preStep3Body:"After payment is verified, customer service will send a rental voucher. Receipt of the voucher confirms the booking. For popular dates, confirmation follows customer-service approval and payment completion time.",
-        duringTitle:"AT PICKUP｜IN-STORE HANDOVER",
-        duringStep1Title:"Arrive at the store at the agreed time",
-        duringStep1Body:"Please arrive at the agreed pickup time and allow approximately 5–10 minutes for handover. You will sign two copies of the mobile-device rental agreement, pay the remaining balance, and acknowledge the rental voucher.",
-        duringStep2Title:"Complete ID and deposit procedure",
-        duringStep2Body:"Prepare the required cash security deposit and your original valid ID. After your phone number and identity are confirmed, the ID will be placed in an envelope, signed by the renter, and sealed.",
-        duringStep3Title:"Inspect equipment and complete handover",
-        duringStep3Body:"Please check the device functions, condition, and all accessories with staff. The rental begins after both parties confirm the handover is complete.",
-        postTitle:"AT RETURN｜INSPECTION & DEPOSIT RETURN",
-        postStep1Title:"Return the equipment as agreed",
-        postStep1Body:"Stay reachable and return to the store on the agreed date and time. Staff will inspect device functions, condition, and whether all accessories are present.",
-        postStep2Title:"Confirm the equipment return",
-        postStep2Body:"After the equipment passes inspection, both parties sign the return confirmation on the rental agreement to complete the return procedure.",
-        postStep3Title:"Verify the deposit and ID in person",
-        postStep3Body:"Customer service returns the sealed envelope under the renter's name. The renter opens it on site to confirm that the cash deposit and ID are correct, completing the rental process.",
-        noticeTitle:"IMPORTANT NOTES",
-        notice1:"Please return equipment on time to avoid late-return charges.",
-        notice2:"For rentals that are not picked up and returned at the store, delivery is arranged only after the no-ID deposit amount confirmed in the price list or by customer service has been paid.",
-        notice3:"Please remain reachable by phone and LINE throughout the rental. Contact customer service promptly if any issue arises to ensure a smooth rental process.",
-        footer:"Final device availability, rental fees, booking deposit, security deposit, pickup/return time, and delivery arrangements are subject to LINE customer-service confirmation."
-      }
-    };
-
-    function chooseInitialLanguage() {
-      const saved = localStorage.getItem("fir-process-language");
-      if (saved === "zh" || saved === "en") return saved;
-      return (navigator.language || "zh").toLowerCase().startsWith("zh") ? "zh" : "en";
-    }
-
-    function applyLanguage(language) {
-      currentLang = language;
-      document.documentElement.lang = language === "zh" ? "zh-TW" : "en";
-      document.getElementById("languageButton").textContent = language === "zh" ? "English" : "繁體中文";
-      document.querySelectorAll("[data-i18n]").forEach((element) => {
-        const key = element.dataset.i18n;
-        if (copy[language][key]) element.innerHTML = copy[language][key];
-      });
-    }
-
-    function toggleLanguage() {
-      const next = currentLang === "zh" ? "en" : "zh";
-      localStorage.setItem("fir-process-language", next);
-      applyLanguage(next);
-    }
-
-    document.addEventListener("DOMContentLoaded", () => applyLanguage(chooseInitialLanguage()));
-  </script>
+<main class="wrap">
+  <div class="utility-bar">
+    <button class="lang-pill-btn" id="languageButton" onclick="toggleLanguage()">EN</button>
+    <button class="theme-morph-btn" onclick="toggleTheme()" aria-label="切換深淺色">
+      <svg class="sun-moon-svg" viewBox="0 0 24 24" width="18" height="18"><defs><mask id="moon-morph-mask"><rect x="0" y="0" width="100%" height="100%" fill="white"/><circle class="mask-cutout" cx="17" cy="7" r="7" fill="black"/></mask></defs><circle class="sun-core" cx="12" cy="12" r="5" fill="currentColor" mask="url(#moon-morph-mask)"/><g class="sun-rays" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.07" y2="4.93"/></g></svg>
+    </button>
+  </div>
+  <header class="header">
+    <div class="subtitle" data-i18n="subtitle">器材租借流程 ｜ RENTAL PROCESS</div>
+    <div class="store" data-i18n="store">交機門市｜FiX iT RiGHT 台北市大安區光復南路88號1樓<br>時間 12:00–20:00｜熱門檔期依現場狀況彈性延長</div>
+    <div class="intro" data-i18n="intro">從 LINE 詢問、收到報價、門市取機到歸還的完整流程。完成預約即代表同意本店各項租賃條款；實際設備、金額與取還時間，以 LINE 客服確認內容為準。</div>
+  </header>
+  <nav class="tabs"><a class="tab" href="./order/" data-i18n="tabPrice">價目與檔期</a><a class="tab active" href="./rental_process.html" data-i18n="tabProcess">租借流程</a><a class="tab" href="./faq.html" data-i18n="tabFaq">常見問題</a></nav>
+  <div class="section-title" data-i18n="howTitle">如何預約</div>
+  <section class="card"><div class="step-body" data-i18n="howBody" style="margin-top:0">不用填表單，直接在官方 LINE 傳訊息即可：<div class="example">11/21-23 想租 x300 Ultra＋400mm</div>客服會依序補問需要的資料：<span class="chip">姓名</span><span class="chip">電話</span><span class="chip">取機時間</span><span class="chip">門市自取／7-11 寄送</span><span class="chip">雲端備份</span>，已提供的資料不會重複詢問。</div>
+    <a class="link-button" href="https://lin.ee/TwxMlwcZ" data-i18n="lineButton">加入官方 LINE 開始詢問</a>
+    <a class="link-button secondary" href="https://liff.line.me/2011411630-pdbfMEEs" data-i18n="priceButton">先看價目表與檔期</a></section>
+  <div class="section-title" data-i18n="preTitle">1. 預約</div><section class="card"><div class="step"><div class="step-number">1</div><div><div class="step-title" data-i18n="pre1T">確認需求</div><div class="step-body" data-i18n="pre1B">資料齊全後，客服會回覆<strong>【檔期需求已收到】</strong>。</div></div></div><div class="step"><div class="step-number">2</div><div><div class="step-title" data-i18n="pre2T">收到報價</div><div class="step-body" data-i18n="pre2B">確認檔期後，會傳送<strong>【器材租借報價單】</strong>與線上報價單連結。熱門場次若已額滿，可回覆「+1」登記候補，有釋出會優先通知您。</div></div></div><div class="step"><div class="step-number">3</div><div><div class="step-title" data-i18n="pre3T">匯款定金</div><div class="step-body" data-i18n="pre3B">請於報價單規定時間內，以<strong>本人帳戶</strong>匯款定金，並回傳「匯款帳號後五碼」，系統會顯示<strong>【等待對帳中】</strong>。</div></div></div><div class="step"><div class="step-number">4</div><div><div class="step-title" data-i18n="pre4T">預約完成</div><div class="step-body" data-i18n="pre4B">對帳完成後，會傳送<strong>【器材租借預約完成通知】</strong>，收到這則才算預約成功喔！需要改日期或機型，直接在 LINE 告訴我們，會重新確認後更新報價。</div></div></div></section>
+  <div class="section-title" data-i18n="pickTitle">2. 取機</div><section class="card"><div class="step"><div class="step-number">1</div><div><div class="step-title" data-i18n="pick1T">現場簽約</div><div class="step-body" data-i18n="pick1B">請於約定時間抵達門市，以手機簽署電子租賃合約（簽署完成會傳送收執聯），並支付剩餘租金。</div></div></div><div class="step"><div class="step-number">2</div><div><div class="step-title" data-i18n="pick2T">押金與證件</div><div class="step-body" data-i18n="pick2B">現金押金 NT$3,000＋本人證件正本（身分證／健保卡／駕照擇一）。證件現場裝入信封、簽名封存，由出租方妥善保管。</div></div></div><div class="step"><div class="step-number">3</div><div><div class="step-title" data-i18n="pick3T">設備點交</div><div class="step-body" data-i18n="pick3B">現場與您一起檢查手機功能與配件，確認無誤後即可使用。</div></div></div></section>
+  <div class="section-title" data-i18n="retTitle">3. 還機</div><section class="card"><div class="step"><div class="step-number">1</div><div><div class="step-title" data-i18n="ret1T">設備點收</div><div class="step-body" data-i18n="ret1B">請於約定時間回到門市，進行設備與配件檢查。</div></div></div><div class="step"><div class="step-number">2</div><div><div class="step-title" data-i18n="ret2T">驗收完成</div><div class="step-body" data-i18n="ret2B">確認無誤後，會傳送<strong>【器材租借歸還驗收完成通知】</strong>。</div></div></div><div class="step"><div class="step-number">3</div><div><div class="step-title" data-i18n="ret3T">退還押金</div><div class="step-body" data-i18n="ret3B">現場退還您的原封信封（證件）與現金押金，完成租賃流程。</div></div></div></section>
+  <section class="notice"><span class="notice-title" data-i18n="shipTitle">外縣市寄送</span><span data-i18n="shipBody">以 7-11 店到店寄送，免押證件，改以轉帳押金 NT$30,000，歸還驗收後退還；合約以 LINE 連結線上簽署。</span></section>
+  <div class="section-title" data-i18n="feeTitle">費用說明</div>
+  <section class="card"><div class="step-body" data-i18n="feeBody" style="margin-top:0"><ul><li>定金：依報價單金額，可全額抵扣租金；請以本人帳戶匯款。</li><li>尾款：取機時現場支付。</li><li>雲端備份：加購雲端上傳備份 NT$200／次。</li><li>發票：如需開立公司統編發票，報價另加 5%。</li></ul></div></section>
+  <div class="section-title" data-i18n="ruleTitle">重要注意事項</div><section class="card"><div class="step"><div class="step-number">1</div><div><div class="step-title" data-i18n="r1T">當日租還規範</div><div class="step-body" data-i18n="r1B">一日租還方案限 <strong>12:00 至 20:00</strong> 之間完成取機與還機（延長營業時段除外）；超出此時段費用以 2 日計算。熱門演唱會場次以場次計費，取還時間以報價單為準。</div></div></div><div class="step"><div class="step-number">2</div><div><div class="step-title" data-i18n="r2T">計費原則與保留權</div><div class="step-body" data-i18n="r2B">租賃期間以預約保留時段起算。若因個人因素延遲取機（例：原定 1/9 取、1/10 才來），仍依原預約起算日計費，恕無法折抵。報價單送出後，檔期保留至報價單上的付款期限；逾期未付款，檔期將釋出給其他客人。</div></div></div><div class="step"><div class="step-number">3</div><div><div class="step-title" data-i18n="r3T">準時規範</div><div class="step-body" data-i18n="r3B">請務必於約定時間準時取還機。逾時歸還將產生額外租金（逾時費），請體諒下一位客人的權益。</div></div></div><div class="step"><div class="step-number">4</div><div><div class="step-title" data-i18n="r4T">溝通與安全</div><div class="step-body" data-i18n="r4B">租借期間請保持聯繫暢通。設備若有損壞、遺失或零件異動，租借人需負擔相關維修或賠償費用。</div></div></div><div class="step"><div class="step-number">5</div><div><div class="step-title" data-i18n="r5T">增距鏡頭入場規定</div><div class="step-body" data-i18n="r5B">加租增距鏡頭（200mm、400mm）前，請務必自行確認主辦單位最新入場規定是否允許攜帶。定金預約完成後，若因主辦單位禁止攜帶導致鏡頭無法使用，鏡頭加租費用不予退款，但可全額轉為<strong>店內信用額度（效期 12 個月）</strong>，下次租借任何設備時直接折抵。建議加租前，將主辦單位官方公告（允許外接鏡頭的截圖）傳給客服確認。本條款適用於所有演唱會、演出活動等需攜帶設備的場合。</div></div></div><div class="step"><div class="step-number">6</div><div><div class="step-title" data-i18n="r6T">最終權益</div><div class="step-body" data-i18n="r6B">出租人保有最終修改、變更、活動解釋及是否承接訂單之權利。</div></div></div></section>
+  <div class="footer" data-i18n="footer">最終設備、租金、定金、押金、取還時間與寄送安排，均以 LINE 客服確認內容為準。</div>
+</main>
+<script>
+var currentLang="zh";
+var T={"zh": {"subtitle": "器材租借流程 ｜ RENTAL PROCESS", "intro": "從 LINE 詢問、收到報價、門市取機到歸還的完整流程。完成預約即代表同意本店各項租賃條款；實際設備、金額與取還時間，以 LINE 客服確認內容為準。", "howTitle": "如何預約", "howBody": "不用填表單，直接在官方 LINE 傳訊息即可：<div class=\"example\">11/21-23 想租 x300 Ultra＋400mm</div>客服會依序補問需要的資料：<span class=\"chip\">姓名</span><span class=\"chip\">電話</span><span class=\"chip\">取機時間</span><span class=\"chip\">門市自取／7-11 寄送</span><span class=\"chip\">雲端備份</span>，已提供的資料不會重複詢問。", "lineButton": "加入官方 LINE 開始詢問", "priceButton": "先看價目表與檔期", "preTitle": "1. 預約", "pre1T": "確認需求", "pre1B": "資料齊全後，客服會回覆<strong>【檔期需求已收到】</strong>。", "pre2T": "收到報價", "pre2B": "確認檔期後，會傳送<strong>【器材租借報價單】</strong>與線上報價單連結。熱門場次若已額滿，可回覆「+1」登記候補，有釋出會優先通知您。", "pre3T": "匯款定金", "pre3B": "請於報價單規定時間內，以<strong>本人帳戶</strong>匯款定金，並回傳「匯款帳號後五碼」，系統會顯示<strong>【等待對帳中】</strong>。", "pre4T": "預約完成", "pre4B": "對帳完成後，會傳送<strong>【器材租借預約完成通知】</strong>，收到這則才算預約成功喔！需要改日期或機型，直接在 LINE 告訴我們，會重新確認後更新報價。", "pickTitle": "2. 取機", "pick1T": "現場簽約", "pick1B": "請於約定時間抵達門市，以手機簽署電子租賃合約（簽署完成會傳送收執聯），並支付剩餘租金。", "pick2T": "押金與證件", "pick2B": "現金押金 NT$3,000＋本人證件正本（身分證／健保卡／駕照擇一）。證件現場裝入信封、簽名封存，由出租方妥善保管。", "pick3T": "設備點交", "pick3B": "現場與您一起檢查手機功能與配件，確認無誤後即可使用。", "retTitle": "3. 還機", "ret1T": "設備點收", "ret1B": "請於約定時間回到門市，進行設備與配件檢查。", "ret2T": "驗收完成", "ret2B": "確認無誤後，會傳送<strong>【器材租借歸還驗收完成通知】</strong>。", "ret3T": "退還押金", "ret3B": "現場退還您的原封信封（證件）與現金押金，完成租賃流程。", "shipTitle": "外縣市寄送", "shipBody": "以 7-11 店到店寄送，免押證件，改以轉帳押金 NT$30,000，歸還驗收後退還；合約以 LINE 連結線上簽署。", "feeTitle": "費用說明", "feeBody": "<ul><li>定金：依報價單金額，可全額抵扣租金；請以本人帳戶匯款。</li><li>尾款：取機時現場支付。</li><li>雲端備份：加購雲端上傳備份 NT$200／次。</li><li>發票：如需開立公司統編發票，報價另加 5%。</li></ul>", "ruleTitle": "重要注意事項", "r1T": "當日租還規範", "r1B": "一日租還方案限 <strong>12:00 至 20:00</strong> 之間完成取機與還機（延長營業時段除外）；超出此時段費用以 2 日計算。熱門演唱會場次以場次計費，取還時間以報價單為準。", "r2T": "計費原則與保留權", "r2B": "租賃期間以預約保留時段起算。若因個人因素延遲取機（例：原定 1/9 取、1/10 才來），仍依原預約起算日計費，恕無法折抵。報價單送出後，檔期保留至報價單上的付款期限；逾期未付款，檔期將釋出給其他客人。", "r3T": "準時規範", "r3B": "請務必於約定時間準時取還機。逾時歸還將產生額外租金（逾時費），請體諒下一位客人的權益。", "r4T": "溝通與安全", "r4B": "租借期間請保持聯繫暢通。設備若有損壞、遺失或零件異動，租借人需負擔相關維修或賠償費用。", "r5T": "增距鏡頭入場規定", "r5B": "加租增距鏡頭（200mm、400mm）前，請務必自行確認主辦單位最新入場規定是否允許攜帶。定金預約完成後，若因主辦單位禁止攜帶導致鏡頭無法使用，鏡頭加租費用不予退款，但可全額轉為<strong>店內信用額度（效期 12 個月）</strong>，下次租借任何設備時直接折抵。建議加租前，將主辦單位官方公告（允許外接鏡頭的截圖）傳給客服確認。本條款適用於所有演唱會、演出活動等需攜帶設備的場合。", "r6T": "最終權益", "r6B": "出租人保有最終修改、變更、活動解釋及是否承接訂單之權利。", "footer": "最終設備、租金、定金、押金、取還時間與寄送安排，均以 LINE 客服確認內容為準。", "tabPrice": "價目與檔期", "tabProcess": "租借流程", "tabFaq": "常見問題", "store": "交機門市｜FiX iT RiGHT 台北市大安區光復南路88號1樓<br>時間 12:00–20:00｜熱門檔期依現場狀況彈性延長"}, "en": {"subtitle": "RENTAL PROCESS ｜ 器材租借流程", "intro": "The full process from asking on LINE and receiving a quote to pickup and return. Completing a booking means you agree to our rental terms. Final devices, prices and pickup/return times follow LINE customer-service confirmation.", "howTitle": "HOW TO BOOK", "howBody": "No form needed — just message our official LINE account:<div class=\"example\">I’d like an x300 Ultra + 400mm for 11/21–23</div>We will ask for anything missing: <span class=\"chip\">Name</span><span class=\"chip\">Phone</span><span class=\"chip\">Pickup time</span><span class=\"chip\">Store pickup / 7-11 delivery</span><span class=\"chip\">Cloud backup</span>. Details you already gave won’t be asked again.", "lineButton": "Add our LINE account to ask", "priceButton": "See prices & availability first", "preTitle": "1. BOOKING", "pre1T": "Request received", "pre1B": "Once your details are complete, we reply with <strong>【檔期需求已收到】</strong> (request received).", "pre2T": "Quotation", "pre2B": "After checking availability, we send a <strong>rental quotation</strong> with an online link. If a popular date is full, reply “+1” to join the waitlist; we’ll notify you first if a device frees up.", "pre3T": "Pay the deposit", "pre3B": "Transfer the deposit from <strong>your own bank account</strong> before the quotation deadline and reply with the <strong>last five digits</strong> of the account. The system will show <strong>【等待對帳中】</strong> (verifying payment).", "pre4T": "Booking confirmed", "pre4B": "After verification you’ll receive the <strong>booking confirmation</strong> — only then is the booking complete. To change dates or devices, just tell us on LINE and we’ll update the quote.", "pickTitle": "2. PICKUP", "pick1T": "Sign the agreement", "pick1B": "Arrive at the agreed time, sign the electronic rental agreement on your phone (a receipt is sent after signing) and pay the remaining rent.", "pick2T": "Deposit & ID", "pick2B": "Cash deposit NT$3,000 plus one original ID (national ID / NHI card / driver’s license). The ID is sealed in a signed envelope and kept safely by us.", "pick3T": "Equipment check", "pick3B": "We check the phone and accessories together with you before handover.", "retTitle": "3. RETURN", "ret1T": "Inspection", "ret1B": "Return to the store at the agreed time for the device and accessory check.", "ret2T": "Return confirmed", "ret2B": "After inspection you’ll receive the <strong>return confirmation</strong>.", "ret3T": "Deposit returned", "ret3B": "We return your sealed envelope (ID) and cash deposit on the spot.", "shipTitle": "Delivery outside Taipei", "shipBody": "Shipped via 7-11 store-to-store. No ID required; instead a NT$30,000 deposit by bank transfer, refunded after return inspection. The agreement is signed online via a LINE link.", "feeTitle": "FEES", "feeBody": "<ul><li>Deposit: as stated on the quotation, fully deducted from the rent; pay from your own account.</li><li>Balance: paid at pickup.</li><li>Cloud backup: NT$200 per upload.</li><li>Invoice with company tax ID: +5%.</li></ul>", "ruleTitle": "IMPORTANT NOTES", "r1T": "Same-day rental", "r1B": "Same-day plans must be picked up and returned between <strong>12:00 and 20:00</strong> (except extended hours); otherwise 2 days are charged. Popular concert dates are charged per show; pickup/return times follow the quotation.", "r2T": "Billing & holds", "r2B": "Rental starts from the reserved time. Late pickup for personal reasons (e.g., booked 1/9, picked up 1/10) is still charged from the original date. After a quotation is sent, the date is held until its payment deadline; unpaid dates are released to other customers.", "r3T": "Punctuality", "r3B": "Please pick up and return on time. Late returns incur extra rent (late fee) out of respect for the next customer.", "r4T": "Contact & safety", "r4B": "Please stay reachable during the rental. Damage, loss or missing parts are charged to the renter for repair or compensation.", "r5T": "Lens entry rules", "r5B": "Before renting a 200mm or 400mm lens, please check the organizer’s latest entry rules. If a lens cannot be used because the organizer bans it after your booking, the lens fee is not refunded but becomes <strong>store credit valid for 12 months</strong>, usable for any future rental. We recommend sending us the organizer’s official notice before renting. This applies to all concerts and events.", "r6T": "Final rights", "r6B": "We reserve the right to modify, change, interpret and decide whether to accept an order.", "footer": "Final devices, rent, deposit, security deposit, pickup/return times and delivery follow LINE customer-service confirmation.", "tabPrice": "Prices", "tabProcess": "Process", "tabFaq": "FAQ", "store": "Store｜FiX iT RiGHT, 1F, No. 88, Guangfu S. Rd., Da’an Dist., Taipei<br>Hours 12:00–20:00｜Extended on popular event dates"}};
+function applyTheme(t){if(t==="dark")document.documentElement.setAttribute("data-theme","dark");else document.documentElement.removeAttribute("data-theme")}
+function toggleTheme(){var d=document.documentElement.getAttribute("data-theme")==="dark";var n=d?"light":"dark";try{localStorage.setItem("fir-theme",n)}catch(e){}applyTheme(n)}
+(function(){var s=null;try{s=localStorage.getItem("fir-theme")}catch(e){}applyTheme(s||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"))})();
+function chooseLanguage(){var p=new URLSearchParams(location.search).get("lang");if(p==="zh"||p==="en")return p;var s=null;try{s=localStorage.getItem("fir-language")}catch(e){}if(s==="zh"||s==="en")return s;return"zh"}
+function applyLanguage(l){currentLang=l;document.documentElement.lang=l==="zh"?"zh-TW":"en";document.getElementById("languageButton").textContent=l==="zh"?"EN":"中文";document.querySelectorAll("[data-i18n]").forEach(function(el){var k=el.dataset.i18n;if(T[l][k])el.innerHTML=T[l][k]})}
+function toggleLanguage(){var n=currentLang==="zh"?"en":"zh";try{localStorage.setItem("fir-language",n)}catch(e){}applyLanguage(n)}
+document.addEventListener("DOMContentLoaded",function(){applyLanguage(chooseLanguage())});
+</script>
 </body>
 </html>
