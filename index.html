@@ -822,7 +822,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
   </section>
 
   <div style="margin-top:16px;margin-bottom:20px;text-align:center">
-    <a href="https://ssystem089.github.io/rental-form/faq.html" target="_blank" rel="noopener noreferrer" id="faqLink" style="display:inline-block;width:100%;padding:11px;border-radius:6px;background:var(--panel-bg);border:1px solid var(--border-color);color:var(--accent-blue);text-decoration:none;font-size:12px;font-weight:700;">
+    <a href="https://ssystem089.com/concert-phone-rental/#faq" target="_blank" rel="noopener noreferrer" id="faqLink" style="display:inline-block;width:100%;padding:11px;border-radius:6px;background:var(--panel-bg);border:1px solid var(--border-color);color:var(--accent-blue);text-decoration:none;font-size:12px;font-weight:700;">
       常見問題 Q&A >
     </a>
   </div>
@@ -1037,7 +1037,7 @@ function updateCalendarWeekdays(lang) {
 
 function setLanguage(lang) {
   currentLang = lang;
-  try { if (!IS_FIR) document.getElementById("faqLink").href = lang === "en" ? "https://ssystem089.com/en/#faq" : "https://ssystem089.com/concert-phone-rental/#faq"; } catch(e){}
+  try { document.getElementById("faqLink").href = IS_FIR ? "https://ssystem089.github.io/rental-form/faq.html" : (lang === "en" ? "https://ssystem089.com/en/#faq" : "https://ssystem089.com/concert-phone-rental/#faq"); } catch(e){}
   try { localStorage.setItem("fir-language", lang); } catch(e){}
 
   const btn = document.getElementById("btn-lang-toggle");
@@ -1749,7 +1749,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 官網銜接（2026-10-24）：SSystem 常見問題連官網；FIR 維持原本 FAQ
   try {
-    if (!IS_FIR) document.getElementById("faqLink").href = currentLang === "en" ? "https://ssystem089.com/en/#faq" : "https://ssystem089.com/concert-phone-rental/#faq";
+    document.getElementById("faqLink").href = IS_FIR ? "https://ssystem089.github.io/rental-form/faq.html" : (currentLang === "en" ? "https://ssystem089.com/en/#faq" : "https://ssystem089.com/concert-phone-rental/#faq");
   } catch(e){}
 
   // 舊版草稿的正式預約階段不再展開第二份表單。
