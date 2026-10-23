@@ -853,17 +853,25 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
 
 <script>
 // 送出詢問的官方帳號：預設 SSystem（@387wfayl）；FIR 圖文選單連結加 ?oa=fir → FIR（@923wiilr）。2026-10-19
-const OA_PARAM = (function(){ try { const q = new URLSearchParams(location.search); const st = q.get("liff.state") || ""; return (q.get("oa") || (new URLSearchParams(st.split("?")[1] || "")).get("oa") || "").toLowerCase(); } catch(e) { return ""; } })();
-const IS_FIR = OA_PARAM === "fir";
-function URLP(k){
+// 2026-10-24：參數統一解析（網址 query ＋ LIFF 的 liff.state，有無 ? 都可）。本次入口帶了任何參數就整組覆寫 sessionStorage 快取，
+// 沒帶才讀快取（LIFF 初始化改網址後仍拿得到；上一個入口的 src=rm 不會殘留到新入口）。
+const URL_KEYS = ["oa", "lang", "model", "src"];
+const URLP_ALL = (function(){
+  const out = {};
   try {
     const q = new URLSearchParams(location.search); const st = q.get("liff.state") || "";
     const stQuery = st.includes("?") ? st.slice(st.indexOf("?") + 1) : st.replace(/^\//, "");
-    const v = q.get(k) || (new URLSearchParams(stQuery)).get(k) || "";
-    if (v) { try { sessionStorage.setItem("urlp_" + k, v); } catch(_) {} return v; }
-    try { return sessionStorage.getItem("urlp_" + k) || ""; } catch(_) { return ""; }
-  } catch(_) { return ""; }
-}
+    const sq = new URLSearchParams(stQuery);
+    URL_KEYS.forEach(k => { out[k] = q.get(k) || sq.get(k) || ""; });
+    const hasAny = URL_KEYS.some(k => out[k]);
+    if (hasAny) { try { sessionStorage.setItem("urlp_all", JSON.stringify(out)); } catch(_) {} }
+    else { try { const c = JSON.parse(sessionStorage.getItem("urlp_all") || "null"); if (c) URL_KEYS.forEach(k => { out[k] = c[k] || ""; }); } catch(_) {} }
+  } catch(_) {}
+  return out;
+})();
+function URLP(k){ return (URLP_ALL[k] || ""); }
+const OA_PARAM = (URLP("oa") || "").toLowerCase();
+const IS_FIR = OA_PARAM === "fir";
 // 2026-10-24：從官網連過來（帶 lang／model／src=web）時，LIFF 內不能確定開在哪個聊天室，一律改開官方帳號聊天室；
 // 圖文選單連結加上 ?src=rm 代表確定在官方帳號聊天室內，可直接 sendMessages。TRUST_BARE：舊版圖文選單沒帶 src 時暫時視為可信（改好圖文選單後改成 false）。
 const SRC_PARAM = URLP("src");
@@ -1535,7 +1543,8 @@ function renderSaved(){
       localStorage.removeItem("fir-stage");
     } catch(e){}
     box.classList.remove("show");
-    calStartDate = ""; calEndDate = ""; syncCalendarToHiddenInputs(); renderCalendar();
+    calStartDate = ""; calEndDate = ""; syncCalendarToHiddenInputs();
+    const mdl = document.getElementById("model"); mdl.selectedIndex = 0; updateLens(false); updateNote(); renderCalendar();
     showToast(currentLang === "zh" ? "已清除暫存資料" : "Draft cleared");
   };
 }
@@ -1622,6 +1631,7 @@ async function init(){
   try{
     await liff.init({ liffId: LIFF_ID });
     liffReady = true;
+    try { if (location.search) history.replaceState(null, "", location.pathname); } catch(_) {}
     document.getElementById("liffStatus").classList.remove("show");
   } catch(e){
     console.warn("外部瀏覽器連線 LIFF:", e);
@@ -1666,7 +1676,7 @@ async function send(m, b, k){
       console.error(e);
       // LIFF 傳送失敗（例如不是在 SSystem 聊天室開啟）：改開官方帳號聊天室並帶入內容
       try { await navigator.clipboard.writeText(m); } catch(err){}
-      window.location.href = `https://line.me/R/oaMessage/${LINE_OA_ID.replace("@", "%40")}/?${encodeURIComponent(m)}`;
+      openLineWithFallback(m);
     } finally {
       setTimeout(() => {
         b.disabled = false;
@@ -1690,7 +1700,13 @@ async function send(m, b, k){
 // 開官方帳號聊天室；1.5 秒後若畫面還在（LINE 沒打開、被內建瀏覽器擋住），自動打開備援視窗（2026-10-24）
 function openLineWithFallback(m){
   const url = `https://line.me/R/oaMessage/${LINE_OA_ID.replace("@", "%40")}/?${encodeURIComponent(m)}`;
-  setTimeout(() => { if (document.visibilityState === "visible") fallback(m); }, 1500);
+  const inLiff = liffReady && liff.isInClient();
+  if (inLiff) {
+    // LINE 內一定能開自己的聊天室：開完把 LIFF 視窗關掉，客人直接看到帶入的訊息
+    setTimeout(() => { try { liff.closeWindow(); } catch(_) {} }, 1200);
+  } else {
+    setTimeout(() => { if (document.visibilityState === "visible") fallback(m); }, 1500);
+  }
   window.location.href = url;
 }
 
