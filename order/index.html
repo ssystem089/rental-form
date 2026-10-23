@@ -129,6 +129,15 @@ body {
 [data-theme="dark"] .mask-cutout { transform: translate(0, 0); }
 [data-theme="dark"] .sun-rays { transform: rotate(90deg) scale(0.2); opacity: 0; }
 
+/* 電腦版備援：LINE 連結＋QR（2026-10-24） */
+.fb-line { display:flex; gap:14px; align-items:center; margin:12px 0; padding:12px; border:1px solid var(--border-color); border-radius:8px; background:var(--panel-bg); }
+.fb-qr { flex:none; width:168px; height:168px; background:#fff; border-radius:6px; padding:4px; }
+.fb-qr svg { width:100%; height:100%; display:block; }
+.fb-line-text { display:flex; flex-direction:column; gap:4px; font-size:13px; color:var(--text-muted); }
+.fb-line-text strong { color:var(--text-main); font-size:14px; }
+.fb-id b { color:var(--text-main); }
+.fb-open { margin-top:4px; display:inline-block; padding:8px 12px; border-radius:6px; background:#04963f; color:#fff; font-weight:700; text-decoration:none; text-align:center; }
+
 /* 頂部商標與門市資訊 */
 .header { padding-bottom: 14px; border-bottom: 2px solid var(--border-dark); margin-bottom: 16px; }
 .header .subtitle:first-child { margin-top: 0; font-size: 20px; font-weight: 800; color: var(--text-main); letter-spacing: 0.3px; }
@@ -581,7 +590,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
 
   <header class="header">
     <div class="subtitle" id="subtitle">器材租賃價目與檔期詢問 ｜ EQUIPMENT RENTAL</div>
-    <div class="store" id="store">交機門市｜FiX iT RiGHT 台北市大安區光復南路88號1樓<br>時間 12:00–20:00｜熱門檔期依現場狀況彈性延長</div>
+    <div class="store" id="store">取還機指定地點｜台北市大安區光復南路88號1樓<br>時間 週一至週六 12:00–20:00｜額外取還日以 LINE 確認為準</div>
   </header>
 
   <!-- 預約 4 步驟進度引導 -->
@@ -813,7 +822,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
   </section>
 
   <div style="margin-top:16px;margin-bottom:20px;text-align:center">
-    <a href="https://www.24932067.xyz/faq.html" target="_blank" rel="noopener noreferrer" id="faqLink" style="display:inline-block;width:100%;padding:11px;border-radius:6px;background:var(--panel-bg);border:1px solid var(--border-color);color:var(--accent-blue);text-decoration:none;font-size:12px;font-weight:700;">
+    <a href="https://ssystem089.com/concert-phone-rental/#faq" target="_blank" rel="noopener noreferrer" id="faqLink" style="display:inline-block;width:100%;padding:11px;border-radius:6px;background:var(--panel-bg);border:1px solid var(--border-color);color:var(--accent-blue);text-decoration:none;font-size:12px;font-weight:700;">
       常見問題 Q&A >
     </a>
   </div>
@@ -823,6 +832,15 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
   <h2 id="fallbackTitle">設備詢問內容</h2>
   <p id="fallbackGuide">請複製設備與日期，貼至官方 LINE 聊天室送出；姓名電話直接在聊天室補充即可。</p>
   <textarea id="fallbackText" readonly></textarea>
+  <div class="fb-line">
+    <div id="fbQr" class="fb-qr" aria-hidden="true"></div>
+    <div class="fb-line-text">
+      <strong id="fbQrTitle">用手機掃描 QR Code</strong>
+      <span id="fbQrDesc">會打開 LINE 官方帳號，詢問內容已自動帶入，按傳送即可。</span>
+      <span class="fb-id">LINE ID：<b id="fbOaId"></b></span>
+      <a id="fbOpenLine" class="fb-open" target="_blank" rel="noopener">在這台電腦開啟 LINE</a>
+    </div>
+  </div>
   <div class="sheet-buttons">
     <button class="secondary" type="button" id="backButton">返回修改表單</button>
     <button class="btn-submit" type="button" id="copyButton">一鍵複製內容</button>
@@ -836,6 +854,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
 // 送出詢問的官方帳號：預設 SSystem（@387wfayl）；FIR 圖文選單連結加 ?oa=fir → FIR（@923wiilr）。2026-10-19
 const OA_PARAM = (function(){ try { const q = new URLSearchParams(location.search); const st = q.get("liff.state") || ""; return (q.get("oa") || (new URLSearchParams(st.split("?")[1] || "")).get("oa") || "").toLowerCase(); } catch(e) { return ""; } })();
 const IS_FIR = OA_PARAM === "fir";
+function URLP(k){ try { const q = new URLSearchParams(location.search); const st = q.get("liff.state") || ""; return q.get(k) || (new URLSearchParams(st.split("?")[1] || "")).get(k) || ""; } catch(_) { return ""; } }
 const LINE_OA_ID = IS_FIR ? "@923wiilr" : "@387wfayl";
 const LIFF_ID = "2011411630-pdbfMEEs";
 const STORAGE_KEY = "fir-rental-draft-v5";
@@ -857,7 +876,7 @@ function getTodayStr(){
 
 const zh = {
   subtitle: "器材租賃價目與檔期詢問 ｜ EQUIPMENT RENTAL",
-  store: "交機門市｜FiX iT RiGHT 台北市大安區光復南路88號1樓<br>時間 12:00–20:00｜熱門檔期依現場狀況彈性延長",
+  store: IS_FIR ? "交機門市｜FiX iT RiGHT 台北市大安區光復南路88號1樓<br>時間 12:00–20:00｜熱門檔期依現場狀況彈性延長" : "取還機指定地點｜台北市大安區光復南路88號1樓<br>時間 週一至週六 12:00–20:00｜額外取還日以 LINE 確認為準",
   priceTitle: "租借價目表 ｜ 24H 彈性制（點選器材快速帶入）",
   days: "/ 1–2日",
   step1Text: "價目與選機",
@@ -936,14 +955,14 @@ const zh = {
   back: "返回修改表單",
   copy: "一鍵複製內容",
   copied: "設備與檔期詢問已複製至剪貼簿",
-  alertYellow: "🟡 <b>熱門檔期提醒</b>：建議儘早送出詢問，設備與檔期由專員確認。",
-  alertRed: "🔴 <b>檔期席次熱門</b>：可先送出詢問，由客服協助確認候補方式。"
+  alertYellow: "<b>熱門檔期提醒</b>：建議儘早送出詢問，設備與檔期由專員確認。",
+  alertRed: "<b>檔期席次熱門</b>：可先送出詢問，由客服協助確認候補方式。"
 };
 
 const en = {
   ...zh,
   subtitle: "Equipment Rental & Reservation System ｜ COMMERCIAL",
-  store: "Pickup Store｜FiX iT RiGHT No. 88, Guangfu S. Rd., Da'an Dist., Taipei<br>Hours: 12:00–20:00｜Extended hours may apply on peak days",
+  store: IS_FIR ? "Pickup Store｜FiX iT RiGHT No. 88, Guangfu S. Rd., Da'an Dist., Taipei<br>Hours: 12:00–20:00｜Extended hours may apply on peak days" : "Pickup location｜1F, No. 88, Guangfu S. Rd., Da'an Dist., Taipei<br>Hours: Mon–Sat 12:00–20:00｜Other days as confirmed on LINE",
   priceTitle: "RENTAL RATES & SPECIFICATIONS ｜ 24H FLEXIBLE PLAN",
   days: "/ 1–2 days",
   step1Text: "Prices & Equipment",
@@ -989,8 +1008,8 @@ const en = {
   back: "Back to Form",
   copy: "Copy Message",
   copied: "Reservation details copied to clipboard",
-  alertYellow: "🟡 <b>Limited Availability</b>: Inventory is tight for this period. Booking early is recommended.",
-  alertRed: "🔴 <b>High Demand</b>: Slot is near capacity. Submission will be queued for waitlist confirmation."
+  alertYellow: "<b>Limited Availability</b>: Inventory is tight for this period. Booking early is recommended.",
+  alertRed: "<b>High Demand</b>: Slot is near capacity. Submission will be queued for waitlist confirmation."
 };
 
 function S(){ return currentLang === "zh" ? zh : en; }
@@ -1018,6 +1037,7 @@ function updateCalendarWeekdays(lang) {
 
 function setLanguage(lang) {
   currentLang = lang;
+  try { document.getElementById("faqLink").href = IS_FIR ? "https://www.24932067.xyz/faq.html" : (lang === "en" ? "https://ssystem089.com/en/#faq" : "https://ssystem089.com/concert-phone-rental/#faq"); } catch(e){}
   try { localStorage.setItem("fir-language", lang); } catch(e){}
 
   const btn = document.getElementById("btn-lang-toggle");
@@ -1582,6 +1602,15 @@ async function init(){
 async function send(m, b, k){
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
+  let ctxType = "";
+  try { ctxType = (liffReady && liff.getContext && (liff.getContext() || {}).type) || ""; } catch(_) {}
+  if(liffReady && liff.isInClient() && (ctxType === "group" || ctxType === "room")){
+    // 2026-10-24：從群組或多人聊天室開啟時，sendMessages 會送到那個聊天室；改開官方帳號聊天室並帶入內容
+    try { await navigator.clipboard.writeText(m); } catch(err){}
+    window.location.href = `https://line.me/R/oaMessage/${LINE_OA_ID.replace("@", "%40")}/?${encodeURIComponent(m)}`;
+    return;
+  }
+
   if(liffReady && liff.isInClient()){
     b.disabled = true;
     b.textContent = S().sending;
@@ -1625,7 +1654,28 @@ function fallback(m){
   document.getElementById("copyButton").textContent = S().copy;
   document.getElementById("fallbackText").value = m;
   document.getElementById("fallbackSheet").classList.add("show");
+  // 2026-10-24：電腦版加 LINE 連結與 QR Code（手機掃描後內容自動帶入）
+  const oaUrl = `https://line.me/R/oaMessage/${LINE_OA_ID.replace("@", "%40")}/?${encodeURIComponent(m)}`;
+  const en = currentLang === "en";
+  document.getElementById("fbOaId").textContent = LINE_OA_ID;
+  document.getElementById("fbQrTitle").textContent = en ? "Scan with your phone" : "用手機掃描 QR Code";
+  document.getElementById("fbQrDesc").textContent = en ? "Opens our LINE account with your inquiry filled in. Just tap send." : "會打開 LINE 官方帳號，詢問內容已自動帶入，按傳送即可。";
+  const op = document.getElementById("fbOpenLine"); op.href = oaUrl; op.textContent = en ? "Open LINE on this computer" : "在這台電腦開啟 LINE";
+  drawQr(oaUrl);
   copyFallback();
+}
+
+function drawQr(url){
+  const box = document.getElementById("fbQr");
+  const render = () => {
+    try { const q = qrcode(0, "L"); q.addData(url, "Byte"); q.make(); box.innerHTML = q.createSvgTag({ cellSize: 3, margin: 2, scalable: true }); }
+    catch(e){ box.innerHTML = ""; box.style.display = "none"; }
+  };
+  if (window.qrcode) return render();
+  const sc = document.createElement("script");
+  sc.src = "https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js";
+  sc.onload = render; sc.onerror = () => { box.style.display = "none"; };
+  document.head.appendChild(sc);
 }
 
 function closeFallback(){ document.getElementById("fallbackSheet").classList.remove("show"); }
@@ -1683,7 +1733,7 @@ document.addEventListener("DOMContentLoaded", () => {
   restore();
   
   const urlParams = new URLSearchParams(window.location.search);
-  const paramLang = urlParams.get("lang");
+  const paramLang = urlParams.get("lang") || URLP("lang");
   let savedLang = null;
   try { savedLang = localStorage.getItem("fir-language"); } catch(e){}
 
@@ -1697,6 +1747,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setupPriceRowInteractions();
 
+  // 官網銜接（2026-10-24）：SSystem 常見問題連官網；FIR 維持原本 FAQ
+  try {
+    document.getElementById("faqLink").href = IS_FIR ? "https://www.24932067.xyz/faq.html" : (currentLang === "en" ? "https://ssystem089.com/en/#faq" : "https://ssystem089.com/concert-phone-rental/#faq");
+  } catch(e){}
+
   // 舊版草稿的正式預約階段不再展開第二份表單。
   try { localStorage.removeItem("fir-stage"); } catch(e){}
 
@@ -1706,6 +1761,14 @@ document.addEventListener("DOMContentLoaded", () => {
       save();
   };
   document.getElementById("lens").onchange = () => { checkLensTip(); save(); };
+
+  // 從官網點「查看價目與檔期」帶 ?model= 時，先幫客人選好機型（2026-10-24）
+  try {
+    const MODEL_KEYS = { x300u:"vivo x300 Ultra", x500pm:"vivo x500 Pro Max", x200u:"vivo x200 Ultra", x300p:"vivo x300 Pro", x9u:"OPPO Find X9 Ultra", ip17pm:"iPhone 17 Pro Max" };
+    const mk = MODEL_KEYS[URLP("model")];
+    const sel = document.getElementById("model");
+    if (mk && [...sel.options].some(o => o.value === mk)) { sel.value = mk; updateLens(false); updateNote(); save(); }
+  } catch(e){}
   
   document.getElementById("inquiryButton").onclick = inquiry;
   document.getElementById("backButton").onclick = closeFallback;
