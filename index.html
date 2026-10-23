@@ -707,11 +707,11 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
         <div class="price-main">NT$ 200<small id="perUse">/ 次</small></div>
       </div>
       <div class="product-desc" id="cloudDesc">拍畢免自行導出傳檔，原畫質雲端載點 ｜ 檔案安全保留 14 天</div>
-      <div class="product-deposit" id="depCloud">門市代為原畫質雲端上傳備份</div>
+      <div class="product-deposit" id="depCloud">歸還後代為原畫質雲端上傳備份</div>
     </div>
 
     <div class="notice-box" style="margin-top:12px;" id="depositRuleTip">
-      <strong>押金規範：</strong>主機設備與增距鏡配件合租時，以手機押金規範為主（超商寄送 NT$ 30,000 / 門市點交 NT$ 3,000 + 證件正本），不重複累計增距鏡押金。
+      <strong>押金規範：</strong>主機設備與增距鏡配件合租時，以手機押金規範為主（超商寄送 NT$ 30,000 / 現場點交 NT$ 3,000 + 證件正本），不重複累計增距鏡押金。
     </div>
   </section>
 
@@ -719,6 +719,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
   <div class="section-title" id="formTitle">選擇設備與租借日期</div>
   <section class="card" id="formSectionStep1">
     <div id="liffStatus" class="status"></div>
+    <noscript><p style="padding:10px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:13px;">這個頁面需要 JavaScript 才能選日期。也可以直接到 LINE 官方帳號詢問：<a href="https://line.me/R/ti/p/@387wfayl">@387wfayl</a></p></noscript>
     
     <!-- 已暫存規格 -->
     <div id="savedSelection" class="saved-box"></div>
@@ -854,7 +855,21 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
 // 送出詢問的官方帳號：預設 SSystem（@387wfayl）；FIR 圖文選單連結加 ?oa=fir → FIR（@923wiilr）。2026-10-19
 const OA_PARAM = (function(){ try { const q = new URLSearchParams(location.search); const st = q.get("liff.state") || ""; return (q.get("oa") || (new URLSearchParams(st.split("?")[1] || "")).get("oa") || "").toLowerCase(); } catch(e) { return ""; } })();
 const IS_FIR = OA_PARAM === "fir";
-function URLP(k){ try { const q = new URLSearchParams(location.search); const st = q.get("liff.state") || ""; return q.get(k) || (new URLSearchParams(st.split("?")[1] || "")).get(k) || ""; } catch(_) { return ""; } }
+function URLP(k){
+  try {
+    const q = new URLSearchParams(location.search); const st = q.get("liff.state") || "";
+    const stQuery = st.includes("?") ? st.slice(st.indexOf("?") + 1) : st.replace(/^\//, "");
+    const v = q.get(k) || (new URLSearchParams(stQuery)).get(k) || "";
+    if (v) { try { sessionStorage.setItem("urlp_" + k, v); } catch(_) {} return v; }
+    try { return sessionStorage.getItem("urlp_" + k) || ""; } catch(_) { return ""; }
+  } catch(_) { return ""; }
+}
+// 2026-10-24：從官網連過來（帶 lang／model／src=web）時，LIFF 內不能確定開在哪個聊天室，一律改開官方帳號聊天室；
+// 圖文選單連結加上 ?src=rm 代表確定在官方帳號聊天室內，可直接 sendMessages。TRUST_BARE：舊版圖文選單沒帶 src 時暫時視為可信（改好圖文選單後改成 false）。
+const SRC_PARAM = URLP("src");
+const FROM_WEB = SRC_PARAM === "web" || !!URLP("model") || !!URLP("lang");
+const TRUST_BARE = true;
+function trustedChat(){ return SRC_PARAM === "rm" || (TRUST_BARE && !FROM_WEB); }
 const LINE_OA_ID = IS_FIR ? "@923wiilr" : "@387wfayl";
 const LIFF_ID = "2011411630-pdbfMEEs";
 const STORAGE_KEY = "fir-rental-draft-v5";
@@ -907,9 +922,9 @@ const zh = {
   lensDesc: `含專用手機外殼及配件組 ｜<br>200mm（NT$ 300／日）：清晰寫實；<br>400mm（NT$ 600／日）：旗艦級超長焦，穿透防護網效果顯著。`,
   cloudTitle: "雲端原畫質備份服務",
   cloudDesc: "拍畢免自行導出傳檔，原畫質雲端載點 ｜ 檔案安全保留 14 天",
-  depCloudText: "門市代為原畫質雲端上傳備份",
+  depCloudText: IS_FIR ? "門市代為原畫質雲端上傳備份" : "歸還後代為原畫質雲端上傳備份",
   perUse: "/ 次",
-  depositRuleTip: "<strong>押金規範：</strong>主機設備與增距鏡配件合租時，以手機押金規範為主（超商寄送 NT$ 30,000 / 門市點交 NT$ 3,000 + 證件正本），不重複累計增距鏡押金。",
+  depositRuleTip: "<strong>押金規範：</strong>主機設備與增距鏡配件合租時，以手機押金規範為主（超商寄送 NT$ 30,000 / " + (IS_FIR ? "門市點交" : "現場點交") + " NT$ 3,000 + 證件正本），不重複累計增距鏡押金。",
 
   formTitle: "選擇設備與租借日期",
   modelLabel: "租借設備機型",
@@ -942,6 +957,7 @@ const zh = {
   savedText: "已保留上次選擇的設備與日期。",
   clear: "清除暫存",
   dates: "請點選月曆選擇預計租賃起訖日期",
+  needReturn: "請再點選月曆上的歸還日期（當天歸還請再點同一天）",
   pastDate: "取機日期不可選擇過去日期",
   badDate: "歸還日期不可早於取機日期",
   contact: "正式預約請填寫承租人法定姓名",
@@ -993,9 +1009,9 @@ const en = {
   lensDesc: `Includes custom phone case & accessories ｜<br>200mm (NT$ 300/day): Clear and natural;<br>400mm (NT$ 600/day): Flagship super-telephoto, net-masking penetration.`,
   cloudTitle: "Original Quality Cloud Backup Service",
   cloudDesc: "Direct high-speed download without file export ｜ Files retained 14 days",
-  depCloudText: "In-store original quality cloud upload service",
+  depCloudText: IS_FIR ? "In-store original quality cloud upload service" : "Original quality cloud upload after return",
   perUse: "/ event",
-  depositRuleTip: "<strong>Deposit Notice:</strong> When renting a phone and an extender together, the phone deposit policy applies (Delivery: NT$ 30,000 / In-store: NT$ 3,000 + ID). Extender deposit is not stacked.",
+  depositRuleTip: "<strong>Deposit Notice:</strong> When renting a phone and an extender together, the phone deposit policy applies (Delivery: NT$ 30,000 / " + (IS_FIR ? "In-store" : "In-person pickup") + ": NT$ 3,000 + ID). Extender deposit is not stacked.",
 
   formTitle: "STEP 1. Equipment Specifications & Rental Schedule",
   modelLabel: "Rental Device Model",
@@ -1003,6 +1019,30 @@ const en = {
   inquiryButton: "Send Equipment & Date Inquiry",
   inquiryNotice: "Continue in LINE after sending. Provide your name, phone and pickup or delivery details in chat; no second form is needed. Availability and pricing require staff confirmation.",
   faqLinkText: "View Rental FAQ & Help Center >",
+  noLens: "No telephoto extender",
+  lens200: "Add G2 200mm extender (+NT$ 300/day)",
+  lens400: "Add G2 Ultra 400mm extender (+NT$ 600/day)",
+  rent200_x300u: "G2 200mm + x300 Ultra case kit",
+  rent200_x500pm: "G2 200mm + x500 Pro Max case kit",
+  rent200_x200u: "G2 200mm + x200 Ultra case kit",
+  rent200_x300p: "G2 200mm + x300 Pro case kit",
+  rent400_x300u: "G2 Ultra 400mm + x300 Ultra case kit",
+  rent400_x500pm: "G2 Ultra 400mm + x500 Pro Max case kit",
+  rent400_oppo: "G2 Ultra 400mm + Find X9 Ultra case kit",
+  lensTipClarification: "<strong>About the extender:</strong> The phone's native zoom stays the same; the extender adds real optical reach and detail at long range, and its shallow depth of field helps blur the safety net in front of you for a cleaner stage shot.",
+  noteX300U: "<strong>Summary:</strong> Flagship telephoto and audio, Blueprint color profile.",
+  noteX500PM: "<strong>Summary:</strong> Cinema-grade telephoto flagship, 200mm / 400mm extender compatible.",
+  noteX200U: "<strong>Summary:</strong> Best fine detail, great for cropping in on the stage.",
+  noteX300P: "<strong>Summary:</strong> Lightweight telephoto pick with excellent stabilization.",
+  noteOppo: "<strong>Summary:</strong> Hasselblad imaging flagship, 400mm extender compatible.",
+  noteIphone: "<strong>Summary:</strong> Smooth video and the iOS ecosystem.",
+  noteDji: "<strong>Summary:</strong> Stabilized handheld video and creative movement.",
+  noteLens: "<strong>Summary:</strong> Extender kit only (includes the matching phone case and protection).",
+  savedText: "Your last selection has been restored.",
+  dates: "Please tap the calendar to choose your pickup and return dates",
+  needReturn: "Please tap the return date on the calendar too (same-day return: tap the same day again)",
+  pastDate: "Pickup date cannot be in the past",
+  badDate: "Return date cannot be earlier than the pickup date",
   fallbackTitle: "Reservation Draft Generated",
   fallbackGuide: "Message could not be dispatched automatically. Details are preserved; tap copy and paste into the LINE chat.",
   back: "Back to Form",
@@ -1059,12 +1099,13 @@ function setLanguage(lang) {
     inquiryButton:"inquiryButton",inquiryNotice:"inquiryNotice",
     fallbackTitle:"fallbackTitle",fallbackGuide:"fallbackGuide",backButton:"back",copyButton:"copy"
   };
-  Object.keys(ids).forEach(k => text(ids[k], x[k], k==="store"||k==="inquiryNotice"||k==="depositRuleTip"||k==="faqLink"||k==="lensDesc"||k==="guideItem1"||k==="guideItem2"||k==="guideNote"));
+  Object.keys(ids).forEach(k => text(k, x[ids[k]], k==="store"||k==="inquiryNotice"||k==="depositRuleTip"||k==="faqLink"||k==="lensDesc"||k==="guideItem1"||k==="guideItem2"||k==="guideNote"));
   ["d12a","d12x","d12b","d12c","d12d","d12e"].forEach(id => text(id, x.days));
   text("perDayA", x.perDay); text("perDayB", x.perDay); text("perUse", x.perUse);
 
   updateCalendarWeekdays(lang);
   updateModelLabels();
+  updateLens(true); // 2026-10-24：沒有暫存時也要長出鏡頭選項；切語言時換成該語言的選項文字
   updateNote();
   renderSaved();
   renderCalendar();
@@ -1153,7 +1194,7 @@ function updateLens(keep = false){
   if(keep && o.some(a => a[0] === old)){
     l.value = old;
   } else {
-    l.value = o.some(a => a[0] === "400") ? "400" : (o.some(a => a[0] === "200") ? "200" : o[0][0]);
+    l.value = o[0][0]; // 2026-10-24：預設不加鏡頭，由客人自己選（官網說明：只租手機不會自動加鏡頭）
   }
   checkLensTip();
 }
@@ -1339,7 +1380,7 @@ function updateCalendarSummary(){
 
     let cur = new Date(dt1);
     while (cur <= dt2) {
-      const curStr = cur.toISOString().split("T")[0];
+      const curStr = `${cur.getFullYear()}-${String(cur.getMonth() + 1).padStart(2, "0")}-${String(cur.getDate()).padStart(2, "0")}`;
       const p = getDatePressure(curStr);
       if (p === "red") { highestPressure = "red"; break; }
       if (p === "yellow") highestPressure = "yellow";
@@ -1437,7 +1478,7 @@ function save(){
       lens: document.getElementById("lens").value,
       pickupDate: cleanStart,
       pickupClock: calPickupTime,
-      returnDate: cleanEnd
+      returnDate: calEndDate ? cleanEnd : ""
     }));
     renderSaved();
   } catch(e){}
@@ -1453,7 +1494,7 @@ function restore(){
   const today = getTodayStr();
   if(d.pickupDate && d.pickupDate.replace(/\//g, "-") >= today){
     calStartDate = d.pickupDate.split("T")[0].split(" ")[0].replace(/\//g, "-");
-    calEndDate = (d.returnDate || d.pickupDate).split("T")[0].split(" ")[0].replace(/\//g, "-");
+    calEndDate = d.returnDate ? d.returnDate.split("T")[0].split(" ")[0].replace(/\//g, "-") : "";
   }
   if(d.pickupClock){
     calPickupTime = d.pickupClock;
@@ -1494,6 +1535,7 @@ function renderSaved(){
       localStorage.removeItem("fir-stage");
     } catch(e){}
     box.classList.remove("show");
+    calStartDate = ""; calEndDate = ""; syncCalendarToHiddenInputs(); renderCalendar();
     showToast(currentLang === "zh" ? "已清除暫存資料" : "Draft cleared");
   };
 }
@@ -1513,6 +1555,7 @@ function dates(){
   syncCalendarToHiddenInputs();
   const today = getTodayStr();
 
+  if(calStartDate && !calEndDate){ showToast(S().needReturn); try { document.getElementById("calGuideHeader").scrollIntoView({ behavior: "smooth", block: "center" }); } catch(_) {} return null; }
   if(!calStartDate || !calEndDate){ showToast(S().dates); return null; }
   if(calStartDate < today){ showToast(S().pastDate); return null; }
   if(calEndDate < calStartDate){ showToast(S().badDate); return null; }
@@ -1604,10 +1647,10 @@ async function send(m, b, k){
 
   let ctxType = "";
   try { ctxType = (liffReady && liff.getContext && (liff.getContext() || {}).type) || ""; } catch(_) {}
-  if(liffReady && liff.isInClient() && (ctxType === "group" || ctxType === "room")){
-    // 2026-10-24：從群組或多人聊天室開啟時，sendMessages 會送到那個聊天室；改開官方帳號聊天室並帶入內容
+  if(liffReady && liff.isInClient() && (ctxType === "group" || ctxType === "room" || !trustedChat())){
+    // 2026-10-24：從群組／多人聊天室或官網連結開啟時，sendMessages 會送到「目前所在」的聊天室（可能是朋友的）；改開官方帳號聊天室並帶入內容
     try { await navigator.clipboard.writeText(m); } catch(err){}
-    window.location.href = `https://line.me/R/oaMessage/${LINE_OA_ID.replace("@", "%40")}/?${encodeURIComponent(m)}`;
+    openLineWithFallback(m);
     return;
   }
 
@@ -1636,15 +1679,19 @@ async function send(m, b, k){
   if (isMobile) {
     try { await navigator.clipboard.writeText(m); } catch(err){}
     const cleanOaId = LINE_OA_ID.replace("@", "%40");
-    const lineDeepLink = `https://line.me/R/oaMessage/${cleanOaId}/?${encodeURIComponent(m)}`;
     showToast(currentLang === "zh" ? "正在為您開啟 LINE 聊天室..." : "Opening LINE chat...");
-    setTimeout(() => {
-      window.location.href = lineDeepLink;
-    }, 300);
+    openLineWithFallback(m);
     return;
   }
 
   fallback(m);
+}
+
+// 開官方帳號聊天室；1.5 秒後若畫面還在（LINE 沒打開、被內建瀏覽器擋住），自動打開備援視窗（2026-10-24）
+function openLineWithFallback(m){
+  const url = `https://line.me/R/oaMessage/${LINE_OA_ID.replace("@", "%40")}/?${encodeURIComponent(m)}`;
+  setTimeout(() => { if (document.visibilityState === "visible") fallback(m); }, 1500);
+  window.location.href = url;
 }
 
 function fallback(m){
@@ -1660,8 +1707,13 @@ function fallback(m){
   document.getElementById("fbOaId").textContent = LINE_OA_ID;
   document.getElementById("fbQrTitle").textContent = en ? "Scan with your phone" : "用手機掃描 QR Code";
   document.getElementById("fbQrDesc").textContent = en ? "Opens our LINE account with your inquiry filled in. Just tap send." : "會打開 LINE 官方帳號，詢問內容已自動帶入，按傳送即可。";
-  const op = document.getElementById("fbOpenLine"); op.href = oaUrl; op.textContent = en ? "Open LINE on this computer" : "在這台電腦開啟 LINE";
-  drawQr(oaUrl);
+  const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const op = document.getElementById("fbOpenLine"); op.href = oaUrl;
+  op.textContent = mobile ? (en ? "Open LINE again" : "再試一次開啟 LINE") : (en ? "Open LINE on this computer" : "在這台電腦開啟 LINE");
+  document.getElementById("fbQr").style.display = mobile ? "none" : "";
+  document.getElementById("fbQrTitle").textContent = mobile ? (en ? "LINE did not open?" : "LINE 沒有打開？") : (en ? "Scan with your phone" : "用手機掃描 QR Code");
+  document.getElementById("fbQrDesc").textContent = mobile ? (en ? "Your inquiry is copied. Open LINE, find our account and paste it." : "詢問內容已複製，打開 LINE 找到官方帳號貼上即可。") : (en ? "Opens our LINE account with your inquiry filled in. Just tap send. LINE for PC may not carry the text, but it is already copied for you." : "會打開 LINE 官方帳號，詢問內容已自動帶入，按傳送即可。電腦版 LINE 不一定能帶入內容，已幫你複製，貼上即可。");
+  if (!mobile) drawQr(oaUrl);
   copyFallback();
 }
 
@@ -1710,23 +1762,25 @@ document.addEventListener("DOMContentLoaded", () => {
   } catch(e){}
 
   if (window.matchMedia) {
-    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function(e) {
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const onScheme = function(e) {
       try {
         if (!localStorage.getItem("fir-theme")) {
           applyTheme(e.matches ? "dark" : "light");
         }
       } catch(err){}
-    });
+    };
+    if (mq.addEventListener) mq.addEventListener("change", onScheme); else if (mq.addListener) mq.addListener(onScheme);
   }
 
   setupTimePills();
 
   document.getElementById("calPrevBtn").onclick = () => {
-    calCurrentMonth.setMonth(calCurrentMonth.getMonth() - 1);
+    calCurrentMonth = new Date(calCurrentMonth.getFullYear(), calCurrentMonth.getMonth() - 1, 1);
     renderCalendar();
   };
   document.getElementById("calNextBtn").onclick = () => {
-    calCurrentMonth.setMonth(calCurrentMonth.getMonth() + 1);
+    calCurrentMonth = new Date(calCurrentMonth.getFullYear(), calCurrentMonth.getMonth() + 1, 1);
     renderCalendar();
   };
 
@@ -1767,7 +1821,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const MODEL_KEYS = { x300u:"vivo x300 Ultra", x500pm:"vivo x500 Pro Max", x200u:"vivo x200 Ultra", x300p:"vivo x300 Pro", x9u:"OPPO Find X9 Ultra", ip17pm:"iPhone 17 Pro Max" };
     const mk = MODEL_KEYS[URLP("model")];
     const sel = document.getElementById("model");
-    if (mk && [...sel.options].some(o => o.value === mk)) { sel.value = mk; updateLens(false); updateNote(); save(); }
+    if (mk && [...sel.options].some(o => o.value === mk)) { const keep = (getDraft() || {}).model === mk; sel.value = mk; updateLens(keep); updateNote(); save(); }
   } catch(e){}
   
   document.getElementById("inquiryButton").onclick = inquiry;
