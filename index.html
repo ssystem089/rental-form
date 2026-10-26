@@ -7,42 +7,42 @@
 <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <style>
 :root {
-  /* 淺色模式變數 */
-  --bg-color: #f4f5f7;
+  /* 淺色模式變數（2026-10-26 與門市控制台統一：中性灰＋單一藍色重點） */
+  --bg-color: #f4f4f5;
   --card-bg: #ffffff;
-  --panel-bg: #f8fafc;
-  --sub-card-bg: #fdfdfd;
-  --text-main: #0f172a;
-  --text-muted: #475569;
-  --text-light: #64748b;
-  --border-color: #e2e8f0;
-  --border-dark: #0f172a;
-  --accent-blue: #0284c7;
-  --accent-blue-bg: #f0f9ff;
-  --accent-blue-border: #bae6fd;
-  --toast-bg: #0f172a;
+  --panel-bg: #f7f7f8;
+  --sub-card-bg: #fbfbfb;
+  --text-main: #111214;
+  --text-muted: #4a4b50;
+  --text-light: #6b6c72;
+  --border-color: #e4e4e7;
+  --border-dark: #111214;
+  --accent-blue: #1f6fd1;
+  --accent-blue-bg: #eef4fc;
+  --accent-blue-border: #c9dcf5;
+  --toast-bg: #111214;
   --toast-text: #ffffff;
   --danger-bg: #fef2f2;
   --danger-border: #fecaca;
   --danger-text: #b91c1c;
 }
 
-/* 深色模式變數 (黑曜石科技黑) */
+/* 深色模式變數（2026-10-26 與門市控制台同一組石墨色＋交機藍） */
 [data-theme="dark"] {
-  --bg-color: #0b0f19;
-  --card-bg: #141c2e;
-  --panel-bg: #1a243b;
-  --sub-card-bg: #1e2945;
-  --text-main: #f8fafc;
-  --text-muted: #cbd5e1;
-  --text-light: #94a3b8;
-  --border-color: #263352;
-  --border-dark: #64748b;
-  --accent-blue: #38bdf8;
-  --accent-blue-bg: rgba(56, 189, 248, 0.12);
-  --accent-blue-border: rgba(56, 189, 248, 0.35);
-  --toast-bg: #38bdf8;
-  --toast-text: #0b0f19;
+  --bg-color: #0f1012;
+  --card-bg: #17181b;
+  --panel-bg: #1f2024;
+  --sub-card-bg: #1f2024;
+  --text-main: #ececee;
+  --text-muted: #b4b5bb;
+  --text-light: #9b9ca3;
+  --border-color: #2a2b30;
+  --border-dark: #5d5f66;
+  --accent-blue: #5aa9ff;
+  --accent-blue-bg: rgba(90, 169, 255, 0.12);
+  --accent-blue-border: rgba(90, 169, 255, 0.35);
+  --toast-bg: #5aa9ff;
+  --toast-text: #0f1012;
   --danger-bg: #2d1515;
   --danger-border: #5c2424;
   --danger-text: #fca5a5;
@@ -146,7 +146,7 @@ body {
 .store { margin-top: 8px; color: var(--text-muted); font-size: 12px; line-height: 1.6; }
 
 /* 預約 4 步驟進度引導 */
-.stepper { display: flex; justify-content: space-between; align-items: center; margin: 14px 0 18px; padding: 10px 12px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+.stepper { display: flex; justify-content: space-between; align-items: center; margin: 14px 0 18px; padding: 10px 12px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; box-shadow: none; }
 .step { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: var(--text-light); flex: 1; text-align: center; }
 .step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--panel-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--text-light); font-size: 11px; }
 .step.active .step-num { background: var(--accent-blue); border-color: var(--accent-blue); color: #ffffff; }
@@ -326,14 +326,14 @@ select:focus, input[type="text"]:focus { border-color: var(--accent-blue); box-s
 .time-pill { width: 100%; min-height: 38px; padding: 6px 2px; border-radius: 4px; font-size: 12.5px; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; font-variant-numeric: tabular-nums; display: flex; align-items: center; justify-content: center; transition: all 0.15s ease; }
 .time-pill:hover { border-color: var(--accent-blue); }
 .time-pill.active { background: var(--accent-blue); color: #ffffff; border-color: var(--accent-blue); font-weight: 700; }
-[data-theme="dark"] .time-pill.active { color: #0b0f19; }
+[data-theme="dark"] .time-pill.active { color: #0f1012; }
 
 /* 預約檔期格式化呈現 */
 .cal-summary { 
   margin-top: 12px; 
   padding: 12px 14px; 
-  background: rgba(2, 132, 199, 0.04); 
-  border: 1px solid rgba(2, 132, 199, 0.18); 
+  background: rgba(31, 111, 209, 0.04); 
+  border: 1px solid rgba(31, 111, 209, 0.18); 
   border-radius: 6px; 
   line-height: 1.5; 
   text-align: center; 
@@ -343,8 +343,8 @@ select:focus, input[type="text"]:focus { border-color: var(--accent-blue); box-s
   justify-content: center;
 }
 [data-theme="dark"] .cal-summary {
-  background: rgba(56, 189, 248, 0.06); 
-  border: 1px solid rgba(56, 189, 248, 0.18); 
+  background: rgba(90, 169, 255, 0.06); 
+  border: 1px solid rgba(90, 169, 255, 0.18); 
 }
 
 .cal-summary-grid {
@@ -490,20 +490,20 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .secondary:hover { border-color: var(--accent-blue); }
 
 .btn-inquiry { 
-  background: #0ea5e9; 
+  background: #1f6fd1; 
   color: #ffffff; 
   border: none; 
   font-size: 14.5px; 
   font-weight: 800; 
   border-radius: 6px; 
   cursor: pointer; 
-  box-shadow: 0 3px 10px rgba(14, 165, 233, 0.22);
+  box-shadow: none;
   transition: opacity 0.15s ease, transform 0.15s ease; 
 }
 [data-theme="dark"] .btn-inquiry { 
-  background: #0284c7; 
+  background: #1f6fd1; 
   color: #ffffff; 
-  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.28);
+  box-shadow: none;
 }
 .btn-inquiry:hover { opacity: 0.92; }
 .btn-inquiry:active { opacity: 0.85; transform: scale(0.99); }
@@ -516,10 +516,10 @@ button:disabled { opacity: .45; cursor: not-allowed; }
   font-weight: 800; 
   border-radius: 6px; 
   cursor: pointer; 
-  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+  box-shadow: none;
   transition: opacity 0.15s ease, transform 0.15s ease; 
 }
-[data-theme="dark"] .btn-submit { color: #0b0f19; }
+[data-theme="dark"] .btn-submit { color: #0f1012; }
 .btn-submit:active { opacity: 0.9; transform: scale(0.99); }
 
 /* 備用複製抽屜 */
