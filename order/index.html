@@ -2,26 +2,27 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
+<meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
 <title>器材租賃價目與檔期詢問</title>
 <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <style>
 :root {
   /* 淺色模式變數（2026-10-26 與門市控制台統一：中性灰＋單一藍色重點） */
-  --bg-color: #f4f4f5;
+  --bg-color: #F6F5F2;
   --card-bg: #ffffff;
-  --panel-bg: #f7f7f8;
-  --sub-card-bg: #fbfbfb;
-  --text-main: #111214;
-  --text-muted: #4a4b50;
-  --text-light: #6b6c72;
-  --border-color: #e4e4e7;
-  --border-dark: #111214;
-  --accent-blue: #1f6fd1;
-  --accent-blue-bg: #eef4fc;
-  --accent-blue-border: #c9dcf5;
-  --toast-bg: #111214;
-  --toast-text: #ffffff;
+  --panel-bg: #EDECE8;
+  --sub-card-bg: #F9F8F6;
+  --text-main: #121316;
+  --text-muted: #45474d;
+  --text-light: #64666c;
+  --border-color: #D9DBDE;
+  --border-dark: #121316;
+  --accent-blue: #1B4DA0;
+  --accent-blue-bg: #E8EEF8;
+  --accent-blue-border: #B7C7E6;
+  --toast-bg: #121316;
+  --toast-text: #F6F5F2;
   --danger-bg: #fef2f2;
   --danger-border: #fecaca;
   --danger-text: #b91c1c;
@@ -29,20 +30,20 @@
 
 /* 深色模式變數（2026-10-26 與門市控制台同一組石墨色＋交機藍） */
 [data-theme="dark"] {
-  --bg-color: #0f1012;
-  --card-bg: #17181b;
-  --panel-bg: #1f2024;
-  --sub-card-bg: #1f2024;
-  --text-main: #ececee;
-  --text-muted: #b4b5bb;
-  --text-light: #9b9ca3;
-  --border-color: #2a2b30;
+  --bg-color: #121316;
+  --card-bg: #191A1E;
+  --panel-bg: #202227;
+  --sub-card-bg: #202227;
+  --text-main: #ECEBE7;
+  --text-muted: #B2B3B8;
+  --text-light: #94959B;
+  --border-color: #2E3036;
   --border-dark: #5d5f66;
-  --accent-blue: #5aa9ff;
-  --accent-blue-bg: rgba(90, 169, 255, 0.12);
-  --accent-blue-border: rgba(90, 169, 255, 0.35);
-  --toast-bg: #5aa9ff;
-  --toast-text: #0f1012;
+  --accent-blue: #7FA2E0;
+  --accent-blue-bg: rgba(127,162,224,.12);
+  --accent-blue-border: rgba(127,162,224,.4);
+  --toast-bg: #7FA2E0;
+  --toast-text: #121316;
   --danger-bg: #2d1515;
   --danger-border: #5c2424;
   --danger-text: #fca5a5;
@@ -556,6 +557,26 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
   visibility: visible;
   transform: translateX(-50%) translateY(0);
 }
+
+/* ===== 2026-10-28 全站統一（與 ssystem089.com 同一組色票：鏡筒黑、陽極鋁銀、相紙白、ZEISS 藍；LINE 綠 #047A35）===== */
+:root{--ink:#121316;--on-ink:#F6F5F2;--line-green:#047A35;--mono:"SF Mono",ui-monospace,Menlo,"Roboto Mono",monospace}
+[data-theme="dark"]{--ink:#ECEBE7;--on-ink:#121316}
+.card,.faq-list{border-radius:4px;box-shadow:none}
+.notice,.call-notice,.fb-line{border-radius:4px}
+.header{border-bottom-color:var(--ink)}
+.chip{border-radius:3px}
+.tab{border-radius:6px}
+.tab.active,[data-theme="dark"] .tab.active{background:var(--ink);border-color:var(--ink);color:var(--on-ink)}
+.action-button,.link-button,[data-theme="dark"] .action-button,[data-theme="dark"] .link-button{background:var(--ink);color:var(--on-ink)}
+.link-button.secondary,[data-theme="dark"] .link-button.secondary{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+.btn-inquiry,[data-theme="dark"] .btn-inquiry,.btn-submit,[data-theme="dark"] .btn-submit{background:var(--ink);color:var(--on-ink)}
+.fb-open{background:var(--line-green)}
+.price-main,.price-tier{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.toast-capsule{border-radius:6px}
+.step-number,.step-num{font-family:var(--mono)}
+/* 審查第 1 輪：深色模式的分隔線不要全亮；手機 hover 不黏住 */
+[data-theme="dark"] .header{border-bottom-color:#5d5f66}
+.lang-pill-btn,.theme-morph-btn{border-radius:6px}
 </style>
 <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 </head>
