@@ -1263,7 +1263,8 @@ function updateLens(keep = false){
   if(keep && o.some(a => a[0] === old)){
     l.value = old;
   } else {
-    l.value = o[0][0]; // 2026-10-24：預設不加鏡頭，由客人自己選（官網說明：只租手機不會自動加鏡頭）
+    // 2026-10-28 使用者：選了機型自動帶入可搭配的最高規格增距鏡（400mm＞200mm），客人要只租手機可再改「無加選」
+    l.value = (o.find(a => a[0] === "400") || o.find(a => a[0] === "200") || o[0])[0];
   }
   checkLensTip();
 }
