@@ -68,6 +68,8 @@ tr.disc td{color:var(--ink-2)}
 .stamp{position:absolute;right:14px;top:34px;width:31mm;height:27mm;border:2px solid var(--red);color:var(--red);border-radius:4px;transform:rotate(-6deg);
   display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:"Noto Serif TC",serif;font-weight:900;font-size:10.5px;line-height:1.35;text-align:center;opacity:.85}
 .stamp b{font-size:11.5px;white-space:nowrap}
+/* 2026-10-29 使用者：改用線上合約甲方公司章（向量圖），不再是文字章 */
+.stamp{border:0!important;transform:rotate(-4deg)!important;width:50mm!important;height:23mm!important;padding:0;opacity:.92}
 .notes{margin-top:10px;font-size:10px;line-height:1.5;color:var(--ink-2)}
 .notes ol{margin:4px 0 0;padding-left:18px}
 /* 紙下方：匯款資訊與按鈕（列印時隱藏） */
@@ -97,7 +99,7 @@ tr.disc td{color:var(--ink-2)}
   .num{font-size:13px}
   .sum{width:100%}
   .terms section{padding-bottom:104px}
-  .stamp{top:auto;bottom:12px;right:8px;width:27mm;height:23mm;font-size:9.5px}
+  .stamp{top:auto;bottom:12px;right:8px;width:40mm!important;height:19mm!important;font-size:9.5px}
   .stamp b{font-size:10px}
 }
 /* 列印＝下載 PDF：A4 一頁白紙，只印報價單 */
@@ -113,7 +115,7 @@ tr.disc td{color:var(--ink-2)}
   .meta{grid-template-columns:1fr 1fr}.meta div:empty{display:block;border:0}
   .sum{width:62mm}
   .terms section{padding-bottom:10px}
-  .stamp{top:34px;bottom:auto;right:14px;width:31mm;height:27mm;font-size:10.5px}.stamp b{font-size:11.5px}
+  .stamp{top:34px;bottom:auto;right:14px;width:50mm!important;height:23mm!important;font-size:10.5px}.stamp b{font-size:11.5px}
   .n{width:34px}.num{font-size:14px}
   th,td{padding-left:6px;padding-right:6px}
 }
@@ -135,7 +137,7 @@ tr.disc td{color:var(--ink-2)}
   <div id="doc" hidden>
     <article class="page" id="page" aria-label="報價單">
       <div class="top">
-        <div class="brand">簡約體制有限公司<small>統一編號 24932067｜LINE @387WFAYL｜(02)27839008</small></div>
+        <div class="brand">簡約體制有限公司<small>統一編號 24932067｜LINE @387WFAYL</small></div>
         <div class="title"><h1>報價單</h1><div class="qno" id="qNo"></div></div>
       </div>
       <dl class="meta">
@@ -158,7 +160,7 @@ tr.disc td{color:var(--ink-2)}
         <div><dt>付款條件</dt><dd>匯款</dd></div><div><dt>交貨方式</dt><dd>指送</dd></div><div><dt>發票</dt><dd id="qInv"></dd></div>
         <div><dt>出貨期限</dt><dd>5 個工作天</dd></div>
         <div><dt>匯款帳戶</dt><dd>簡約體制有限公司<br><span class="bank">國泰世華 013 南港分行 1069<br>106035003935</span></dd></div></dl>
-        <div class="stamp" aria-hidden="true"><b>簡約體制有限公司</b>統一編號<br>24932067<br>報價專用</div></section>
+        <div class="stamp" aria-hidden="true"><svg viewBox="0 0 280 130" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"> <rect x="3" y="3" width="274" height="124" rx="14" fill="none" stroke="#2563eb" stroke-width="4"/> <line x1="222" y1="3" x2="222" y2="127" stroke="#2563eb" stroke-width="3"/> <path d="M 18 24 L 32 38 L 46 24 M 18 38 L 32 52 L 46 38 M 18 52 L 32 66 L 46 52" fill="none" stroke="#2563eb" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/> <text x="56" y="38" font-size="18.5" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif">簡約體制有限公司</text> <line x1="55" y1="46" x2="216" y2="46" stroke="#2563eb" stroke-width="2.5"/> <text x="136" y="78" font-size="28" font-weight="bold" fill="#2563eb" font-family="'Courier New', monospace" text-anchor="middle" letter-spacing="1.5">24932067</text> <line x1="55" y1="88" x2="216" y2="88" stroke="#2563eb" stroke-width="2.5"/> <text x="136" y="106" font-size="12" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif" text-anchor="middle">台北市南港區舊莊街一段</text> <text x="136" y="122" font-size="12" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif" text-anchor="middle">242 號 3 樓</text> <text x="250" y="24" font-size="15" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif" writing-mode="vertical-rl" letter-spacing="3">統一發票專用章</text> </svg></div></section>
       </div>
       <div class="notes" id="qNotesBox" hidden>備註<ol id="qNotes"></ol></div>
     </article>
@@ -182,7 +184,6 @@ tr.disc td{color:var(--ink-2)}
       </div>
       <p class="hint">匯款後請在 LINE 傳送帳號後五碼與報價單號，我們確認後安排出貨。下載 PDF：在列印畫面選「儲存為 PDF」。</p>
     </section>
-    <div class="foot">簡約體制有限公司　台北市南港區舊莊街1段242號3樓</div>
   </div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
