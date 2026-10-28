@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <script>/* 載入前先套深色，避免先閃白（2026-10-27） */(function(){try{var s=localStorage.getItem("fir-theme");if(s==="dark"||(!s&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.setAttribute("data-theme","dark")}catch(e){}})();</script>
 <meta name="robots" content="noindex">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <title>器材租賃價目與檔期詢問</title>
 <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&family=Oswald:wght@500;600&display=swap">
@@ -51,12 +51,11 @@
   --danger-text: #fca5a5;
 }
 
+/* 2026-10-28 審查12：拿掉全域字型與全域 transition，字型由 body 繼承 */
 * { 
   -webkit-text-size-adjust: 100%; 
   text-size-adjust: 100%; 
   box-sizing: border-box; 
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease; 
 }
 
 html, body {
@@ -602,6 +601,75 @@ a{text-decoration-color:var(--gold);text-underline-offset:4px;-webkit-tap-highli
 /* 2026-10-28 使用者：取機～歸還摘要框拿掉藍底藍框，改票根虛線 */
 .cal-summary,[data-theme="dark"] .cal-summary{background:transparent;border:1px dashed var(--border-color);border-radius:2px}
 .cal-summary-lbl{color:var(--gold)}
+/* ===== 2026-10-28 審查12：價目每日價、步驟進度、字級、月曆、備援抽屜、動態 ===== */
+/* 字級與字型繼承 */
+input,select,textarea,button{font:inherit}
+select,input[type="text"],textarea{font-size:16px}
+label,.time-pill-label{font-size:14px;line-height:1.6}
+.product-desc,.device-note,.notice-box,.lens-tip-box,.delivery-notice,.calendar-guide-box,.calendar-guide-item,.calendar-guide-note,.pressure-alert,.saved-box,.fallback p,.switch-cta-desc,.store,.product-deposit,.fb-line-text{font-size:14px;line-height:1.6}
+.section-title{font-size:14px;letter-spacing:.06em}
+.calendar-guide-title{font-size:14px}
+.cal-title{font-size:15px}
+.cal-weekdays{font-size:13px}
+.time-pill{font-size:15px;min-height:44px}
+.lang-pill-btn{width:auto;min-width:44px;font-size:13px;min-height:36px;transition:border-color .15s ease,color .15s ease}
+textarea:focus,textarea:focus-visible{outline:1px solid var(--gold);outline-offset:0}
+.theme-morph-btn{width:36px;height:36px;min-height:36px}
+.cal-summary-val{color:var(--text-main)}
+[data-theme="dark"] .cal-summary-val{color:var(--text-main)}
+.cal-summary-lbl{font-size:13px}
+/* 1. 價目：每日價＋適用天數，長機名可換行 */
+.price-row-top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:4px 12px}
+.product-name{white-space:normal;font-size:16px;line-height:1.4;overflow-wrap:anywhere}
+.price-main{font-size:17px;line-height:1.3}
+.price-main small{font-size:13px;margin-left:1px}
+.price-apply{display:block;margin-top:2px;font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--text-light);letter-spacing:0}
+.price-tier{text-align:left;font-size:14px;line-height:1.6;color:var(--text-main);font-weight:500}
+.price-tier,.price-tier *{font-family:var(--font-body)}
+.price-more{display:none}
+@media (max-width:600px){
+  .price-card.collapsed .price-row:nth-child(n+4){display:none}
+  .price-more{display:block;width:100%;margin:6px 0 2px;min-height:44px;background:transparent;border:1px solid var(--border-color);color:var(--text-main);font-size:14px;font-weight:700}
+}
+/* 2. 步驟進度：跟著填寫前進 */
+.stepper{list-style:none;margin:14px 0 18px;padding:10px 12px;border-radius:2px}
+.step{font-size:13px}
+.step-num{width:auto;min-width:28px;height:24px;padding:0 4px;border-radius:2px;font-size:13px;background:transparent}
+.step.active .step-num,[data-theme="dark"] .step.active .step-num{background:var(--ink);border-color:var(--ink);color:var(--on-ink)}
+.step.done .step-num{border-color:var(--gold);color:var(--gold)}
+.step.done span{color:var(--text-muted)}
+.step-line{flex:.3;list-style:none}
+.form-step{display:flex;align-items:baseline;gap:8px;margin:18px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border-color);font-family:var(--font-head);font-size:16px;font-weight:700;color:var(--text-main)}
+.saved-box + .form-step{margin-top:2px}
+.form-step-num{font-family:var(--font-num);font-size:15px;color:var(--gold);letter-spacing:0}
+/* 4. 月曆：取消左右內距、格子 ≥44px、起訖日實色、熱門日金線 */
+.calendar-box{padding:12px 0 0;background:transparent;border:0;border-radius:0}
+.cal-hint{margin:0 0 10px;padding:8px 10px;border-left:2px solid var(--gold);background:var(--panel-bg);font-size:15px;font-weight:700;line-height:1.5;color:var(--text-main)}
+.cal-btn{width:44px;height:44px;min-height:44px;border-radius:2px}
+.cal-grid{gap:2px;row-gap:3px}
+.cal-cell{height:46px;font-size:15px;border-radius:2px}
+.cal-cell.today{border:1px solid var(--gold)!important}
+.cal-cell.p-yellow,.cal-cell.p-red{background:transparent;color:var(--text-main)}
+.cell-dot,.cal-cell.p-yellow .cell-dot,.cal-cell.p-red .cell-dot{width:16px;height:2px;border-radius:0;margin-top:3px;background-color:var(--gold)}
+.cal-cell.p-red .cell-dot{height:3px}
+.cal-cell.range-start,.cal-cell.range-end,[data-theme="dark"] .cal-cell.range-start,[data-theme="dark"] .cal-cell.range-end{background:var(--ink)!important;color:var(--on-ink)!important;border-color:var(--ink)!important}
+.cal-cell.range-start .cell-dot,.cal-cell.range-end .cell-dot{background-color:var(--on-ink)!important}
+.cal-cell.range-mid{background:var(--accent-blue-bg)!important;color:var(--text-main)!important}
+.cal-legend{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:13px;line-height:1.5;color:var(--text-light)}
+.cal-legend-mark{flex:none;width:16px;height:2px;background:var(--gold)}
+.alert-yellow,.alert-red,[data-theme="dark"] .alert-yellow,[data-theme="dark"] .alert-red{background:transparent;border:0;border-left:2px solid var(--gold);border-radius:0;color:var(--text-main);text-align:left}
+.time-pill.active,[data-theme="dark"] .time-pill.active{background:var(--ink);border-color:var(--ink);color:var(--on-ink)}
+/* 11. 備援抽屜：高度上限、自身捲動、操作列黏底 */
+.fallback{max-height:90dvh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-bottom:max(18px,calc(env(safe-area-inset-bottom) + 12px));border-radius:2px 2px 0 0}
+.fallback textarea{height:auto;font-size:16px;line-height:1.5}
+.fallback .sheet-buttons{position:sticky;bottom:0;margin-top:10px;padding:10px 0 0;background:var(--card-bg)}
+@media (min-width:601px){.fallback textarea{min-height:160px}}
+/* 12. 動態：狀態回饋 ≤0.18 秒 */
+.sun-core,.mask-cutout{transition-duration:.18s}
+.sun-rays{transition:transform .18s ease,opacity .18s ease}
+.toast-capsule{transition:opacity .18s ease,transform .18s ease,visibility .18s}
+.calendar-guide-box,.time-pill,.link-btn,.saved-close-x{transition-duration:.15s}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 </style>
 <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 </head>
@@ -639,96 +707,91 @@ a{text-decoration-color:var(--gold);text-underline-offset:4px;-webkit-tap-highli
     <div class="store" id="store">取還機指定地點｜台北市大安區光復南路88號1樓<br>時間 週一至週六 12:00–20:00｜額外取還日以 LINE 確認為準</div>
   </header>
 
-  <!-- 預約 4 步驟進度引導 -->
-  <div class="stepper">
-    <div class="step active" id="st1">
-      <div class="step-num">1</div>
-      <span id="step1Text">價目與選機</span>
-    </div>
-    <div class="step-line"></div>
-    <div class="step" id="st2">
-      <div class="step-num">2</div>
-      <span id="step2Text">送出詢問</span>
-    </div>
-    <div class="step-line"></div>
-    <div class="step" id="st3">
-      <div class="step-num">3</div>
-      <span id="step3Text">LINE 確認</span>
-    </div>
-    <div class="step-line"></div>
-    <div class="step" id="st4">
-      <div class="step-num">4</div>
-      <span id="step4Text">付款預訂</span>
-    </div>
-  </div>
+  <!-- 預約 3 步驟進度引導（2026-10-28 審查12：依填寫進度前進） -->
+  <ol class="stepper" id="stepper" aria-label="詢問步驟">
+    <li class="step active" id="st1">
+      <div class="step-num">01</div>
+      <span id="step1Text">設備與鏡頭</span>
+    </li>
+    <li class="step-line" aria-hidden="true"></li>
+    <li class="step" id="st2">
+      <div class="step-num">02</div>
+      <span id="step2Text">取還日期</span>
+    </li>
+    <li class="step-line" aria-hidden="true"></li>
+    <li class="step" id="st3">
+      <div class="step-num">03</div>
+      <span id="step3Text">確認送出</span>
+    </li>
+  </ol>
 
   <div class="section-title" id="priceTitle">租借價目表 ｜ 24H 彈性制（點選器材快速帶入）</div>
-  <section class="card">
+  <section class="card price-card collapsed" id="priceCard">
     <!-- vivo x300 Ultra -->
     <div class="price-row" data-model="vivo x300 Ultra">
       <div class="price-row-top">
         <span class="product-name">vivo x300 Ultra</span>
-        <div class="price-main">NT$ 1,200<small id="d12a">/ 1–2日</small></div>
+        <div class="price-main">NT$ 1,200<small class="pd">／日</small><span class="price-apply" id="d12a">租 1–2 日適用</span></div>
       </div>
       <div class="product-desc" id="x300uDesc">極致長焦收音旗艦・藍圖原色 ｜ 支援 200mm / 400mm 增距鏡配備</div>
-      <div class="price-tier" id="x300uPrice">NT$ 1,100（3–5日）｜ NT$ 1,000（6日以上）</div>
+      <div class="price-tier" id="x300uPrice">NT$ 1,100／日（租 3–5 日）｜ NT$ 1,000／日（租 6 日以上）</div>
     </div>
 
     <!-- vivo x500 Pro Max -->
     <div class="price-row" data-model="vivo x500 Pro Max">
       <div class="price-row-top">
         <span class="product-name">vivo x500 Pro Max</span>
-        <div class="price-main">NT$ 1,100<small id="d12x">/ 1–2日</small></div>
+        <div class="price-main">NT$ 1,100<small class="pd">／日</small><span class="price-apply" id="d12x">租 1–2 日適用</span></div>
       </div>
       <div class="product-desc" id="x500pmDesc">長焦電影級專業旗艦規格 ｜ 可搭配 200mm / 400mm 增距鏡配件</div>
-      <div class="price-tier" id="x500pmPrice">NT$ 1,000（3–5日）｜ NT$ 900（6日以上）</div>
+      <div class="price-tier" id="x500pmPrice">NT$ 1,000／日（租 3–5 日）｜ NT$ 900／日（租 6 日以上）</div>
     </div>
 
     <!-- vivo x200 Ultra -->
     <div class="price-row" data-model="vivo x200 Ultra">
       <div class="price-row-top">
         <span class="product-name">vivo x200 Ultra</span>
-        <div class="price-main">NT$ 1,000<small id="d12b">/ 1–2日</small></div>
+        <div class="price-main">NT$ 1,000<small class="pd">／日</small><span class="price-apply" id="d12b">租 1–2 日適用</span></div>
       </div>
       <div class="product-desc" id="x200uDesc">大光圈與細膩成像細節首選 ｜ 支援 200mm 增距鏡配件</div>
-      <div class="price-tier" id="x200uPrice">NT$ 900（3–5日）｜ NT$ 800（6日以上）</div>
+      <div class="price-tier" id="x200uPrice">NT$ 900／日（租 3–5 日）｜ NT$ 800／日（租 6 日以上）</div>
     </div>
 
     <!-- OPPO Find X9 Ultra -->
     <div class="price-row" data-model="OPPO Find X9 Ultra">
       <div class="price-row-top">
         <span class="product-name">OPPO Find X9 Ultra</span>
-        <div class="price-main">NT$ 1,000<small id="d12d">/ 1–2日</small></div>
+        <div class="price-main">NT$ 1,000<small class="pd">／日</small><span class="price-apply" id="d12d">租 1–2 日適用</span></div>
       </div>
       <div class="product-desc" id="oppoDesc">哈蘇影像認證，10倍原生光學變焦 ｜ 支援 400mm 增距鏡配件</div>
-      <div class="price-tier" id="oppoPrice">NT$ 900（3–5日）｜ NT$ 800（6日以上）</div>
+      <div class="price-tier" id="oppoPrice">NT$ 900／日（租 3–5 日）｜ NT$ 800／日（租 6 日以上）</div>
     </div>
 
     <!-- vivo x300 Pro -->
     <div class="price-row" data-model="vivo x300 Pro">
       <div class="price-row-top">
         <span class="product-name">vivo x300 Pro</span>
-        <div class="price-main">NT$ 900<small id="d12c">/ 1–2日</small></div>
+        <div class="price-main">NT$ 900<small class="pd">／日</small><span class="price-apply" id="d12c">租 1–2 日適用</span></div>
       </div>
       <div class="product-desc" id="x300pDesc">旅行輕便長焦攝影推薦首選 ｜ 支援 200mm 增距鏡配件</div>
-      <div class="price-tier" id="x300pPrice">NT$ 800（3–5日）｜ NT$ 700（6日以上）</div>
+      <div class="price-tier" id="x300pPrice">NT$ 800／日（租 3–5 日）｜ NT$ 700／日（租 6 日以上）</div>
     </div>
 
     <!-- iPhone 17 Pro / Max -->
     <div class="price-row" data-model="iPhone 17 Pro Max">
       <div class="price-row-top">
         <span class="product-name">iPhone 17 Pro Max</span>
-        <div class="price-main">NT$ 850<small id="d12e">/ 1–2日</small></div>
+        <div class="price-main">NT$ 850<small class="pd">／日</small><span class="price-apply" id="d12e">租 1–2 日適用</span></div>
       </div>
       <div class="product-desc" id="iphoneDesc">極致運算效能與專業級流暢影片錄製性能</div>
-      <div class="price-tier" id="iphonePrice">NT$ 750（3–5日）｜ NT$ 600（6日以上）</div>
+      <div class="price-tier" id="iphonePrice">NT$ 750／日（租 3–5 日）｜ NT$ 600／日（租 6 日以上）</div>
     </div>
 
     <!-- DJI Pocket 4 Pro -->
     <div class="price-row" data-model="DJI Pocket 4 Pro 全能套裝">
       <div class="price-row-top">
         <span class="product-name">DJI Pocket 4 Pro 全能套裝</span>
-        <div class="price-main">NT$ 700<small id="perDayA">/ 日</small></div>
+        <div class="price-main">NT$ 700<small id="perDayA">／日</small></div>
       </div>
       <div class="product-desc" id="djiDesc">旗艦級雙鏡頭手持光學縮放三軸穩定相機套裝</div>
     </div>
@@ -737,7 +800,7 @@ a{text-decoration-color:var(--gold);text-underline-offset:4px;-webkit-tap-highli
     <div class="price-row" data-model="僅租借 G2 增距鏡頭特仕組">
       <div class="price-row-top">
         <span class="product-name" id="lensTitle">vivo G2 增距鏡特仕組</span>
-        <div class="price-main">NT$ 300–600<small id="perDayB">/ 日</small></div>
+        <div class="price-main">NT$ 300–600<small id="perDayB">／日</small></div>
       </div>
       <div class="product-desc" id="lensDesc">
         含專用手機外殼及配件組 ｜<br>
@@ -750,7 +813,7 @@ a{text-decoration-color:var(--gold);text-underline-offset:4px;-webkit-tap-highli
     <div class="price-row" data-model="cloud">
       <div class="price-row-top">
         <span class="product-name" id="cloudTitle">雲端原畫質備份服務</span>
-        <div class="price-main">NT$ 200<small id="perUse">/ 次</small></div>
+        <div class="price-main">NT$ 200<small id="perUse">／次</small></div>
       </div>
       <div class="product-desc" id="cloudDesc">拍畢免自行導出傳檔，原畫質雲端載點 ｜ 檔案安全保留 14 天</div>
       <div class="product-deposit" id="depCloud">歸還後代為原畫質雲端上傳備份</div>
@@ -766,6 +829,9 @@ a{text-decoration-color:var(--gold);text-underline-offset:4px;-webkit-tap-highli
       <div class="product-deposit" id="hlDep">交還時可加購，當晚以 LINE 傳雲端連結</div>
     </div>
 
+    <!-- 手機版價目收合（2026-10-28 審查12：只在窄螢幕顯示） -->
+    <button type="button" class="price-more" id="priceMoreBtn" aria-controls="priceCard" aria-expanded="false">看全部 10 項價目（含增距鏡、雲端、花絮）</button>
+
     <div class="notice-box" style="margin-top:12px;" id="depositRuleTip">
       <strong>押金規範：</strong>主機設備與增距鏡配件合租時，以手機押金規範為主（超商寄送 NT$ 30,000 / 現場點交 NT$ 3,000 + 證件正本），不重複累計增距鏡押金。
     </div>
@@ -780,7 +846,8 @@ a{text-decoration-color:var(--gold);text-underline-offset:4px;-webkit-tap-highli
     <!-- 已暫存規格 -->
     <div id="savedSelection" class="saved-box"></div>
 
-    <div class="field">
+    <div class="form-step" aria-hidden="true"><span class="form-step-num">01</span><span id="fsStep1">設備與鏡頭</span></div>
+    <div class="field" id="modelField">
       <label for="model" id="modelLabel">租借設備機型</label>
       <select id="model">
         <option value="vivo x300 Ultra">vivo x300 Ultra ｜ 旗艦長焦收音</option>
@@ -803,6 +870,7 @@ a{text-decoration-color:var(--gold);text-underline-offset:4px;-webkit-tap-highli
     </div>
 
     <!-- 整合式區間月曆與時間快捷膠囊 -->
+    <div class="form-step" aria-hidden="true"><span class="form-step-num">02</span><span id="fsStep2">取還日期</span></div>
     <div class="field">
       <label id="calendarTitle">預計租期（點選月曆起訖日）</label>
       
@@ -826,6 +894,7 @@ a{text-decoration-color:var(--gold);text-underline-offset:4px;-webkit-tap-highli
       </div>
 
       <div class="calendar-box">
+        <div class="cal-hint" id="calHint" aria-live="polite">請選取機日</div>
         <div class="cal-nav">
           <button type="button" class="cal-btn" id="calPrevBtn" aria-label="Previous Month">◀</button>
           <span class="cal-title" id="calMonthTitle">2026 年 10 月</span>
@@ -835,6 +904,7 @@ a{text-decoration-color:var(--gold);text-underline-offset:4px;-webkit-tap-highli
           <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
         </div>
         <div class="cal-grid" id="calDaysGrid"></div>
+        <div class="cal-legend"><span class="cal-legend-mark" aria-hidden="true"></span><span id="calLegend">日期下方金線＝熱門日期，建議儘早詢問</span></div>
 
         <!-- 取機時間膠囊選單 -->
         <div class="time-pill-section">
@@ -869,11 +939,12 @@ a{text-decoration-color:var(--gold);text-underline-offset:4px;-webkit-tap-highli
     <input type="hidden" id="returnDate">
 
     <!-- 送出設備與檔期詢問 -->
+    <div class="form-step" aria-hidden="true"><span class="form-step-num">03</span><span id="fsStep3">確認送出</span></div>
     <button id="inquiryButton" type="button" class="btn-inquiry">送出設備與檔期詢問</button>
     
     <!-- 說明文字 -->
     <div class="notice-box" id="inquiryNotice">
-      送出後請在 LINE 接續與客服確認；姓名、電話與交還方式於聊天室補充即可，無須返回填表。檔期及租金以專員確認為準。
+      <strong>送出詢問不代表保留設備，檔期由專員確認。</strong><br>送出後：在 LINE 與客服確認檔期 → 付款完成預訂。姓名、電話與交還方式於聊天室補充即可，無須返回填表。
     </div>
 
   </section>
@@ -888,7 +959,7 @@ a{text-decoration-color:var(--gold);text-underline-offset:4px;-webkit-tap-highli
 <section id="fallbackSheet" class="fallback">
   <h2 id="fallbackTitle">設備詢問內容</h2>
   <p id="fallbackGuide">請複製設備與日期，貼至官方 LINE 聊天室送出；姓名電話直接在聊天室補充即可。</p>
-  <textarea id="fallbackText" readonly></textarea>
+  <textarea id="fallbackText" rows="5" readonly></textarea>
   <div class="fb-line">
     <div id="fbQr" class="fb-qr" aria-hidden="true"></div>
     <div class="fb-line-text">
@@ -957,11 +1028,16 @@ const zh = {
   subtitle: "器材租賃價目與檔期詢問 ｜ EQUIPMENT RENTAL",
   store: IS_FIR ? "交機門市｜FiX iT RiGHT 台北市大安區光復南路88號1樓<br>時間 12:00–20:00｜熱門檔期依現場狀況彈性延長" : "取還機指定地點｜台北市大安區光復南路88號1樓<br>時間 週一至週六 12:00–20:00｜額外取還日以 LINE 確認為準",
   priceTitle: "租借價目表 ｜ 24H 彈性制（點選器材快速帶入）",
-  days: "/ 1–2日",
-  step1Text: "價目與選機",
-  step2Text: "送出詢問",
-  step3Text: "LINE 確認",
-  step4Text: "付款預訂",
+  days: "租 1–2 日適用",
+  step1Text: "設備與鏡頭",
+  step2Text: "取還日期",
+  step3Text: "確認送出",
+  calHintStart: "請選取機日",
+  calHintEnd: "請選歸還日（當天還請再點同一天）",
+  calHintDone: "日期已選好・再點任一天可重選",
+  calLegend: "日期下方金線＝熱門日期，建議儘早詢問",
+  priceMore: "看全部 10 項價目（含增距鏡、雲端、花絮）",
+  priceLess: "收合價目",
   calendarTitle: "預計租期（點選月曆起訖日）",
   calGuideTitle: "晚間活動/演唱會選期指南",
   guideItem1: "<strong>• 看1天活動（例：9號）</strong>：選9號 預計取機時間 - 10號交還（計1日）",
@@ -969,19 +1045,19 @@ const zh = {
   guideNote: "租訖日請直接選至【活動隔天】-<br>除熱門時段延長營業至23:00外，最終交還檔期於現場/客服確認為準。", 
   timePillLabel: "預計取機時間（營業時間 12:00–20:00）：",
   x300uDesc: "極致長焦收音旗艦・藍圖原色 ｜ 支援 200mm / 400mm 增距鏡配備",
-  x300uPrice: "NT$ 1,100（3–5日）｜ NT$ 1,000（6日以上）",
+  x300uPrice: "NT$ 1,100／日（租 3–5 日）｜ NT$ 1,000／日（租 6 日以上）",
   x500pmDesc: "長焦電影級專業旗艦規格 ｜ 可搭配 200mm / 400mm 增距鏡配件",
-  x500pmPrice: "NT$ 1,000（3–5日）｜ NT$ 900（6日以上）",
+  x500pmPrice: "NT$ 1,000／日（租 3–5 日）｜ NT$ 900／日（租 6 日以上）",
   x200uDesc: "大光圈與細膩成像細節首選 ｜ 支援 200mm 增距鏡配件",
-  x200uPrice: "NT$ 900（3–5日）｜ NT$ 800（6日以上）",
+  x200uPrice: "NT$ 900／日（租 3–5 日）｜ NT$ 800／日（租 6 日以上）",
   x300pDesc: "旅行輕便長焦攝影推薦首選 ｜ 支援 200mm 增距鏡配件",
-  x300pPrice: "NT$ 800（3–5日）｜ NT$ 700（6日以上）",
+  x300pPrice: "NT$ 800／日（租 3–5 日）｜ NT$ 700／日（租 6 日以上）",
   oppoDesc: "哈蘇影像認證，10倍原生光學變焦 ｜ 支援 400mm 增距鏡配件",
-  oppoPrice: "NT$ 900（3–5日）｜ NT$ 800（6日以上）",
+  oppoPrice: "NT$ 900／日（租 3–5 日）｜ NT$ 800／日（租 6 日以上）",
   iphoneDesc: "極致運算效能與專業級流暢影片錄製性能",
-  iphonePrice: "NT$ 750（3–5日）｜ NT$ 600（6日以上）",
+  iphonePrice: "NT$ 750／日（租 3–5 日）｜ NT$ 600／日（租 6 日以上）",
   djiDesc: "旗艦級雙鏡頭手持光學縮放三軸穩定相機套裝",
-  perDay: "/ 日",
+  perDay: "／日",
   lensTitle: "vivo G2 增距鏡特仕組",
   lensDesc: `含專用手機外殼及配件組 ｜<br>200mm（NT$ 300／日）：清晰寫實；<br>400mm（NT$ 600／日）：旗艦級超長焦，穿透防護網效果顯著。`,
   cloudTitle: "雲端原畫質備份服務",
@@ -991,14 +1067,14 @@ const zh = {
   hlDep: "交還時可加購，當晚以 LINE 傳雲端連結",
   cloudDesc: "拍畢免自行導出傳檔，原畫質雲端載點 ｜ 檔案安全保留 14 天",
   depCloudText: IS_FIR ? "門市代為原畫質雲端上傳備份" : "歸還後代為原畫質雲端上傳備份",
-  perUse: "/ 次",
+  perUse: "／次",
   depositRuleTip: "<strong>押金規範：</strong>主機設備與增距鏡配件合租時，以手機押金規範為主（超商寄送 NT$ 30,000 / " + (IS_FIR ? "門市點交" : "現場點交") + " NT$ 3,000 + 證件正本），不重複累計增距鏡押金。",
 
   formTitle: "選擇設備與租借日期",
   modelLabel: "租借設備機型",
   lensLabel: "增距鏡配件選配",
   inquiryButton: "送出設備與檔期詢問",
-  inquiryNotice: "送出後請在 LINE 接續與客服確認；姓名、電話與交還方式於聊天室補充即可，無須返回填表。檔期及租金以專員確認為準。",
+  inquiryNotice: "<strong>送出詢問不代表保留設備，檔期由專員確認。</strong><br>送出後：在 LINE 與客服確認檔期 → 付款完成預訂。姓名、電話與交還方式於聊天室補充即可，無須返回填表。",
   faqLinkText: "常見問題 Q&A >",
   noLens: "無加選鏡頭配件",
   lens200: "加租 G2 200mm 增距鏡（+NT$ 300／日）",
@@ -1048,11 +1124,16 @@ const en = {
   subtitle: "Equipment Rental & Reservation System ｜ COMMERCIAL",
   store: IS_FIR ? "Pickup Store｜FiX iT RiGHT No. 88, Guangfu S. Rd., Da'an Dist., Taipei<br>Hours: 12:00–20:00｜Extended hours may apply on peak days" : "Pickup location｜1F, No. 88, Guangfu S. Rd., Da'an Dist., Taipei<br>Hours: Mon–Sat 12:00–20:00｜Other days as confirmed on LINE",
   priceTitle: "RENTAL RATES & SPECIFICATIONS ｜ 24H FLEXIBLE PLAN",
-  days: "/ 1–2 days",
-  step1Text: "Prices & Equipment",
-  step2Text: "Send Inquiry",
-  step3Text: "LINE Follow-up",
-  step4Text: "Payment & Booking",
+  days: "for 1–2 day rentals",
+  step1Text: "Device & Lens",
+  step2Text: "Dates",
+  step3Text: "Review & Send",
+  calHintStart: "Tap your pickup date",
+  calHintEnd: "Now tap your return date (same day: tap it again)",
+  calHintDone: "Dates set · tap any date to start over",
+  calLegend: "Gold line under a date = busy date, ask early",
+  priceMore: "See all 10 rates (extenders, cloud, highlights)",
+  priceLess: "Show fewer rates",
   calendarTitle: "Rental Period (Tap start & end dates)",
   calGuideTitle: "Evening Event & Concert Booking Guide",
   guideItem1: "<strong>• 1-Day Event (e.g. 9th)</strong>: Select 9th pickup time - 10th return (1 day)",
@@ -1060,17 +1141,17 @@ const en = {
   guideNote: "Please select the day after the event as the return date -<br>Except peak hours extending to 23:00, the final return schedule is confirmed on site or by customer service.",
   timePillLabel: "Scheduled Pickup Time (Business Hours 12:00–20:00):",
   x300uDesc: "Ultimate telephoto & studio audio flagship, Blueprint ｜ 200mm / 400mm extender compatible",
-  x300uPrice: "NT$ 1,100 (3–5 days) ｜ NT$ 1,000 (6+ days)",
+  x300uPrice: "NT$ 1,100/day (3–5 days) ｜ NT$ 1,000/day (6+ days)",
   x500pmDesc: "Cinema-grade telephoto professional flagship ｜ 200mm / 400mm extender compatible",
-  x500pmPrice: "NT$ 1,000 (3–5 days) ｜ NT$ 900 (6+ days)",
+  x500pmPrice: "NT$ 1,000/day (3–5 days) ｜ NT$ 900/day (6+ days)",
   x200uDesc: "Large aperture & fine optical detail resolution ｜ 200mm extender compatible",
-  x200uPrice: "NT$ 900 (3–5 days) ｜ NT$ 800 (6+ days)",
+  x200uPrice: "NT$ 900/day (3–5 days) ｜ NT$ 800/day (6+ days)",
   x300pDesc: "High cost-performance lightweight travel telephoto ｜ 200mm extender compatible",
-  x300pPrice: "NT$ 800 (3–5 days) ｜ NT$ 700 (6+ days)",
+  x300pPrice: "NT$ 800/day (3–5 days) ｜ NT$ 700/day (6+ days)",
   oppoDesc: "Hasselblad certified imaging, 10x native optical zoom ｜ 400mm extender compatible",
-  oppoPrice: "NT$ 900 (3–5 days) ｜ NT$ 800 (6+ days)",
+  oppoPrice: "NT$ 900/day (3–5 days) ｜ NT$ 800/day (6+ days)",
   iphoneDesc: "Apple flagship computation & cinema-grade video performance",
-  iphonePrice: "NT$ 750 (3–5 days) ｜ NT$ 600 (6+ days)",
+  iphonePrice: "NT$ 750/day (3–5 days) ｜ NT$ 600/day (6+ days)",
   djiDesc: "Flagship dual-lens 3-axis optical zoom handheld camera system",
   perDay: "/ day",
   lensTitle: "vivo G2 Telephoto Extender Set",
@@ -1085,11 +1166,11 @@ const en = {
   perUse: "/ event",
   depositRuleTip: "<strong>Deposit Notice:</strong> When renting a phone and an extender together, the phone deposit policy applies (Delivery: NT$ 30,000 / " + (IS_FIR ? "In-store" : "In-person pickup") + ": NT$ 3,000 + ID). Extender deposit is not stacked.",
 
-  formTitle: "STEP 1. Equipment Specifications & Rental Schedule",
+  formTitle: "Choose Device & Rental Dates",
   modelLabel: "Rental Device Model",
   lensLabel: "Telephoto Extender Option",
   inquiryButton: "Send Equipment & Date Inquiry",
-  inquiryNotice: "Continue in LINE after sending. Provide your name, phone and pickup or delivery details in chat; no second form is needed. Availability and pricing require staff confirmation.",
+  inquiryNotice: "<strong>Sending an inquiry does not reserve the device; staff will confirm availability.</strong><br>Next: confirm dates with us on LINE → pay to complete the booking. Provide your name, phone and pickup or delivery details in chat; no second form is needed.",
   faqLinkText: "View Rental FAQ & Help Center >",
   noLens: "No telephoto extender",
   lens200: "Add G2 200mm extender (+NT$ 300/day)",
@@ -1159,7 +1240,8 @@ function setLanguage(lang) {
   const x = S();
   const ids = {
     subtitle:"subtitle",store:"store",priceTitle:"priceTitle",
-    step1Text:"step1Text",step2Text:"step2Text",step3Text:"step3Text",step4Text:"step4Text",
+    step1Text:"step1Text",step2Text:"step2Text",step3Text:"step3Text",
+    fsStep1:"step1Text",fsStep2:"step2Text",fsStep3:"step3Text",calLegend:"calLegend",
     calendarTitle:"calendarTitle",timePillLabel:"timePillLabel",
     calGuideTitle:"calGuideTitle",guideItem1:"guideItem1",guideItem2:"guideItem2",guideNote:"guideNote",
     x300uDesc:"x300uDesc",x300uPrice:"x300uPrice",x500pmDesc:"x500pmDesc",x500pmPrice:"x500pmPrice",
@@ -1174,6 +1256,8 @@ function setLanguage(lang) {
   Object.keys(ids).forEach(k => text(k, x[ids[k]], k==="store"||k==="inquiryNotice"||k==="depositRuleTip"||k==="faqLink"||k==="lensDesc"||k==="guideItem1"||k==="guideItem2"||k==="guideNote"||k==="hlPrice"||k==="hlDesc"));
   ["d12a","d12x","d12b","d12c","d12d","d12e"].forEach(id => text(id, x.days));
   text("perDayA", x.perDay); text("perDayB", x.perDay); text("perUse", x.perUse);
+  document.querySelectorAll(".pd").forEach(e => { e.textContent = x.perDay; });
+  updatePriceMore();
 
   updateCalendarWeekdays(lang);
   updateModelLabels();
@@ -1503,6 +1587,9 @@ function updateCalendarSummary(){
     sumEl.textContent = currentLang === "zh" ? "請點選月曆選擇預定租賃起訖日期" : "Please select pickup and return dates";
   }
 
+  updateCalHint();
+  updateStepper();
+
   if (alertBox) {
     if (highestPressure === "red") {
       alertBox.className = "pressure-alert alert-red";
@@ -1516,6 +1603,32 @@ function updateCalendarSummary(){
       alertBox.style.display = "none";
     }
   }
+}
+
+// 2026-10-28 審查12：月曆上方常駐提示＋步驟進度
+let equipTouched = false;
+function updateCalHint(){
+  const h = document.getElementById("calHint"); if (!h) return;
+  const x = S();
+  const st = calStartDate && calEndDate ? "done" : (calStartDate ? "end" : "start");
+  h.textContent = st === "done" ? x.calHintDone : (st === "end" ? x.calHintEnd : x.calHintStart);
+  h.setAttribute("data-state", st);
+}
+function updateStepper(){
+  const cur = (calStartDate && calEndDate) ? 3 : ((equipTouched || calStartDate) ? 2 : 1);
+  [1,2,3].forEach(i => {
+    const e = document.getElementById("st" + i); if (!e) return;
+    e.classList.toggle("active", i === cur);
+    e.classList.toggle("done", i < cur);
+    if (i === cur) e.setAttribute("aria-current", "step"); else e.removeAttribute("aria-current");
+  });
+}
+function updatePriceMore(){
+  const card = document.getElementById("priceCard"), b = document.getElementById("priceMoreBtn");
+  if (!card || !b) return;
+  const collapsed = card.classList.contains("collapsed");
+  b.textContent = collapsed ? S().priceMore : S().priceLess;
+  b.setAttribute("aria-expanded", collapsed ? "false" : "true");
 }
 
 function toggleCalendarGuide(){
@@ -1689,10 +1802,13 @@ function setupPriceRowInteractions(){
       mSelect.value = modelVal;
       updateLens(false);
       updateNote();
-          save();
+      save();
+      equipTouched = true; updateStepper();
 
-      const target = document.getElementById("calendarTitle");
-      if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+      // 2026-10-28 審查12：點價目先帶到「設備與鏡頭」確認，不直接跳月曆
+      const target = document.getElementById("formTitle");
+      const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (target) target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
     });
   });
 }
@@ -1898,16 +2014,19 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("model").onchange = () => {
     updateLens(false);
     updateNote();
-      save();
+    save();
+    equipTouched = true; updateStepper();
   };
-  document.getElementById("lens").onchange = () => { checkLensTip(); save(); };
+  document.getElementById("lens").onchange = () => { checkLensTip(); save(); equipTouched = true; updateStepper(); };
+  const pmb = document.getElementById("priceMoreBtn");
+  if (pmb) pmb.onclick = () => { document.getElementById("priceCard").classList.toggle("collapsed"); updatePriceMore(); };
 
   // 從官網點「查看價目與檔期」帶 ?model= 時，先幫客人選好機型（2026-10-24）
   try {
     const MODEL_KEYS = { x300u:"vivo x300 Ultra", x500pm:"vivo x500 Pro Max", x200u:"vivo x200 Ultra", x300p:"vivo x300 Pro", x9u:"OPPO Find X9 Ultra", ip17pm:"iPhone 17 Pro Max" };
     const mk = MODEL_KEYS[URLP("model")];
     const sel = document.getElementById("model");
-    if (mk && [...sel.options].some(o => o.value === mk)) { const keep = (getDraft() || {}).model === mk; sel.value = mk; updateLens(keep); updateNote(); save(); }
+    if (mk && [...sel.options].some(o => o.value === mk)) { const keep = (getDraft() || {}).model === mk; sel.value = mk; updateLens(keep); updateNote(); save(); equipTouched = true; updateStepper(); }
   } catch(e){}
   
   document.getElementById("inquiryButton").onclick = inquiry;
