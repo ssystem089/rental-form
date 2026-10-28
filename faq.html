@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#f4f5f7">
 <title>租借須知與常見問題</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&family=Oswald:wght@500;600&display=swap">
 <style>
 :root{--bg-color:#F6F5F2;--card-bg:#ffffff;--panel-bg:#EDECE8;--text-main:#121316;--text-muted:#45474d;--text-light:#64666c;--border-color:#D9DBDE;--border-dark:#121316;--accent-blue:#1B4DA0;--accent-blue-bg:#E8EEF8;--accent-blue-border:#B7C7E6;--warn-bg:rgba(245,158,11,.10);--warn-border:rgba(245,158,11,.35);--warn-text:#b45309}
 [data-theme="dark"]{--bg-color:#121316;--card-bg:#191A1E;--panel-bg:#202227;--text-main:#ECEBE7;--text-muted:#B2B3B8;--text-light:#94959B;--border-color:#2E3036;--border-dark:#5d5f66;--accent-blue:#7FA2E0;--accent-blue-bg:rgba(127,162,224,.12);--accent-blue-border:rgba(127,162,224,.4);--warn-bg:rgba(245,158,11,.12);--warn-border:rgba(245,158,11,.35);--warn-text:#fbbf24}
@@ -75,6 +76,26 @@ details[open] summary{color:var(--accent-blue)}
 /* 審查第 1 輪：深色模式的分隔線不要全亮；手機 hover 不黏住 */
 [data-theme="dark"] .header{border-bottom-color:#5d5f66}
 .lang-pill-btn,.theme-morph-btn{border-radius:6px}
+/* ===== 2026-10-28 與 ssystem089.com 同風格「場刊票根・暖白＋香檳金」：宋體標題、黑體內文、Oswald 價格；方角按鈕；不用藍字 ===== */
+:root{--bg-color:#F7F4EE;--card-bg:#FFFFFF;--panel-bg:#EFEAE0;--sub-card-bg:#FAF7F1;--text-main:#16140F;--text-muted:#4B463C;--text-light:#6A6458;
+  --border-color:#DDD6C8;--border-dark:#16140F;--accent-blue:#7A5C17;--accent-blue-bg:#F3EBD8;--accent-blue-border:#D9C394;--toast-bg:#16140F;--toast-text:#F7F4EE;
+  --ink:#16140F;--on-ink:#F7F4EE;--gold:#9A7623;--font-head:"Noto Serif TC","Songti TC",serif;--font-body:"Noto Sans TC",-apple-system,"PingFang TC",sans-serif;--font-num:"Oswald","Noto Sans TC",sans-serif;--mono:var(--font-num)}
+[data-theme="dark"]{--bg-color:#0B0B0C;--card-bg:#141415;--panel-bg:#1C1B1A;--sub-card-bg:#1C1B1A;--text-main:#F5F1E8;--text-muted:#BDB6A8;--text-light:#A8A296;
+  --border-color:#2C2A26;--border-dark:#C9A24A;--accent-blue:#D9B864;--accent-blue-bg:rgba(201,162,74,.12);--accent-blue-border:rgba(201,162,74,.45);--toast-bg:#F5F1E8;--toast-text:#0B0B0C;
+  --ink:#F5F1E8;--on-ink:#0B0B0C;--gold:#C9A24A}
+body{font-family:var(--font-body)}
+h1,h2,h3,.title,.section-title,.card-title,.product-name{font-family:var(--font-head);letter-spacing:0}
+.header{border-bottom-color:var(--gold)}
+[data-theme="dark"] .header{border-bottom-color:#C9A24A55}
+.price-main,.price-tier,.price-main *{font-family:var(--font-num);letter-spacing:0}
+.step-number,.step-num{font-family:var(--font-num);color:var(--gold)}
+.card,.faq-list,.notice,.call-notice,.fb-line,.price-row{border-radius:2px}
+.chip,.tab,.lang-pill-btn,.theme-morph-btn{border-radius:2px}
+button,.action-button,.link-button,.btn-inquiry,.btn-submit,.fb-open{border-radius:2px;box-shadow:none;-webkit-tap-highlight-color:transparent;transition:transform .12s ease,opacity .12s ease}
+button:active,.action-button:active,.link-button:active{transform:scale(.97)}
+.fb-open{background:#047A35}
+a{text-decoration-color:var(--gold);text-underline-offset:4px;-webkit-tap-highlight-color:transparent}
+@media (prefers-reduced-motion:reduce){button,.action-button,.link-button{transition:none}button:active{transform:none}}
 </style>
 <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 </head>
