@@ -1654,6 +1654,11 @@ function setupPriceRowInteractions(){
         showToast(currentLang === "zh" ? "雲端備份可在 LINE 詢問時告知客服加選。" : "Ask our LINE team to add cloud backup.");
         return;
       }
+      // 2026-10-28：花絮不是機型，點了跟雲端一樣只提示（原本會把機型選單清空）
+      if (modelVal === "highlight") {
+        showToast(currentLang === "zh" ? "精彩花絮剪輯可在交還時告知門市加購。" : "Ask our staff to add the highlight edit when you return the phone.");
+        return;
+      }
 
       const mSelect = document.getElementById("model");
       mSelect.value = modelVal;
