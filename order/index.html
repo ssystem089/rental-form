@@ -624,7 +624,12 @@ textarea:focus,textarea:focus-visible{outline:1px solid var(--gold);outline-offs
 .price-main{font-size:17px;line-height:1.3}
 .price-main small{font-size:13px;margin-left:1px}
 .price-apply{display:block;margin-top:2px;font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--text-light);letter-spacing:0}
-.price-tier{text-align:left;font-size:14px;line-height:1.6;color:var(--text-main);font-weight:500}
+.price-tier{text-align:right;font-size:14px;line-height:1.6;color:var(--text-main);font-weight:500}   /* 2026-10-29 使用者：多日折讓靠右 */
+.name-line{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:8px;row-gap:2px;min-width:0}
+.product-lens{font-family:var(--font-body);font-size:12.5px;font-weight:500;color:var(--text-light);white-space:nowrap}
+@media (min-width:521px){.product-lens::before{content:"｜";margin-right:6px;opacity:.6}}   /* 2026-10-29 使用者：增距鏡支援放型號右邊；手機寬度不夠時換到型號下一行、不加分隔線 */
+.price-tier .t{display:inline-block;white-space:nowrap}
+.price-tier .t + .t{margin-left:14px}   /* 兩段多日價各自不斷行 */
 .price-tier,.price-tier *{font-family:var(--font-body)}
 .price-more{display:none}
 @media (max-width:600px){
@@ -730,51 +735,51 @@ textarea:focus,textarea:focus-visible{outline:1px solid var(--gold);outline-offs
     <!-- vivo x300 Ultra -->
     <div class="price-row" data-model="vivo x300 Ultra">
       <div class="price-row-top">
-        <span class="product-name">vivo x300 Ultra</span>
+        <div class="name-line"><span class="product-name">vivo x300 Ultra</span><span class="product-lens" id="x300uLens">支援 200mm / 400mm 增距鏡配備</span></div>
         <div class="price-main">NT$ 1,200<small class="pd">／日</small><span class="price-apply" id="d12a">租 1–2 日適用</span></div>
       </div>
-      <div class="product-desc" id="x300uDesc">極致長焦收音旗艦・藍圖原色 ｜ 支援 200mm / 400mm 增距鏡配備</div>
-      <div class="price-tier" id="x300uPrice">NT$ 1,100／日（租 3–5 日）｜ NT$ 1,000／日（租 6 日以上）</div>
+      <div class="product-desc" id="x300uDesc">極致長焦收音旗艦・藍圖原色</div>
+      <div class="price-tier" id="x300uPrice"><span class="t">NT$ 1,100／日（租 3–5 日）</span><span class="t">NT$ 1,000／日（租 6 日以上）</span></div>
     </div>
 
     <!-- vivo x500 Pro Max -->
     <div class="price-row" data-model="vivo x500 Pro Max">
       <div class="price-row-top">
-        <span class="product-name">vivo x500 Pro Max</span>
+        <div class="name-line"><span class="product-name">vivo x500 Pro Max</span><span class="product-lens" id="x500pmLens">可搭配 200mm / 400mm 增距鏡配件</span></div>
         <div class="price-main">NT$ 1,100<small class="pd">／日</small><span class="price-apply" id="d12x">租 1–2 日適用</span></div>
       </div>
-      <div class="product-desc" id="x500pmDesc">長焦電影級專業旗艦規格 ｜ 可搭配 200mm / 400mm 增距鏡配件</div>
-      <div class="price-tier" id="x500pmPrice">NT$ 1,000／日（租 3–5 日）｜ NT$ 900／日（租 6 日以上）</div>
+      <div class="product-desc" id="x500pmDesc">長焦電影級專業旗艦規格</div>
+      <div class="price-tier" id="x500pmPrice"><span class="t">NT$ 1,000／日（租 3–5 日）</span><span class="t">NT$ 900／日（租 6 日以上）</span></div>
     </div>
 
     <!-- vivo x200 Ultra -->
     <div class="price-row" data-model="vivo x200 Ultra">
       <div class="price-row-top">
-        <span class="product-name">vivo x200 Ultra</span>
+        <div class="name-line"><span class="product-name">vivo x200 Ultra</span><span class="product-lens" id="x200uLens">支援 200mm 增距鏡配件</span></div>
         <div class="price-main">NT$ 1,000<small class="pd">／日</small><span class="price-apply" id="d12b">租 1–2 日適用</span></div>
       </div>
-      <div class="product-desc" id="x200uDesc">大光圈與細膩成像細節首選 ｜ 支援 200mm 增距鏡配件</div>
-      <div class="price-tier" id="x200uPrice">NT$ 900／日（租 3–5 日）｜ NT$ 800／日（租 6 日以上）</div>
+      <div class="product-desc" id="x200uDesc">大光圈與細膩成像細節首選</div>
+      <div class="price-tier" id="x200uPrice"><span class="t">NT$ 900／日（租 3–5 日）</span><span class="t">NT$ 800／日（租 6 日以上）</span></div>
     </div>
 
     <!-- OPPO Find X9 Ultra -->
     <div class="price-row" data-model="OPPO Find X9 Ultra">
       <div class="price-row-top">
-        <span class="product-name">OPPO Find X9 Ultra</span>
+        <div class="name-line"><span class="product-name">OPPO Find X9 Ultra</span><span class="product-lens" id="oppoLens">支援 400mm 增距鏡配件</span></div>
         <div class="price-main">NT$ 1,000<small class="pd">／日</small><span class="price-apply" id="d12d">租 1–2 日適用</span></div>
       </div>
-      <div class="product-desc" id="oppoDesc">哈蘇影像認證，10倍原生光學變焦 ｜ 支援 400mm 增距鏡配件</div>
-      <div class="price-tier" id="oppoPrice">NT$ 900／日（租 3–5 日）｜ NT$ 800／日（租 6 日以上）</div>
+      <div class="product-desc" id="oppoDesc">哈蘇影像認證，10倍原生光學變焦</div>
+      <div class="price-tier" id="oppoPrice"><span class="t">NT$ 900／日（租 3–5 日）</span><span class="t">NT$ 800／日（租 6 日以上）</span></div>
     </div>
 
     <!-- vivo x300 Pro -->
     <div class="price-row" data-model="vivo x300 Pro">
       <div class="price-row-top">
-        <span class="product-name">vivo x300 Pro</span>
+        <div class="name-line"><span class="product-name">vivo x300 Pro</span><span class="product-lens" id="x300pLens">支援 200mm 增距鏡配件</span></div>
         <div class="price-main">NT$ 900<small class="pd">／日</small><span class="price-apply" id="d12c">租 1–2 日適用</span></div>
       </div>
-      <div class="product-desc" id="x300pDesc">旅行輕便長焦攝影推薦首選 ｜ 支援 200mm 增距鏡配件</div>
-      <div class="price-tier" id="x300pPrice">NT$ 800／日（租 3–5 日）｜ NT$ 700／日（租 6 日以上）</div>
+      <div class="product-desc" id="x300pDesc">旅行輕便長焦攝影推薦首選</div>
+      <div class="price-tier" id="x300pPrice"><span class="t">NT$ 800／日（租 3–5 日）</span><span class="t">NT$ 700／日（租 6 日以上）</span></div>
     </div>
 
     <!-- iPhone 17 Pro / Max -->
@@ -784,7 +789,7 @@ textarea:focus,textarea:focus-visible{outline:1px solid var(--gold);outline-offs
         <div class="price-main">NT$ 850<small class="pd">／日</small><span class="price-apply" id="d12e">租 1–2 日適用</span></div>
       </div>
       <div class="product-desc" id="iphoneDesc">極致運算效能與專業級流暢影片錄製性能</div>
-      <div class="price-tier" id="iphonePrice">NT$ 750／日（租 3–5 日）｜ NT$ 600／日（租 6 日以上）</div>
+      <div class="price-tier" id="iphonePrice"><span class="t">NT$ 750／日（租 3–5 日）</span><span class="t">NT$ 600／日（租 6 日以上）</span></div>
     </div>
 
     <!-- DJI Pocket 4 Pro -->
@@ -1044,18 +1049,23 @@ const zh = {
   guideItem2: "<strong>• 看2天活動（例：9+10號）</strong>：選9號 預計取機時間 - 11號交還（計2日）",
   guideNote: "租訖日請直接選至【活動隔天】-<br>除熱門時段延長營業至23:00外，最終交還檔期於現場/客服確認為準。", 
   timePillLabel: "預計取機時間（營業時間 12:00–20:00）：",
-  x300uDesc: "極致長焦收音旗艦・藍圖原色 ｜ 支援 200mm / 400mm 增距鏡配備",
-  x300uPrice: "NT$ 1,100／日（租 3–5 日）｜ NT$ 1,000／日（租 6 日以上）",
-  x500pmDesc: "長焦電影級專業旗艦規格 ｜ 可搭配 200mm / 400mm 增距鏡配件",
-  x500pmPrice: "NT$ 1,000／日（租 3–5 日）｜ NT$ 900／日（租 6 日以上）",
-  x200uDesc: "大光圈與細膩成像細節首選 ｜ 支援 200mm 增距鏡配件",
-  x200uPrice: "NT$ 900／日（租 3–5 日）｜ NT$ 800／日（租 6 日以上）",
-  x300pDesc: "旅行輕便長焦攝影推薦首選 ｜ 支援 200mm 增距鏡配件",
-  x300pPrice: "NT$ 800／日（租 3–5 日）｜ NT$ 700／日（租 6 日以上）",
-  oppoDesc: "哈蘇影像認證，10倍原生光學變焦 ｜ 支援 400mm 增距鏡配件",
-  oppoPrice: "NT$ 900／日（租 3–5 日）｜ NT$ 800／日（租 6 日以上）",
+  x300uDesc: "極致長焦收音旗艦・藍圖原色",
+  x300uLens: "支援 200mm / 400mm 增距鏡配備",
+  x300uPrice: '<span class="t">NT$ 1,100／日（租 3–5 日）</span><span class="t">NT$ 1,000／日（租 6 日以上）</span>',
+  x500pmDesc: "長焦電影級專業旗艦規格",
+  x500pmLens: "可搭配 200mm / 400mm 增距鏡配件",
+  x500pmPrice: '<span class="t">NT$ 1,000／日（租 3–5 日）</span><span class="t">NT$ 900／日（租 6 日以上）</span>',
+  x200uDesc: "大光圈與細膩成像細節首選",
+  x200uLens: "支援 200mm 增距鏡配件",
+  x200uPrice: '<span class="t">NT$ 900／日（租 3–5 日）</span><span class="t">NT$ 800／日（租 6 日以上）</span>',
+  x300pDesc: "旅行輕便長焦攝影推薦首選",
+  x300pLens: "支援 200mm 增距鏡配件",
+  x300pPrice: '<span class="t">NT$ 800／日（租 3–5 日）</span><span class="t">NT$ 700／日（租 6 日以上）</span>',
+  oppoDesc: "哈蘇影像認證，10倍原生光學變焦",
+  oppoLens: "支援 400mm 增距鏡配件",
+  oppoPrice: '<span class="t">NT$ 900／日（租 3–5 日）</span><span class="t">NT$ 800／日（租 6 日以上）</span>',
   iphoneDesc: "極致運算效能與專業級流暢影片錄製性能",
-  iphonePrice: "NT$ 750／日（租 3–5 日）｜ NT$ 600／日（租 6 日以上）",
+  iphonePrice: '<span class="t">NT$ 750／日（租 3–5 日）</span><span class="t">NT$ 600／日（租 6 日以上）</span>',
   djiDesc: "旗艦級雙鏡頭手持光學縮放三軸穩定相機套裝",
   perDay: "／日",
   lensTitle: "vivo G2 增距鏡特仕組",
@@ -1140,18 +1150,23 @@ const en = {
   guideItem2: "<strong>• 2-Day Event (e.g. 9th+10th)</strong>: Select 9th pickup time - 11th return (2 days)",
   guideNote: "Please select the day after the event as the return date -<br>Except peak hours extending to 23:00, the final return schedule is confirmed on site or by customer service.",
   timePillLabel: "Scheduled Pickup Time (Business Hours 12:00–20:00):",
-  x300uDesc: "Ultimate telephoto & studio audio flagship, Blueprint ｜ 200mm / 400mm extender compatible",
-  x300uPrice: "NT$ 1,100/day (3–5 days) ｜ NT$ 1,000/day (6+ days)",
-  x500pmDesc: "Cinema-grade telephoto professional flagship ｜ 200mm / 400mm extender compatible",
-  x500pmPrice: "NT$ 1,000/day (3–5 days) ｜ NT$ 900/day (6+ days)",
-  x200uDesc: "Large aperture & fine optical detail resolution ｜ 200mm extender compatible",
-  x200uPrice: "NT$ 900/day (3–5 days) ｜ NT$ 800/day (6+ days)",
-  x300pDesc: "High cost-performance lightweight travel telephoto ｜ 200mm extender compatible",
-  x300pPrice: "NT$ 800/day (3–5 days) ｜ NT$ 700/day (6+ days)",
-  oppoDesc: "Hasselblad certified imaging, 10x native optical zoom ｜ 400mm extender compatible",
-  oppoPrice: "NT$ 900/day (3–5 days) ｜ NT$ 800/day (6+ days)",
+  x300uDesc: "Ultimate telephoto & studio audio flagship, Blueprint",
+  x300uLens: "200mm / 400mm extender compatible",
+  x300uPrice: '<span class="t">NT$ 1,100/day (3–5 days)</span><span class="t">NT$ 1,000/day (6+ days)</span>',
+  x500pmDesc: "Cinema-grade telephoto professional flagship",
+  x500pmLens: "200mm / 400mm extender compatible",
+  x500pmPrice: '<span class="t">NT$ 1,000/day (3–5 days)</span><span class="t">NT$ 900/day (6+ days)</span>',
+  x200uDesc: "Large aperture & fine optical detail resolution",
+  x200uLens: "200mm extender compatible",
+  x200uPrice: '<span class="t">NT$ 900/day (3–5 days)</span><span class="t">NT$ 800/day (6+ days)</span>',
+  x300pDesc: "High cost-performance lightweight travel telephoto",
+  x300pLens: "200mm extender compatible",
+  x300pPrice: '<span class="t">NT$ 800/day (3–5 days)</span><span class="t">NT$ 700/day (6+ days)</span>',
+  oppoDesc: "Hasselblad certified imaging, 10x native optical zoom",
+  oppoLens: "400mm extender compatible",
+  oppoPrice: '<span class="t">NT$ 900/day (3–5 days)</span><span class="t">NT$ 800/day (6+ days)</span>',
   iphoneDesc: "Apple flagship computation & cinema-grade video performance",
-  iphonePrice: "NT$ 750/day (3–5 days) ｜ NT$ 600/day (6+ days)",
+  iphonePrice: '<span class="t">NT$ 750/day (3–5 days)</span><span class="t">NT$ 600/day (6+ days)</span>',
   djiDesc: "Flagship dual-lens 3-axis optical zoom handheld camera system",
   perDay: "/ day",
   lensTitle: "vivo G2 Telephoto Extender Set",
@@ -1244,6 +1259,7 @@ function setLanguage(lang) {
     fsStep1:"step1Text",fsStep2:"step2Text",fsStep3:"step3Text",calLegend:"calLegend",
     calendarTitle:"calendarTitle",timePillLabel:"timePillLabel",
     calGuideTitle:"calGuideTitle",guideItem1:"guideItem1",guideItem2:"guideItem2",guideNote:"guideNote",
+    x300uLens:"x300uLens",x500pmLens:"x500pmLens",x200uLens:"x200uLens",x300pLens:"x300pLens",oppoLens:"oppoLens",
     x300uDesc:"x300uDesc",x300uPrice:"x300uPrice",x500pmDesc:"x500pmDesc",x500pmPrice:"x500pmPrice",
     x200uDesc:"x200uDesc",x200uPrice:"x200uPrice",x300pDesc:"x300pDesc",x300pPrice:"x300pPrice",
     oppoDesc:"oppoDesc",oppoPrice:"oppoPrice",iphoneDesc:"iphoneDesc",iphonePrice:"iphonePrice",
@@ -1253,7 +1269,7 @@ function setLanguage(lang) {
     inquiryButton:"inquiryButton",inquiryNotice:"inquiryNotice",
     fallbackTitle:"fallbackTitle",fallbackGuide:"fallbackGuide",backButton:"back",copyButton:"copy"
   };
-  Object.keys(ids).forEach(k => text(k, x[ids[k]], k==="store"||k==="inquiryNotice"||k==="depositRuleTip"||k==="faqLink"||k==="lensDesc"||k==="guideItem1"||k==="guideItem2"||k==="guideNote"||k==="hlPrice"||k==="hlDesc"));
+  Object.keys(ids).forEach(k => text(k, x[ids[k]], k==="store"||k==="inquiryNotice"||k==="depositRuleTip"||k==="faqLink"||k==="lensDesc"||k==="guideItem1"||k==="guideItem2"||k==="guideNote"||k==="hlPrice"||k==="hlDesc"||/^(x300u|x500pm|x200u|x300p|oppo|iphone)Price$/.test(k)));
   ["d12a","d12x","d12b","d12c","d12d","d12e"].forEach(id => text(id, x.days));
   text("perDayA", x.perDay); text("perDayB", x.perDay); text("perUse", x.perUse);
   document.querySelectorAll(".pd").forEach(e => { e.textContent = x.perDay; });
