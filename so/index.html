@@ -165,7 +165,7 @@ tr.disc td{color:var(--ink-2)}
       <div class="terms"><section><h3>銷貨明細</h3><dl>
         <div><dt>付款方式</dt><dd>匯款</dd></div>
         <div id="qPdRow"><dt>收款日</dt><dd class="num" id="qPd"></dd></div>
-        <div id="qL5Row"><dt>帳號後五碼</dt><dd class="num" id="qL5"></dd></div>
+        <div id="qL5Row"><dt>後五碼</dt><dd class="num" id="qL5"></dd></div>
         <div><dt>交貨方式</dt><dd id="qShip"></dd></div>
         <div id="qSdRow"><dt>出貨日期</dt><dd class="num" id="qSd"></dd></div>
         <div><dt>發票</dt><dd id="qInv"></dd></div></dl>
@@ -256,7 +256,7 @@ tr.disc td{color:var(--ink-2)}
     $("qTaxAmt").textContent = money(q.tax_amount);
     $("qTaxRow").hidden = !q.tax;   // 2026-10-29：沒含稅不顯示「營業稅（未稅）0」
     $("qTotal").textContent = money(q.total);
-    $("qInv").textContent = q.invoice_no ? (q.tax ? "三聯式 " : "") + q.invoice_no : (q.tax ? "三聯式（含稅）" : "—");
+    $("qInv").textContent = q.tax ? "三聯式（含稅）" : (q.invoice_no ? "已開立" : "—");   // 號碼在上方「發票號碼」
     $("qInvNo").textContent = q.invoice_no || ""; $("qInvNoRow").hidden = !q.invoice_no;   // 發票號碼有填才顯示
     $("qPaid").textContent = money(q.paid);
     var bal = Number(q.balance) || 0;
