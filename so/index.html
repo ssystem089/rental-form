@@ -72,9 +72,9 @@ tr.disc td{color:var(--ink-2)}
 .stamp{border:0!important;transform:none!important;width:50mm!important;height:23mm!important;padding:0;opacity:.92}
 .paid-tag{display:inline-block;margin-left:8px;padding:1px 8px;border:1.5px solid var(--line-green);color:var(--line-green);font-weight:700;font-size:11px;letter-spacing:.1em;border-radius:2px;vertical-align:2px}
 .sum .bal b{font-family:"Oswald",sans-serif;font-size:16px;color:var(--red)}
-.sign{display:grid;grid-template-columns:1fr 1fr;gap:0 28px;margin-top:16px}
-.sign div{display:flex;align-items:flex-end;gap:8px;min-height:40px;border-bottom:1px solid var(--ink);padding-bottom:4px}
-.sign span{color:var(--ink-3);white-space:nowrap}
+.terms .notes{margin-top:12px;font-size:13px;line-height:1.7;color:var(--ink);max-width:calc(100% - 54mm)}
+.terms .notes b{font-family:"Noto Serif TC",serif;letter-spacing:.2em}
+@media (max-width:560px){.terms .notes{max-width:none}}
 .notes{margin-top:10px;font-size:10px;line-height:1.5;color:var(--ink-2)}
 .notes ol{margin:4px 0 0;padding-left:18px}
 /* 紙下方：匯款資訊與按鈕（列印時隱藏） */
@@ -148,7 +148,7 @@ tr.disc td{color:var(--ink-2)}
       <dl class="meta">
         <div><dt>客戶名稱</dt><dd id="qName"></dd></div><div><dt>銷貨日期</dt><dd class="num" id="qDate"></dd></div>
         <div><dt>電話</dt><dd class="num" id="qPhone"></dd></div><div><dt>報價單號</dt><dd class="num" id="qQno"></dd></div>
-        <div id="qTaxIdRow"><dt>統一編號</dt><dd id="qTax"></dd></div><div id="qInvNoRow"><dt>發票號碼</dt><dd class="num" id="qInvNo"></dd></div>
+        <div id="qTaxIdRow"><dt>統一編號</dt><dd id="qTax"></dd></div><div></div>
       </dl>
       <table>
         <thead><tr><th class="n">No.</th><th>品名／規格</th><th class="r">數量</th><th class="r">單價</th><th class="r">金額</th></tr></thead>
@@ -167,12 +167,12 @@ tr.disc td{color:var(--ink-2)}
         <div id="qPdRow"><dt>收款日</dt><dd class="num" id="qPd"></dd></div>
         <div id="qL5Row"><dt>後五碼</dt><dd class="num" id="qL5"></dd></div>
         <div><dt>交貨方式</dt><dd id="qShip"></dd></div>
+        <div id="qStRow"><dt>寄送門市</dt><dd id="qSt"></dd></div>
         <div id="qSdRow"><dt>出貨日期</dt><dd class="num" id="qSd"></dd></div>
-        <div><dt>發票</dt><dd id="qInv"></dd></div></dl>
+        <div id="qInvRow"><dt>發票</dt><dd class="num" id="qInv"></dd></div></dl>
+        <div class="notes" id="qNotesBox" hidden><b>備註</b><ol id="qNotes"></ol></div>
         <div class="stamp" aria-hidden="true"><svg viewBox="0 0 280 130" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"> <rect x="3" y="3" width="274" height="124" rx="14" fill="none" stroke="#2563eb" stroke-width="4"/> <line x1="222" y1="3" x2="222" y2="127" stroke="#2563eb" stroke-width="3"/> <path d="M 18 24 L 32 38 L 46 24 M 18 38 L 32 52 L 46 38 M 18 52 L 32 66 L 46 52" fill="none" stroke="#2563eb" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/> <text x="56" y="38" font-size="18.5" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif">簡約體制有限公司</text> <line x1="55" y1="46" x2="216" y2="46" stroke="#2563eb" stroke-width="2.5"/> <text x="136" y="78" font-size="28" font-weight="bold" fill="#2563eb" font-family="'Courier New', monospace" text-anchor="middle" letter-spacing="1.5">24932067</text> <line x1="55" y1="88" x2="216" y2="88" stroke="#2563eb" stroke-width="2.5"/> <text x="136" y="106" font-size="12" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif" text-anchor="middle">台北市南港區舊莊街一段</text> <text x="136" y="122" font-size="12" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif" text-anchor="middle">242 號 3 樓</text> <text x="250" y="24" font-size="15" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif" writing-mode="vertical-rl" letter-spacing="3">統一發票專用章</text> </svg></div></section>
       </div>
-      <div class="sign"><div><span>客戶簽收</span></div><div><span>簽收日期</span></div></div>
-      <div class="notes" id="qNotesBox" hidden>備註<ol id="qNotes"></ol></div>
     </article>
 
     <section class="panel" aria-label="付款狀態">
@@ -256,8 +256,8 @@ tr.disc td{color:var(--ink-2)}
     $("qTaxAmt").textContent = money(q.tax_amount);
     $("qTaxRow").hidden = !q.tax;   // 2026-10-29：沒含稅不顯示「營業稅（未稅）0」
     $("qTotal").textContent = money(q.total);
-    $("qInv").textContent = q.tax ? "三聯式（含稅）" : (q.invoice_no ? "已開立" : "—");   // 號碼在上方「發票號碼」
-    $("qInvNo").textContent = q.invoice_no || ""; $("qInvNoRow").hidden = !q.invoice_no;   // 發票號碼有填才顯示
+    $("qInv").textContent = q.invoice_no || ""; $("qInvRow").hidden = !q.invoice_no;   // 發票號碼有填才顯示（2026-10-29）
+    $("qSt").textContent = q.ship_store || ""; $("qStRow").hidden = !q.ship_store;
     $("qPaid").textContent = money(q.paid);
     var bal = Number(q.balance) || 0;
     $("qPaidTag").hidden = bal > 0;
