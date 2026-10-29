@@ -69,7 +69,7 @@ tr.disc td{color:var(--ink-2)}
   display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:"Noto Serif TC",serif;font-weight:900;font-size:10.5px;line-height:1.35;text-align:center;opacity:.85}
 .stamp b{font-size:11.5px;white-space:nowrap}
 /* 2026-10-29 使用者：改用線上合約甲方公司章（向量圖），不再是文字章 */
-.stamp{border:0!important;transform:rotate(-4deg)!important;width:50mm!important;height:23mm!important;padding:0;opacity:.92}
+.stamp{border:0!important;transform:none!important;width:50mm!important;height:23mm!important;padding:0;opacity:.92}
 .notes{margin-top:10px;font-size:10px;line-height:1.5;color:var(--ink-2)}
 .notes ol{margin:4px 0 0;padding-left:18px}
 /* 紙下方：匯款資訊與按鈕（列印時隱藏） */
@@ -143,7 +143,7 @@ tr.disc td{color:var(--ink-2)}
       <dl class="meta">
         <div><dt>客戶名稱</dt><dd id="qName"></dd></div><div><dt>報價日期</dt><dd class="num" id="qDate"></dd></div>
         <div><dt>電話</dt><dd class="num" id="qPhone"></dd></div><div><dt>有效期限</dt><dd class="num" id="qExp"></dd></div>
-        <div><dt>統一編號</dt><dd id="qTax"></dd></div><div></div>
+        <div id="qTaxIdRow"><dt>統一編號</dt><dd id="qTax"></dd></div><div></div>
       </dl>
       <table>
         <thead><tr><th class="n">No.</th><th>品名／規格</th><th class="r">數量</th><th class="r">單價</th><th class="r">金額</th></tr></thead>
@@ -151,7 +151,7 @@ tr.disc td{color:var(--ink-2)}
       </table>
       <div class="sum">
         <div><span>小計</span><span class="num" id="qSub"></span></div>
-        <div><span id="qTaxLbl">營業稅</span><span class="num" id="qTaxAmt"></span></div>
+        <div id="qTaxRow"><span id="qTaxLbl">營業稅</span><span class="num" id="qTaxAmt"></span></div>
         <div class="total"><span>總計 NT$</span><b id="qTotal"></b></div>
       </div>
       <div class="pay" id="qPay" hidden></div>
@@ -220,7 +220,8 @@ tr.disc td{color:var(--ink-2)}
     $("qDate").textContent = q.date || "";
     $("qPhone").textContent = q.phone || "—";
     $("qExp").textContent = q.expires || "";
-    $("qTax").textContent = q.tax_id || "—";
+    $("qTax").textContent = q.tax_id || "";
+    $("qTaxIdRow").hidden = !q.tax_id;   // 2026-10-29：統編沒填不顯示
     var tb = $("qRows");
     (q.items || []).forEach(function (it, k) {
       var tr = el("tr");
@@ -242,6 +243,7 @@ tr.disc td{color:var(--ink-2)}
     $("qSub").textContent = money(q.subtotal);
     $("qTaxLbl").textContent = "營業稅" + (q.tax ? "（5%）" : "（未稅）");
     $("qTaxAmt").textContent = money(q.tax_amount);
+    $("qTaxRow").hidden = !q.tax;   // 2026-10-29：沒含稅不顯示「營業稅（未稅）0」
     $("qTotal").textContent = money(q.total);
     $("qInv").textContent = q.tax ? "三聯式（含稅）" : "未確定";
     if (q.pay && q.pay.length) {
