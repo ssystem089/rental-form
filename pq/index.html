@@ -53,6 +53,7 @@ td{padding:7px 6px;border-bottom:1px solid var(--rule-2);vertical-align:top;over
 .r{text-align:right}.n{width:34px;color:var(--gold-ink);font-family:"Oswald",sans-serif}
 .num{font-family:"Oswald",sans-serif;font-size:14px;letter-spacing:.02em;white-space:nowrap}
 tr.disc td{color:var(--ink-2)}
+tr.disc td.num{color:var(--red)}   /* 2026-10-30 使用者：折讓金額紅字 */
 .sum{margin:14px 0 0 auto;width:62mm;max-width:100%}
 .sum div{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--rule)}
 .sum .total{border-top:1px solid var(--ink);border-bottom:2px solid var(--gold-ink);margin-top:4px;padding:8px 0;align-items:baseline}
@@ -78,6 +79,12 @@ tr.disc td{color:var(--ink-2)}
 .acct{display:grid;grid-template-columns:4.5em 1fr;gap:4px 10px;font-size:14px}
 .acct dt{color:var(--faint)}.acct dd{margin:0}
 .acct .big{font-family:"Oswald",sans-serif;font-size:22px;letter-spacing:.08em;color:var(--warm)}
+/* 2026-10-30 使用者：蘋果風白卡圓點轉帳 QR（同租借報價頁，台灣Pay 碼，中間國泰圖示） */
+.qr-card{background:#fff;border-radius:28px;padding:20px 20px 12px;margin:14px auto 0;width:fit-content;box-shadow:0 8px 30px rgba(0,0,0,.35);display:flex;flex-direction:column;align-items:center;gap:8px}
+.qr-box,.qr-box canvas{width:208px!important;height:208px!important;display:flex;align-items:center;justify-content:center}
+.qr-name{font-size:13px;font-weight:600;color:#3a3a3c;letter-spacing:.3px}
+.qr-cap{margin:8px 0 0;text-align:center;color:var(--faint);font-size:12px}
+.bank a{color:inherit;text-decoration:none}
 .amt{font-family:"Oswald",sans-serif;font-size:18px;color:var(--gold)}
 .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 .actions .full{grid-column:1 / -1}
@@ -159,7 +166,7 @@ tr.disc td{color:var(--ink-2)}
       <div class="terms"><section><h3>報價確認</h3><dl>
         <div><dt>付款條件</dt><dd>匯款</dd></div><div><dt>交貨方式</dt><dd>指送</dd></div><div><dt>發票</dt><dd id="qInv"></dd></div>
         <div><dt>出貨期限</dt><dd>5 個工作天</dd></div>
-        <div><dt>匯款帳戶</dt><dd>簡約體制有限公司<br><span class="bank">國泰世華 013 南港分行 1069<br>106035003935</span></dd></div></dl>
+        <div><dt>匯款帳戶</dt><dd>簡約體制有限公司<br><span class="bank">國泰世華 013 南港分行 1069<br><a href="#qrCard">1060 3500 3935</a></span></dd></div></dl>
         <div class="stamp" aria-hidden="true"><svg viewBox="0 0 280 130" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"> <rect x="3" y="3" width="274" height="124" rx="14" fill="none" stroke="#2563eb" stroke-width="4"/> <line x1="222" y1="3" x2="222" y2="127" stroke="#2563eb" stroke-width="3"/> <path d="M 18 24 L 32 38 L 46 24 M 18 38 L 32 52 L 46 38 M 18 52 L 32 66 L 46 52" fill="none" stroke="#2563eb" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/> <text x="56" y="38" font-size="18.5" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif">簡約體制有限公司</text> <line x1="55" y1="46" x2="216" y2="46" stroke="#2563eb" stroke-width="2.5"/> <text x="136" y="78" font-size="28" font-weight="bold" fill="#2563eb" font-family="'Courier New', monospace" text-anchor="middle" letter-spacing="1.5">24932067</text> <line x1="55" y1="88" x2="216" y2="88" stroke="#2563eb" stroke-width="2.5"/> <text x="136" y="106" font-size="12" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif" text-anchor="middle">台北市南港區舊莊街一段</text> <text x="136" y="122" font-size="12" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif" text-anchor="middle">242 號 3 樓</text> <text x="250" y="24" font-size="15" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif" writing-mode="vertical-rl" letter-spacing="3">統一發票專用章</text> </svg></div></section>
       </div>
       <div class="notes" id="qNotesBox" hidden>備註<ol id="qNotes"></ol></div>
@@ -173,6 +180,10 @@ tr.disc td{color:var(--ink-2)}
         <dt>帳號</dt><dd class="big">1060 3500 3935</dd>
         <dt>金額</dt><dd class="amt" id="pAmt"></dd>
       </dl>
+      <div id="qrWrap">
+        <div class="qr-card" id="qrCard"><div class="qr-box" id="qrBox" role="img" aria-label="國泰世華轉帳 QR Code 1060 3500 3935"></div><div class="qr-name">台灣Pay｜國泰世華 013</div></div>
+        <p class="qr-cap">用銀行 App 掃描轉帳（手機上可截圖後用 App 讀取）</p>
+      </div>
       <div class="actions">
         <button class="btn gold full" type="button" id="copyBtn" onclick="copyAcct()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/></svg>
@@ -255,7 +266,32 @@ tr.disc td{color:var(--ink-2)}
       $("qNotesBox").hidden = false;
     }
     $("pAmt").textContent = "NT$ " + money(q.total);
+    drawQr();
     $("state").hidden = true; $("doc").hidden = false;
+  }
+
+  // 2026-10-30 轉帳 QR：與租借報價頁（gas-full/QuoteView.html）同一組台灣Pay 資料與畫法；載入失敗就整塊不顯示
+  var TW_QR_DATA = "TWQRP%3A%2F%2F%E5%80%8B%E4%BA%BA%E8%BD%89%E5%B8%B3%2F158%2F02%2FV1%3FD5%3D013%26D6%3D0000106035003935";
+  var CATHAY_ICON = "data:image/png;base64,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";
+  function drawQr() {
+    var box = $("qrBox");
+    if (box.firstChild) return;
+    var hide = function () { $("qrWrap").hidden = true; };
+    var sc = document.createElement("script");
+    sc.src = "https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js";
+    sc.onerror = hide;
+    sc.onload = function () {
+      try {
+        new QRCodeStyling({ width: 464, height: 464, type: "canvas", data: TW_QR_DATA, margin: 0,
+          qrOptions: { errorCorrectionLevel: "H" },
+          dotsOptions: { type: "dots", color: "#000000" },
+          cornersSquareOptions: { type: "extra-rounded", color: "#000000" },
+          cornersDotOptions: { type: "dot", color: "#000000" },
+          backgroundOptions: { color: "#ffffff" },
+          image: CATHAY_ICON, imageOptions: { hideBackgroundDots: true, imageSize: 0.3, margin: 6 } }).append(box);
+      } catch (e) { hide(); }
+    };
+    document.head.appendChild(sc);
   }
 
   var toastTimer = null;
