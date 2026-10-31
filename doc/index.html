@@ -92,9 +92,24 @@
       .catch(function () { clearTimeout(timer); return fromGas(); });
   }
 
-  fromEdge()
-    .then(function (d) {
+  // 控制台開約加速（2026-10-31）：在控制台簽約面板裡時，先跟控制台要開約當下 GAS 算好的頁面；拿到就直接顯示，不用等這邊再抓
+  var shown = false;
+  var CONSOLE = /^https:\/\/admin\.24932067\.xyz$|^http:\/\/(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+)(:\d+)?$/;
+  var cidMatch = qs.match(/(?:^|&)cid=([A-Za-z0-9_-]+)/);
+  if (window.parent !== window && cidMatch) {
+    window.addEventListener("message", function (e) {
+      if (shown || e.source !== window.parent || !CONSOLE.test(e.origin || "")) return;
+      var m = e.data || {};
+      if (m.type !== "ssystem-doc-html" || !m.html || String(m.cid || "").toUpperCase() !== cidMatch[1].toUpperCase()) return;
+      showDoc({ ok: true, html: m.html, title: m.title });
+    });
+    try { window.parent.postMessage({ type: "ssystem-doc-ready", cid: cidMatch[1] }, "*"); } catch (e) {}
+  }
+
+  function showDoc(d) {
+      if (shown) return;
       if (!d || !d.ok || !d.html) { showError((d && d.error) || "文件載入失敗，請稍後重試。"); return; }
+      shown = true;
       var html = d.html;
       // 已簽署的合約：原本頁面會自動跳轉到 PDF
       var refresh = html.match(/http-equiv=["']refresh["'][^>]*url=([^"'>]+)/i);
@@ -113,8 +128,11 @@
       document.write(html);
       document.close();
       if (d.title && !/<title>/i.test(html)) document.title = d.title;
-    })
-    .catch(function () { showError("網路連線不穩，請確認網路後重新載入。"); });
+  }
+
+  fromEdge()
+    .then(showDoc)
+    .catch(function () { if (!shown) showError("網路連線不穩，請確認網路後重新載入。"); });
 })();
 </script>
 </body>
