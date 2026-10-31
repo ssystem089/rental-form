@@ -74,7 +74,7 @@
   window.google = { script: { run: makeRunner(null, null, null), host: { close: function () {} } } };
 
   var qs = location.search.replace(/^\?/, "");
-  if (!/(^|&)(cid|qid|contractId|orderId|quoteId|delivery)=/.test(qs)) {
+  if (!/(^|&)(cid|qid|contractId|orderId|quoteId|delivery|pdf)=/.test(qs)) {
     showError("連結不完整，請向門市重新索取。");
     return;
   }
