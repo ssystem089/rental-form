@@ -798,7 +798,7 @@ textarea:focus,textarea:focus-visible{outline:1px solid var(--gold);outline-offs
         <span class="product-name">Insta360 Luna Ultra 標準套裝</span>
         <div class="price-main">NT$ 600<small id="d12f">/ 1–2日</small></div>
       </div>
-      <div class="product-desc" id="djiDesc">徠卡雙鏡 8K 雲台相機 ｜ 增距鏡需與專員確認（未來加入）</div>
+      <div class="product-desc"><span id="djiDesc">徠卡雙鏡 8K 雲台相機</span> ｜ <a id="lunaTele" href="https://www.ssystem089.com/insta360-luna-ultra/#tele" target="_blank" rel="noopener">Luna Ultra 1.5x 望遠鏡頭（選配）</a></div>
       <div class="price-tier" id="lunaPrice">NT$ 500（3–5日）｜ NT$ 400（6日以上）</div>
     </div>
 
@@ -1067,7 +1067,8 @@ const zh = {
   oppoPrice: '<span class="t">NT$ 900／日（租 3–5 日）</span><span class="t">NT$ 800／日（租 6 日以上）</span>',
   iphoneDesc: "極致運算效能與專業級流暢影片錄製性能",
   iphonePrice: '<span class="t">NT$ 750／日（租 3–5 日）</span><span class="t">NT$ 600／日（租 6 日以上）</span>',
-  djiDesc: "徠卡雙鏡 8K 雲台相機 ｜ 增距鏡需與專員確認（未來加入）",
+  djiDesc: "徠卡雙鏡 8K 雲台相機",
+  lunaTele: "Luna Ultra 1.5x 望遠鏡頭（選配）",
   lunaPrice: "NT$ 500（3–5日）｜ NT$ 400（6日以上）",
   perDay: "／日",
   lensTitle: "vivo G2 增距鏡特仕組",
@@ -1108,7 +1109,7 @@ const zh = {
   noteX300P: "<strong>規格摘要：</strong>輕量化長焦首選，防手震與光學平衡出色。",
   noteOppo: "<strong>規格摘要：</strong>哈蘇影像旗艦，支援 400mm 增距鏡。",
   noteIphone: "<strong>規格摘要：</strong>適合 iOS 專業影音生態與流暢錄影。",
-  noteDji: "<strong>規格摘要：</strong>徠卡雙鏡、8K 錄影、三軸雲台穩定，適合旅遊 Vlog、演唱會與手持運鏡；增距鏡需與專員確認（未來加入）。",
+  noteDji: "<strong>規格摘要：</strong>徠卡雙鏡、8K 錄影、三軸雲台穩定，適合旅遊 Vlog、演唱會與手持運鏡；可加 Luna Ultra 1.5x 望遠鏡頭（選配），需與專員確認。",
   noteLens: "<strong>規格摘要：</strong>僅單租增距鏡特仕組（含對應手機外殼與保護配件）。",
   savedText: "已保留上次選擇的設備與日期。",
   clear: "清除暫存",
@@ -1169,7 +1170,8 @@ const en = {
   oppoPrice: '<span class="t">NT$ 900/day (3–5 days)</span><span class="t">NT$ 800/day (6+ days)</span>',
   iphoneDesc: "Apple flagship computation & cinema-grade video performance",
   iphonePrice: '<span class="t">NT$ 750/day (3–5 days)</span><span class="t">NT$ 600/day (6+ days)</span>',
-  djiDesc: "Leica dual-lens 8K gimbal camera ｜ Telephoto lens: please ask our staff (coming soon)",
+  djiDesc: "Leica dual-lens 8K gimbal camera",
+  lunaTele: "Luna Ultra 1.5x Telephoto Lens (optional)",
   lunaPrice: "NT$ 500 (3–5 days) ｜ NT$ 400 (6+ days)",
   perDay: "/ day",
   lensTitle: "vivo G2 Telephoto Extender Set",
@@ -1207,7 +1209,7 @@ const en = {
   noteX300P: "<strong>Summary:</strong> Lightweight telephoto pick with excellent stabilization.",
   noteOppo: "<strong>Summary:</strong> Hasselblad imaging flagship, 400mm extender compatible.",
   noteIphone: "<strong>Summary:</strong> Smooth video and the iOS ecosystem.",
-  noteDji: "<strong>Summary:</strong> Leica dual lens, 8K video and 3-axis gimbal stabilization for travel vlogs, concerts and handheld shots. Telephoto lens: please ask our staff (coming soon).",
+  noteDji: "<strong>Summary:</strong> Leica dual lens, 8K video and 3-axis gimbal stabilization for travel vlogs, concerts and handheld shots. Optional Luna Ultra telephoto lens (please ask our staff).",
   noteLens: "<strong>Summary:</strong> Extender kit only (includes the matching phone case and protection).",
   savedText: "Your last selection has been restored.",
   dates: "Please tap the calendar to choose your pickup and return dates",
@@ -1265,7 +1267,7 @@ function setLanguage(lang) {
     x300uLens:"x300uLens",x500pmLens:"x500pmLens",x200uLens:"x200uLens",x300pLens:"x300pLens",oppoLens:"oppoLens",
     x300uDesc:"x300uDesc",x300uPrice:"x300uPrice",x500pmDesc:"x500pmDesc",x500pmPrice:"x500pmPrice",
     x200uDesc:"x200uDesc",x200uPrice:"x200uPrice",x300pDesc:"x300pDesc",x300pPrice:"x300pPrice",
-    oppoDesc:"oppoDesc",oppoPrice:"oppoPrice",iphoneDesc:"iphoneDesc",iphonePrice:"iphonePrice",lunaPrice:"lunaPrice",
+    oppoDesc:"oppoDesc",oppoPrice:"oppoPrice",iphoneDesc:"iphoneDesc",iphonePrice:"iphonePrice",lunaPrice:"lunaPrice",lunaTele:"lunaTele",
     djiDesc:"djiDesc",lensTitle:"lensTitle",lensDesc:"lensDesc",cloudTitle:"cloudTitle",cloudDesc:"cloudDesc",hlTitle:"hlTitle",hlPrice:"hlPrice",hlDesc:"hlDesc",hlDep:"hlDep",
     depCloud:"depCloudText",depositRuleTip:"depositRuleTip",faqLink:"faqLinkText",
     formTitle:"formTitle",modelLabel:"modelLabel",lensLabel:"lensLabel",
