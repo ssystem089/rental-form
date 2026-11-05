@@ -2042,7 +2042,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 從官網點「查看價目與檔期」帶 ?model= 時，先幫客人選好機型（2026-10-24）
   try {
-    const MODEL_KEYS = { x300u:"vivo x300 Ultra", x500pm:"vivo x500 Pro Max", x200u:"vivo x200 Ultra", x300p:"vivo x300 Pro", x9u:"OPPO Find X9 Ultra", ip17pm:"iPhone 17 Pro Max" };
+    const MODEL_KEYS = { x300u:"vivo x300 Ultra", x500pm:"vivo x500 Pro Max", x200u:"vivo x200 Ultra", x300p:"vivo x300 Pro", x9u:"OPPO Find X9 Ultra", ip17pm:"iPhone 17 Pro Max", ilu:"Insta360 Luna Ultra 標準套裝" };
     const mk = MODEL_KEYS[URLP("model")];
     const sel = document.getElementById("model");
     if (mk && [...sel.options].some(o => o.value === mk)) { const keep = (getDraft() || {}).model === mk; sel.value = mk; updateLens(keep); updateNote(); save(); equipTouched = true; updateStepper(); }
