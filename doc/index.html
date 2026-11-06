@@ -79,8 +79,18 @@
     return;
   }
 
+  // 2026-11-06：GAS 偶爾卡住不回，原本會一直轉圈；改成每次最多等 25 秒、自動重試一次
+  function timedJson(url, ms) {
+    if (typeof AbortController === "undefined") return fetch(url, { method: "GET" }).then(function (r) { return r.json(); });
+    var ctrl = new AbortController();
+    var timer = setTimeout(function () { ctrl.abort(); }, ms);
+    return fetch(url, { method: "GET", signal: ctrl.signal })
+      .then(function (r) { return r.json(); })
+      .then(function (d) { clearTimeout(timer); return d; }, function (e) { clearTimeout(timer); throw e; });
+  }
   function fromGas() {
-    return fetch(GAS + "?api=html&" + qs, { method: "GET" }).then(function (r) { return r.json(); });
+    var url = GAS + "?api=html&" + qs;
+    return timedJson(url, 25000).catch(function () { return shown ? null : timedJson(url, 25000); });
   }
   function fromEdge() {
     if (!EDGE || typeof AbortController === "undefined") return fromGas();
@@ -130,9 +140,22 @@
       if (d.title && !/<title>/i.test(html)) document.title = d.title;
   }
 
+  // 保險：70 秒還沒出現就停止轉圈，給「重新載入」；在控制台簽約面板裡另給「用瀏覽器開啟」
+  var giveUp = setTimeout(function () {
+    if (shown) return;
+    showError("文件載入太久，請按重新載入。");
+    if (window.parent !== window) {
+      var o = document.createElement("button");
+      o.textContent = "用瀏覽器開啟";
+      o.style.marginLeft = "8px";
+      o.onclick = function () { window.open(location.href, "_blank"); };
+      document.getElementById("state").insertBefore(o, document.querySelector(".brand"));
+    }
+  }, 70000);
+
   fromEdge()
-    .then(showDoc)
-    .catch(function () { if (!shown) showError("網路連線不穩，請確認網路後重新載入。"); });
+    .then(function (d) { if (shown) return; clearTimeout(giveUp); showDoc(d); })
+    .catch(function () { if (!shown) { clearTimeout(giveUp); showError("網路連線不穩，請確認網路後重新載入。"); } });
 })();
 </script>
 </body>
