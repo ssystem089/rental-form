@@ -1,0 +1,79 @@
+/* SSystem 日／夜主題切換開關：外觀分層（底座凹槽 → 滑塊接觸陰影 → 霧面玻璃 → 高光邊 → 流動光 → 點陣 canvas）
+ * 可調：--ts-w（寬度，高度自動 = 寬/2）、--ts-inset（滑塊內縮）；顏色由 JS 依切換進度寫入 --ts-* 變數 */
+.ss-tswitch {
+  --ts-w: 168px;
+  --ts-h: calc(var(--ts-w) / 2);
+  --ts-inset: calc(var(--ts-h) * 0.075);
+  --ts-k: calc(var(--ts-h) - var(--ts-inset) * 2);
+  --ts-r: calc(var(--ts-k) * 0.27);
+  --ts-gap: calc(var(--ts-k) * 0.045);   /* 邊光與滑塊之間的間距 */
+  --ts-blur: calc(var(--ts-h) * 0.45);
+  position: relative; display: inline-block; flex: none;
+  width: var(--ts-w); height: var(--ts-h);
+  padding: 0; margin: 0; border: 0; background: none; cursor: pointer;
+  border-radius: calc(var(--ts-r) + var(--ts-inset));   /* 外框跟滑塊同比例圓角（影片：圓角方形，不是膠囊） */
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.ss-tswitch[data-size="sm"] { --ts-w: 60px; --ts-inset: calc(var(--ts-h) * 0.08); --ts-blur: calc(var(--ts-h) * 0.3); --ts-gap: 1.5px; }
+.ss-tswitch:focus { outline: none; }
+.ss-tswitch:focus-visible { box-shadow: 0 0 0 3px var(--ts-edge), 0 0 0 6px rgba(127,162,224,.35); }
+
+.ss-ts-track {
+  position: absolute; inset: 0; border-radius: inherit;
+  background: var(--ts-track);
+  box-shadow:
+    inset 0 calc(var(--ts-h) * .06) calc(var(--ts-h) * .14) rgba(0,0,0,calc(var(--ts-shade) + .1)),
+    inset 0 calc(var(--ts-h) * -.03) calc(var(--ts-h) * .06) rgba(255,255,255,calc(.5 - var(--ts-shade))),
+    0 1px 0 rgba(255,255,255,calc(.6 - var(--ts-shade) * 1.4)),
+    0 calc(var(--ts-h) * .1) calc(var(--ts-h) * .25) rgba(0,0,0,calc(var(--ts-shade) * .5));
+}
+.ss-tswitch[data-size="sm"] .ss-ts-track {
+  box-shadow: inset 0 1px 3px rgba(0,0,0,calc(var(--ts-shade) + .05)), 0 1px 0 rgba(255,255,255,calc(.5 - var(--ts-shade)));
+}
+
+.ss-ts-knob {
+  position: absolute; top: var(--ts-inset); left: var(--ts-inset);
+  width: var(--ts-k); height: var(--ts-k); border-radius: var(--ts-r);
+  transform: translateX(calc((var(--ts-w) - var(--ts-k) - var(--ts-inset) * 2) * var(--ts-x)));
+  background:
+    linear-gradient(160deg, rgba(255,255,255,.5), rgba(255,255,255,0) 45%),
+    radial-gradient(120% 90% at 30% 10%, rgba(255,255,255,.35), transparent 60%),
+    var(--ts-glass);
+  -webkit-backdrop-filter: blur(6px) saturate(140%); backdrop-filter: blur(6px) saturate(140%);
+  box-shadow:
+    calc(var(--ts-gx, 0) * var(--ts-blur) * .35) calc(var(--ts-gy, 0) * var(--ts-blur) * .35) var(--ts-blur) calc(var(--ts-blur) * .2) var(--ts-glow), /* 偏向亮弧那側的暈光 */
+    0 calc(var(--ts-k) * .06) calc(var(--ts-k) * .14) rgba(0,0,0,calc(var(--ts-shade) + .05)), /* 接觸陰影 */
+    inset 0 0 0 1px rgba(255,255,255,.35),                                  /* 細高光邊 */
+    inset 0 calc(var(--ts-k) * -.08) calc(var(--ts-k) * .12) rgba(0,0,0,.08);
+}
+.ss-tswitch[data-size="sm"] .ss-ts-knob {
+  box-shadow:
+    calc(var(--ts-gx, 0) * 3px) calc(var(--ts-gy, 0) * 3px) var(--ts-blur) 0 var(--ts-glow),
+    0 1px 3px rgba(0,0,0,calc(var(--ts-shade) + .05)),
+    inset 0 0 0 1px rgba(255,255,255,.3);
+}
+/* 邊緣光：一段亮弧（conic 漸層＋遮罩只留邊框），角度由 JS 依切換進度寫入 */
+.ss-ts-ring {
+  position: absolute; inset: calc(var(--ts-gap) * -1 - 2px); border-radius: calc(var(--ts-r) + var(--ts-gap) + 2px);
+  padding: max(1.5px, calc(var(--ts-k) * .018)); pointer-events: none;
+  background: conic-gradient(from calc(var(--ts-ring-a, 180deg) - 80deg), transparent 0deg, var(--ts-edge) 18deg, #fff 50deg, #fff 110deg, var(--ts-edge) 142deg, transparent 160deg, transparent 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: var(--ts-ring-o, 1);
+  filter: drop-shadow(0 0 2px var(--ts-edge)) drop-shadow(0 0 7px var(--ts-edge));
+}
+.ss-tswitch[data-size="sm"] .ss-ts-ring { inset: -2.5px; border-radius: calc(var(--ts-r) + 2.5px); padding: 1px; filter: drop-shadow(0 0 2px var(--ts-edge)); }
+/* 玻璃內的冷暖色調（日：右上暖黃；夜：極淡藍紫） */
+.ss-ts-tint {
+  position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(140% 75% at calc(50% + var(--ts-gx, 0) * 60%) calc(50% + var(--ts-gy, 0) * 62%), var(--ts-tint), transparent 72%);
+}
+/* 單鍵版（2026-11-09 使用者：不用左右滑，單點就換日月＋光暈）：只留玻璃按鍵，邊光繞一圈換色 */
+.ss-tswitch[data-mode="button"] { --ts-w: 96px; --ts-h: var(--ts-w); --ts-inset: calc(var(--ts-w) * .1); border-radius: var(--ts-r); }
+.ss-tswitch[data-mode="button"][data-size="sm"] { --ts-w: 36px; --ts-inset: 4px; }
+.ss-tswitch[data-mode="button"] .ss-ts-track { display: none; }
+.ss-tswitch[data-mode="button"] .ss-ts-knob { transition: scale .12s ease; }
+.ss-tswitch[data-mode="button"]:active .ss-ts-knob { scale: .96; }
+.ss-tswitch[data-mode="button"]:focus-visible { box-shadow: none; }
+.ss-tswitch[data-mode="button"]:focus-visible .ss-ts-knob { outline: 2px solid var(--ts-edge); outline-offset: calc(var(--ts-gap) + 5px); }
+.ss-ts-dots { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: inherit; }
