@@ -7,9 +7,11 @@
 <meta name="robots" content="noindex">
 <script>(function(){try{var s=localStorage.getItem("fir-theme");if(s==="dark"||(!s&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.setAttribute("data-theme","dark")}catch(e){}})();</script>
 <style>
-/* 2026-11-09 歡迎卡「Google Maps 導航」改在 LINE 內 LIFF 半版開（?p=map 轉來這頁）：地圖嵌在頁內，要導航再按按鈕開 Google Maps */
-:root{--bg:#F6F1E9;--card:#FFFFFF;--ink:#28262F;--sub:#6F6A78;--line:#E2DDE8;--accent:#70549F;--btn:#28262F;--btnfg:#FFFFFF}
-[data-theme="dark"]{--bg:#17130F;--card:#1F1A15;--ink:#F1E8DC;--sub:#B9AC9B;--line:#3A3129;--accent:#C9B6F0;--btn:#F1E8DC;--btnfg:#17130F}
+/* 2026-11-09 使用者：地圖改用官網首頁那張（靜態地圖＋捷運出口、步行路線、門口照片），點地圖或按鈕開 Google Maps
+   2026-11-09 歡迎卡「Google Maps 導航」改在 LINE 內 LIFF 半版開（?p=map 轉來這頁）：地圖嵌在頁內，要導航再按按鈕開 Google Maps */
+/* accent 照官網首頁地圖 */
+:root{--r:18px;--pill:rgba(255,255,255,.85);--ink-2:#6B5E52;--bg:#F6F1E9;--card:#FFFFFF;--ink:#28262F;--sub:#6F6A78;--line:#E2DDE8;--accent:#9A5B2C;--btn:#28262F;--btnfg:#FFFFFF}
+[data-theme="dark"]{--ink-2:#B8AB9C;--bg:#17130F;--card:#1F1A15;--ink:#F1E8DC;--sub:#B9AC9B;--line:#3A3129;--accent:#9A5B2C;--btn:#F1E8DC;--btnfg:#17130F}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang TC","Noto Sans TC",sans-serif}
 main{max-width:640px;margin:0 auto;padding:20px max(16px,env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
@@ -17,8 +19,36 @@ main{max-width:640px;margin:0 auto;padding:20px max(16px,env(safe-area-inset-rig
 h1{font-size:22px;line-height:1.35;margin:6px 0 4px}
 p{margin:2px 0;font-size:16px;line-height:1.6}
 .sub{color:var(--sub)}
-.map{margin:16px 0;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:var(--card);aspect-ratio:4/3}
-.map iframe{width:100%;height:100%;border:0;display:block}
+.mapwrap{margin:16px 0 4px}
+/* 指定地點：靜態地圖卡（2026-10-29 使用者：比 Google 內嵌好看；點地圖開 Google，另有 Apple／Google 按鈕） */
+.smap{position:relative;display:block;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);box-shadow:0 14px 30px -22px rgba(43,35,29,.5)}
+.smap img{display:block;width:100%;height:auto;aspect-ratio:900/560;object-fit:cover}
+.pin{position:absolute;width:18px;height:18px;margin:-18px 0 0 -9px;background:var(--accent);border:3px solid #fff;border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 4px 10px rgba(43,35,29,.45)}
+.pin-label{position:absolute;left:50%;bottom:22px;transform:rotate(45deg) translate(-10%,0);transform-origin:left bottom;white-space:nowrap;background:var(--ink);color:#fff;font-size:12px;font-weight:800;border-radius:999px;padding:5px 10px}
+.smap-hint{position:absolute;right:10px;top:10px;background:var(--pill);color:var(--ink);font-size:12px;font-weight:700;border-radius:999px;padding:6px 10px}
+.map-credit{margin:6px 0 0;font-size:11px;color:var(--ink-2);text-align:right}
+/* 地圖加捷運 1 號出口、步行路線、門市實景小圖（2026-10-29 使用者） */
+.route{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.route-bg{fill:none;stroke:#fff;stroke-width:11;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
+.route-line{fill:none;stroke:var(--accent);stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 12}
+.exit-dot{fill:#0070BD;stroke:#fff;stroke-width:3}
+.exit-tag,.walk-tag{position:absolute;transform:translate(-50%,calc(-100% - 12px));white-space:nowrap;font-size:11px;font-weight:800;border-radius:999px;padding:4px 9px 4px 4px;display:inline-flex;align-items:center;gap:5px;box-shadow:0 3px 8px rgba(43,35,29,.25)}
+.exit-tag{background:#fff;color:#0B4F87}
+.exit-tag b{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#0070BD;color:#fff;font-size:11px}
+.walk-tag{transform:translate(8px,-50%);background:var(--accent);color:#fff;padding:4px 9px}
+.dome-tag{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;font-size:11px;font-weight:800;border-radius:999px;padding:4px 10px 4px 7px;display:inline-flex;align-items:center;gap:4px;background:#2B231D;color:#fff;box-shadow:0 3px 8px rgba(43,35,29,.3)}
+/* 2026-10-30 使用者：地圖加台北大巨蛋地標 */
+.store-pic{position:absolute;left:3%;top:5%;width:30%;max-width:170px;background:#fff;border-radius:12px;padding:4px 4px 3px;box-shadow:0 8px 18px -8px rgba(43,35,29,.55)}
+.store-pic img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:9px}
+.store-pic span{display:block;text-align:center;font-size:10.5px;font-weight:800;color:var(--ink);padding-top:3px}
+[data-theme="dark"] .smap img{filter:brightness(.82) contrast(1.05)}
+/* 地圖上的標籤固定深字／深底（地圖本身是淺色，不跟深色模式變） */
+.pin-label{background:#2B231D;color:#fff}
+.store-pic span{color:#2B231D}
+/* 2026-10-30 使用者：地圖只突顯「取還點」，其他藥丸（出口、步行、大巨蛋、點地圖導航）淡化 */
+.smap .exit-tag,.smap .walk-tag,.smap .dome-tag,.smap .smap-hint{opacity:.62;box-shadow:none}
+@media (max-width:420px){.exit-tag,.walk-tag,.dome-tag{font-size:10px}.store-pic{width:32%}}
+.smap-hint{display:none}
 .go{display:flex;align-items:center;justify-content:center;gap:8px;height:52px;border-radius:999px;background:var(--btn);color:var(--btnfg);font-size:17px;font-weight:700;text-decoration:none}
 .go:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .note{margin-top:12px;font-size:14px;color:var(--sub);text-align:center}
@@ -30,8 +60,7 @@ p{margin:2px 0;font-size:16px;line-height:1.6}
   <h1>FiX iT RiGHT 修成正果 大巨蛋門市</h1>
   <p>台北市大安區光復南路88號1樓</p>
   <p class="sub">大巨蛋旁步行 3 分鐘｜週一至週六 12:00–20:00</p>
-  <div class="map"><iframe title="門市位置地圖" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-    src="https://www.google.com/maps?q=FiX+iT+RiGHT+%E4%BF%AE%E6%88%90%E6%AD%A3%E6%9E%9C+%E5%8F%B0%E5%8C%97%E5%B8%82%E5%A4%A7%E5%AE%89%E5%8D%80%E5%85%89%E5%BE%A9%E5%8D%97%E8%B7%AF88%E8%99%9F&amp;z=17&amp;output=embed"></iframe></div>
+  <div class="mapwrap"><a class="smap" href="https://maps.app.goo.gl/1UeTJMKtvYxRcxqk9" rel="noopener" aria-label="在 Google 地圖開啟 FiX iT RiGHT 修成正果（光復南路 88 號，捷運國父紀念館站 1 號或 5 號出口步行約 5 分鐘）"><img src="https://www.ssystem089.com/v3/media/map.webp" alt="地圖：FiX iT RiGHT 修成正果在光復南路 88 號，台北大巨蛋旁步行 3 分鐘" width="900" height="560" loading="lazy" decoding="async"><svg class="route" viewBox="0 0 900 560" preserveAspectRatio="none" aria-hidden="true"><polyline points="294.3,481.4 294.2,492.2 303.4,492.2 307.2,492.3 372.1,493.2 374.2,491.2 374.8,469.4 376.6,408.2 377.4,336.9 378.5,286.3 378.7,242.6 380.8,199.3" class="route-bg"/><polyline points="294.3,481.4 294.2,492.2 303.4,492.2 307.2,492.3 372.1,493.2 374.2,491.2 374.8,469.4 376.6,408.2 377.4,336.9 378.5,286.3 378.7,242.6 380.8,199.3" class="route-line"/><polyline points="451.9,468.1 451.4,484.9 418.5,484.0 419.5,425.7 422.0,287.2 416.0,287.0 407.2,286.8 398.2,286.8 386.3,286.4 378.5,286.3 378.7,242.6 380.8,199.3" class="route-bg"/><polyline points="451.9,468.1 451.4,484.9 418.5,484.0 419.5,425.7 422.0,287.2 416.0,287.0 407.2,286.8 398.2,286.8 386.3,286.4 378.5,286.3 378.7,242.6 380.8,199.3" class="route-line"/><circle cx="294.3" cy="481.4" r="9" class="exit-dot"/><circle cx="451.9" cy="468.1" r="9" class="exit-dot"/></svg><span class="exit-tag" style="left:32.7%;top:86.0%" aria-hidden="true"><b>1</b>國父紀念館站 1 號出口</span><span class="exit-tag" style="left:50.2%;top:83.6%;transform:translate(14px,-50%)" aria-hidden="true"><b>5</b>國父紀念館站 5 號出口</span><span class="dome-tag" style="left:70%;top:70%" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17a9 6 0 0 1 18 0"/><path d="M2 17h20"/><path d="M8 12.5l1.5 4.5M16 12.5l-1.5 4.5M12 11v6"/></svg>台北大巨蛋</span><span class="walk-tag" style="left:47.2%;top:56%" aria-hidden="true">步行約 5 分鐘</span><span class="pin" style="left:42.3%;top:35.6%" aria-hidden="true"><span class="pin-label">取還點・FiX iT RiGHT</span></span><span class="store-pic" aria-hidden="true"><img src="https://www.ssystem089.com/v3/media/store.webp" alt="" width="360" height="272" loading="lazy" decoding="async"><span>門口長這樣</span></span><span class="smap-hint" aria-hidden="true">點地圖開 Google 地圖導航</span></a><p class="map-credit">地圖資料 © OpenStreetMap 貢獻者</p></div>
   <a class="go" href="https://maps.app.goo.gl/1UeTJMKtvYxRcxqk9" target="_blank" rel="noopener">開啟 Google Maps 導航 ↗</a>
   <p class="note">取還時間以客服確認為準</p>
 </main>
