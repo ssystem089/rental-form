@@ -678,6 +678,9 @@ textarea:focus,textarea:focus-visible{outline:1px solid var(--gold);outline-offs
 .toast-capsule{transition:opacity .18s ease,transform .18s ease,visibility .18s}
 .calendar-guide-box,.time-pill,.link-btn,.saved-close-x{transition-duration:.15s}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+/* 2026-11-09 使用者：價目表上方提醒提早預定（淡黃＋香檳金） */
+.book-early{margin:4px 0 14px;padding:10px 12px;background:var(--accent-blue-bg);border:1px solid var(--accent-blue-border);border-left:2px solid var(--gold);color:var(--text-main);font-size:13.5px;line-height:1.6;border-radius:2px}
 </style>
 <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 </head>
@@ -733,6 +736,7 @@ textarea:focus,textarea:focus-visible{outline:1px solid var(--gold);outline-offs
     </li>
   </ol>
 
+  <div class="book-early" id="bookEarly">熱門場次檔期需提早預定，直接在 LINE 傳『日期＋機型』，幫你查還有沒有檔期。</div>
   <div class="section-title" id="priceTitle">租借價目表 ｜ 24H 彈性制（點選器材快速帶入）</div>
   <section class="card price-card collapsed" id="priceCard">
     <!-- vivo x300 Ultra -->
@@ -1037,6 +1041,7 @@ const zh = {
   subtitle: "器材租賃價目與檔期詢問 ｜ EQUIPMENT RENTAL",
   store: IS_FIR ? "交機門市｜FiX iT RiGHT 台北市大安區光復南路88號1樓<br>時間 12:00–20:00｜熱門檔期依現場狀況彈性延長" : "取還機指定地點｜台北市大安區光復南路88號1樓<br>時間 週一至週六 12:00–20:00｜額外取還日、時間以客服確認為準",
   priceTitle: "租借價目表 ｜ 24H 彈性制（點選器材快速帶入）",
+  bookEarly: "熱門場次檔期需提早預定，直接在 LINE 傳『日期＋機型』，幫你查還有沒有檔期。",
   days: "租 1–2 日適用",
   step1Text: "設備與鏡頭",
   step2Text: "取還日期",
@@ -1140,6 +1145,7 @@ const en = {
   subtitle: "Equipment Rental & Reservation System ｜ COMMERCIAL",
   store: IS_FIR ? "Pickup Store｜FiX iT RiGHT No. 88, Guangfu S. Rd., Da'an Dist., Taipei<br>Hours: 12:00–20:00｜Extended hours may apply on peak days" : "Pickup & return｜1F, No. 88, Guangfu S. Rd., Da'an Dist., Taipei<br>Hours Mon–Sat 12:00–20:00｜Other pickup/return days and times as confirmed by our staff",
   priceTitle: "RENTAL RATES & SPECIFICATIONS ｜ 24H FLEXIBLE PLAN",
+  bookEarly: "Popular dates book up early — send “date + model” on LINE and we’ll check availability for you.",
   days: "for 1–2 day rentals",
   step1Text: "Device & Lens",
   step2Text: "Dates",
@@ -1262,7 +1268,7 @@ function setLanguage(lang) {
 
   const x = S();
   const ids = {
-    subtitle:"subtitle",store:"store",priceTitle:"priceTitle",
+    subtitle:"subtitle",store:"store",priceTitle:"priceTitle",bookEarly:"bookEarly",
     step1Text:"step1Text",step2Text:"step2Text",step3Text:"step3Text",
     fsStep1:"step1Text",fsStep2:"step2Text",fsStep3:"step3Text",calLegend:"calLegend",
     calendarTitle:"calendarTitle",timePillLabel:"timePillLabel",
