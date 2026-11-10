@@ -1868,7 +1868,10 @@ document.addEventListener("DOMContentLoaded", () => {
   } else if (savedLang && (savedLang === "en" || savedLang === "zh")) {
     setLanguage(savedLang);
   } else {
-    setLanguage("zh");
+    // 2026-11-11 使用者：英日韓語系的客人收英文歡迎卡 → 價目表沒選過語言時，依 LINE／手機語言預設（中文以外用英文）
+    let dev = "";
+    try { dev = (window.liff && liff.getLanguage && liff.getLanguage()) || navigator.language || ""; } catch(e) { dev = navigator.language || ""; }
+    setLanguage(/^(en|ja|ko)/i.test(dev) ? "en" : "zh");
   }
 
   setupPriceRowInteractions();
