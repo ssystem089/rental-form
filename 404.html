@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>FiX iT RiGHT 修成正果</title>
+<style>
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;background:#f6f6f4;color:#222;display:flex;min-height:100vh;align-items:center;justify-content:center;text-align:center;padding:24px}
+  a{color:#0a7d4f}
+  .box{max-width:360px}
+  .sub{color:#777;font-size:14px}
+</style>
+<script>
+// 報價單短網址（2026-11-16 使用者選 C）：/q/<單號>-<驗證碼 11 碼英數> → 轉回 /doc/?qid=<單號>&k=<16 碼>
+// 驗證碼＝原本 16 碼 16 進位（64 位元）換成 62 進位，客人連結短一半；轉回去後流程（加速器、GAS 驗證）完全不變。
+(function () {
+  var m = location.pathname.match(/^\/q\/([A-Za-z0-9_]{4,40})-([0-9A-Za-z]{1,11})\/?$/);
+  if (!m) return;
+  var A = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  // 62 進位字串 → 16 位數 16 進位（不用 BigInt，舊手機也能跑）
+  var digits = [0];   // 16 進位，低位在前
+  for (var i = 0; i < m[2].length; i++) {
+    var carry = A.indexOf(m[2].charAt(i));
+    if (carry < 0) return;
+    for (var j = 0; j < digits.length; j++) {
+      var v = digits[j] * 62 + carry;
+      digits[j] = v % 16;
+      carry = Math.floor(v / 16);
+    }
+    while (carry > 0) { digits.push(carry % 16); carry = Math.floor(carry / 16); }
+  }
+  var hex = "";
+  for (var k = digits.length - 1; k >= 0; k--) hex += digits[k].toString(16);
+  hex = hex.replace(/^0+(?=.)/, "");
+  while (hex.length < 16) hex = "0" + hex;
+  if (hex.length !== 16) return;
+  location.replace("/doc/?qid=" + encodeURIComponent(m[1]) + "&k=" + hex);
+})();
+</script>
+</head>
+<body>
+<div class="box">
+  <h1 style="font-size:20px">找不到這個頁面</h1>
+  <p class="sub">連結可能不完整，請向門市重新索取，或回到 <a href="/">首頁</a>。</p>
+</div>
+</body>
+</html>
