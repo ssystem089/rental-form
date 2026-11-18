@@ -15,7 +15,8 @@
 // 報價單短網址（2026-11-16 使用者選 C）：/q/<單號>-<驗證碼 11 碼英數> → 轉回 /doc/?qid=<單號>&k=<16 碼>
 // 驗證碼＝原本 16 碼 16 進位（64 位元）換成 62 進位，客人連結短一半；轉回去後流程（加速器、GAS 驗證）完全不變。
 (function () {
-  var m = location.pathname.match(/^\/q\/([A-Za-z0-9_]{4,40})-([0-9A-Za-z]{1,11})\/?$/);
+  // 2026-11-18 夜審 1117 P7：單號可含「-」（子單），跟 GAS 產生端同字元集；驗證碼沒有「-」，所以最後一個「-」後面才是驗證碼
+  var m = location.pathname.match(/^\/q\/([A-Za-z0-9_-]{4,40})-([0-9A-Za-z]{1,11})\/?$/);
   if (!m) return;
   var A = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   // 62 進位字串 → 16 位數 16 進位（不用 BigInt，舊手機也能跑）
