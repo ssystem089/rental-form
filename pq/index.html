@@ -112,7 +112,7 @@ tr.disc td.num{color:var(--red)}   /* 2026-10-30 使用者：折讓金額紅字 
 /* 列印＝下載 PDF：A4 一頁白紙，只印報價單 */
 @page{size:A4;margin:0}
 /* 2026-11-23 使用者：畫面上下方已有匯款資訊，紙上的匯款帳戶只在列印／PDF 顯示 */
-@media screen{.bank-row{display:none}}
+@media screen{.terms dl div.bank-row{display:none}}
 @media print{
   html,body{background:#fff!important;color:var(--ink)}
   body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
