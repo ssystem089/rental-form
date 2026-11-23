@@ -166,7 +166,7 @@ tr.disc td.num{color:var(--red)}   /* 2026-10-30 使用者：折讓金額紅字 
       <div class="pay" id="qPay" hidden></div>
       <div class="grow"></div>
       <div class="terms"><section><h3>報價確認</h3><dl>
-        <div><dt>付款條件</dt><dd>匯款</dd></div><div><dt>交貨方式</dt><dd>指送</dd></div><div><dt>發票</dt><dd id="qInv"></dd></div>
+        <div><dt>付款條件</dt><dd>匯款</dd></div><div><dt>交貨方式</dt><dd>指送</dd></div><div id="qInvRow"><dt>發票</dt><dd id="qInv"></dd></div>
         <div><dt>出貨期限</dt><dd>5 個工作天</dd></div>
         <div class="bank-row"><dt>匯款帳戶</dt><dd>簡約體制有限公司<br><span class="bank">國泰世華 013 南港分行 1069<br><a href="#qrCard">1060 3500 3935</a></span></dd></div></dl>
         <div class="stamp" aria-hidden="true"><svg viewBox="0 0 280 130" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"> <rect x="3" y="3" width="274" height="124" rx="14" fill="none" stroke="#2563eb" stroke-width="4"/> <line x1="222" y1="3" x2="222" y2="127" stroke="#2563eb" stroke-width="3"/> <path d="M 18 24 L 32 38 L 46 24 M 18 38 L 32 52 L 46 38 M 18 52 L 32 66 L 46 52" fill="none" stroke="#2563eb" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/> <text x="56" y="38" font-size="18.5" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif">簡約體制有限公司</text> <line x1="55" y1="46" x2="216" y2="46" stroke="#2563eb" stroke-width="2.5"/> <text x="136" y="78" font-size="28" font-weight="bold" fill="#2563eb" font-family="'Courier New', monospace" text-anchor="middle" letter-spacing="1.5">24932067</text> <line x1="55" y1="88" x2="216" y2="88" stroke="#2563eb" stroke-width="2.5"/> <text x="136" y="106" font-size="12" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif" text-anchor="middle">台北市南港區舊莊街一段</text> <text x="136" y="122" font-size="12" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif" text-anchor="middle">242 號 3 樓</text> <text x="250" y="24" font-size="15" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif" writing-mode="vertical-rl" letter-spacing="3">統一發票專用章</text> </svg></div></section>
@@ -258,7 +258,8 @@ tr.disc td.num{color:var(--red)}   /* 2026-10-30 使用者：折讓金額紅字 
     $("qTaxAmt").textContent = money(q.tax_amount);
     $("qTaxRow").hidden = !q.tax;   // 2026-10-29：沒含稅不顯示「營業稅（未稅）0」
     $("qTotal").textContent = money(q.total);
-    $("qInv").textContent = q.tax ? "三聯式（含稅）" : "未確定";
+    $("qInv").textContent = q.tax ? "三聯式（含稅）" : "";
+    if (!q.tax) $("qInvRow").style.display = "none";   // 2026-11-23 使用者：沒填發票就不顯示
     if (q.pay && q.pay.length) {
       q.pay.forEach(function (p) { $("qPay").appendChild(el("p", "", p)); });
       $("qPay").hidden = false;
