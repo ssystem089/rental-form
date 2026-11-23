@@ -318,6 +318,21 @@ select:focus, input[type="text"]:focus { border-color: var(--accent-blue); box-s
   border-radius: 0; 
   font-weight: 700; 
 }
+/* 活動標記（2026-11-18）：日期下方細線＋月曆下方當月活動清單；只列名稱，不代表檔期 */
+.ev-mark { width: 12px; height: 2px; border-radius: 1px; margin-top: 2px; background: #8b5cf6; }
+.cal-cell.disabled .ev-mark { display: none; }
+.cal-cell.range-start .ev-mark, .cal-cell.range-end .ev-mark { background: #ffffff; }
+.cal-events { margin-top: 10px; font-size: 12px; line-height: 1.55; color: var(--text-main); }
+.cal-events:empty { display: none; }
+.cal-events-title { font-size: 11.5px; font-weight: 700; color: var(--text-light); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+.cal-events-title::before { content: ""; width: 12px; height: 2px; border-radius: 1px; background: #8b5cf6; }
+.cal-events ul { margin: 0; padding: 0; list-style: none; }
+.cal-events li { padding: 3px 0; border-top: 1px dashed var(--border-color); }
+.cal-events li:first-child { border-top: 0; }
+.cal-events li.sel { color: #8b5cf6; font-weight: 700; }
+.cal-events .ev-d { font-variant-numeric: tabular-nums; font-weight: 700; margin-right: 6px; }
+.cal-events .ev-v { color: var(--text-light); }
+.cal-events-note { margin-top: 4px; font-size: 11px; color: var(--text-light); }
 .cal-cell.range-start .cell-dot, 
 .cal-cell.range-end .cell-dot { 
   background-color: #ffffff !important; 
@@ -821,6 +836,7 @@ textarea { width: 100%; height: 160px; padding: 10px; background: var(--panel-bg
           <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
         </div>
         <div class="cal-grid" id="calDaysGrid"></div>
+        <div class="cal-events" id="calEvents" aria-live="polite"></div>
 
         <!-- 取機時間膠囊選單 -->
         <div class="time-pill-section">
@@ -931,6 +947,7 @@ let calEndDate = "";
 let calPickupTime = "12:00";
 
 // 公開檔期快照由 GitHub 提供；詢問與預約仍待門市確認。
+let activeEvents = {};   // 2026-11-18：北部大型場館活動 {"YYYY/MM/DD": [{v, t}]}，由 Mini 公開 API 提供
 let activeHotDates = "2026/10/22 (黃)、2026/10/23 (黃)、2026/10/24 (黃)、2026/10/25 (黃)、2026/11/18 (黃)、2026/11/19 (黃)、2026/11/20 (黃)、2026/11/21 (黃)、2026/11/22 (黃)、2026/12/04 (黃)、2026/12/05 (黃)、2026/12/06 (黃)、2026/12/07 (黃)、2026/12/12 (黃)、2027/02/26 (黃)、2027/02/27 (黃)、2027/02/28 (黃)、2027/03/01 (黃)";
 let datePressures = {};
 
@@ -1344,7 +1361,10 @@ function renderCalendar(){
       cell.classList.add("p-" + pressure);
     }
 
-    cell.innerHTML = `<span>${d}</span>${showPressure ? '<span class="cell-dot"></span>' : ''}`;
+    const evKey = `${y}/${mm}/${dd}`;
+    const hasEv = Array.isArray(activeEvents[evKey]) && activeEvents[evKey].length > 0;
+    cell.innerHTML = `<span>${d}</span>${showPressure ? '<span class="cell-dot"></span>' : ''}${hasEv ? '<span class="ev-mark"></span>' : ''}`;
+    if (hasEv) cell.title = activeEvents[evKey].map(e => e.t).join("、");
 
     if (dateStr < todayStr) {
       cell.classList.add("disabled");
@@ -1357,7 +1377,49 @@ function renderCalendar(){
     }
     grid.appendChild(cell);
   }
+  renderMonthEvents(y, m);
   updateCalendarSummary();
+}
+
+// 當月大型活動清單（同場館同名稱的連續日期合併成一行；選到的起訖日內的活動標紫色）
+function renderMonthEvents(y, m){
+  const box = document.getElementById("calEvents");
+  if (!box) return;
+  box.textContent = "";
+  const prefix = `${y}/${String(m + 1).padStart(2, '0')}/`;
+  const todayKey = getTodayStr().replace(/-/g, "/");
+  const groups = {};
+  Object.keys(activeEvents || {}).sort().forEach(k => {
+    if (k.indexOf(prefix) !== 0 || k < todayKey) return;
+    (activeEvents[k] || []).forEach(e => {
+      const g = e.v + "|" + e.t;
+      (groups[g] = groups[g] || { v: e.v, t: e.t, days: [] }).days.push(k);
+    });
+  });
+  const list = Object.values(groups).sort((a, b) => a.days[0] < b.days[0] ? -1 : 1);
+  if (!list.length) return;
+  const zhLang = currentLang === "zh";
+  const title = document.createElement("div");
+  title.className = "cal-events-title";
+  title.textContent = zhLang ? "本月大型活動" : "Major events this month";
+  const ul = document.createElement("ul");
+  const s0 = (calStartDate || "").replace(/-/g, "/"), s1 = (calEndDate || calStartDate || "").replace(/-/g, "/");
+  list.forEach(g => {
+    const md = k => { const p = k.split("/"); return Number(p[1]) + "/" + Number(p[2]); };
+    const first = g.days[0], last = g.days[g.days.length - 1];
+    const span = g.days.length === 1 ? md(first) : (first.slice(0, 7) === last.slice(0, 7) ? md(first) + "–" + Number(last.split("/")[2]) : md(first) + "–" + md(last));
+    const li = document.createElement("li");
+    if (s0 && g.days.some(k => k >= s0 && k <= s1)) li.className = "sel";
+    const d = document.createElement("span"); d.className = "ev-d"; d.textContent = span;
+    const t = document.createElement("span"); t.textContent = g.t + " ";
+    const v = document.createElement("span"); v.className = "ev-v"; v.textContent = "（" + g.v + "）";
+    li.append(d, t, v);
+    ul.appendChild(li);
+  });
+  const note = document.createElement("div");
+  note.className = "cal-events-note";
+  note.textContent = zhLang ? "活動日期以主辦公告為準；檔期請直接在 LINE 詢問" : "Dates per organizer announcements. Ask us on LINE for availability.";
+  box.append(title, ul, note);
 }
 
 function onDateCellClick(dateStr){
@@ -1701,6 +1763,7 @@ async function init(){
     if (!r.ok) throw new Error("config unavailable");
     const data = await r.json();
     if (typeof data.hot_dates === "string") activeHotDates = data.hot_dates;
+    if (data.events && typeof data.events === "object" && !Array.isArray(data.events)) activeEvents = data.events;
     renderCalendar();
   } catch (_) {
     // 公告不代表即時庫存，設備與日期仍由專員確認。
