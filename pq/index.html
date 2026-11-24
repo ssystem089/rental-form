@@ -152,7 +152,7 @@ tr.disc td.num{color:var(--red)}   /* 2026-10-30 使用者：折讓金額紅字 
       <dl class="meta">
         <div><dt>客戶名稱</dt><dd id="qName"></dd></div><div><dt>報價日期</dt><dd class="num" id="qDate"></dd></div>
         <div><dt>電話</dt><dd class="num" id="qPhone"></dd></div><div><dt>有效期限</dt><dd class="num" id="qExp"></dd></div>
-        <div id="qTaxIdRow"><dt>統一編號</dt><dd id="qTax"></dd></div><div></div>
+        <div id="qTaxIdRow"><dt>統一編號</dt><dd id="qTax"></dd></div><div id="qTitleRow"><dt>抬頭</dt><dd id="qTitle"></dd></div>
       </dl>
       <table>
         <thead><tr><th class="n">No.</th><th>品名／規格</th><th class="r">數量</th><th class="r">單價</th><th class="r">金額</th></tr></thead>
@@ -235,6 +235,8 @@ tr.disc td.num{color:var(--red)}   /* 2026-10-30 使用者：折讓金額紅字 
     $("qExp").textContent = q.expires || "";
     $("qTax").textContent = q.tax_id || "";
     $("qTaxIdRow").hidden = !q.tax_id;   // 2026-10-29：統編沒填不顯示
+    $("qTitle").textContent = q.title || "";
+    $("qTitleRow").hidden = !q.title;   // 2026-11-24 #橘方：抬頭（選填），沒填不顯示
     var tb = $("qRows");
     (q.items || []).forEach(function (it, k) {
       var tr = el("tr");
