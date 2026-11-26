@@ -18,6 +18,8 @@
 html,body{margin:0;background:var(--bg);color:var(--warm)}
 body{font-family:"Noto Sans TC",-apple-system,BlinkMacSystemFont,"PingFang TC",sans-serif;font-size:15px;line-height:1.6;-webkit-text-size-adjust:100%}
 .wrap{max-width:860px;margin:0 auto;padding:20px 16px calc(32px + env(safe-area-inset-bottom))}
+/* 2026-11-26 #橘方：單據載入後上方公司名＋單據名跟白紙抬頭重複 → 只在載入中／錯誤頁顯示 */
+body:has(#doc:not([hidden])) .head{display:none}
 .head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;border-bottom:1px solid rgba(201,162,74,.45);padding-bottom:10px;margin-bottom:16px}
 .head b{font-family:"Noto Serif TC",serif;font-weight:900;letter-spacing:.06em;font-size:16px}
 .head span{color:var(--faint);font-size:12px;letter-spacing:.08em}
