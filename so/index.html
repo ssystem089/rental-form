@@ -169,7 +169,8 @@ tr.disc td{color:var(--ink-2)}
         <div><dt>交貨方式</dt><dd id="qShip"></dd></div>
         <div id="qStRow"><dt>寄送門市</dt><dd id="qSt"></dd></div>
         <div id="qSdRow"><dt>出貨日期</dt><dd class="num" id="qSd"></dd></div>
-        <div id="qInvRow"><dt>發票</dt><dd class="num" id="qInv"></dd></div></dl>
+        <div id="qInvRow"><dt>發票</dt><dd class="num" id="qInv"></dd></div>
+        <div id="qSignRow" hidden><dt>簽收</dt><dd class="num" id="qSign"></dd></div></dl>
         <div class="notes" id="qNotesBox" hidden><b>備註</b><ol id="qNotes"></ol></div>
         <div class="stamp" aria-hidden="true"><svg viewBox="0 0 280 130" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"> <rect x="3" y="3" width="274" height="124" rx="14" fill="none" stroke="#2563eb" stroke-width="4"/> <line x1="222" y1="3" x2="222" y2="127" stroke="#2563eb" stroke-width="3"/> <path d="M 18 24 L 32 38 L 46 24 M 18 38 L 32 52 L 46 38 M 18 52 L 32 66 L 46 52" fill="none" stroke="#2563eb" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/> <text x="56" y="38" font-size="18.5" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif">簡約體制有限公司</text> <line x1="55" y1="46" x2="216" y2="46" stroke="#2563eb" stroke-width="2.5"/> <text x="136" y="78" font-size="28" font-weight="bold" fill="#2563eb" font-family="'Courier New', monospace" text-anchor="middle" letter-spacing="1.5">24932067</text> <line x1="55" y1="88" x2="216" y2="88" stroke="#2563eb" stroke-width="2.5"/> <text x="136" y="106" font-size="12" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif" text-anchor="middle">台北市南港區舊莊街一段</text> <text x="136" y="122" font-size="12" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif" text-anchor="middle">242 號 3 樓</text> <text x="250" y="24" font-size="15" font-weight="bold" fill="#2563eb" font-family="'Noto Sans TC', sans-serif" writing-mode="vertical-rl" letter-spacing="3">統一發票專用章</text> </svg></div></section>
       </div>
@@ -268,6 +269,7 @@ tr.disc td{color:var(--ink-2)}
     $("qL5").textContent = q.last5 || ""; $("qL5Row").hidden = !q.last5;
     $("qShip").textContent = q.ship_method || "指送";
     $("qSd").textContent = q.ship_date || ""; $("qSdRow").hidden = !q.ship_date;
+    $("qSign").textContent = q.signed_at ? "已簽收 " + q.signed_at : ""; $("qSignRow").hidden = !q.signed_at;   // 2026-11-26 門市簽收
     if (q.notes && q.notes.length) {
       q.notes.forEach(function (n) { $("qNotes").appendChild(el("li", "", n)); });
       $("qNotesBox").hidden = false;
