@@ -170,6 +170,7 @@ tr.disc td{color:var(--ink-2)}
         <div id="qL5Row"><dt>後五碼</dt><dd class="num" id="qL5"></dd></div>
         <div><dt>交貨方式</dt><dd id="qShip"></dd></div>
         <div id="qStRow"><dt>寄送門市</dt><dd id="qSt"></dd></div>
+        <div id="qAddrRow" hidden><dt>收貨地址</dt><dd id="qAddr"></dd></div>
         <div id="qSdRow"><dt>出貨日期</dt><dd class="num" id="qSd"></dd></div>
         <div id="qInvRow"><dt>發票</dt><dd class="num" id="qInv"></dd></div>
         <div id="qSignRow" hidden><dt>簽收</dt><dd class="num" id="qSign"></dd></div></dl>
@@ -263,6 +264,7 @@ tr.disc td{color:var(--ink-2)}
     $("qTotal").textContent = money(q.total);
     $("qInv").textContent = q.invoice_no || ""; $("qInvRow").hidden = !q.invoice_no;   // 發票號碼有填才顯示（2026-10-29）
     $("qSt").textContent = q.ship_store || ""; $("qStRow").hidden = !q.ship_store;
+    $("qAddr").textContent = q.ship_address || ""; $("qAddrRow").hidden = !q.ship_address;   // 2026-11-26 收貨地址
     $("qPaid").textContent = money(q.paid);
     var bal = Number(q.balance) || 0;
     $("qPaidTag").hidden = bal > 0;
