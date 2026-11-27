@@ -55,6 +55,9 @@ td{padding:7px 6px;border-bottom:1px solid var(--rule-2);vertical-align:top;over
 .r{text-align:right}.n{width:34px;color:var(--gold-ink);font-family:"Oswald",sans-serif}
 .num{font-family:"Oswald",sans-serif;font-size:14px;letter-spacing:.02em;white-space:nowrap}
 tr.disc td{color:var(--ink-2)}
+/* 2026-11-28 #橘方：數量、單價欄標題與數字置中；金額欄貼齊右邊，跟下方小計／總計同一條線 */
+thead th:nth-child(3),thead th:nth-child(4),tbody td:nth-child(3),tbody td:nth-child(4){text-align:center}
+thead th:last-child,tbody td:last-child{padding-right:0}
 tr.disc td.num{color:var(--red)}   /* 2026-10-30 使用者：折讓金額紅字 */
 .sum{margin:14px 0 0 auto;width:62mm;max-width:100%}
 .sum div{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--rule)}
